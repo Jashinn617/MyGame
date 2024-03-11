@@ -1,1 +1,2 @@
 C:\Users\fko2347024\Desktop\JumpGame\x64\Debug\JumpGame.exe
+C:\Users\fko2347024\Documents\GitHub\MyGame\JumpGame\x64\Debug\JumpGame.exe
