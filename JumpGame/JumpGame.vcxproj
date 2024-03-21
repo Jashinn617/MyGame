@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Handle\ModelManager.cpp" />
     <ClCompile Include="Scene\MainScene.cpp" />
@@ -148,6 +149,7 @@
     <ClCompile Include="WorldSprite.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Handle\ModelManager.h" />
     <ClInclude Include="Scene\MainScene.h" />
     <ClInclude Include="Player.h" />
