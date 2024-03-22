@@ -2,6 +2,12 @@
 #include "SceneBase.h"
 
 class Player;
+class Camera;
+class Map;
+
+/// <summary>
+/// メインシーン
+/// </summary>
 class MainScene:public SceneBase
 {
 public:
@@ -16,6 +22,11 @@ public:
 private:
 
 	/*ポインタの取得*/
+	// プレイヤー
 	shared_ptr<Player> m_pPlayer;
+	// カメラ
+	shared_ptr<Camera> m_pCamera;
+	// マップ
+	shared_ptr<Map> m_pMap;
 };
 

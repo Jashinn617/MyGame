@@ -22,7 +22,7 @@ public:
 	/// 更新
 	/// </summary>
 	/// <param name="playr">プレイヤーのクラス</param>
-	void Update(const Player& playr);
+	void Update(const Player& player);
 
 	/// <summary>
 	/// ポジションのgetter/setter

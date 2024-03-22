@@ -16,14 +16,8 @@
     <Filter Include="ソース ファイル\Scene">
       <UniqueIdentifier>{62493d19-f882-457a-b629-281e3dccd3fb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Handle">
-      <UniqueIdentifier>{b33c1381-6c51-4977-8b5a-beeb0a55a9f8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ヘッダー ファイル\Scene">
       <UniqueIdentifier>{035e55fe-d602-44c3-afb8-00b2c916ce57}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\Handle">
-      <UniqueIdentifier>{bcb9437d-1593-4fbe-81a8-dd75fcefebc4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -35,9 +29,6 @@
     </ClCompile>
     <ClCompile Include="Scene\SceneBase.cpp">
       <Filter>ソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Handle\ModelManager.cpp">
-      <Filter>ソース ファイル\Handle</Filter>
     </ClCompile>
     <ClCompile Include="Scene\SceneManager.cpp">
       <Filter>ソース ファイル\Scene</Filter>
@@ -51,6 +42,9 @@
     <ClCompile Include="Camera.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -58,9 +52,6 @@
     </ClInclude>
     <ClInclude Include="Scene\SceneBase.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Handle\ModelManager.h">
-      <Filter>ヘッダー ファイル\Handle</Filter>
     </ClInclude>
     <ClInclude Include="Scene\SceneManager.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
@@ -72,6 +63,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

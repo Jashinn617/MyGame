@@ -8,6 +8,10 @@ using namespace std;
 // プログラムは WinMain から始まります
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
+	// 画面モードのセット
+	ChangeWindowMode(TRUE);
+	SetGraphMode(1600, 900, 16);
+
 	// 一部の関数はDxLib_Init()の前に実行する必要がある
 	ChangeWindowMode(true);
 
@@ -16,15 +20,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		return -1;			// エラーが起きたら直ちに終了
 	}
 
-	SetDrawScreen(DX_SCREEN_BACK);
-
-	// 奥行0.1～1000までをカメラの描画範囲とする
-	SetCameraNearFar(3.0f, 3000.0f);
-
-	SetCameraPositionAndTarget_UpVecY(VGet(0, 450, -1000), VGet(0.0f, 0.0f, 0.0f));
-
-	// ハンドルの取得
-	shared_ptr<ModelManager> pModel = make_shared<ModelManager>();
+	SetDrawScreen(DX_SCREEN_BACK);	// 裏画面を描画対象にする
+	SetUseZBufferFlag(TRUE);		// Ｚバッファを使用する
+	SetWriteZBufferFlag(TRUE);		// Ｚバッファへの書き込みを行う
+	SetUseBackCulling(TRUE);		// バックカリングを行う
 	
 	// シーン管理
 	shared_ptr<SceneManager> pScene = make_shared<SceneManager>();
