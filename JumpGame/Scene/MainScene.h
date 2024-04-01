@@ -4,6 +4,7 @@
 class Player;
 class Camera;
 class Map;
+class EnemyManager;
 
 /// <summary>
 /// メインシーン
@@ -28,5 +29,7 @@ private:
 	shared_ptr<Camera> m_pCamera;
 	// マップ
 	shared_ptr<Map> m_pMap;
+	// 敵キャラクター
+	shared_ptr<EnemyManager> m_pEnemy;
 };
 

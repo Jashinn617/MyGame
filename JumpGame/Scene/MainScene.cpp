@@ -2,6 +2,7 @@
 #include "../Player.h"
 #include "../Map.h"
 #include "../Camera.h"
+#include "../Enemy/EnemyManager.h"
 #include "DxLib.h"
 
 MainScene::MainScene():
@@ -11,6 +12,7 @@ MainScene::MainScene():
 	m_pPlayer = make_shared<Player>();
 	m_pCamera = make_shared<Camera>();
 	m_pMap = make_shared<Map>();
+	m_pEnemy = make_shared<EnemyManager>();
 }
 
 MainScene::~MainScene()
@@ -21,6 +23,9 @@ void MainScene::Init()
 {
 	// マップのロード
 	m_pMap->Load();
+
+	// 敵の生成
+	m_pEnemy->CreateEnemyes();
 }
 
 shared_ptr<SceneBase> MainScene::Update()
@@ -28,6 +33,7 @@ shared_ptr<SceneBase> MainScene::Update()
 	m_pPlayer->Update();
 	m_pMap->Update();
 	m_pCamera->Update(*m_pPlayer);
+	m_pEnemy->Update();
 
 	// シーン移動しないときは自身のポインタを返す
 	return shared_from_this();
@@ -37,6 +43,7 @@ void MainScene::Draw()
 {
 	m_pMap->Draw();	
 	m_pPlayer->Draw();
+	m_pEnemy->Draw();
 
 	// デバッグ描画
 #ifdef _DEBUG
