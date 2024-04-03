@@ -17,6 +17,7 @@ public:
 	// 
 	const VECTOR& GetPos() const { return m_pos; }
 	void SetPos(const VECTOR pos) { m_pos = pos; }
+	void SetModelPos();
 
 protected:
 	int m_modelHandle;

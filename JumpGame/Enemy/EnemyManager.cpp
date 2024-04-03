@@ -62,6 +62,7 @@ void EnemyManager::Draw()
 		if (enemy != NULL)
 		{
 			enemy->Draw();
+
 		}
 	}
 }

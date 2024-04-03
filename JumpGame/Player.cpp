@@ -6,6 +6,9 @@ namespace
 	constexpr float kSpeed = static_cast<float>(10000.0 / 60.0 / 60.0 / 60.0);
 	// ƒvƒŒƒCƒ„[‚ÌƒXƒP[ƒ‹
 	constexpr float kScale = 0.002f;
+
+	// “–‚½‚è”»’è—p‚Ì‰~‚Ì”¼Œa
+	constexpr float kRadius = 0.5;
 }
 
 Player::Player() :
@@ -54,6 +57,8 @@ void Player::Update()
 
 #endif
 
+	m_dir = VAdd(m_dir, VGet(1, 0, 0));
+
 	// ƒ[ƒœŽZ”ð‚¯
 	if (VSquareSize(m_dir) > 0)
 	{
@@ -85,4 +90,12 @@ void Player::Draw() const
 {
 	// 3Dƒ‚ƒfƒ‹‚Ì•`‰æ
 	MV1DrawModel(m_modelHandle);
+
+#ifdef _DEBUG
+	VECTOR pos = MV1GetPosition(m_modelHandle);
+
+	DrawSphere3D(pos, kRadius, 32, 0x0000ff, 0x0000ff, false);
+
+#endif // _DEBUG
+
 }
