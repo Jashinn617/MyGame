@@ -11,7 +11,8 @@ namespace
 
 EnemyBase::EnemyBase(int modelHandle):
 	m_modelHandle(-1),
-	m_pos{0,0,0}
+	m_pos{0,0,0},
+	m_rad(kRadius)
 {
 	m_modelHandle = MV1DuplicateModel(modelHandle);
 }
@@ -40,6 +41,12 @@ void EnemyBase::Draw()
 #endif // _DEBUG
 }
 
+const VECTOR& EnemyBase::GetPos() const
+{
+	return MV1GetPosition(m_modelHandle);
+	// TODO: return ステートメントをここに挿入します
+}
+
 void EnemyBase::SetModelPos()
 {
 	// モデルのスケールを決定する
@@ -51,3 +58,6 @@ void EnemyBase::SetModelPos()
 	// 回転
 	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, 90.0f, 0.0f));
 }
+
+
+

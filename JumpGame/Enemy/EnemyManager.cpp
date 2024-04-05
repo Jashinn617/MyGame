@@ -2,6 +2,7 @@
 #include "DxLib.h"
 #include "EnemyBase.h"
 #include "EnemyBee.h"
+#include "../Player.h"
 
 namespace
 {
@@ -29,8 +30,6 @@ EnemyManager::~EnemyManager()
 
 void EnemyManager::CreateEnemyes()
 {
-	
-
 	// “G‚ÌˆÊ’u‚Ì‰Šú‰»
 	float band = 5.0f;
 	for (int i = 0; i < kEnemyNum; i++)
@@ -66,3 +65,27 @@ void EnemyManager::Draw()
 		}
 	}
 }
+
+bool EnemyManager::CollisionPlayer()
+{
+	VECTOR playerPos = m_pPlayer->GetPos();
+	float playerRad = m_pPlayer->GetRad();
+	for (auto& enemy : m_pEnemy)
+	{
+		VECTOR enemyPos=enemy->GetPos();
+		float enemyRad=enemy->GetRad();
+
+		float a = playerPos.x - enemyPos.x;
+		float b = playerPos.y - enemyPos.y;
+		float c = sqrtf((a * a) + (b * b));
+
+		if (c <= playerRad + enemyRad)
+		{
+			return true;
+		}
+
+	}
+
+	return false;
+}
+

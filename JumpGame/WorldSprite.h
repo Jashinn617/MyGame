@@ -7,6 +7,9 @@
 class WorldSprite
 {
 public:
+
+	WorldSprite();
+
 	/// <summary>
 	/// ‰Šú‰»
 	/// </summary>

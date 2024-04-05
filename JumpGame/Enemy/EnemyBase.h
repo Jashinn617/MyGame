@@ -15,12 +15,16 @@ public:
 	int GetModelHandle()const { return m_modelHandle; }
 
 	// 
-	const VECTOR& GetPos() const { return m_pos; }
+	const VECTOR& GetPos() const;
 	void SetPos(const VECTOR pos) { m_pos = pos; }
 	void SetModelPos();
+	const float GetRad()const { return m_rad; }
+
+	
 
 protected:
 	int m_modelHandle;
+	float m_rad;
 	VECTOR m_pos;
 };
 

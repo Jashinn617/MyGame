@@ -1,5 +1,11 @@
 #include "WorldSprite.h"
 
+WorldSprite::WorldSprite():
+	m_textureGraph(-1),
+	m_pos{0,0,0}
+{
+}
+
 void WorldSprite::Init(int textureGraph, int chipPixelSize, int spriteNo)
 {
 	this->m_textureGraph = textureGraph;

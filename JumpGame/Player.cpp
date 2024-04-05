@@ -8,14 +8,15 @@ namespace
 	constexpr float kScale = 0.002f;
 
 	// 当たり判定用の円の半径
-	constexpr float kRadius = 0.5;
+	constexpr float kRadius = 0.5f;
 }
 
 Player::Player() :
 	m_pos{ 0,0,0 },
 	m_velocity{0,0,0},
 	m_dir{0,0,1},
-	m_modelHandle(-1)
+	m_modelHandle(-1),
+	m_rad(kRadius)
 {
 	// 3Dモデルのロード
 	m_modelHandle = MV1LoadModel("Data/Model/chicken.mv1");
@@ -98,4 +99,10 @@ void Player::Draw() const
 
 #endif // _DEBUG
 
+}
+
+const VECTOR& Player::GetPos() const
+{
+	return MV1GetPosition(m_modelHandle);
+	// TODO: return ステートメントをここに挿入します
 }

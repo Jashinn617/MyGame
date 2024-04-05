@@ -1,3 +1,2 @@
-﻿  EnemyBase.cpp
-D:\GitHub\MyGame\JumpGame\Enemy\EnemyBase.cpp(36,56): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
+﻿  MainScene.cpp
   JumpGame.vcxproj -> D:\GitHub\MyGame\JumpGame\x64\Debug\JumpGame.exe

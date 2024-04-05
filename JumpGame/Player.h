@@ -34,8 +34,9 @@ public:
 	/// <returns></returns>
 	int GetModelHandle()const { return m_modelHandle; }
 
-	const VECTOR& GetPos()const { return m_pos; }
+	const VECTOR& GetPos()const;
 	const VECTOR& GetDir()const { return m_dir; }
+	const float GetRad()const { return m_rad; }
 
 private:
 	// ˆÊ’u
@@ -46,6 +47,8 @@ private:
 	VECTOR m_dir;
 	// 3Dƒ‚ƒfƒ‹
 	int m_modelHandle;
+	// ”¼Œa
+	float m_rad;
 
 };
 
