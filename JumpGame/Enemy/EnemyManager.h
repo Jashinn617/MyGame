@@ -25,7 +25,7 @@ public:
 
 private:
 	// “G‚Ì”
-	static constexpr int kEnemyNum = 10;
+	static constexpr int kEnemyNum = 60;
 
 	vector<shared_ptr<EnemyBase>> m_pEnemy;
 	shared_ptr<Player> m_pPlayer;

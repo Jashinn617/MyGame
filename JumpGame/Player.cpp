@@ -13,10 +13,13 @@ namespace
 
 Player::Player() :
 	m_pos{ 0,0,0 },
-	m_velocity{0,0,0},
-	m_dir{0,0,1},
+	m_move{ 0,0,0 },
+	m_velocity{ 0,0,0 },
+	m_dir{ 0,0,1 },
 	m_modelHandle(-1),
-	m_rad(kRadius)
+	m_rad(kRadius),
+	m_jumpPower(0.0f),
+	m_isJump(false)
 {
 	// 3Dモデルのロード
 	m_modelHandle = MV1LoadModel("Data/Model/chicken.mv1");
@@ -30,61 +33,55 @@ Player::~Player()
 
 void Player::Update()
 {
-
-	// 仮の動き
-#ifdef _DEBUG
+	// モデルのスケールを決定する
+	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
+	// 回転
+	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, kDirY, 0.0f));
 
 	// キー入力取得
 	int Key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
-	// 単純に方向転換
-	m_dir = VGet(0, 0, 0);
-	if (Key & PAD_INPUT_UP)
+	// 右移動
+	m_pos = VAdd(m_pos, VGet(0.05f, 0, 0));
+
+	// 重力
+	m_pos = VAdd(m_pos, VGet(0.0f, m_jumpPower, 0.0f));
+
+	m_jumpPower -= kGravity;
+
+	if (m_pos.y <= 0)
 	{
-		m_dir = VAdd(m_dir, VGet(0, 1, 0));
-	}
-	else if (Key & PAD_INPUT_DOWN)
-	{
-		m_dir = VAdd(m_dir, VGet(0, -1, 0));
-	}
-	if (Key & PAD_INPUT_RIGHT)
-	{
-		m_dir = VAdd(m_dir, VGet(1, 0, 0));
-	}
-	else if (Key & PAD_INPUT_LEFT)
-	{
-		m_dir = VAdd(m_dir, VGet(-1, 0, 0));
+		m_pos.y = 0;
+		m_jumpPower = 0;
+		m_isJump = false;
 	}
 
-#endif
-
-	m_dir = VAdd(m_dir, VGet(1, 0, 0));
-
-	// ゼロ除算避け
-	if (VSquareSize(m_dir) > 0)
+	if (Key & PAD_INPUT_A && !m_isJump)
 	{
-		// 正規化
-		m_dir = VNorm(m_dir);
+		m_jumpPower = kJumpHeight;
+		m_isJump = true;
 	}
+
+	//// ゼロ除算避け
+	//if (VSquareSize(m_dir) > 0)
+	//{
+	//	// 正規化
+	//	m_dir = VNorm(m_dir);
+	//}
 
 	// 位置の更新
-	m_velocity = VScale(m_dir, kSpeed);
-	m_pos = VAdd(m_pos, m_velocity);
+	//m_velocity = VScale(m_dir, kSpeed);
+	m_pos = VAdd(m_pos, m_move);
 
-	// 力をかけ終わったvelocityの方向にdirを調整する
-	if (VSize(m_velocity) != 0)
-	{
-		m_dir = VNorm(m_velocity);
-	}
+	//// 力をかけ終わったvelocityの方向にdirを調整する
+	//if (VSize(m_velocity) != 0)
+	//{
+	//	m_dir = VNorm(m_velocity);
+	//}
 
-	// モデルのスケールを決定する
-	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
 
 	// モデルの位置設定
 	MV1SetPosition(m_modelHandle, m_pos);
-
-	// 回転
-	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, 91.0f, 0.0f));	
 }
 
 void Player::Draw() const
