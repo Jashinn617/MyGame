@@ -1,9 +1,7 @@
-﻿  Camera.cpp
-  EnemyManager.cpp
-D:\GitHub\MyGame\JumpGame\Enemy\EnemyManager.cpp(37,59): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-D:\GitHub\MyGame\JumpGame\Enemy\EnemyManager.cpp(37,33): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
-  Player.cpp
-  MainScene.cpp
-  コードを生成中...
-D:\GitHub\MyGame\JumpGame\Player.cpp(103): warning C4172: ローカル変数またはテンポラリのアドレスを返します
+﻿  EnemyManager.cpp
+D:\GitHub\MyGame\JumpGame\Enemy\EnemyManager.cpp(49,32): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+D:\GitHub\MyGame\JumpGame\Enemy\EnemyManager.cpp(53,32): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+D:\GitHub\MyGame\JumpGame\Enemy\EnemyManager.cpp(57,32): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+D:\GitHub\MyGame\JumpGame\Enemy\EnemyManager.cpp(61,32): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+D:\GitHub\MyGame\JumpGame\Enemy\EnemyManager.cpp(65,33): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
   JumpGame.vcxproj -> D:\GitHub\MyGame\JumpGame\x64\Debug\JumpGame.exe

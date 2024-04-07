@@ -6,8 +6,18 @@
 
 namespace
 {
-	// 敵のスケール
+	// スケールサイズ
 	constexpr float kScale = 0.002f;
+
+	// Y位置
+	constexpr float kPosYDown = 0.3f;	// 下の敵
+	constexpr float kPosYUp = 0.6f;	// 上の敵
+
+	// 敵の間隔を変える敵数
+	constexpr int kEnemyDifficultyNum1 = 5;
+	constexpr int kEnemyDifficultyNum2 = 10;
+	constexpr int kEnemyDifficultyNum3 = 20;
+	constexpr int kEnemyDifficultyNum4 = 40;
 }
 
 
@@ -31,10 +41,31 @@ EnemyManager::~EnemyManager()
 void EnemyManager::CreateEnemyes()
 {
 	// 敵の位置の初期化
-	float band = 5.0f;
+	float band = 10.0f;
 	for (int i = 0; i < kEnemyNum; i++)
 	{
-		m_pEnemy[i]->SetPos(VGet(band * (i - kEnemyNum * 0.01), 0.3, -1.0f));
+		if (i <= kEnemyDifficultyNum1)
+		{
+			m_pEnemy[i]->SetPos(VGet((i * 10), kPosYDown, -0.5f));
+		}
+		else if (i <= kEnemyDifficultyNum2)
+		{
+			m_pEnemy[i]->SetPos(VGet((i * 10), kPosYDown, -0.5f));
+		}
+		else if (i <= kEnemyDifficultyNum3)
+		{
+			m_pEnemy[i]->SetPos(VGet((i * 10), kPosYDown, -0.5f));
+		}
+		else if (i <= kEnemyDifficultyNum4)
+		{
+			m_pEnemy[i]->SetPos(VGet((i * 10), kPosYDown, -0.5f));
+		}
+		else
+		{
+			m_pEnemy[i]->SetPos(VGet((i  * 10), kPosYDown, -0.5f));
+		}
+
+		
 	}
 }
 

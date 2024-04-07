@@ -8,11 +8,11 @@ namespace
 	constexpr float kScale = 0.002f;
 
 	// “–‚½‚è”»’è—p‚Ì‰~‚Ì”¼Œa
-	constexpr float kRadius = 0.5f;
+	constexpr float kRadius = 0.3f;
 }
 
 Player::Player() :
-	m_pos{ 0,0,0 },
+	m_pos{ -10,0,0 },
 	m_move{ 0,0,0 },
 	m_velocity{ 0,0,0 },
 	m_dir{ 0,0,1 },
