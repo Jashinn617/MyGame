@@ -1,5 +1,6 @@
 #pragma once
 #include "SceneBase.h"
+#include "DxLib.h"
 
 class Player;
 class Camera;
@@ -21,10 +22,20 @@ public:
 	virtual void End();
 
 private:
+	void BackDraw();
+
+	VECTOR m_bgPos;	// 背景の表示位置
+	int m_bgImg;	// 背景画像
+	int m_bgFrame;
 
 	int m_time;
 
-	int m_num;
+
+	struct BgSize	// 背景画像のサイズ
+	{
+		int width;
+		int height;
+	};
 
 	/*ポインタの取得*/
 	// プレイヤー
@@ -35,5 +46,15 @@ private:
 	shared_ptr<Map> m_pMap;
 	// 敵キャラクター
 	shared_ptr<EnemyManager> m_pEnemy;
+
+private:	// 定数
+	static constexpr float kBgScale = 0.5f;		// 背景画像のスケールサイズ
+	static constexpr float kBgSpeed = -1.0f;	// 背景の移動スピード
+
+	/*背景の描画位置*/
+	static constexpr float kBgPosX = 0.0f;
+	static constexpr float kBgPosY = 0.0f;
+	static constexpr float kBgPosZ = 200.0f;
+
 };
 

@@ -62,23 +62,8 @@ void Player::Update()
 		m_isJump = true;
 	}
 
-	//// ゼロ除算避け
-	//if (VSquareSize(m_dir) > 0)
-	//{
-	//	// 正規化
-	//	m_dir = VNorm(m_dir);
-	//}
-
 	// 位置の更新
-	//m_velocity = VScale(m_dir, kSpeed);
 	m_pos = VAdd(m_pos, m_move);
-
-	//// 力をかけ終わったvelocityの方向にdirを調整する
-	//if (VSize(m_velocity) != 0)
-	//{
-	//	m_dir = VNorm(m_velocity);
-	//}
-
 
 	// モデルの位置設定
 	MV1SetPosition(m_modelHandle, m_pos);
@@ -91,6 +76,7 @@ void Player::Draw() const
 
 #ifdef _DEBUG
 	VECTOR pos = MV1GetPosition(m_modelHandle);
+	pos.x -= 0.1;
 
 	DrawSphere3D(pos, kRadius, 32, 0x0000ff, 0x0000ff, false);
 

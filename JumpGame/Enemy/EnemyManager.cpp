@@ -148,6 +148,7 @@ void EnemyManager::Draw()
 bool EnemyManager::CollisionPlayer()
 {
 	VECTOR playerPos = m_pPlayer->GetPos();
+	playerPos.x -= 0.1;
 	float playerRad = m_pPlayer->GetRad();
 	for (auto& enemy : m_pEnemy)
 	{

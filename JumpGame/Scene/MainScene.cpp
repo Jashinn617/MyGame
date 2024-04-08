@@ -3,14 +3,15 @@
 #include "../Map.h"
 #include "../Camera.h"
 #include "../Enemy/EnemyManager.h"
-#include "DxLib.h"
 
 #include "SceneGameOver.h"
 
 MainScene::MainScene():
+	m_bgPos{kBgPosX,kBgPosY,kBgPosZ},
 	m_pPlayer(nullptr),
 	m_time(0),
-	m_num(0)
+	m_bgFrame(0),
+	m_bgImg(-1)
 {
 	// ポインタの生成
 	m_pPlayer = make_shared<Player>();
@@ -18,10 +19,13 @@ MainScene::MainScene():
 	m_pMap = make_shared<Map>();
 	m_pEnemy = make_shared<EnemyManager>();
 	m_pEnemy->GetPlayer(m_pPlayer);
+
+	m_bgImg = LoadGraph("Data/Image/Background/StageBg.png");
 }
 
 MainScene::~MainScene()
 {
+	DeleteGraph(m_bgImg);
 }
 
 void MainScene::Init()
@@ -41,6 +45,7 @@ shared_ptr<SceneBase> MainScene::Update()
 	m_pEnemy->Update();
 
 	m_time++;
+	m_bgPos = VAdd(m_bgPos, VGet(kBgSpeed, 0.0f, 0.0f));
 
 
 	if (m_pEnemy->CollisionPlayer())
@@ -55,12 +60,12 @@ shared_ptr<SceneBase> MainScene::Update()
 
 void MainScene::Draw()
 {
+	BackDraw();
 	m_pMap->Draw();	
 	m_pPlayer->Draw();
 	m_pEnemy->Draw();
 
 	DrawFormatString(100, 100, 0xffffff, "%d", m_time/60);
-	DrawFormatString(150, 150, 0xffffff, "当たった回数：%d", m_num);
 	
 	// デバッグ描画
 #ifdef _DEBUG
@@ -76,4 +81,26 @@ void MainScene::Draw()
 
 void MainScene::End()
 {
+}
+
+void MainScene::BackDraw()
+{
+	// 画像サイズの取得
+	BgSize bgSize;
+	GetGraphSize(m_bgImg, &bgSize.width, &bgSize.height);
+
+	// スクロール量の計算
+	int scrollBg = static_cast<int>(m_bgPos.x * 0.3f) % static_cast<int>(bgSize.width * kBgScale);
+
+	// 背景の描画
+	for (int i = 0; i < 2; i++)
+	{
+		DrawRotaGraph3D(scrollBg + i * bgSize.width * kBgScale,
+			m_bgPos.y,
+			m_bgPos.z,
+			kBgScale,
+			0.0f,
+			m_bgImg,
+			true);
+	}
 }
