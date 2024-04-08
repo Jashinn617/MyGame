@@ -5,6 +5,8 @@
 #include "../Enemy/EnemyManager.h"
 #include "DxLib.h"
 
+#include "SceneGameOver.h"
+
 MainScene::MainScene():
 	m_pPlayer(nullptr),
 	m_time(0),
@@ -40,13 +42,11 @@ shared_ptr<SceneBase> MainScene::Update()
 
 	m_time++;
 
-#ifdef _DEBUG
 
 	if (m_pEnemy->CollisionPlayer())
 	{
-		m_num++;
+		return make_shared<SceneGameOver>();
 	}
-#endif
 	
 
 	// シーン移動しないときは自身のポインタを返す
