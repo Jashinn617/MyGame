@@ -1,7 +1,5 @@
 ﻿  EnemyManager.cpp
-D:\GitHub\MyGame\JumpGame\Enemy\EnemyManager.cpp(49,32): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-D:\GitHub\MyGame\JumpGame\Enemy\EnemyManager.cpp(53,32): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-D:\GitHub\MyGame\JumpGame\Enemy\EnemyManager.cpp(57,32): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-D:\GitHub\MyGame\JumpGame\Enemy\EnemyManager.cpp(61,32): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-D:\GitHub\MyGame\JumpGame\Enemy\EnemyManager.cpp(65,33): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+  MainScene.cpp
+  SceneManager.cpp
+  コードを生成中...
   JumpGame.vcxproj -> D:\GitHub\MyGame\JumpGame\x64\Debug\JumpGame.exe

@@ -7,7 +7,8 @@
 
 MainScene::MainScene():
 	m_pPlayer(nullptr),
-	m_time(0)
+	m_time(0),
+	m_num(0)
 {
 	// ポインタの生成
 	m_pPlayer = make_shared<Player>();
@@ -43,7 +44,7 @@ shared_ptr<SceneBase> MainScene::Update()
 
 	if (m_pEnemy->CollisionPlayer())
 	{
-		printfDx("当たった");
+		m_num++;
 	}
 #endif
 	
@@ -59,6 +60,7 @@ void MainScene::Draw()
 	m_pEnemy->Draw();
 
 	DrawFormatString(100, 100, 0xffffff, "%d", m_time/60);
+	DrawFormatString(150, 150, 0xffffff, "当たった回数：%d", m_num);
 	
 	// デバッグ描画
 #ifdef _DEBUG

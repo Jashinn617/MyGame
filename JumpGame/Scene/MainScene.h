@@ -24,6 +24,8 @@ private:
 
 	int m_time;
 
+	int m_num;
+
 	/*ポインタの取得*/
 	// プレイヤー
 	shared_ptr<Player> m_pPlayer;
