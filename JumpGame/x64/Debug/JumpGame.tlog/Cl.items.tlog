@@ -4,6 +4,8 @@ D:\GitHub\MyGame\JumpGame\Enemy\EnemyBase.cpp;D:\GitHub\MyGame\JumpGame\x64\Debu
 D:\GitHub\MyGame\JumpGame\Enemy\EnemyManager.cpp;D:\GitHub\MyGame\JumpGame\x64\Debug\EnemyManager.obj
 D:\GitHub\MyGame\JumpGame\Main.cpp;D:\GitHub\MyGame\JumpGame\x64\Debug\Main.obj
 D:\GitHub\MyGame\JumpGame\Map.cpp;D:\GitHub\MyGame\JumpGame\x64\Debug\Map.obj
+D:\GitHub\MyGame\JumpGame\Scene\SceneTitle.cpp;D:\GitHub\MyGame\JumpGame\x64\Debug\SceneTitle.obj
+D:\GitHub\MyGame\JumpGame\Scene\SceneClear.cpp;D:\GitHub\MyGame\JumpGame\x64\Debug\SceneClear.obj
 D:\GitHub\MyGame\JumpGame\Scene\SceneGameOver.cpp;D:\GitHub\MyGame\JumpGame\x64\Debug\SceneGameOver.obj
 D:\GitHub\MyGame\JumpGame\Scene\MainScene.cpp;D:\GitHub\MyGame\JumpGame\x64\Debug\MainScene.obj
 D:\GitHub\MyGame\JumpGame\Player.cpp;D:\GitHub\MyGame\JumpGame\x64\Debug\Player.obj

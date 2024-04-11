@@ -1,6 +1,7 @@
 #include "SceneManager.h"
 #include "SceneBase.h"
 #include "MainScene.h"
+#include "SceneTitle.h"
 
 SceneManager::SceneManager():
 	m_pScene(nullptr)
@@ -14,7 +15,7 @@ SceneManager::~SceneManager()
 void SceneManager::Init()
 {
 	// Å‰‚ÌƒV[ƒ“‚Ìƒƒ‚ƒŠ‚ğŠm•Û‚·‚é
-	m_pScene = make_shared<MainScene>();
+	m_pScene = make_shared<SceneTitle>();
 	m_pScene->Init();
 }
 

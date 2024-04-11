@@ -5,6 +5,7 @@
 #include "../Enemy/EnemyManager.h"
 
 #include "SceneGameOver.h"
+#include "SceneClear.h"
 
 MainScene::MainScene():
 	m_bgPos{kBgPosX,kBgPosY,kBgPosZ},
@@ -46,6 +47,20 @@ shared_ptr<SceneBase> MainScene::Update()
 
 	m_time++;
 	m_bgPos = VAdd(m_bgPos, VGet(kBgSpeed, 0.0f, 0.0f));
+
+	
+
+#ifdef _DEBUG
+	if (CheckHitKey(KEY_INPUT_P))
+	{
+		return make_shared<SceneGameOver>();
+	}
+	else if (CheckHitKey(KEY_INPUT_Q))
+	{
+		return make_shared<SceneClear>();
+	}
+#endif
+
 
 
 	if (m_pEnemy->CollisionPlayer())
