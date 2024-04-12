@@ -38,9 +38,9 @@ void MainScene::Init()
 	m_pEnemy->CreateEnemyes();
 }
 
-shared_ptr<SceneBase> MainScene::Update()
+shared_ptr<SceneBase> MainScene::Update(Input& input)
 {
-	m_pPlayer->Update();
+	m_pPlayer->Update(input);
 	m_pMap->Update();
 	m_pCamera->Update(*m_pPlayer);
 	m_pEnemy->Update();
@@ -51,17 +51,15 @@ shared_ptr<SceneBase> MainScene::Update()
 	
 
 #ifdef _DEBUG
-	if (CheckHitKey(KEY_INPUT_P))
+	if (input.IsTriggered("Y"))
 	{
 		return make_shared<SceneGameOver>();
 	}
-	else if (CheckHitKey(KEY_INPUT_Q))
+	else if (input.IsTriggered("X"))
 	{
 		return make_shared<SceneClear>();
 	}
 #endif
-
-
 
 	if (m_pEnemy->CollisionPlayer())
 	{

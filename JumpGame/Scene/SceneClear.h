@@ -8,7 +8,7 @@ public:
 	~SceneClear();
 
 	virtual void Init();
-	virtual shared_ptr<SceneBase> Update();
+	virtual shared_ptr<SceneBase> Update(Input& input);
 	virtual void Draw();
 	virtual void End();
 
@@ -16,10 +16,36 @@ private:
 	int m_clearLogoHandle;
 	int m_continueLogoHandle;
 	int m_endLogoHandle;
+	int m_selectCursorHandle;
+
+	double m_continueExtRate;
+	double m_endExtRate;
+
+	float m_cursorSinCount;
+	float m_cursorSinPosX;
+	int m_cursorPosY;
+
+	int m_cursorCount;
 
 private:	// 定数
-	static constexpr float kClearPosX = 800.0f;	// クリアロゴのX位置
-	static constexpr float kClearPosY = 300.0f;	// クリアロゴのY位置
-	static constexpr double kClearExtRate = 0.8;	// クリアロゴの拡大率
+	static constexpr float kClearPosX = 800.0f;	// クリアのX位置
+	static constexpr float kClearPosY = 200.0f;	// クリアのY位置
+	static constexpr double kClearExtRate = 0.8;	// クリアの拡大率
+
+	static constexpr float kContinuePosX = kClearPosX;	// コンテニューのX位置
+	static constexpr float kContinuePosY = kClearPosY + 300.0f;	// コンテニューのX位置
+	static constexpr double kSmallContinueExtRate = 0.5f;	// コンテニューの拡大率(通常時)
+	static constexpr double kBigContinueExtRate = 0.55f;	// コンテニューの拡大率(拡大時)
+
+	static constexpr float kEndPosX = kClearPosX;	// エンドのX位置
+	static constexpr float kEndPosY = kContinuePosY + 200.0f;	// エンドのY位置
+	static constexpr double kSmallEndExtRate = kSmallContinueExtRate;	// エンドの拡大率(通常時)
+	static constexpr double kBigEndExtRate = kBigContinueExtRate;	// エンドの拡大率(拡大時)
+
+	static constexpr float kCursorPosX = kClearPosX - 450.0f;	// カーソルのX位置
+	static constexpr double kCursorExtRate = 0.15;	// カーソルの拡大率
+
+	static constexpr float kCursorSinSpeed = 0.08f;	// カーソルの移動スピード
+	static constexpr float kCursorAnimationSwing = 30.0f;	// カーソルの移動幅
 };
 

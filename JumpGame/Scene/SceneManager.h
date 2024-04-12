@@ -4,6 +4,8 @@
 using namespace std;
 
 class SceneBase;
+class Input;
+
 class SceneManager
 {
 public:
@@ -11,7 +13,7 @@ public:
 	virtual ~SceneManager();
 
 	void Init();
-	void Update();
+	void Update(Input& input);
 	void Draw();
 	void End();
 

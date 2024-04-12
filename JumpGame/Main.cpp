@@ -1,6 +1,7 @@
 #include "DxLib.h"
 #include "Handle/ModelManager.h"
 #include "Scene/SceneManager.h"
+#include "Input.h"
 #include <memory>
 
 using namespace std;
@@ -29,6 +30,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	shared_ptr<SceneManager> pScene = make_shared<SceneManager>();
 	pScene->Init();
 
+	// 入力
+	Input input;
+
+
 	// ゲームループ
 	while (ProcessMessage() != -1)
 	{
@@ -36,10 +41,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		LONGLONG start = GetNowHiPerformanceCount();
 
 		// 描画を行う前に画面をクリアする
-		ClearDrawScreen();		
+		ClearDrawScreen();
+
+		// 入力の更新
+		input.Update();
 
 		// ゲームの処理
-		pScene->Update();
+		pScene->Update(input);
 		pScene->Draw();
 
 		// 画面が切り替わるのを待つ

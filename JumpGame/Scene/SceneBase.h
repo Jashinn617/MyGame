@@ -1,5 +1,7 @@
 #pragma once
 #include <memory>
+#include "../Input.h"
+#include <math.h>
 
 using namespace std;
 
@@ -12,7 +14,7 @@ public:
 	// 初期化
 	virtual void Init() = 0;
 	// 更新
-	virtual shared_ptr<SceneBase> Update() = 0;
+	virtual shared_ptr<SceneBase> Update(Input& input) = 0;
 	// 描画
 	virtual void Draw() = 0;
 	// シーン終了時の処理

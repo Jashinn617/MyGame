@@ -6,6 +6,7 @@ class Player;
 class Camera;
 class Map;
 class EnemyManager;
+class Input;
 
 /// <summary>
 /// ƒƒCƒ“ƒV[ƒ“
@@ -17,7 +18,7 @@ public:
 	virtual ~MainScene();
 
 	virtual void Init();
-	virtual shared_ptr<SceneBase> Update();
+	virtual shared_ptr<SceneBase> Update(Input& input);
 	virtual void Draw();
 	virtual void End();
 

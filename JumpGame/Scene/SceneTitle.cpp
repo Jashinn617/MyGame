@@ -9,8 +9,10 @@ SceneTitle::SceneTitle():
 	m_selectCursorHandle(-1),
 	m_startExtRate(kSmallStartExtRate),
 	m_endExtRate(kSmallEndExtRate),
+	m_cursorSinPosX(0),
 	m_cursorPosY(kStartPosY),
-	m_cursorCount(0)
+	m_cursorCount(0),
+	m_cursorSinCount(0)
 {
 	m_titleLogoHandle = LoadGraph("Data/Image/Logo/Title.png");
 	m_startLogoHandle = LoadGraph("Data/Image/Logo/Start.png");
@@ -28,14 +30,47 @@ SceneTitle::~SceneTitle()
 
 void SceneTitle::Init()
 {
-	m_cursorCount = 0;
 }
 
-shared_ptr<SceneBase> SceneTitle::Update()
+shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 {
-	if (CheckHitKeyAll())
+	if (input.IsTriggered("up"))
 	{
-		return make_shared<MainScene>();
+		m_cursorCount--;
+	}
+	else if (input.IsTriggered("down"))
+	{
+		m_cursorCount++;
+	}
+
+	if (m_cursorCount % 2 == 0)
+	{
+		m_cursorPosY = kStartPosY;
+		m_startExtRate = kBigStartExtRate;
+		m_endExtRate = kSmallEndExtRate;
+	}
+	else if (m_cursorCount % 2 == 1)
+	{
+		m_cursorPosY = kEndPosY;
+		m_startExtRate = kSmallStartExtRate;
+		m_endExtRate = kBigEndExtRate;
+	}
+
+	// カーソルのアニメーション
+	m_cursorSinCount += kCursorSinSpeed;
+	m_cursorSinPosX = sinf(m_cursorSinCount) * kCursorAnimationSwing;
+
+
+	if (input.IsTriggered("A"))
+	{
+		if (m_cursorCount % 2 == 0)
+		{
+			return make_shared<MainScene>();
+		}
+		else if (m_cursorCount % 2 == 1)
+		{
+			DxLib_End();
+		}
 	}
 
 	return shared_from_this();
@@ -46,10 +81,13 @@ void SceneTitle::Draw()
 	DrawRotaGraphF(kTitlePosX, kTitlePosY, kTitleExtRate, 0.0, m_titleLogoHandle, true, false);
 	DrawRotaGraphF(kStartPosX, kStartPosY, m_startExtRate, 0.0, m_startLogoHandle, true, false);
 	DrawRotaGraphF(kEndPosX, kEndPosY, m_endExtRate, 0.0, m_endLogoHandle, true, false);
-	DrawRotaGraphF(kCursorPosX, m_cursorPosY, kCursorExtRate, 0.0, m_selectCursorHandle, true, false);
+
+	float curosrX = kCursorPosX + m_cursorSinPosX;
+	DrawRotaGraphF(curosrX, m_cursorPosY, kCursorExtRate, 0.0, m_selectCursorHandle, true, false);
 
 #ifdef _DEBUG
 	DrawString(0, 0, "Title", 0xffffff);
+	DrawFormatString(0, 50, 0xffffff, "Count：%d", m_cursorCount % 2);
 #endif	
 }
 

@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Input.h"
 
 namespace
 {
@@ -31,15 +32,12 @@ Player::~Player()
 	MV1DeleteModel(m_modelHandle);
 }
 
-void Player::Update()
+void Player::Update(Input& input)
 {
 	// モデルのスケールを決定する
 	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
 	// 回転
 	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, kDirY, 0.0f));
-
-	// キー入力取得
-	int Key = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 
 	// 右移動
 	m_pos = VAdd(m_pos, VGet(0.05f, 0, 0));
@@ -56,7 +54,7 @@ void Player::Update()
 		m_isJump = false;
 	}
 
-	if (Key & PAD_INPUT_A && !m_isJump)
+	if (input.IsTriggered("A") && !m_isJump)
 	{
 		m_jumpPower = kJumpHeight;
 		m_isJump = true;
@@ -87,5 +85,4 @@ void Player::Draw() const
 const VECTOR& Player::GetPos() const
 {
 	return MV1GetPosition(m_modelHandle);
-	// TODO: return ステートメントをここに挿入します
 }

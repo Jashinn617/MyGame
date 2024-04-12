@@ -4,6 +4,8 @@
 
 using namespace std;
 
+class Input;
+
 /// <summary>
 /// プレイヤークラス
 /// </summary>
@@ -22,7 +24,7 @@ public:
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update();
+	void Update(Input& input);
 	/// <summary>
 	/// 描画
 	/// </summary>
