@@ -11,8 +11,9 @@ MainScene::MainScene():
 	m_bgPos{kBgPosX,kBgPosY,kBgPosZ},
 	m_pPlayer(nullptr),
 	m_time(0),
+	m_bgmHandle(-1),
 	m_bgFrame(0),
-	m_bgImg(-1)
+	m_bgHandle(-1)
 {
 	// ポインタの生成
 	m_pPlayer = make_shared<Player>();
@@ -21,12 +22,14 @@ MainScene::MainScene():
 	m_pEnemy = make_shared<EnemyManager>();
 	m_pEnemy->GetPlayer(m_pPlayer);
 
-	m_bgImg = LoadGraph("Data/Image/Background/StageBg.png");
+	m_bgHandle = LoadGraph("Data/Image/Background/StageBg.png");
+	m_bgmHandle = LoadSoundMem("Data/Sound/BGM/Main.ogg");
 }
 
 MainScene::~MainScene()
 {
-	DeleteGraph(m_bgImg);
+	DeleteGraph(m_bgHandle);
+	DeleteSoundMem(m_bgmHandle);
 }
 
 void MainScene::Init()
@@ -36,6 +39,9 @@ void MainScene::Init()
 
 	// 敵の生成
 	m_pEnemy->CreateEnemyes();
+
+	// BGMの再生
+	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
 }
 
 shared_ptr<SceneBase> MainScene::Update(Input& input)
@@ -94,13 +100,15 @@ void MainScene::Draw()
 
 void MainScene::End()
 {
+	// BGMの停止
+	StopSoundMem(m_bgmHandle);
 }
 
 void MainScene::BackDraw()
 {
 	// 画像サイズの取得
 	BgSize bgSize;
-	GetGraphSize(m_bgImg, &bgSize.width, &bgSize.height);
+	GetGraphSize(m_bgHandle, &bgSize.width, &bgSize.height);
 
 	// スクロール量の計算
 	int scrollBg = static_cast<int>(m_bgPos.x * 0.3f) % static_cast<int>(bgSize.width * kBgScale);
@@ -113,7 +121,7 @@ void MainScene::BackDraw()
 			m_bgPos.z,
 			kBgScale,
 			0.0f,
-			m_bgImg,
+			m_bgHandle,
 			true);
 	}
 }

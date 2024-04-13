@@ -26,10 +26,12 @@ private:
 	void BackDraw();
 
 	VECTOR m_bgPos;	// ”wŒi‚Ì•\¦ˆÊ’u
-	int m_bgImg;	// ”wŒi‰æ‘œ
+	int m_bgHandle;	// ”wŒi‰æ‘œ
 	int m_bgFrame;
 
 	int m_time;
+
+	int m_bgmHandle;
 
 
 	struct BgSize	// ”wŒi‰æ‘œ‚ÌƒTƒCƒY

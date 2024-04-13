@@ -17,6 +17,7 @@ private:
 	int m_continueLogoHandle;
 	int m_endLogoHandle;
 	int m_selectCursorHandle;
+	int m_bgmHandle;
 
 	double m_continueExtRate;
 	double m_endExtRate;

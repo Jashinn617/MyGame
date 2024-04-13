@@ -7,6 +7,7 @@ SceneTitle::SceneTitle():
 	m_startLogoHandle(-1),
 	m_endLogoHandle(-1),
 	m_selectCursorHandle(-1),
+	m_bgmHandle(-1),
 	m_startExtRate(kSmallStartExtRate),
 	m_endExtRate(kSmallEndExtRate),
 	m_cursorSinPosX(0),
@@ -18,6 +19,7 @@ SceneTitle::SceneTitle():
 	m_startLogoHandle = LoadGraph("Data/Image/Logo/Start.png");
 	m_endLogoHandle = LoadGraph("Data/Image/Logo/End.png");
 	m_selectCursorHandle = LoadGraph("Data/Image/SelectCursor.png");
+	m_bgmHandle = LoadSoundMem("Data/Sound/BGM/Title.ogg");
 }
 
 SceneTitle::~SceneTitle()
@@ -26,10 +28,13 @@ SceneTitle::~SceneTitle()
 	DeleteGraph(m_startLogoHandle);
 	DeleteGraph(m_endLogoHandle);
 	DeleteGraph(m_selectCursorHandle);
+	DeleteSoundMem(m_bgmHandle);
 }
 
 void SceneTitle::Init()
 {
+	// BGMÇÃçƒê∂
+	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
 }
 
 shared_ptr<SceneBase> SceneTitle::Update(Input& input)
@@ -93,4 +98,6 @@ void SceneTitle::Draw()
 
 void SceneTitle::End()
 {
+	// BGMÇÃí‚é~
+	StopSoundMem(m_bgmHandle);
 }

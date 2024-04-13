@@ -8,6 +8,7 @@ SceneClear::SceneClear():
 	m_continueLogoHandle(-1),
 	m_endLogoHandle(-1),
 	m_selectCursorHandle(-1),
+	m_bgmHandle(-1),
 	m_continueExtRate(kSmallContinueExtRate),
 	m_endExtRate(kSmallEndExtRate),
 	m_cursorSinPosX(0),
@@ -19,6 +20,7 @@ SceneClear::SceneClear():
 	m_continueLogoHandle = LoadGraph("Data/Image/Logo/Continue.png");
 	m_endLogoHandle = LoadGraph("Data/Image/Logo/End2.png");
 	m_selectCursorHandle = LoadGraph("Data/Image/SelectCursor.png");
+	m_bgmHandle = LoadSoundMem("Data/Sound/BGM/Clear.ogg");
 }
 
 SceneClear::~SceneClear()
@@ -27,10 +29,12 @@ SceneClear::~SceneClear()
 	DeleteGraph(m_continueLogoHandle);
 	DeleteGraph(m_endLogoHandle);
 	DeleteGraph(m_selectCursorHandle);
+	DeleteSoundMem(m_bgmHandle);
 }
 
 void SceneClear::Init()
 {
+	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
 }
 
 shared_ptr<SceneBase> SceneClear::Update(Input& input)
@@ -93,4 +97,5 @@ void SceneClear::Draw()
 
 void SceneClear::End()
 {
+	StopSoundMem(m_bgmHandle);
 }

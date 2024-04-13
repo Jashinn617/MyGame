@@ -8,6 +8,7 @@ SceneGameOver::SceneGameOver():
 	m_continueLogoHandle(-1),
 	m_endLogoHandle(-1),
 	m_selectCursorHandle(-1),
+	m_bgmHandle(-1),
 	m_continueExtRate(kSmallContinueExtRate),
 	m_endExtRate(kSmallEndExtRate),
 	m_cursorSinCount(0),
@@ -19,6 +20,7 @@ SceneGameOver::SceneGameOver():
 	m_continueLogoHandle = LoadGraph("Data/Image/Logo/Continue.png");
 	m_endLogoHandle = LoadGraph("Data/Image/Logo/End2.png");
 	m_selectCursorHandle = LoadGraph("Data/Image/SelectCursor.png");
+	m_bgmHandle = LoadSoundMem("Data/Sound/BGM/GameOver.mp3");
 }
 
 SceneGameOver::~SceneGameOver()
@@ -27,10 +29,12 @@ SceneGameOver::~SceneGameOver()
 	DeleteGraph(m_continueLogoHandle);
 	DeleteGraph(m_endLogoHandle);
 	DeleteGraph(m_selectCursorHandle);
+	DeleteSoundMem(m_bgmHandle);
 }
 
 void SceneGameOver::Init()
 {
+	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
 }
 
 shared_ptr<SceneBase> SceneGameOver::Update(Input& input)
@@ -94,4 +98,5 @@ void SceneGameOver::Draw()
 
 void SceneGameOver::End()
 {
+	StopSoundMem(m_bgmHandle);
 }
