@@ -8,6 +8,8 @@ SceneTitle::SceneTitle():
 	m_endLogoHandle(-1),
 	m_selectCursorHandle(-1),
 	m_bgmHandle(-1),
+	m_cursorMoveSeHandle(-1),
+	m_startSeHandle(-1),
 	m_startExtRate(kSmallStartExtRate),
 	m_endExtRate(kSmallEndExtRate),
 	m_cursorSinPosX(0),
@@ -20,6 +22,8 @@ SceneTitle::SceneTitle():
 	m_endLogoHandle = LoadGraph("Data/Image/Logo/End.png");
 	m_selectCursorHandle = LoadGraph("Data/Image/SelectCursor.png");
 	m_bgmHandle = LoadSoundMem("Data/Sound/BGM/Title.ogg");
+	m_cursorMoveSeHandle = LoadSoundMem("Data/Sound/SE/CursorMove.mp3");
+	m_startSeHandle = LoadSoundMem("Data/Sound/SE/Start.mp3");
 }
 
 SceneTitle::~SceneTitle()
@@ -29,10 +33,15 @@ SceneTitle::~SceneTitle()
 	DeleteGraph(m_endLogoHandle);
 	DeleteGraph(m_selectCursorHandle);
 	DeleteSoundMem(m_bgmHandle);
+	DeleteSoundMem(m_cursorMoveSeHandle);
+	DeleteSoundMem(m_startSeHandle);
 }
 
 void SceneTitle::Init()
 {
+	ChangeVolumeSoundMem(kBgmVolume, m_bgmHandle);
+	ChangeVolumeSoundMem(kSeVolume, m_cursorMoveSeHandle);
+	ChangeVolumeSoundMem(kSeVolume, m_startSeHandle);
 	// BGMÇÃçƒê∂
 	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
 }
@@ -42,10 +51,12 @@ shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 	if (input.IsTriggered("up"))
 	{
 		m_cursorCount--;
+		PlaySoundMem(m_cursorMoveSeHandle, DX_PLAYTYPE_BACK);
 	}
 	else if (input.IsTriggered("down"))
 	{
 		m_cursorCount++;
+		PlaySoundMem(m_cursorMoveSeHandle, DX_PLAYTYPE_BACK);
 	}
 
 	if (m_cursorCount % 2 == 0)
@@ -70,6 +81,9 @@ shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 	{
 		if (m_cursorCount % 2 == 0)
 		{
+			// BGMÇÃí‚é~
+			StopSoundMem(m_bgmHandle);
+			PlaySoundMem(m_startSeHandle, DX_PLAYTYPE_BACK);
 			return make_shared<MainScene>();
 		}
 		else if (m_cursorCount % 2 == 1)
@@ -98,6 +112,5 @@ void SceneTitle::Draw()
 
 void SceneTitle::End()
 {
-	// BGMÇÃí‚é~
-	StopSoundMem(m_bgmHandle);
+
 }

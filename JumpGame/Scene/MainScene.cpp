@@ -30,6 +30,7 @@ MainScene::~MainScene()
 {
 	DeleteGraph(m_bgHandle);
 	DeleteSoundMem(m_bgmHandle);
+
 }
 
 void MainScene::Init()
@@ -40,6 +41,8 @@ void MainScene::Init()
 	// “G‚Ì¶¬
 	m_pEnemy->CreateEnemyes();
 
+
+	ChangeVolumeSoundMem(kBgmVolume, m_bgmHandle);
 	// BGM‚ÌÄ¶
 	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
 }

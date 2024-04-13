@@ -59,5 +59,7 @@ private:	// ’è”
 	static constexpr float kBgPosY = 0.0f;
 	static constexpr float kBgPosZ = 200.0f;
 
+	static constexpr int kBgmVolume = 130;	// BGM‚Ì‰¹—Ê
+	static constexpr int kSeVolume = 255;	// SE‚Ì‰¹—Ê
 };
 

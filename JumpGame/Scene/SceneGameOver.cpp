@@ -9,6 +9,9 @@ SceneGameOver::SceneGameOver():
 	m_endLogoHandle(-1),
 	m_selectCursorHandle(-1),
 	m_bgmHandle(-1),
+	m_cursorMoveSeHandle(-1),
+	m_startSeHandle(-1),
+	m_endSeHandle(-1),
 	m_continueExtRate(kSmallContinueExtRate),
 	m_endExtRate(kSmallEndExtRate),
 	m_cursorSinCount(0),
@@ -20,7 +23,10 @@ SceneGameOver::SceneGameOver():
 	m_continueLogoHandle = LoadGraph("Data/Image/Logo/Continue.png");
 	m_endLogoHandle = LoadGraph("Data/Image/Logo/End2.png");
 	m_selectCursorHandle = LoadGraph("Data/Image/SelectCursor.png");
-	m_bgmHandle = LoadSoundMem("Data/Sound/BGM/GameOver.mp3");
+	m_bgmHandle = LoadSoundMem("Data/Sound/BGM/GameOver.ogg");
+	m_cursorMoveSeHandle = LoadSoundMem("Data/Sound/SE/CursorMove.mp3");
+	m_startSeHandle = LoadSoundMem("Data/Sound/SE/Start.mp3");
+	m_endSeHandle = LoadSoundMem("Data/Sound/SE/GameEnd.mp3");
 }
 
 SceneGameOver::~SceneGameOver()
@@ -30,10 +36,18 @@ SceneGameOver::~SceneGameOver()
 	DeleteGraph(m_endLogoHandle);
 	DeleteGraph(m_selectCursorHandle);
 	DeleteSoundMem(m_bgmHandle);
+	DeleteSoundMem(m_cursorMoveSeHandle);
+	DeleteSoundMem(m_startSeHandle);
+	DeleteSoundMem(m_endSeHandle);
 }
 
 void SceneGameOver::Init()
 {
+	ChangeVolumeSoundMem(kBgmVolume, m_bgmHandle);
+	ChangeVolumeSoundMem(kSeVolume, m_cursorMoveSeHandle);
+	ChangeVolumeSoundMem(kSeVolume, m_startSeHandle);
+	ChangeVolumeSoundMem(kSeVolume, m_endSeHandle);
+	// BGMÇÃçƒê∂
 	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
 }
 
@@ -42,10 +56,12 @@ shared_ptr<SceneBase> SceneGameOver::Update(Input& input)
 	if (input.IsTriggered("up"))
 	{
 		m_cursorCount--;
+		PlaySoundMem(m_cursorMoveSeHandle, DX_PLAYTYPE_BACK);
 	}
 	else if (input.IsTriggered("down"))
 	{
 		m_cursorCount++;
+		PlaySoundMem(m_cursorMoveSeHandle, DX_PLAYTYPE_BACK);
 	}
 
 	if (m_cursorCount % 2 == 0)
@@ -69,10 +85,14 @@ shared_ptr<SceneBase> SceneGameOver::Update(Input& input)
 	{
 		if (m_cursorCount % 2 == 0)
 		{
+			StopSoundMem(m_bgmHandle);
+			PlaySoundMem(m_startSeHandle, DX_PLAYTYPE_BACK);
 			return make_shared<MainScene>();
 		}
 		else if (m_cursorCount % 2 == 1)
 		{
+			StopSoundMem(m_bgmHandle);
+			PlaySoundMem(m_endSeHandle, DX_PLAYTYPE_BACK);
 			return make_shared<SceneTitle>();
 		}
 	}
@@ -98,5 +118,5 @@ void SceneGameOver::Draw()
 
 void SceneGameOver::End()
 {
-	StopSoundMem(m_bgmHandle);
+	
 }

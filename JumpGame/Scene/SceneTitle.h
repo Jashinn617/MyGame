@@ -18,6 +18,8 @@ private:
 	int m_endLogoHandle;
 	int m_selectCursorHandle;
 	int m_bgmHandle;
+	int m_cursorMoveSeHandle;
+	int m_startSeHandle;
 
 	double m_startExtRate;
 	double m_endExtRate;
@@ -49,6 +51,9 @@ private: // 定数
 
 	static constexpr float kCursorSinSpeed = 0.08f;	// カーソルの移動スピード
 	static constexpr float kCursorAnimationSwing = 30.0f;	// カーソルの移動幅
+
+	static constexpr int kBgmVolume = 130;	// BGMの音量
+	static constexpr int kSeVolume = 255;	// SEの音量
 
 };
 
