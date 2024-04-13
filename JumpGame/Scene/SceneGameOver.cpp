@@ -17,7 +17,9 @@ SceneGameOver::SceneGameOver():
 	m_cursorSinCount(0),
 	m_cursorSinPosX(0),
 	m_cursorPosY(kContinuePosY),
-	m_cursorCount(0)
+	m_cursorCount(0),
+	m_fadeAlpha(255),
+	m_isSceneEnd(false)
 {
 	m_gameOverLogoHandle = LoadGraph("Data/Image/Logo/GameOver.png");
 	m_continueLogoHandle = LoadGraph("Data/Image/Logo/Continue.png");
@@ -53,50 +55,77 @@ void SceneGameOver::Init()
 
 shared_ptr<SceneBase> SceneGameOver::Update(Input& input)
 {
-	if (input.IsTriggered("up"))
+	if (m_isSceneEnd)
 	{
-		m_cursorCount--;
-		PlaySoundMem(m_cursorMoveSeHandle, DX_PLAYTYPE_BACK);
-	}
-	else if (input.IsTriggered("down"))
-	{
-		m_cursorCount++;
-		PlaySoundMem(m_cursorMoveSeHandle, DX_PLAYTYPE_BACK);
-	}
+		m_fadeAlpha += kFadeSpeed;
+		if (m_fadeAlpha > 255)
+		{
+			m_fadeAlpha = 255;
 
-	if (m_cursorCount % 2 == 0)
-	{
-		m_cursorPosY = kContinuePosY;
-		m_continueExtRate = kBigContinueExtRate;
-		m_endExtRate = kSmallEndExtRate;
+			if (m_cursorCount % 2 == 0)
+			{
+				return make_shared<MainScene>();
+			}
+			else if (m_cursorCount % 2 == 1)
+			{
+				return make_shared<SceneTitle>();
+			}
+		}
 	}
-	else if (m_cursorCount % 2 == 1)
+	else
 	{
-		m_cursorPosY = kEndPosY;
-		m_continueExtRate = kSmallContinueExtRate;
-		m_endExtRate = kBigEndExtRate;
-	}
+		m_fadeAlpha -= kFadeSpeed;
 
-	// カーソルのアニメーション
-	m_cursorSinCount += kCursorSinSpeed;
-	m_cursorSinPosX = sinf(m_cursorSinCount) * kCursorAnimationSwing;
+		if (input.IsTriggered("up"))
+		{
+			m_cursorCount--;
+			PlaySoundMem(m_cursorMoveSeHandle, DX_PLAYTYPE_BACK);
+		}
+		else if (input.IsTriggered("down"))
+		{
+			m_cursorCount++;
+			PlaySoundMem(m_cursorMoveSeHandle, DX_PLAYTYPE_BACK);
+		}
 
-	if (input.IsTriggered("A"))
-	{
 		if (m_cursorCount % 2 == 0)
 		{
-			StopSoundMem(m_bgmHandle);
-			PlaySoundMem(m_startSeHandle, DX_PLAYTYPE_BACK);
-			return make_shared<MainScene>();
+			m_cursorPosY = kContinuePosY;
+			m_continueExtRate = kBigContinueExtRate;
+			m_endExtRate = kSmallEndExtRate;
 		}
 		else if (m_cursorCount % 2 == 1)
 		{
-			StopSoundMem(m_bgmHandle);
-			PlaySoundMem(m_endSeHandle, DX_PLAYTYPE_BACK);
-			return make_shared<SceneTitle>();
+			m_cursorPosY = kEndPosY;
+			m_continueExtRate = kSmallContinueExtRate;
+			m_endExtRate = kBigEndExtRate;
+		}
+
+		// カーソルのアニメーション
+		m_cursorSinCount += kCursorSinSpeed;
+		m_cursorSinPosX = sinf(m_cursorSinCount) * kCursorAnimationSwing;
+
+		if (input.IsTriggered("A"))
+		{
+			if (m_cursorCount % 2 == 0)
+			{
+				StopSoundMem(m_bgmHandle);
+				PlaySoundMem(m_startSeHandle, DX_PLAYTYPE_BACK);
+			}
+			else if (m_cursorCount % 2 == 1)
+			{
+				StopSoundMem(m_bgmHandle);
+				PlaySoundMem(m_endSeHandle, DX_PLAYTYPE_BACK);
+			}
+
+			m_isSceneEnd = true;
+		}
+
+		if (m_fadeAlpha < 0)
+		{
+			m_fadeAlpha = 0;
 		}
 	}
-
+	
 	return shared_from_this();
 }
 
@@ -114,6 +143,11 @@ void SceneGameOver::Draw()
 	DrawString(0, 0, "GameOver", 0xffffff);
 	DrawFormatString(0, 50, 0xffffff, "Count：%d", m_cursorCount % 2);
 #endif // _DEBUG	
+
+	// フェードの描画
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_fadeAlpha);
+	DrawBox(0, 0, kScreenWidth, kScreenHeight, 0xffffff, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);		// 不透明に戻しておく
 }
 
 void SceneGameOver::End()

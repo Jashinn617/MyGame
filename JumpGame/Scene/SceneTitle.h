@@ -30,6 +30,10 @@ private:
 
 	int m_cursorCount;
 
+	int m_fadeAlpha;	// フェードイン、アウト
+
+	bool m_isSceneEnd;	// シーンが終了したかどうか
+
 
 private: // 定数
 	static constexpr float kTitlePosX = 800.0f;	// タイトルのX位置
@@ -52,8 +56,13 @@ private: // 定数
 	static constexpr float kCursorSinSpeed = 0.08f;	// カーソルの移動スピード
 	static constexpr float kCursorAnimationSwing = 30.0f;	// カーソルの移動幅
 
+
 	static constexpr int kBgmVolume = 130;	// BGMの音量
 	static constexpr int kSeVolume = 255;	// SEの音量
 
+	static constexpr int kScreenWidth = 1600;	// 画面の横サイズ
+	static constexpr int kScreenHeight = 900;	// 画面の縦サイズ
+
+	static constexpr int kFadeSpeed = 3;	// フェードのスピード
 };
 

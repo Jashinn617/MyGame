@@ -15,7 +15,9 @@ SceneTitle::SceneTitle():
 	m_cursorSinPosX(0),
 	m_cursorPosY(kStartPosY),
 	m_cursorCount(0),
-	m_cursorSinCount(0)
+	m_cursorSinCount(0),
+	m_fadeAlpha(255),
+	m_isSceneEnd(false)
 {
 	m_titleLogoHandle = LoadGraph("Data/Image/Logo/Title.png");
 	m_startLogoHandle = LoadGraph("Data/Image/Logo/Start.png");
@@ -48,50 +50,70 @@ void SceneTitle::Init()
 
 shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 {
-	if (input.IsTriggered("up"))
+	// 場面転換
+	if (m_isSceneEnd)
 	{
-		m_cursorCount--;
-		PlaySoundMem(m_cursorMoveSeHandle, DX_PLAYTYPE_BACK);
+		m_fadeAlpha += kFadeSpeed;
+		if (m_fadeAlpha > 255)
+		{
+			m_fadeAlpha = 255;
+			return make_shared<MainScene>();
+		}
 	}
-	else if (input.IsTriggered("down"))
+	else
 	{
-		m_cursorCount++;
-		PlaySoundMem(m_cursorMoveSeHandle, DX_PLAYTYPE_BACK);
-	}
+		m_fadeAlpha -= kFadeSpeed;
 
-	if (m_cursorCount % 2 == 0)
-	{
-		m_cursorPosY = kStartPosY;
-		m_startExtRate = kBigStartExtRate;
-		m_endExtRate = kSmallEndExtRate;
-	}
-	else if (m_cursorCount % 2 == 1)
-	{
-		m_cursorPosY = kEndPosY;
-		m_startExtRate = kSmallStartExtRate;
-		m_endExtRate = kBigEndExtRate;
-	}
+		if (input.IsTriggered("up"))
+		{
+			m_cursorCount--;
+			PlaySoundMem(m_cursorMoveSeHandle, DX_PLAYTYPE_BACK);
+		}
+		else if (input.IsTriggered("down"))
+		{
+			m_cursorCount++;
+			PlaySoundMem(m_cursorMoveSeHandle, DX_PLAYTYPE_BACK);
+		}
 
-	// カーソルのアニメーション
-	m_cursorSinCount += kCursorSinSpeed;
-	m_cursorSinPosX = sinf(m_cursorSinCount) * kCursorAnimationSwing;
-
-
-	if (input.IsTriggered("A"))
-	{
 		if (m_cursorCount % 2 == 0)
 		{
-			// BGMの停止
-			StopSoundMem(m_bgmHandle);
-			PlaySoundMem(m_startSeHandle, DX_PLAYTYPE_BACK);
-			return make_shared<MainScene>();
+			m_cursorPosY = kStartPosY;
+			m_startExtRate = kBigStartExtRate;
+			m_endExtRate = kSmallEndExtRate;
 		}
 		else if (m_cursorCount % 2 == 1)
 		{
-			DxLib_End();
+			m_cursorPosY = kEndPosY;
+			m_startExtRate = kSmallStartExtRate;
+			m_endExtRate = kBigEndExtRate;
+		}
+
+		// カーソルのアニメーション
+		m_cursorSinCount += kCursorSinSpeed;
+		m_cursorSinPosX = sinf(m_cursorSinCount) * kCursorAnimationSwing;
+
+
+		if (input.IsTriggered("A"))
+		{
+			if (m_cursorCount % 2 == 0)
+			{
+				// BGMの停止
+				StopSoundMem(m_bgmHandle);
+				PlaySoundMem(m_startSeHandle, DX_PLAYTYPE_BACK);
+				m_isSceneEnd = true;
+			}
+			else if (m_cursorCount % 2 == 1)
+			{
+				DxLib_End();
+			}
+		}
+
+		if (m_fadeAlpha < 0)
+		{
+			m_fadeAlpha = 0;
 		}
 	}
-
+	
 	return shared_from_this();
 }
 
@@ -108,6 +130,11 @@ void SceneTitle::Draw()
 	DrawString(0, 0, "Title", 0xffffff);
 	DrawFormatString(0, 50, 0xffffff, "Count：%d", m_cursorCount % 2);
 #endif	
+
+	// フェードの描画
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_fadeAlpha);
+	DrawBox(0, 0, kScreenWidth, kScreenHeight, 0xffffff, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);		// 不透明に戻しておく
 }
 
 void SceneTitle::End()

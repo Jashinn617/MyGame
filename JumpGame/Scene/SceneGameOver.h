@@ -31,6 +31,10 @@ private:
 
 	int m_cursorCount;
 
+	int m_fadeAlpha;	// フェードイン、アウト
+
+	bool m_isSceneEnd;	// シーンが終了したかどうか
+
 private:	// 定数
 	static constexpr float kGameOverPosX = 800.0f;	// ゲームオーバーロゴのX位置
 	static constexpr float kGameOverPosY = 250.0f;	// ゲームオーバーロゴのY位置
@@ -54,5 +58,10 @@ private:	// 定数
 
 	static constexpr int kBgmVolume = 130;	// BGMの音量
 	static constexpr int kSeVolume = 255;	// SEの音量
+
+	static constexpr int kScreenWidth = 1600;	// 画面の横サイズ
+	static constexpr int kScreenHeight = 900;	// 画面の縦サイズ
+
+	static constexpr int kFadeSpeed = 3;	// フェードのスピード
 };
 
