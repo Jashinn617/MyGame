@@ -34,7 +34,7 @@ private:	// 定数
 	static constexpr float kScale = 0.002f;		// サイズ
 
 	/*X位置*/
-	static constexpr float kPosX0 = 10.0f;
+	static constexpr float kPosX0 = 8.0f;
 	static constexpr float kPosX1 = kPosX0 + 8.0f;
 	static constexpr float kPosX2 = kPosX1 + 8.0f;
 	static constexpr float kPosX3 = kPosX2 + 6.0f;

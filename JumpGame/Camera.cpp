@@ -22,7 +22,7 @@ void Camera::Update(const Player& player)
 	// その真ん中に表示するので半分を計算で出す
 	// プレイヤーのX座標には追従したいのでplayerのXを使う
 	VECTOR playerPos = player.GetPos();
-	VECTOR cameraPos = VGet(playerPos.x, Map::m_chipSize * (16 - 2) * 0.5f, playerPos.z - 10.0f);
+	VECTOR cameraPos = VGet(playerPos.x, Map::ChipSize * (16 - 2) * 0.5f, playerPos.z - 10.0f);
 
 	// 注視する視点はカメラと平行にまっすぐz = 0 地点
 	VECTOR lookPos = VGet(cameraPos.x, cameraPos.y, 0.0f);

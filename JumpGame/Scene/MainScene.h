@@ -29,10 +29,27 @@ private:
 	int m_bgHandle;	// 背景画像
 	int m_bgFrame;
 
+	int m_noticeLogoHandle1;
+	int m_noticeLogoHandle2;
+	int m_noticeLogoHandle3;
+	int m_noticeLogoHandle4;
+
+	int m_tutorialHandle;
+
+	int m_timeFrame;
 	int m_time;
 
 	int m_bgmHandle;
+	int m_clearSeHandle;
+	int m_noticeSeHandle;
+	int m_missSeHandle;
 
+
+	int m_timeFontHandle;
+	int m_timeBackFontHandle;
+
+	int m_blinkingNoticeFrame;	// 秒数通知の点滅フレーム
+	bool m_isNotice;	// 秒数通知が表示されているか
 
 	struct BgSize	// 背景画像のサイズ
 	{
@@ -61,5 +78,34 @@ private:	// 定数
 
 	static constexpr int kBgmVolume = 130;	// BGMの音量
 	static constexpr int kSeVolume = 255;	// SEの音量
+
+	static constexpr int kScreenWidth = 1600;	// 画面の横サイズ
+	static constexpr int kScreenHeight = 900;	// 画面の縦サイズ
+
+	static constexpr int kFadeSpeed = 3;	// フェードのスピード
+
+	static constexpr int kNoticeBlinkingSpeed = 30;	// 秒数通知の点滅速度
+	static constexpr int kNoticeBlinkingFrequency = 20; // 秒数通知の点滅頻度
+
+	/*秒数通知の描画位置*/
+	static constexpr float kNoticePosX = 850;	// X位置
+	static constexpr float kNoticePosY = 400;	// Y位置
+	static constexpr double kNoticeExtRate = 0.3;	// 拡大率
+
+	/*秒数の表示位置*/
+	static constexpr int kTimePosX = 750;
+	static constexpr int kTimePosY = 80;
+
+	/*秒数通知をする間隔*/
+	static constexpr int kTimeInterval1 = 20;
+	static constexpr int kTimeInterval2 = kTimeInterval1 + 20;
+	static constexpr int kTimeInterval3 = kTimeInterval2 + 20;
+	static constexpr int kTimeInterval4 = kTimeInterval3 + 20;
+
+	/*秒数通知を表示する秒数*/
+	static constexpr int kNoticeDisplayTime = 3;
+
+	static constexpr int kClearTime = 90;	// クリアタイム
+
 };
 

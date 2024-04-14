@@ -16,7 +16,7 @@ SceneTitle::SceneTitle():
 	m_cursorPosY(kStartPosY),
 	m_cursorCount(0),
 	m_cursorSinCount(0),
-	m_fadeAlpha(255),
+	m_fadeAlpha(0),
 	m_isSceneEnd(false)
 {
 	m_titleLogoHandle = LoadGraph("Data/Image/Logo/Title.png");

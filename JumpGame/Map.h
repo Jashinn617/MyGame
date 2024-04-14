@@ -1,8 +1,6 @@
+// 2023 Takeru Yui All Rights Reserved.
 #pragma once
 #include <vector>
-#include <memory>
-
-using namespace std;
 
 class WorldSprite;
 
@@ -12,42 +10,23 @@ class WorldSprite;
 class Map
 {
 public:
-	/// <summary>
-	/// コンストラクタ
-	/// </summary>
 	Map();
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
 	~Map();
 
-	/// <summary>
-	/// マップのロード
-	/// </summary>
 	void Load();
-	/// <summary>
-	/// 更新
-	/// </summary>
 	void Update();
-	/// <summary>
-	/// 描画
-	/// </summary>
 	void Draw();
 
-	/*マップチップのサイズ*/
-	static const float m_chipSize;
-	static const int m_chipPixelSize;
-	static const int m_stageDataColNum = 16;	// マップの行
-	static const int m_stageDataRowNum = 20;	// マップの列
-
+	// マップチップのサイズ
+	static const float	ChipSize;
+	static const int	ChipPixelSize;
+	static const int	StageDataColNum = 16;		// マップ行
+	static const int	StageDataRowNum = 440;		// マップ列
 
 private:
-	// マップチップの配置データ
-	static const int m_stageData[m_stageDataColNum][m_stageDataRowNum];
+	static const int Stage1Data[StageDataColNum][StageDataRowNum];
 
-	// WorldSpriteのポインタ
-	vector<shared_ptr<WorldSprite>> m_sprites;
-	// マップチップのハンドル
-	int m_chipHandle;
+	std::vector<WorldSprite*> sprites;
+	int chipGraph;
 };
 

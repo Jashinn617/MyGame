@@ -20,16 +20,22 @@ Player::Player() :
 	m_modelHandle(-1),
 	m_rad(kRadius),
 	m_jumpPower(0.0f),
-	m_isJump(false)
+	m_isJump(false),
+	m_jumpSe(-1)
 {
 	// 3Dモデルのロード
 	m_modelHandle = MV1LoadModel("Data/Model/chicken.mv1");
+	// SEのロード
+	m_jumpSe = LoadSoundMem("Data/Sound/SE/Jump.mp3");
+
 }
 
 Player::~Player()
 {
 	// モデルのデリート
 	MV1DeleteModel(m_modelHandle);
+
+	DeleteSoundMem(m_jumpSe);
 }
 
 void Player::Update(Input& input)
@@ -56,6 +62,7 @@ void Player::Update(Input& input)
 
 	if (input.IsTriggered("A") && !m_isJump)
 	{
+		PlaySoundMem(m_jumpSe, DX_PLAYTYPE_BACK);
 		m_jumpPower = kJumpHeight;
 		m_isJump = true;
 	}

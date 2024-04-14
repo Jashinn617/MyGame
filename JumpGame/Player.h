@@ -58,6 +58,7 @@ private:
 	float m_jumpPower;
 	// ジャンプ中かどうか
 	bool m_isJump;
+	int m_jumpSe;	// ジャンプ中のSE
 
 private:	// 定数
 	static constexpr float kGravity = 0.025f;	// 重力
