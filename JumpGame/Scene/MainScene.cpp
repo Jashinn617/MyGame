@@ -146,12 +146,12 @@ shared_ptr<SceneBase> MainScene::Update(Input& input)
 
 
 	// プレイヤーとエネミーの当たり判定
-	/*if (m_pEnemy->CollisionPlayer())
+	if (m_pEnemy->CollisionPlayer())
 	{
 		StopSoundMem(m_bgmHandle);
 		PlaySoundMem(m_missSeHandle, DX_PLAYTYPE_NORMAL);
 		return make_shared<SceneGameOver>();
-	}*/
+	}
 	
 
 	// シーン移動しないときは自身のポインタを返す
@@ -160,7 +160,7 @@ shared_ptr<SceneBase> MainScene::Update(Input& input)
 
 void MainScene::Draw()
 {
-	//BackDraw();
+	BackDraw();
 	m_pMap->Draw();	
 	m_pPlayer->Draw();
 	m_pEnemy->Draw();

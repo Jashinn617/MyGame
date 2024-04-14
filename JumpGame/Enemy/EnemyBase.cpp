@@ -6,7 +6,7 @@ namespace
 	constexpr float kScale = 0.005f;
 
 	// ”¼Œa
-	constexpr float kRadius = 0.35f;
+	constexpr float kRadius = 0.3f;
 }
 
 EnemyBase::EnemyBase(int modelHandle):
