@@ -28,10 +28,16 @@ private:
 	shared_ptr<Player> m_pPlayer;
 
 	int m_beeModelHandle;
+	int m_crabModelHandle;
+	int m_skullModelHandle;
 
 private:	// 定数
 	static constexpr int kEnemyNum = 90;		// 敵の数
 	static constexpr float kScale = 0.002f;		// サイズ
+
+	static constexpr int kEnemyChangeNum1 = 20;
+	static constexpr int kEnemyChangeNum2 = 50;
+	static constexpr int kEnemyChangeNum3 = 90;
 
 	/*X位置*/
 	static constexpr float kPosX0 = 8.0f;

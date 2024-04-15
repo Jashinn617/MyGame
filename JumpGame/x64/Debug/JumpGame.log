@@ -1,4 +1,2 @@
-﻿  EnemyBase.cpp
-D:\GitHub\MyGame\JumpGame\Enemy\EnemyBase.cpp(37,56): warning C4305: '引数': 'double' から 'float' へ切り詰めます。
-D:\GitHub\MyGame\JumpGame\Enemy\EnemyBase.cpp(46): warning C4172: ローカル変数またはテンポラリのアドレスを返します
-  JumpGame.vcxproj -> D:\GitHub\MyGame\JumpGame\x64\Debug\JumpGame.exe
+﻿  MainScene.cpp
+  JumpGame.vcxproj -> C:\Users\fko2347024\Documents\GitHub\MyGame\JumpGame\x64\Debug\JumpGame.exe

@@ -14,5 +14,4 @@ EnemyBee::~EnemyBee()
 void EnemyBee::Update()
 {
 	SetModelPos();
-	
 }

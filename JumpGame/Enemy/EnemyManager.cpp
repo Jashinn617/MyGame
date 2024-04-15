@@ -2,17 +2,31 @@
 #include "DxLib.h"
 #include "EnemyBase.h"
 #include "EnemyBee.h"
+#include "EnemyCrab.h"
+#include "EnemySkull.h"
 #include "../Player.h"
 
 EnemyManager::EnemyManager():
-	m_beeModelHandle(-1)
+	m_beeModelHandle(-1),
+	m_crabModelHandle(-1),
+	m_skullModelHandle(-1)
 {
 	m_beeModelHandle = MV1LoadModel("Data/Model/Enemy/BeeEnemy.mv1");
+	m_crabModelHandle = MV1LoadModel("Data/Model/Enemy/CrabEnemy.mv1");
+	m_skullModelHandle = MV1LoadModel("Data/Model/Enemy/SkullEnemy.mv1");
 
 	m_pEnemy.resize(kEnemyNum);
-	for (int i = 0; i < kEnemyNum; i++)
+	for (int i = 0; i < kEnemyChangeNum1; i++)
 	{
 		m_pEnemy[i] = make_shared<EnemyBee>(m_beeModelHandle);
+	}
+	for (int i = kEnemyChangeNum1; i < kEnemyChangeNum2; i++)
+	{
+		m_pEnemy[i] = make_shared<EnemyCrab>(m_crabModelHandle);
+	}
+	for (int i = kEnemyChangeNum2; i < kEnemyChangeNum3; i++)
+	{
+		m_pEnemy[i] = make_shared<EnemySkull>(m_skullModelHandle);
 	}
 }
 

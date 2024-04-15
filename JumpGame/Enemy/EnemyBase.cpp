@@ -56,7 +56,7 @@ void EnemyBase::SetModelPos()
 	MV1SetPosition(m_modelHandle, m_pos);
 
 	// ‰ñ“]
-	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, 90.0f, 0.0f));
+	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, kDirY, 0.0f));
 }
 
 

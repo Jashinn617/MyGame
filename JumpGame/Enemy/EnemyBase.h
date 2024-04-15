@@ -26,5 +26,9 @@ protected:
 	int m_modelHandle;
 	float m_rad;
 	VECTOR m_pos;
+
+private: // ’è”
+	static constexpr float kDirY = 180.0f * DX_PI_F / 270.0f;	// Y²•ûŒü‚ÌŒü‚«
+
 };
 

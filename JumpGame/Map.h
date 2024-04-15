@@ -21,7 +21,7 @@ public:
 	static const float	ChipSize;
 	static const int	ChipPixelSize;
 	static const int	StageDataColNum = 16;		// マップ行
-	static const int	StageDataRowNum = 440;		// マップ列
+	static const int	StageDataRowNum = 480;		// マップ列
 
 private:
 	static const int Stage1Data[StageDataColNum][StageDataRowNum];

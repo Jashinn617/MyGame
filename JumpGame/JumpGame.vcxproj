@@ -140,6 +140,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Enemy\EnemySkull.cpp" />
+    <ClCompile Include="Enemy\EnemyCrab.cpp" />
     <ClCompile Include="Enemy\EnemyBee.cpp" />
     <ClCompile Include="Enemy\EnemyBase.cpp" />
     <ClCompile Include="Enemy\EnemyManager.cpp" />
@@ -157,6 +159,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Enemy\EnemySkull.h" />
+    <ClInclude Include="Enemy\EnemyCrab.h" />
     <ClInclude Include="Enemy\EnemyBee.h" />
     <ClInclude Include="Enemy\EnemyBase.h" />
     <ClInclude Include="Enemy\EnemyManager.h" />
