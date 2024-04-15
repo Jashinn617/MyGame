@@ -11,20 +11,22 @@ EnemyManager::EnemyManager():
 	m_crabModelHandle(-1),
 	m_skullModelHandle(-1)
 {
+	/*3Dモデルのロード*/
 	m_beeModelHandle = MV1LoadModel("Data/Model/Enemy/BeeEnemy.mv1");
 	m_crabModelHandle = MV1LoadModel("Data/Model/Enemy/CrabEnemy.mv1");
 	m_skullModelHandle = MV1LoadModel("Data/Model/Enemy/SkullEnemy.mv1");
 
+	// 敵の種類を決める
 	m_pEnemy.resize(kEnemyNum);
-	for (int i = 0; i < kEnemyChangeNum1; i++)
+	for (int i = 0; i < kEnemyChangeNum1; i++)// ハチ
 	{
 		m_pEnemy[i] = make_shared<EnemyBee>(m_beeModelHandle);
 	}
-	for (int i = kEnemyChangeNum1; i < kEnemyChangeNum2; i++)
+	for (int i = kEnemyChangeNum1; i < kEnemyChangeNum2; i++)// カニ
 	{
 		m_pEnemy[i] = make_shared<EnemyCrab>(m_crabModelHandle);
 	}
-	for (int i = kEnemyChangeNum2; i < kEnemyChangeNum3; i++)
+	for (int i = kEnemyChangeNum2; i < kEnemyChangeNum3; i++)// ホネ
 	{
 		m_pEnemy[i] = make_shared<EnemySkull>(m_skullModelHandle);
 	}
@@ -32,11 +34,12 @@ EnemyManager::EnemyManager():
 
 EnemyManager::~EnemyManager()
 {
-	// 処理無し
+	/*処理無し*/
 }
 
 void EnemyManager::CreateEnemyes()
 {
+	// 敵の生成と位置の設定
 	m_pEnemy[0]->SetPos(VGet(kPosX0, kPosYDown, kPosZ));
 	m_pEnemy[1]->SetPos(VGet(kPosX1, kPosYDown, kPosZ));
 	m_pEnemy[2]->SetPos(VGet(kPosX2, kPosYDown, kPosZ));
@@ -131,7 +134,10 @@ void EnemyManager::CreateEnemyes()
 
 void EnemyManager::DestroyEnemyes()
 {
+	/*3Dモデルのデリーtp*/
 	MV1DeleteModel(m_beeModelHandle);
+	MV1DeleteModel(m_crabModelHandle);
+	MV1DeleteModel(m_skullModelHandle);
 }
 
 void EnemyManager::Update()
@@ -159,6 +165,8 @@ void EnemyManager::Draw()
 
 bool EnemyManager::CollisionPlayer()
 {
+	// 円での当たり判定をとっている
+	// 当たっていればtrue、そうでなければfalseを返す
 	VECTOR playerPos = m_pPlayer->GetPos();
 	playerPos.x -= 0.1;
 	float playerRad = m_pPlayer->GetRad();
@@ -175,7 +183,6 @@ bool EnemyManager::CollisionPlayer()
 		{
 			return true;
 		}
-
 	}
 
 	return false;

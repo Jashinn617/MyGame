@@ -8,6 +8,7 @@ SceneGameOver::SceneGameOver():
 	m_continueLogoHandle(-1),
 	m_endLogoHandle(-1),
 	m_selectCursorHandle(-1),
+	m_bgHandle(-1),
 	m_bgmHandle(-1),
 	m_cursorMoveSeHandle(-1),
 	m_startSeHandle(-1),
@@ -18,13 +19,16 @@ SceneGameOver::SceneGameOver():
 	m_cursorSinPosX(0),
 	m_cursorPosY(kContinuePosY),
 	m_cursorCount(0),
-	m_fadeAlpha(255),
+	m_fadeAlpha(0),
 	m_isSceneEnd(false)
 {
+	/*画像のロード*/
 	m_gameOverLogoHandle = LoadGraph("Data/Image/Logo/GameOver.png");
 	m_continueLogoHandle = LoadGraph("Data/Image/Logo/Continue.png");
 	m_endLogoHandle = LoadGraph("Data/Image/Logo/End2.png");
 	m_selectCursorHandle = LoadGraph("Data/Image/SelectCursor.png");
+	m_bgHandle = LoadGraph("Data/Image/Background/GameOverBg.jpg");
+	/*BGM、SEのロード*/
 	m_bgmHandle = LoadSoundMem("Data/Sound/BGM/GameOver.ogg");
 	m_cursorMoveSeHandle = LoadSoundMem("Data/Sound/SE/CursorMove.mp3");
 	m_startSeHandle = LoadSoundMem("Data/Sound/SE/Start.mp3");
@@ -33,10 +37,13 @@ SceneGameOver::SceneGameOver():
 
 SceneGameOver::~SceneGameOver()
 {
+	/*画像のデリート*/
 	DeleteGraph(m_gameOverLogoHandle);
 	DeleteGraph(m_continueLogoHandle);
 	DeleteGraph(m_endLogoHandle);
 	DeleteGraph(m_selectCursorHandle);
+	DeleteGraph(m_bgHandle);
+	/*BGM、SEのデリート*/
 	DeleteSoundMem(m_bgmHandle);
 	DeleteSoundMem(m_cursorMoveSeHandle);
 	DeleteSoundMem(m_startSeHandle);
@@ -45,6 +52,7 @@ SceneGameOver::~SceneGameOver()
 
 void SceneGameOver::Init()
 {
+	/*BGM、SEのボリューム調整*/
 	ChangeVolumeSoundMem(kBgmVolume, m_bgmHandle);
 	ChangeVolumeSoundMem(kSeVolume, m_cursorMoveSeHandle);
 	ChangeVolumeSoundMem(kSeVolume, m_startSeHandle);
@@ -55,9 +63,13 @@ void SceneGameOver::Init()
 
 shared_ptr<SceneBase> SceneGameOver::Update(Input& input)
 {
+	// 場面転換
 	if (m_isSceneEnd)
 	{
+		// フェードイン
 		m_fadeAlpha += kFadeSpeed;
+
+		// 完全にフェードをしきってから場面転換をする
 		if (m_fadeAlpha > 255)
 		{
 			m_fadeAlpha = 255;
@@ -74,36 +86,17 @@ shared_ptr<SceneBase> SceneGameOver::Update(Input& input)
 	}
 	else
 	{
+		// フェードアウト
 		m_fadeAlpha -= kFadeSpeed;
 
-		if (input.IsTriggered("up"))
-		{
-			m_cursorCount--;
-			PlaySoundMem(m_cursorMoveSeHandle, DX_PLAYTYPE_BACK);
-		}
-		else if (input.IsTriggered("down"))
-		{
-			m_cursorCount++;
-			PlaySoundMem(m_cursorMoveSeHandle, DX_PLAYTYPE_BACK);
-		}
-
-		if (m_cursorCount % 2 == 0)
-		{
-			m_cursorPosY = kContinuePosY;
-			m_continueExtRate = kBigContinueExtRate;
-			m_endExtRate = kSmallEndExtRate;
-		}
-		else if (m_cursorCount % 2 == 1)
-		{
-			m_cursorPosY = kEndPosY;
-			m_continueExtRate = kSmallContinueExtRate;
-			m_endExtRate = kBigEndExtRate;
-		}
+		// カーソルの移動と処理
+		CursorMove(input);
 
 		// カーソルのアニメーション
 		m_cursorSinCount += kCursorSinSpeed;
 		m_cursorSinPosX = sinf(m_cursorSinCount) * kCursorAnimationSwing;
 
+		// Aを押すとSEを鳴らしてメインシーンかタイトルシーンに戻る
 		if (input.IsTriggered("A"))
 		{
 			if (m_cursorCount % 2 == 0)
@@ -131,10 +124,13 @@ shared_ptr<SceneBase> SceneGameOver::Update(Input& input)
 
 void SceneGameOver::Draw()
 {
+	// 背景
+	DrawGraph(0, 0, m_bgHandle, true);
+	// ロゴ
 	DrawRotaGraphF(kGameOverPosX, kGameOverPosY, kGameOverExtRate, 0.0, m_gameOverLogoHandle, true, false);
 	DrawRotaGraphF(kContinuePosX, kContinuePosY, m_continueExtRate, 0.0, m_continueLogoHandle, true, false);
 	DrawRotaGraphF(kEndPosX, kEndPosY, m_endExtRate, 0.0, m_endLogoHandle, true, false);
-
+	// カーソル
 	float curosrX = kCursorPosX + m_cursorSinPosX;
 	DrawRotaGraphF(curosrX, m_cursorPosY, kCursorExtRate, 0.0, m_selectCursorHandle, true, false);
 
@@ -152,5 +148,33 @@ void SceneGameOver::Draw()
 
 void SceneGameOver::End()
 {
-	
+	/*処理無し*/
+}
+
+void SceneGameOver::CursorMove(Input& input)
+{
+	// カーソルを動かす際の処理
+	if (input.IsTriggered("up"))
+	{
+		m_cursorCount--;
+		PlaySoundMem(m_cursorMoveSeHandle, DX_PLAYTYPE_BACK);
+	}
+	else if (input.IsTriggered("down"))
+	{
+		m_cursorCount++;
+		PlaySoundMem(m_cursorMoveSeHandle, DX_PLAYTYPE_BACK);
+	}
+	// カーソルの位置によってロゴの拡大率や、次のシーンが変わる
+	if (m_cursorCount % 2 == 0)
+	{
+		m_cursorPosY = kContinuePosY;
+		m_continueExtRate = kBigContinueExtRate;
+		m_endExtRate = kSmallEndExtRate;
+	}
+	else if (m_cursorCount % 2 == 1)
+	{
+		m_cursorPosY = kEndPosY;
+		m_continueExtRate = kSmallContinueExtRate;
+		m_endExtRate = kBigEndExtRate;
+	}
 }

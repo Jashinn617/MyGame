@@ -6,6 +6,7 @@ class SceneClear : public SceneBase
 public:
 	SceneClear();
 	~SceneClear();
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -38,6 +39,7 @@ private:	// 変数
 	int m_continueLogoHandle;		// コンテニューの画像
 	int m_endLogoHandle;			// ゲーム終了の画像
 	int m_selectCursorHandle;		// 選択用のカーソルの画像
+	int m_bgHandle;					// 背景の画像
 	int m_bgmHandle;				// BGM
 	int m_cursorMoveSeHandle;		// カーソルを移動した際のSE
 	int m_continueSeHandle;			// コンテニュー時のSE

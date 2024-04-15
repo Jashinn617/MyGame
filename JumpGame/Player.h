@@ -36,13 +36,25 @@ public:
 	/// <summary>
 	/// 位置を取得する
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在位置</returns>
 	const VECTOR& GetPos()const;
 	/// <summary>
 	/// 半径を取得する
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>半径</returns>
 	const float GetRad()const { return m_rad; }
+
+private:	// 関数
+	/// <summary>
+	/// ジャンプ処理
+	/// </summary>
+	/// <param name="input">入力</param>
+	void Jump(Input& input);
+
+	/// <summary>
+	/// 重力の処理と地面の処理
+	/// </summary>
+	void GravityAndGround();
 
 private:	// 変数
 	VECTOR m_pos;		// 位置
@@ -55,7 +67,6 @@ private:	// 変数
 	float m_rad;		// 半径
 
 	float m_jumpPower;	// ジャンプ力
-
 	bool m_isJump;		// ジャンプ中かどうか
 	int m_jumpSe;		// ジャンプ中のSE
 

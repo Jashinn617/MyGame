@@ -13,28 +13,46 @@ public:
 	EnemyManager();
 	~EnemyManager();
 
+	/// <summary>
+	/// 敵の生成
+	/// </summary>
 	void CreateEnemyes();
+	/// <summary>
+	/// 敵の消去
+	/// </summary>
 	void DestroyEnemyes();
-
+	/// <summary>
+	/// 更新
+	/// </summary>
+	void Update();
+	/// <summary>
+	/// 描画
+	/// </summary>
+	void Draw();
+	/// <summary>
+	/// プレイヤーとの当たり判定
+	/// </summary>
+	/// <returns>プレイヤーと当たっているかどうか</returns>
+	bool CollisionPlayer();
+	/// <summary>
+	///  プレイヤーのポインタの取得
+	/// </summary>
+	/// <param name="pPlayer"></param>
 	void GetPlayer(shared_ptr<Player> pPlayer) { m_pPlayer = pPlayer; }
 
-	void Update();
-	void Draw();
+private:	// 変数
+	int m_beeModelHandle;						// ハチの3Dモデル
+	int m_crabModelHandle;						// カニの3Dモデル
+	int m_skullModelHandle;						// ホネの3Dモデル
 
-	bool CollisionPlayer();
-
-private:
-	vector<shared_ptr<EnemyBase>> m_pEnemy;
-	shared_ptr<Player> m_pPlayer;
-
-	int m_beeModelHandle;
-	int m_crabModelHandle;
-	int m_skullModelHandle;
+	vector<shared_ptr<EnemyBase>> m_pEnemy;		// 敵のポインタ
+	shared_ptr<Player> m_pPlayer;				// プレイヤーのポインタ
 
 private:	// 定数
 	static constexpr int kEnemyNum = 90;		// 敵の数
 	static constexpr float kScale = 0.002f;		// サイズ
 
+	/*敵の種類が変わる数*/
 	static constexpr int kEnemyChangeNum1 = 20;
 	static constexpr int kEnemyChangeNum2 = 50;
 	static constexpr int kEnemyChangeNum3 = 90;

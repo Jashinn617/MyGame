@@ -1,30 +1,23 @@
 #include "EnemyBase.h"
 
-namespace
-{
-	// スケール
-	constexpr float kScale = 0.005f;
-
-	// 半径
-	constexpr float kRadius = 0.3f;
-}
-
 EnemyBase::EnemyBase(int modelHandle):
 	m_modelHandle(-1),
 	m_pos{0,0,0},
 	m_rad(kRadius)
 {
+	// モデルの読み込み
 	m_modelHandle = MV1DuplicateModel(modelHandle);
 }
 
 EnemyBase::~EnemyBase()
 {
-	// モデルのアンロード.
+	// モデルのデリート
 	MV1DeleteModel(m_modelHandle);
 }
 
 void EnemyBase::Update()
 {
+	/*処理無し*/
 }
 
 void EnemyBase::Draw()
@@ -44,10 +37,9 @@ void EnemyBase::Draw()
 const VECTOR& EnemyBase::GetPos() const
 {
 	return MV1GetPosition(m_modelHandle);
-	// TODO: return ステートメントをここに挿入します
 }
 
-void EnemyBase::SetModelPos()
+void EnemyBase::AdjustmentModelPos()
 {
 	// モデルのスケールを決定する
 	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));

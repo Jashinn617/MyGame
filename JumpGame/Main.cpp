@@ -37,7 +37,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 
 	// ゲームバーのタイトル
-	SetWindowText(_T("ジャンプチキン"));
+	SetWindowText(_T("LiveChicken"));
 	
 	// シーン管理
 	shared_ptr<SceneManager> pScene = make_shared<SceneManager>();

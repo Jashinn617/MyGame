@@ -1,4 +1,6 @@
 D:\GitHub\MyGame\JumpGame\Camera.cpp;D:\GitHub\MyGame\JumpGame\x64\Debug\Camera.obj
+D:\GitHub\MyGame\JumpGame\Enemy\EnemySkull.cpp;D:\GitHub\MyGame\JumpGame\x64\Debug\EnemySkull.obj
+D:\GitHub\MyGame\JumpGame\Enemy\EnemyCrab.cpp;D:\GitHub\MyGame\JumpGame\x64\Debug\EnemyCrab.obj
 D:\GitHub\MyGame\JumpGame\Enemy\EnemyBee.cpp;D:\GitHub\MyGame\JumpGame\x64\Debug\EnemyBee.obj
 D:\GitHub\MyGame\JumpGame\Enemy\EnemyBase.cpp;D:\GitHub\MyGame\JumpGame\x64\Debug\EnemyBase.obj
 D:\GitHub\MyGame\JumpGame\Enemy\EnemyManager.cpp;D:\GitHub\MyGame\JumpGame\x64\Debug\EnemyManager.obj
