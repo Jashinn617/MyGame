@@ -127,8 +127,6 @@ void EnemyManager::CreateEnemyes()
 	m_pEnemy[87]->SetPos(VGet(kPosX87, kPosYDown, kPosZ));
 	m_pEnemy[88]->SetPos(VGet(kPosX88, kPosYDown, kPosZ));
 	m_pEnemy[89]->SetPos(VGet(kPosX89, kPosYDown, kPosZ));
-
-	
 }
 
 void EnemyManager::DestroyEnemyes()

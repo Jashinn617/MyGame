@@ -50,9 +50,9 @@ void Player::Update(Input& input)
 
 	// 重力
 	m_pos = VAdd(m_pos, VGet(0.0f, m_jumpPower, 0.0f));
-
 	m_jumpPower -= kGravity;
 
+	// 地面
 	if (m_pos.y <= 0)
 	{
 		m_pos.y = 0;
@@ -60,6 +60,7 @@ void Player::Update(Input& input)
 		m_isJump = false;
 	}
 
+	// ジャンプ処理
 	if (input.IsTriggered("A") && !m_isJump)
 	{
 		PlaySoundMem(m_jumpSe, DX_PLAYTYPE_BACK);

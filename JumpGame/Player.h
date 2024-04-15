@@ -20,7 +20,6 @@ public:
 	/// デストラクタ
 	/// </summary>
 	~Player();
-
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -29,42 +28,40 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw()const;
-
 	/// <summary>
 	/// モデルハンドルの取得
 	/// </summary>
 	/// <returns></returns>
 	int GetModelHandle()const { return m_modelHandle; }
-
+	/// <summary>
+	/// 位置を取得する
+	/// </summary>
+	/// <returns></returns>
 	const VECTOR& GetPos()const;
-	const VECTOR& GetDir()const { return m_dir; }
+	/// <summary>
+	/// 半径を取得する
+	/// </summary>
+	/// <returns></returns>
 	const float GetRad()const { return m_rad; }
 
-private:
-	// 位置
-	VECTOR m_pos;
-	// 移動量
-	VECTOR m_move;
+private:	// 変数
+	VECTOR m_pos;		// 位置
+	VECTOR m_move;		// 移動量
+	VECTOR m_velocity;	// 移動力
+	VECTOR m_dir;		// 回転方向
 
-	// 移動力
-	VECTOR m_velocity;
-	// 回転方向
-	VECTOR m_dir;
-	// 3Dモデル
-	int m_modelHandle;
-	// 半径
-	float m_rad;
-	// ジャンプ力
-	float m_jumpPower;
-	// ジャンプ中かどうか
-	bool m_isJump;
-	int m_jumpSe;	// ジャンプ中のSE
+	int m_modelHandle;	// 3Dモデル
+
+	float m_rad;		// 半径
+
+	float m_jumpPower;	// ジャンプ力
+
+	bool m_isJump;		// ジャンプ中かどうか
+	int m_jumpSe;		// ジャンプ中のSE
 
 private:	// 定数
 	static constexpr float kGravity = 0.025f;	// 重力
 	static constexpr float kJumpHeight = 0.5f;	// ジャンプ力
 	static constexpr float kDirY = 180.0f * DX_PI_F / 180.0f;	// Y軸方向の向き
-
-
 };
 

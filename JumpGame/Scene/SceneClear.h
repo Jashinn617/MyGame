@@ -6,34 +6,55 @@ class SceneClear : public SceneBase
 public:
 	SceneClear();
 	~SceneClear();
-
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	virtual void Init();
+	/// <summary>
+	/// 更新
+	/// </summary>
+	/// <param name="input">入力</param>
+	/// <returns>現在のシーン</returns>
 	virtual shared_ptr<SceneBase> Update(Input& input);
+	/// <summary>
+	/// 描画
+	/// </summary>
 	virtual void Draw();
+	/// <summary>
+	/// シーン終了時の処理
+	/// </summary>
 	virtual void End();
 
-private:
-	int m_clearLogoHandle;
-	int m_continueLogoHandle;
-	int m_endLogoHandle;
-	int m_selectCursorHandle;
-	int m_bgmHandle;
-	int m_cursorMoveSeHandle;
-	int m_startSeHandle;
-	int m_endSeHandle;
+private:	// 関数
+	/// <summary>
+	/// カーソルの移動
+	/// </summary>
+	/// <param name="input">入力</param>
+	void CursorMove(Input& input);
 
-	double m_continueExtRate;
-	double m_endExtRate;
 
-	float m_cursorSinCount;
-	float m_cursorSinPosX;
-	int m_cursorPosY;
+private:	// 変数
+	int m_clearLogoHandle;			// クリアの画像
+	int m_continueLogoHandle;		// コンテニューの画像
+	int m_endLogoHandle;			// ゲーム終了の画像
+	int m_selectCursorHandle;		// 選択用のカーソルの画像
+	int m_bgmHandle;				// BGM
+	int m_cursorMoveSeHandle;		// カーソルを移動した際のSE
+	int m_continueSeHandle;			// コンテニュー時のSE
+	int m_endSeHandle;				// ゲーム終了時のSE
 
-	int m_cursorCount;
+	double m_continueExtRate;		// コンテニューの画像の拡大率
+	double m_endExtRate;			// ゲーム終了の画像の拡大率
 
-	int m_fadeAlpha;	// フェードイン、アウト
+	float m_cursorSinCount;			// カーソルを動かす際のカウント
+	float m_cursorSinPosX;			// カーソルの位置計算に使うSin
+	float m_cursorPosY;				// カーソルのY位置
 
-	bool m_isSceneEnd;	// シーンが終了したかどうか
+	int m_cursorCount;				//	カーソルの表示位置用のカウント
+
+	int m_fadeAlpha;				// フェードイン、アウト
+
+	bool m_isSceneEnd;				// シーンが終了したかどうか
 
 private:	// 定数
 	static constexpr float kClearPosX = 800.0f;	// クリアのX位置
