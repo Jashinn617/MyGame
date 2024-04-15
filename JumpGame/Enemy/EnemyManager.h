@@ -151,8 +151,8 @@ private:	// ’è”
 	static constexpr float kPosX90 = kPosX89 + 2.5f;
 
 	/*YˆÊ’u*/
-	static constexpr float kPosYDown = 0.3f;	// ‰º‚Ì“G
-	static constexpr float kPosYUp = 1.2f;		// ã‚Ì“G
+	static constexpr float kPosYDown = 0.7f;	// ‰º‚Ì“G
+	static constexpr float kPosYUp = 1.6f;		// ã‚Ì“G
 
 	static constexpr float kPosZ = -0.5f;		// ZˆÊ’u
 

@@ -71,8 +71,12 @@ private:	// 変数
 	int m_jumpSe;		// ジャンプ中のSE
 
 private:	// 定数
-	static constexpr float kGravity = 0.025f;	// 重力
-	static constexpr float kJumpHeight = 0.5f;	// ジャンプ力
-	static constexpr float kDirY = 180.0f * DX_PI_F / 180.0f;	// Y軸方向の向き
+	static constexpr float kSpeed = static_cast<float>(10000.0 / 60.0 / 60.0 / 60.0);	// 速度
+	static constexpr float kScale = 0.002f;												// スケール
+	static constexpr float kRadius = 0.3f;												// 当たり判定用の半径
+	static constexpr float kGravity = 0.025f;											// 重力
+	static constexpr float kJumpHeight = 0.5f;											// ジャンプ力
+	static constexpr float kDirY = 180.0f * DX_PI_F / 180.0f;							// Y軸方向の向き
+	static constexpr float kGroundPosY = 0.4f;											// 地面のY位置
 };
 

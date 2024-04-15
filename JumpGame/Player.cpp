@@ -1,19 +1,8 @@
 #include "Player.h"
 #include "Input.h"
 
-namespace
-{
-	// プレイヤーの速度
-	constexpr float kSpeed = static_cast<float>(10000.0 / 60.0 / 60.0 / 60.0);
-	// プレイヤーのスケール
-	constexpr float kScale = 0.002f;
-
-	// 当たり判定用の円の半径
-	constexpr float kRadius = 0.3f;
-}
-
 Player::Player() :
-	m_pos{ -10,0,0 },
+	m_pos{ -10,kGroundPosY,0 },
 	m_move{ 0,0,0 },
 	m_velocity{ 0,0,0 },
 	m_dir{ 0,0,1 },
@@ -67,7 +56,7 @@ void Player::Draw() const
 
 #ifdef _DEBUG
 	VECTOR pos = MV1GetPosition(m_modelHandle);
-	pos.x -= 0.1;
+	pos.x -= 0.1f;
 	DrawSphere3D(pos, kRadius, 32, 0x0000ff, 0x0000ff, false);
 #endif // _DEBUG
 }
@@ -95,9 +84,9 @@ void Player::GravityAndGround()
 	m_jumpPower -= kGravity;
 
 	// 地面
-	if (m_pos.y <= 0)
+	if (m_pos.y <= kGroundPosY)
 	{
-		m_pos.y = 0;
+		m_pos.y = kGroundPosY;
 		m_jumpPower = 0;
 		m_isJump = false;
 	}

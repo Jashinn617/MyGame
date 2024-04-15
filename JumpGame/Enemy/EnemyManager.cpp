@@ -168,7 +168,7 @@ bool EnemyManager::CollisionPlayer()
 	// ‰~‚Å‚Ì“–‚½‚è”»’è‚ð‚Æ‚Á‚Ä‚¢‚é
 	// “–‚½‚Á‚Ä‚¢‚ê‚ÎtrueA‚»‚¤‚Å‚È‚¯‚ê‚Îfalse‚ð•Ô‚·
 	VECTOR playerPos = m_pPlayer->GetPos();
-	playerPos.x -= 0.1;
+	playerPos.x -= 0.1f;
 	float playerRad = m_pPlayer->GetRad();
 	for (auto& enemy : m_pEnemy)
 	{
