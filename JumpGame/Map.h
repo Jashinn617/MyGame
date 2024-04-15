@@ -1,4 +1,3 @@
-// 2023 Takeru Yui All Rights Reserved.
 #pragma once
 #include <vector>
 
@@ -13,20 +12,30 @@ public:
 	Map();
 	~Map();
 
+	/// <summary>
+	/// ロード
+	/// </summary>
 	void Load();
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
+	/// <summary>
+	/// 描画
+	/// </summary>
 	void Draw();
 
-	// マップチップのサイズ
-	static const float	ChipSize;
-	static const int	ChipPixelSize;
-	static const int	StageDataColNum = 16;		// マップ行
-	static const int	StageDataRowNum = 480;		// マップ列
+	/*マップチップのサイズ*/
+	static const float	kChipSize;
+	static const int	kChipPixelSize;
+
+	static const int	kStageDataColNum = 16;		// マップ行
+	static const int	kStageDataRowNum = 480;		// マップ列
 
 private:
-	static const int Stage1Data[StageDataColNum][StageDataRowNum];
+	static const int m_stage1Data[kStageDataColNum][kStageDataRowNum];	// マップチップを並べる配列
 
-	std::vector<WorldSprite*> sprites;
-	int chipGraph;
+	std::vector<WorldSprite*> m_pSprites;		// ワールドスプライトのポインタ
+	int m_chipHandle;							// マップチップの画像
 };
 
