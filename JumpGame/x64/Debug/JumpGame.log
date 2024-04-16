@@ -1,7 +1,0 @@
-﻿  EnemyManager.cpp
-  Main.cpp
-  Player.cpp
-  MainScene.cpp
-  コードを生成中...
-D:\GitHub\MyGame\JumpGame\Player.cpp(66): warning C4172: ローカル変数またはテンポラリのアドレスを返します
-  JumpGame.vcxproj -> D:\GitHub\MyGame\JumpGame\x64\Debug\JumpGame.exe
