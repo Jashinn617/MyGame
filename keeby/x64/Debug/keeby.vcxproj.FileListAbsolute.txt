@@ -1,4 +1,0 @@
-C:\Users\fko2347024\Documents\GitHub\WorkExhibition\参考資料\keeby\x64\Debug\keeby.exe
-D:\GitHub\WorkExhibition\keeby\x64\Debug\keeby.exe
-C:\Users\fko2347024\Documents\GitHub\WorkExhibition\keeby\x64\Debug\keeby.exe
-C:\Users\opencampus\Desktop\keeby\x64\Debug\keeby.exe

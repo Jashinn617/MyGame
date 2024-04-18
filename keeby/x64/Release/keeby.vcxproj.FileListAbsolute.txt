@@ -1,3 +1,0 @@
-C:\Users\fko2347024\Documents\GitHub\WorkExhibition\keeby\x64\Release\keeby.exe
-C:\Users\opencampus\Desktop\keeby\x64\Release\keeby.exe
-D:\GitHub\MyGame\keeby\x64\Release\keeby.exe
