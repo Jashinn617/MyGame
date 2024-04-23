@@ -28,11 +28,7 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw()const;
-	/// <summary>
-	/// モデルハンドルの取得
-	/// </summary>
-	/// <returns></returns>
-	int GetModelHandle()const { return m_modelHandle; }
+	
 	/// <summary>
 	/// 位置を取得する
 	/// </summary>
@@ -59,8 +55,6 @@ private:	// 関数
 private:	// 変数
 	VECTOR m_pos;		// 位置
 	VECTOR m_move;		// 移動量
-	VECTOR m_velocity;	// 移動力
-	VECTOR m_dir;		// 回転方向
 
 	int m_modelHandle;	// 3Dモデル
 

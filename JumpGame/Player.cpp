@@ -4,8 +4,6 @@
 Player::Player() :
 	m_pos{ -10,kGroundPosY,0 },
 	m_move{ 0,0,0 },
-	m_velocity{ 0,0,0 },
-	m_dir{ 0,0,1 },
 	m_modelHandle(-1),
 	m_rad(kRadius),
 	m_jumpPower(0.0f),

@@ -1,4 +1,9 @@
 #include "DxLib.h"
+#include "Util/Game.h"
+#include "Util/Input.h"
+#include "Scene/SceneManager.h"
+
+#include <memory>
 
 // プログラムは WinMain から始まります
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -6,12 +11,29 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// 一部の関数はDxLib_Init()の前に実行する必要がある
 	ChangeWindowMode(true);
 
+	// 画面のサイズ変更
+	SetGraphMode(Game::kScreenWidth, Game::kScreenHeight, 32);
+
 	if (DxLib_Init() == -1)		// ＤＸライブラリ初期化処理
 	{
 		return -1;			// エラーが起きたら直ちに終了
 	}
 
 	SetDrawScreen(DX_SCREEN_BACK);
+
+	// 3D描画の奥行情報を使用する
+	SetUseZBuffer3D(true);
+
+
+	// ゲームバーのタイトル
+	SetWindowText(_T("とれとれとりくん！！"));
+
+	// シーン管理
+	shared_ptr<SceneManager> pScene = make_shared<SceneManager>();
+	pScene->Init();
+
+	// 入力
+	Input input;
 
 	// ゲームループ
 	while (ProcessMessage() != -1)
@@ -22,8 +44,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		// 描画を行う前に画面をクリアする
 		ClearDrawScreen();
 
-		// ゲームの処理
+		// 入力の更新
+		input.Update();
 
+		// ゲームの処理
+		pScene->Update(input);
+		pScene->Draw();
 
 		// 画面が切り替わるのを待つ
 		ScreenFlip();
@@ -41,7 +67,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 	}
 
+	pScene->End();
+
 	DxLib_End();				// ＤＸライブラリ使用の終了処理
 
 	return 0;				// ソフトの終了 
 }
+
