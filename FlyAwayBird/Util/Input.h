@@ -18,6 +18,9 @@ enum class InputType
 // コマンド名,入力<入力デバイス,入力>
 using InputTable_t = unordered_map<string, map<InputType, int>>;
 
+/// <summary>
+/// 入力の管理をするクラス
+/// </summary>
 class Input
 {
 public:

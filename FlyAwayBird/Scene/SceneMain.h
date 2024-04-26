@@ -3,6 +3,7 @@
 
 class Player;
 class Camera;
+class RecoveredItem;
 
 /// <summary>
 /// メインシーンクラス
@@ -19,9 +20,11 @@ public:
 	virtual void End();
 
 private:	// 変数
+	int m_backHandle;
 
 	/*ポインタ*/
 	shared_ptr<Player> m_pPlayer;
 	shared_ptr<Camera> m_pCamera;
+	shared_ptr<RecoveredItem> m_pItem;
 };
 

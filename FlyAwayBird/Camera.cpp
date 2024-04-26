@@ -17,9 +17,9 @@ Camera::~Camera()
 void Camera::Update(const Player& player)
 {
 	VECTOR playerPos = player.GetPos();
-	VECTOR cameraPos = VGet(playerPos.x - 3, 3, playerPos.z - 3);
+	VECTOR cameraPos = VGet(playerPos.x, 3.0f, playerPos.z - 6);
 
-	VECTOR targetPos = playerPos;
+	VECTOR targetPos = VGet(playerPos.x, 1.0f, playerPos.z);
 
 	m_pos = cameraPos;
 

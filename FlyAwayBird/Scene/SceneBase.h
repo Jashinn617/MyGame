@@ -1,10 +1,14 @@
 #pragma once
 #include "../Util/Input.h"
+#include "../Util/Game.h"
 #include <memory>
 #include <math.h>
 
 using namespace std;
 
+/// <summary>
+/// シーンの基底クラス
+/// </summary>
 class SceneBase :public enable_shared_from_this<SceneBase>
 {
 public:

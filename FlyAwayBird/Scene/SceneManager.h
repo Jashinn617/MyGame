@@ -6,6 +6,9 @@ using namespace std;
 class SceneBase;
 class Input;
 
+/// <summary>
+/// シーン遷移等、各シーンを管理するためのクラス
+/// </summary>
 class SceneManager
 {
 public:
@@ -30,6 +33,6 @@ public:
 	/// </summary>
 	void End();
 
-private:
+private:	// 変数
 	shared_ptr<SceneBase> m_pScene;			// 描画するシーンのポインタ
 };

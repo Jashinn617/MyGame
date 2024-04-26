@@ -26,13 +26,16 @@ Player::~Player()
 
 void Player::Update(Input& input)
 {
+	// 移動値の初期化
+	m_move = VGet(0, 0, 0);
+
 	// モデルのスケールを決定する
 	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
 	// 回転
 	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, kDirY, 0.0f));
 
 	// 右移動
-	m_pos = VAdd(m_pos, VGet(0.05f, 0, 0));
+	m_move = VAdd(m_move, VGet(0.05f, 0, 0));
 
 	// 重力と地面の処理
 	GravityAndGround();

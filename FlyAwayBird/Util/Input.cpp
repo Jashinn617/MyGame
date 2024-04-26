@@ -11,6 +11,14 @@ Input::Input()
 	commandTable["down"] = { {InputType::kwybd,KEY_INPUT_DOWN},
 								{InputType::pad,PAD_INPUT_DOWN} };
 
+	// 右ボタン
+	commandTable["right"] = { {InputType::kwybd,KEY_INPUT_RIGHT},
+								{InputType::pad,PAD_INPUT_RIGHT} };
+
+	// 左ボタン
+	commandTable["left"] = { {InputType::kwybd,KEY_INPUT_LEFT},
+								{InputType::pad,PAD_INPUT_LEFT} };
+
 	// Aボタン
 	commandTable["A"] = { {InputType::kwybd,KEY_INPUT_Z},
 								{InputType::pad,PAD_INPUT_A} };
@@ -47,18 +55,20 @@ void Input::Update()
 
 		for (const auto& hardIO : cmd.second)
 		{
-			// キーボードのチェック
+			
 			input = false;
-			if (hardIO.first == InputType::kwybd)
+			if (hardIO.first == InputType::kwybd)	// キーボードのチェック
 			{
+				// キーボードが押されていた場合
 				if (keystate[hardIO.second])
 				{
 					input = true;
 					break;	// 同時押しをできないようにここでbreakする
 				}
 			}
-			else if (hardIO.first == InputType::pad)
+			else if (hardIO.first == InputType::pad)	// ゲームパッドのチェック
 			{
+				// ゲームパッドが押されていた場合
 				if (padstate & hardIO.second)
 				{
 					input = true;
