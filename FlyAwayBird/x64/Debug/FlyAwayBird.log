@@ -1,3 +1,0 @@
-﻿  RecoveredItem.cpp
-C:\Users\fko2347024\Documents\GitHub\MyGame\FlyAwayBird\RecoveredItem.cpp(49,33): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-  FlyAwayBird.vcxproj -> C:\Users\fko2347024\Documents\GitHub\MyGame\FlyAwayBird\x64\Debug\FlyAwayBird.exe

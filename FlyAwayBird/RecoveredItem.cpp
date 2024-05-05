@@ -10,6 +10,7 @@ RecoveredItem::RecoveredItem():
 	m_handle(-1),
 	m_w(0),
 	m_h(0),
+	m_isExist(true),
 	m_sinCount(0),
 	m_sinPosY(0),
 	m_pSprite(nullptr)
@@ -23,7 +24,7 @@ RecoveredItem::~RecoveredItem()
 	DeleteGraph(m_handle);
 }
 
-void RecoveredItem::Init()
+void RecoveredItem::Init(float x, float z)
 {
 	//画像のロード
 	m_handle = LoadGraph("Data/Img/Cake.png");
@@ -31,7 +32,8 @@ void RecoveredItem::Init()
 	// 画像サイズの取得
 	GetGraphSize(m_handle, &m_w, &m_h);
 
-	m_pos.y = kDownPosY;
+	m_pos = VGet(x, kDownPosY, z);
+
 
 	//ポインタの生成
 	m_pSprite = make_shared<WorldSprite>();
@@ -41,6 +43,7 @@ void RecoveredItem::Init()
 
 void RecoveredItem::Update()
 {
+	if (!m_isExist) return;
 	// 移動
 	m_sinCount += kSinSpeed;
 	m_sinPosY = sinf(m_sinCount) * kMoveSwing;
@@ -52,6 +55,7 @@ void RecoveredItem::Update()
 
 void RecoveredItem::Draw()
 {
+	if (!m_isExist) return;
 	m_pSprite->Draw();
 
 	// 当たり判定の表示

@@ -45,6 +45,11 @@ private:	// 関数
 	/// </summary>
 	void GravityAndGround();
 
+	/// <summary>
+	/// 壁に関する処理
+	/// </summary>
+	void Wall();
+
 private:	// 変数
 	VECTOR m_pos;	// 位置
 	VECTOR m_move;	// 移動量
@@ -62,5 +67,7 @@ private:	// 定数
 	static constexpr float kGravity = 0.025f;		// 重力
 	static constexpr float kJumpPower = 0.35f;		// ジャンプ力
 	static constexpr float kGroundPosY = 0.4f;		// 地面のY位置
+	static constexpr float kWallZ = 30;				// z軸の壁
+	static constexpr float kWallX = 50;				// x軸の壁
 };
 

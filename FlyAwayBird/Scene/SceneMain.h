@@ -21,10 +21,19 @@ public:
 
 private:	// •Ï”
 	int m_backHandle;
+	bool m_isStart;
+	bool m_isPlay;
+	bool m_isGoal;
 
 	/*ƒ|ƒCƒ“ƒ^*/
 	shared_ptr<Player> m_pPlayer;
 	shared_ptr<Camera> m_pCamera;
-	shared_ptr<RecoveredItem> m_pItem;
+	//shared_ptr<RecoveredItem> m_pItem;
+	vector<shared_ptr<RecoveredItem>> m_pItem;
+
+private:	 // ’è”
+
+	static constexpr float kWallZ = 30;				// z²‚Ì•Ç
+	static constexpr float kWallX = 50;				// x²‚Ì•Ç
 };
 

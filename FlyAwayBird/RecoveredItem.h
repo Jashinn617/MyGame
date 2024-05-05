@@ -17,7 +17,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Init();
+	void Init(float x, float z);
 
 	/// <summary>
 	/// 更新
@@ -29,12 +29,20 @@ public:
 	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// 存在しているかどうか
+	/// </summary>
+	/// <returns>存在フラグ</returns>
+	bool IsExist() { return m_isExist; }
+
 private:	// 変数
 	VECTOR m_pos;	// 位置
 	int m_handle;	// 画像のハンドル
 	/*画像のサイズ*/
 	int m_w;	// 横
 	int m_h;	// 縦
+
+	bool m_isExist;	// 存在フラグ
 
 	float m_sinCount;	// 移動の際のSinカウント
 	float m_sinPosY;	// 位置の計算に使うSin

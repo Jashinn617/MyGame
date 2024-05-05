@@ -46,6 +46,9 @@ void Player::Update(Input& input)
 	// ジャンプ処理
 	Jump(input);
 
+	// 壁の処理
+	Wall();
+
 	// 位置の更新
 	m_pos = VAdd(m_pos, m_move);
 
@@ -110,4 +113,29 @@ void Player::GravityAndGround()
 		m_jumpPower = 0;
 		m_isJump = false;
 	}
+}
+
+void Player::Wall()
+{
+	// 後ろ
+	if (m_pos.z <= -kWallZ)
+	{
+		m_pos.z = -kWallZ;
+	}
+	// 前
+	if (m_pos.z >= kWallZ)
+	{
+		m_pos.z = kWallZ;
+	}
+	// 右
+	if (m_pos.x >= kWallX)
+	{
+		m_pos.x = kWallX;
+	}
+	// 左
+	if (m_pos.x <= -kWallX)
+	{
+		m_pos.x = -kWallX;
+	}
+
 }
