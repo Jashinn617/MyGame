@@ -14,6 +14,8 @@ SceneMain::SceneMain():
 	m_timeBackFontHandle(-1),
 	m_itemFrontFontHandle(-1),
 	m_itemBackFontHandle(-1),
+	m_clearTimeFrontFontHandle(-1),
+	m_clearTimeBackFontHandle(-1),
 	m_timeFrame(0),
 	m_time(0),
 	m_clearTime(0),
@@ -65,6 +67,9 @@ void SceneMain::Init()
 	m_timeBackFontHandle = CreateFontToHandle("GN-ƒLƒ‹ƒSU‚©‚ÈNA", 110, -1);
 	m_itemFrontFontHandle = CreateFontToHandle("GN-ƒLƒ‹ƒSU‚©‚ÈNA", 80, -1);
 	m_itemBackFontHandle = CreateFontToHandle("GN-ƒLƒ‹ƒSU‚©‚ÈNA", 82, -1);
+	m_clearTimeFrontFontHandle = CreateFontToHandle("GN-ƒLƒ‹ƒSU‚©‚ÈNA", 70, -1);
+	m_clearTimeBackFontHandle = CreateFontToHandle("GN-ƒLƒ‹ƒSU‚©‚ÈNA", 73, -1);
+
 
 	ItemInit();	
 }
@@ -120,6 +125,10 @@ void SceneMain::Draw()
 	else
 	{
 		DrawGraph(200, 100, m_clearHandle, false);
+
+		// •b”‚Ì•`‰æ
+		DrawFormatStringToHandle(kClearTimePosX, kClearTimePosY, 0x00008b, m_clearTimeBackFontHandle, "‚¯‚Á‚©F%d‚Ñ‚å‚¤I",m_clearTime);
+		DrawFormatStringToHandle(kClearTimePosX, kClearTimePosY, 0xff7f50, m_clearTimeFrontFontHandle, "‚¯‚Á‚©F%d‚Ñ‚å‚¤I", m_clearTime);
 	}
 
 #ifdef _DEBUG
@@ -208,6 +217,16 @@ void SceneMain::PlayUpdate(Input& input)
 	{
 		item->Update();
 	}
+
+#ifdef _DEBUG
+	if (input.IsTriggered("B"))
+	{
+		m_clearTime = m_time;
+		m_isClear = true;
+		m_isPlay = false;
+	}
+#endif // _DEBUG
+
 
 }
 

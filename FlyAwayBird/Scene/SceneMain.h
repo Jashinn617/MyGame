@@ -37,6 +37,8 @@ private:	// 変数
 	int m_timeBackFontHandle;	// 秒数表示用のフォントのハンドル(後)
 	int m_itemFrontFontHandle;	// アイテム表示用のフォントのハンドル(前)
 	int m_itemBackFontHandle;	// アイテム表示用のフォントのハンドル(後)
+	int m_clearTimeFrontFontHandle;	// クリアタイム表示用のフォントのハンドル(前)
+	int m_clearTimeBackFontHandle;	// クリアタイム表示用のフォントのハンドル(後)
 	int m_timeFrame;	// 経過フレーム
 	int m_time;			// 経過秒数
 	int m_clearTime;	// クリア時の秒数
@@ -65,4 +67,6 @@ private:	 // 定数
 	static constexpr int kTimePosY = 40;			// 秒数のY位置
 	static constexpr int kItemPosX = 550;			// アイテムのX位置
 	static constexpr int kItemPosY = 150;			// アイテムのY位置
+	static constexpr int kClearTimePosX = 500;		// クリアタイムのX位置
+	static constexpr int kClearTimePosY = 120;		// クリアタイムのY位置
 };
