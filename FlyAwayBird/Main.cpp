@@ -24,6 +24,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// 3D描画の奥行情報を使用する
 	SetUseZBuffer3D(true);
 
+	// ********** フォントのロード **********
+	LPCSTR font_path = "Data/font/GN-KillGothic-U-KanaNA.ttf"; // 読み込むフォントファイルのパス
+	if (AddFontResourceEx(font_path, FR_PRIVATE, NULL) > 0) {
+	}
+	else {
+		// フォント読込エラー処理
+		MessageBox(NULL, _T("フォント読込失敗"), _T(""), MB_OK);
+	}
+
 
 	// ゲームバーのタイトル
 	SetWindowText(_T("とれとれとりくん！！"));
@@ -68,6 +77,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 
 	pScene->End();
+
+	// ********** フォントのアンロード **********
+	if (RemoveFontResourceEx(font_path, FR_PRIVATE, NULL)) {
+	}
+	else {
+		MessageBox(NULL, _T("remove failure"), _T(""), MB_OK);
+	}
 
 	DxLib_End();				// ＤＸライブラリ使用の終了処理
 

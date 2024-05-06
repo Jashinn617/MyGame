@@ -2,6 +2,7 @@
 #include <memory>
 
 class WorldSprite;
+class Player;
 
 using namespace std;
 
@@ -11,7 +12,7 @@ using namespace std;
 class RecoveredItem
 {
 public:
-	RecoveredItem();
+	RecoveredItem(shared_ptr<Player> pPlayer);
 	~RecoveredItem();
 
 	/// <summary>
@@ -28,6 +29,9 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw();
+
+	
+	void CollisionToPlayer(VECTOR pVec, float pRad);
 
 	/// <summary>
 	/// 存在しているかどうか
@@ -47,10 +51,11 @@ private:	// 変数
 	float m_sinCount;	// 移動の際のSinカウント
 	float m_sinPosY;	// 位置の計算に使うSin
 
+	shared_ptr<Player> m_pPlayer;
 	shared_ptr<WorldSprite> m_pSprite;	// スプライト
 
 private:	// 定数
-	int kSize = 2;	// 画像の全体的なサイズ
+	static constexpr float kSize = 2;	// 画像の全体的なサイズ
 
 	static constexpr float kRadius = 0.8f;	// 半径
 	static constexpr float kUpPosY = 2.0f;	// 上にいるときの位置

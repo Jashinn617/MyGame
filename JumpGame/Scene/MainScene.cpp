@@ -65,6 +65,7 @@ MainScene::~MainScene()
 	DeleteSoundMem(m_missSeHandle);
 	/*フォントのデリート*/
 	DeleteFontToHandle(m_timeFontHandle);
+	DeleteFontToHandle(m_timeBackFontHandle);
 }
 
 void MainScene::Init()

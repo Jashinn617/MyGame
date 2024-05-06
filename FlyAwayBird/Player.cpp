@@ -5,7 +5,7 @@
 
 
 Player::Player():
-	m_pos{0,0,-10},
+	m_pos{0,0,-kWallZ},
 	m_move{0,0,0},
 	m_dirY(90),
 	m_modelHandle(-1),
@@ -137,5 +137,4 @@ void Player::Wall()
 	{
 		m_pos.x = -kWallX;
 	}
-
 }

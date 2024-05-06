@@ -1,3 +1,4 @@
+#pragma once
 #include "DxLib.h"
 
 // ゲーム全体で使用する定数を定義する
