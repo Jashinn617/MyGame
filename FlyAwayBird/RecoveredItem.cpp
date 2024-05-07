@@ -2,37 +2,43 @@
 #include "RecoveredItem.h"
 #include "WorldSprite.h"
 #include "Player.h"
+#include "Util/Game.h"
 
 #include <cassert>
 #include <cmath>
 
 RecoveredItem::RecoveredItem(shared_ptr<Player> pPlayer):
 	m_pos{0,0,0},
-	m_handle(-1),
+	m_modelHandle(-1),
+	m_chatchSeHandle(-1),
 	m_w(0),
 	m_h(0),
 	m_isExist(true),
 	m_sinCount(0),
 	m_sinPosY(0),
-	m_pPlayer(pPlayer),
-	m_pSprite(nullptr)
+	m_pPlayer(pPlayer)
 {
 	/*処理無し*/
 }
 
 RecoveredItem::~RecoveredItem()
 {
-	/*画像のデリート*/
-	DeleteGraph(m_handle);
+	/*モデルのデリート*/
+	MV1DeleteModel(m_modelHandle);
+	/*SEのデリート*/
+	DeleteSoundMem(m_chatchSeHandle);
 }
 
 void RecoveredItem::Init(float x, float z)
 {
-	//画像のロード
-	m_handle = LoadGraph("Data/Img/Cake.png");
-	assert(m_handle != -1);
-	// 画像サイズの取得
-	GetGraphSize(m_handle, &m_w, &m_h);
+	// モデルのロード
+	m_modelHandle = MV1LoadModel("Data/Model/Heart.mv1");
+	assert(m_modelHandle != -1);
+	/*SEのロード*/
+	m_chatchSeHandle = LoadSoundMem("Data/Sound/SE/ItemChatchSE.mp3");
+	assert(m_chatchSeHandle != -1);
+	/*SEの音量調整*/
+	ChangeVolumeSoundMem(kSeVolume, m_chatchSeHandle);
 
 	int rand = GetRand(1);
 	if (rand == 0)
@@ -43,25 +49,25 @@ void RecoveredItem::Init(float x, float z)
 	{
 		m_pos = VGet(x, kUpPosY, z);
 	}
-
-
-	//ポインタの生成
-	m_pSprite = make_shared<WorldSprite>();
-	// スプライトの生成
-	m_pSprite->Initialize(m_handle, m_w, m_h);
 }
 
 void RecoveredItem::Update()
 {
 	if (!m_isExist) return;
+
+	// モデルのスケールを設定する
+	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
+	// 回転
+	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f,0.0f, 0.0f));
+
 	// 当たり判定
 	CollisionToPlayer(m_pPlayer->GetPos(), m_pPlayer->GetRadius());
 	// 移動
 	m_sinCount += kSinSpeed;
 	m_sinPosY = sinf(m_sinCount) * kMoveSwing;
 	m_pos.y += m_sinPosY;
-	// 位置、サイズの設定
-	m_pSprite->SetTransform(m_pos, kSize);
+
+	MV1SetPosition(m_modelHandle, m_pos);
 
 
 }
@@ -69,7 +75,8 @@ void RecoveredItem::Update()
 void RecoveredItem::Draw()
 {
 	if (!m_isExist) return;
-	m_pSprite->Draw();
+
+	MV1DrawModel(m_modelHandle);
 
 	// 当たり判定の表示
 #ifdef _DEBUG
@@ -93,6 +100,7 @@ void RecoveredItem::CollisionToPlayer(VECTOR pVec, float pRad)
 #ifdef _DEBUG
 		printfDx("当たった");
 #endif // _DEBUG
+		PlaySoundMem(m_chatchSeHandle, DX_PLAYTYPE_BACK);
 		m_isExist = false;
 	}
 }

@@ -1,12 +1,1 @@
-﻿  Main.cpp
-  Player.cpp
-  RecoveredItem.cpp
-  SceneBase.cpp
-  SceneMain.cpp
-  SceneManager.cpp
-  SceneTitle.cpp
-  コード生成しています。
-  Previous IPDB and IOBJ mismatch, fall back to full compilation.
-  All 742 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
-  コード生成が終了しました。
-  FlyAwayBird.vcxproj -> D:\GitHub\MyGame\FlyAwayBird\x64\Release\FlyAwayBird.exe
+﻿  FlyAwayBird.vcxproj -> C:\Users\fko2347024\Documents\GitHub\MyGame\FlyAwayBird\x64\Release\FlyAwayBird.exe

@@ -3,17 +3,25 @@
 #include "Util/Game.h"
 #include"Util/Input.h"
 
+#include <cassert>
+
 
 Player::Player():
 	m_pos{0,0,-kWallZ},
 	m_move{0,0,0},
 	m_dirY(90),
 	m_modelHandle(-1),
+	m_jumpSeHandle(-1),
 	m_jumpPower(0.0f),
 	m_isJump(false)
 {
 	// モデルのロード
 	m_modelHandle = MV1LoadModel("Data/Model/Player/chicken.mv1");
+	assert(m_modelHandle != -1);
+	/*SEのロード*/
+	m_jumpSeHandle = MV1LoadModel("Data/Sound/SE/JumpSE.mp3");
+	assert(m_modelHandle != -1);
+
 }
 
 Player::~Player()

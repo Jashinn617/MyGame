@@ -10,12 +10,16 @@ SceneMain::SceneMain():
 	m_startHandle(-1),
 	m_clearHandle(-1),
 	m_backHandle(-1),
-	m_timeFrontFontHandle(-1),
-	m_timeBackFontHandle(-1),
-	m_itemFrontFontHandle(-1),
-	m_itemBackFontHandle(-1),
-	m_clearTimeFrontFontHandle(-1),
-	m_clearTimeBackFontHandle(-1),
+	m_groundModelHandle(-1),
+	m_fastClearSeHandle(-1),
+	m_clearSeHandle(-1),
+	m_slowClearSeHandle(-1),
+	m_startBgmHandle(-1),
+	m_mainBgmHandle(-1),
+	m_clearBgmHandle(-1),
+	m_timeFontHandle(-1),
+	m_itemFontHandle(-1),
+	m_clearTimeFontHandle(-1),
 	m_timeFrame(0),
 	m_time(0),
 	m_clearTime(0),
@@ -24,6 +28,7 @@ SceneMain::SceneMain():
 	m_isStart(true),
 	m_isPlay(false),
 	m_isClear(false),
+	m_isSe(false),
 	m_pPlayer(nullptr),
 	m_pCamera(nullptr)
 {
@@ -41,11 +46,20 @@ SceneMain::~SceneMain()
 	DeleteGraph(m_startHandle);
 	DeleteGraph(m_clearHandle);
 	DeleteGraph(m_backHandle);
+	/*モデルのデリート*/
+	MV1DeleteModel(m_groundModelHandle);
+	/*SEのデリート*/
+	DeleteSoundMem(m_fastClearSeHandle);
+	DeleteSoundMem(m_clearSeHandle);
+	DeleteSoundMem(m_slowClearSeHandle);
+	/*BGmのデリート*/
+	DeleteSoundMem(m_startBgmHandle);
+	DeleteSoundMem(m_mainBgmHandle);
+	DeleteSoundMem(m_clearBgmHandle);
 	/*フォントのデリート*/
-	DeleteFontToHandle(m_timeFrontFontHandle);
-	DeleteFontToHandle(m_timeBackFontHandle);
-	DeleteFontToHandle(m_itemFrontFontHandle);
-	DeleteFontToHandle(m_itemBackFontHandle);
+	DeleteFontToHandle(m_timeFontHandle);
+	DeleteFontToHandle(m_itemFontHandle);
+	DeleteFontToHandle(m_clearTimeFontHandle);
 }
 
 void SceneMain::Init()
@@ -62,14 +76,27 @@ void SceneMain::Init()
 	m_startHandle = LoadGraph("Data/Img/StartImg.png");
 	m_clearHandle = LoadGraph("Data/Img/ClearImg.png");
 	m_backHandle = LoadGraph("Data/Img/Back/Sky.png");
-	// 秒数表示用のフォント
-	m_timeFrontFontHandle = CreateFontToHandle("GN-キルゴUかなNA", 100, -1);
-	m_timeBackFontHandle = CreateFontToHandle("GN-キルゴUかなNA", 110, -1);
-	m_itemFrontFontHandle = CreateFontToHandle("GN-キルゴUかなNA", 80, -1);
-	m_itemBackFontHandle = CreateFontToHandle("GN-キルゴUかなNA", 82, -1);
-	m_clearTimeFrontFontHandle = CreateFontToHandle("GN-キルゴUかなNA", 70, -1);
-	m_clearTimeBackFontHandle = CreateFontToHandle("GN-キルゴUかなNA", 73, -1);
-
+	/*モデルのロード*/
+	m_groundModelHandle = MV1LoadModel("Data/Model/Ground.mv1");
+	/*SEのロード*/
+	m_fastClearSeHandle = LoadSoundMem("Data/Sound/SE/FastClearSE.mp3");
+	m_clearSeHandle = LoadSoundMem("Data/Sound/SE/NormalClearSE.mp3");
+	m_slowClearSeHandle = LoadSoundMem("Data/Sound/SE/SlowClearSE.mp3");
+	/*BGMのロード*/
+	m_startBgmHandle = LoadSoundMem("Data/Sound/BGM/StartBGM.mp3");
+	m_mainBgmHandle = LoadSoundMem("Data/Sound/BGM/MainBGM.mp3");
+	m_clearBgmHandle = LoadSoundMem("Data/Sound/BGM/ClearBGM.mp3");
+	/*BGM、SEの音量の調整*/
+	ChangeVolumeSoundMem(kSeVolume, m_fastClearSeHandle);
+	ChangeVolumeSoundMem(kSeVolume, m_clearSeHandle);
+	ChangeVolumeSoundMem(kSeVolume, m_slowClearSeHandle);
+	ChangeVolumeSoundMem(kBgmVolume, m_startBgmHandle);
+	ChangeVolumeSoundMem(kBgmVolume, m_mainBgmHandle);
+	ChangeVolumeSoundMem(kBgmVolume, m_clearBgmHandle);
+	/*フォントのロード*/
+	m_timeFontHandle = CreateFontToHandle("GN-キルゴUかなNA", 100, -1);
+	m_itemFontHandle = CreateFontToHandle("GN-キルゴUかなNA", 80, -1);
+	m_clearTimeFontHandle = CreateFontToHandle("GN-キルゴUかなNA", 70, -1);
 
 	ItemInit();	
 }
@@ -77,6 +104,10 @@ void SceneMain::Init()
 shared_ptr<SceneBase> SceneMain::Update(Input& input)
 {
 	m_pCamera->Update(*m_pPlayer);
+
+	//地面モデルの位置、大きさの設定
+	MV1SetScale(m_groundModelHandle, VGet(kGroundModelScale, 1, kGroundModelScale));
+	MV1SetPosition(m_groundModelHandle, VGet(0, kGroundPosY, 0));
 
 	if (m_isStart)
 	{
@@ -107,6 +138,8 @@ void SceneMain::Draw()
 	DrawGraph(0, 0, m_backHandle, false);
 	SetWriteZBufferFlag(true);
 	m_pPlayer->Draw();
+	// 地面モデルの描画
+	MV1DrawModel(m_groundModelHandle);
 	for (const auto& item : m_pItem)
 	{
 		item->Draw();
@@ -115,20 +148,15 @@ void SceneMain::Draw()
 	SetWriteZBufferFlag(false);
 	if (m_isStart)
 	{
-		DrawGraph(200, 100, m_startHandle, false);
+		StartDraw();
 	}
 	else if (m_isPlay)
 	{		
-		TimeDraw();
-		ItemNumDraw();
+		PlayDraw();
 	}
 	else
 	{
-		DrawGraph(200, 100, m_clearHandle, false);
-
-		// 秒数の描画
-		DrawFormatStringToHandle(kClearTimePosX, kClearTimePosY, 0x00008b, m_clearTimeBackFontHandle, "けっか：%dびょう！",m_clearTime);
-		DrawFormatStringToHandle(kClearTimePosX, kClearTimePosY, 0xff7f50, m_clearTimeFrontFontHandle, "けっか：%dびょう！", m_clearTime);
+		ClearDraw();
 	}
 
 #ifdef _DEBUG
@@ -148,6 +176,7 @@ void SceneMain::Draw()
 
 void SceneMain::End()
 {
+	/*処理無し*/
 }
 
 void SceneMain::ItemInit()
@@ -182,8 +211,14 @@ void SceneMain::ItemInit()
 
 void SceneMain::StartUpdate(Input& input)
 {
+	if (!CheckSoundMem(m_startBgmHandle))
+	{
+		PlaySoundMem(m_startBgmHandle, DX_PLAYTYPE_LOOP);
+	}
+	
 	if (input.IsTriggered("A"))
 	{
+		StopSoundMem(m_startBgmHandle);
 		m_isPlay = true;
 		m_isStart = false;
 	}
@@ -194,6 +229,12 @@ void SceneMain::PlayUpdate(Input& input)
 	// 秒数
 	m_timeFrame++;
 	m_time = m_timeFrame / 60;
+
+	// BGM
+	if (!CheckSoundMem(m_mainBgmHandle))
+	{
+		PlaySoundMem(m_mainBgmHandle, DX_PLAYTYPE_LOOP);
+	}
 
 	m_itemNum = 0;
 	for (const auto& item : m_pItem)
@@ -206,6 +247,7 @@ void SceneMain::PlayUpdate(Input& input)
 	if (kItemNum - m_itemNum == 0)
 	{
 		m_clearTime = m_time;
+		StopSoundMem(m_mainBgmHandle);
 		m_isClear = true;
 		m_isPlay = false;
 	}
@@ -222,6 +264,7 @@ void SceneMain::PlayUpdate(Input& input)
 	if (input.IsTriggered("B"))
 	{
 		m_clearTime = m_time;
+		StopSoundMem(m_mainBgmHandle);
 		m_isClear = true;
 		m_isPlay = false;
 	}
@@ -232,22 +275,68 @@ void SceneMain::PlayUpdate(Input& input)
 
 void SceneMain::ClearUpdate(Input& input)
 {
+	// SEの再生
+	// クリアタイムによってSEの内容が変わる
+	if (!m_isSe)
+	{
+		if (m_clearTime <= kClearFastTime)
+		{			
+			PlaySoundMem(m_fastClearSeHandle, DX_PLAYTYPE_NORMAL);
+		}
+		else if (m_clearTime > kClearFastTime && m_clearTime < kClearSlowTime)
+		{
+			PlaySoundMem(m_clearSeHandle, DX_PLAYTYPE_NORMAL);
+		}
+		else if (m_clearTime >= kClearSlowTime)
+		{
+			PlaySoundMem(m_slowClearSeHandle, DX_PLAYTYPE_NORMAL);
+		}
+
+		m_isSe = true;
+	}
+	// BGM
+	if (!CheckSoundMem(m_clearBgmHandle))
+	{
+		PlaySoundMem(m_clearBgmHandle, DX_PLAYTYPE_LOOP);
+	}
+	
+
 	if (input.IsTriggered("A"))
 	{
 		m_isClear = false;
 	}
 }
 
+void SceneMain::StartDraw()
+{
+	DrawGraph(200, 100, m_startHandle, false);
+}
+
+void SceneMain::PlayDraw()
+{
+	TimeDraw();
+	ItemNumDraw();
+}
+
+void SceneMain::ClearDraw()
+{
+	DrawGraph(200, 100, m_clearHandle, false);
+
+	// 秒数の描画
+	DrawFormatStringToHandle(kClearTimePosX + kBackFontShiftPosX, kClearTimePosY, 0x00008b, m_clearTimeFontHandle, "けっか：%dびょう！", m_clearTime);
+	DrawFormatStringToHandle(kClearTimePosX, kClearTimePosY, 0xff7f50, m_clearTimeFontHandle, "けっか：%dびょう！", m_clearTime);
+}
+
 void SceneMain::TimeDraw()
 {
 	// 秒数の描画
-	DrawFormatStringToHandle(kTimePosX, kTimePosY, 0x00008b, m_timeBackFontHandle, "%dけいか", m_time);
-	DrawFormatStringToHandle(kTimePosX, kTimePosY, 0xff7f50, m_timeFrontFontHandle, "%dけいか", m_time);
+	DrawFormatStringToHandle(kTimePosX+kBackFontShiftPosX, kTimePosY, 0x00008b, m_timeFontHandle, "%dけいか", m_time);
+	DrawFormatStringToHandle(kTimePosX, kTimePosY, 0xff7f50, m_timeFontHandle, "%dけいか", m_time);
 }
 
 void SceneMain::ItemNumDraw()
 {
 	// 残りのアイテム数の描画
-	DrawFormatStringToHandle(kItemPosX, kItemPosY, 0x000086, m_itemBackFontHandle, "のこり：%dこ", kItemNum - m_itemNum);
-	DrawFormatStringToHandle(kItemPosX, kItemPosY, 0xff6347, m_itemFrontFontHandle, "のこり：%dこ", kItemNum - m_itemNum);
+	DrawFormatStringToHandle(kItemPosX+kBackFontShiftPosX, kItemPosY, 0x000086, m_itemFontHandle, "のこり：%dこ", kItemNum - m_itemNum);
+	DrawFormatStringToHandle(kItemPosX, kItemPosY, 0xff6347, m_itemFontHandle, "のこり：%dこ", kItemNum - m_itemNum);
 }

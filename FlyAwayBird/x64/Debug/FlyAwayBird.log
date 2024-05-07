@@ -1,4 +1,8 @@
-﻿  SceneMain.cpp
-  SceneManager.cpp
+﻿  Camera.cpp
+  Player.cpp
+  RecoveredItem.cpp
+  SceneMain.cpp
+C:\Users\fko2347024\Documents\GitHub\MyGame\FlyAwayBird\Scene\SceneMain.h(74,43): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
   コードを生成中...
-  FlyAwayBird.vcxproj -> D:\GitHub\MyGame\FlyAwayBird\x64\Debug\FlyAwayBird.exe
+  LINK : 前回のインクリメンタル リンクで C:\Users\fko2347024\Documents\GitHub\MyGame\FlyAwayBird\x64\Debug\FlyAwayBird.exe が見つからなかったか、ビルドされませんでした。フル リンクを行います。
+  FlyAwayBird.vcxproj -> C:\Users\fko2347024\Documents\GitHub\MyGame\FlyAwayBird\x64\Debug\FlyAwayBird.exe

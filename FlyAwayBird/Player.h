@@ -56,6 +56,7 @@ private:	// 変数
 	float m_dirY;	// Y方向の向き
 
 	int m_modelHandle;	// 3Dモデル	
+	int m_jumpSeHandle;	// ジャンプ時のSE
 
 	float m_jumpPower;	// ジャンプ力
 	bool m_isJump;		// ジャンプ中かどうか
@@ -69,5 +70,5 @@ private:	// 定数
 	static constexpr float kGroundPosY = 0.4f;		// 地面のY位置
 	static constexpr float kWallZ = 30;				// z軸の壁
 	static constexpr float kWallX = 50;				// x軸の壁
+	static constexpr int kSeVolume = 255;			// SEの音量
 };
-
