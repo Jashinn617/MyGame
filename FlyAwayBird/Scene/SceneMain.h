@@ -15,15 +15,15 @@ public:
 	virtual ~SceneMain();
 
 	virtual void Init();
-	virtual shared_ptr<SceneBase> Update(Input& input);
-	virtual void Draw();
+	virtual shared_ptr<SceneBase> Update(Input& input, HandleManager& handle);
+	virtual void Draw(HandleManager& handle);
 	virtual void End();
 
 private:	// ä÷êî
 	void ItemInit();
 
 	void StartUpdate(Input& input);
-	void PlayUpdate(Input& input);
+	void PlayUpdate(Input& input, HandleManager& handle);
 	void ClearUpdate(Input& input);
 
 	void StartDraw();

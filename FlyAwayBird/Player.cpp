@@ -1,7 +1,8 @@
 #include "DxLib.h"
 #include "Player.h"
 #include "Util/Game.h"
-#include"Util/Input.h"
+#include "Util/Input.h"
+#include "Util/HandleManager.h"
 
 #include <cassert>
 
@@ -10,24 +11,19 @@ Player::Player():
 	m_pos{0,0,-kWallZ},
 	m_move{0,0,0},
 	m_dirY(90),
-	m_modelHandle(-1),
 	m_jumpSeHandle(-1),
 	m_jumpPower(0.0f),
 	m_isJump(false)
 {
-	// モデルのロード
-	m_modelHandle = MV1LoadModel("Data/Model/Player/chicken.mv1");
-	assert(m_modelHandle != -1);
 	/*SEのロード*/
-	m_jumpSeHandle = MV1LoadModel("Data/Sound/SE/JumpSE.mp3");
-	assert(m_modelHandle != -1);
+	m_jumpSeHandle = LoadSoundMem("Data/Sound/SE/JumpSE.mp3");
+	assert(m_jumpSeHandle != -1);
 
 }
 
 Player::~Player()
 {
-	// モデルのデリート
-	MV1DeleteModel(m_modelHandle);
+	/*処理無し*/
 }
 
 void Player::Init()
@@ -35,15 +31,15 @@ void Player::Init()
 	/*処理無し*/
 }
 
-void Player::Update(Input& input)
+void Player::Update(Input& input, HandleManager& handle)
 {
 	// 移動値の初期化
 	m_move = VGet(0, 0, 0);
 
 	// モデルのスケールを設定する
-	MV1SetScale(m_modelHandle, VGet(kScale,kScale,kScale));
+	MV1SetScale(handle.GetModel("player"), VGet(kScale,kScale,kScale));
 	// 回転
-	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, m_dirY * Game::kRadianConversion, 0.0f));
+	MV1SetRotationXYZ(handle.GetModel("player"), VGet(0.0f, m_dirY * Game::kRadianConversion, 0.0f));
 
 	// 移動
 	Move(input);
@@ -61,17 +57,17 @@ void Player::Update(Input& input)
 	m_pos = VAdd(m_pos, m_move);
 
 	// モデルの位置設定
-	MV1SetPosition(m_modelHandle, m_pos);
+	MV1SetPosition(handle.GetModel("player"), m_pos);
 }
 
-void Player::Draw() const
+void Player::Draw(HandleManager& handle) const
 {
 	// 3Dモデルの描画
-	MV1DrawModel(m_modelHandle);
+	MV1DrawModel(handle.GetModel("player"));
 
 	// 当たり判定の表示
 #ifdef _DEBUG
-	VECTOR pos = MV1GetPosition(m_modelHandle);
+	VECTOR pos = MV1GetPosition(handle.GetModel("player"));
 	pos.y += 0.1f;
 	DrawSphere3D(pos, kRadius, 32, 0x0000ff, 0x0000ff, false);
 #endif // _DEBUG

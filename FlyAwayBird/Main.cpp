@@ -1,6 +1,7 @@
 #include "DxLib.h"
 #include "Util/Game.h"
 #include "Util/Input.h"
+#include "Util/HandleManager.h"
 #include "Scene/SceneManager.h"
 
 #include <memory>
@@ -37,6 +38,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// ゲームバーのタイトル
 	SetWindowText(_T("とれとれとりくん！！"));
 
+	// ハンドル管理
+	HandleManager handle;
+
 	// シーン管理
 	shared_ptr<SceneManager> pScene = make_shared<SceneManager>();
 	pScene->Init();
@@ -57,8 +61,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		input.Update();
 
 		// ゲームの処理
-		pScene->Update(input);
-		pScene->Draw();
+		pScene->Update(input,handle);
+		pScene->Draw(handle);
 
 		// 画面が切り替わるのを待つ
 		ScreenFlip();

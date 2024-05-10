@@ -1,6 +1,7 @@
 #pragma once
 
 class Input;
+class HandleManager;
 
 /// <summary>
 /// プレイヤークラス
@@ -12,8 +13,8 @@ public:
 	~Player();
 
 	void Init();
-	void Update(Input& input);
-	void Draw()const;
+	void Update(Input& input, HandleManager& handle);
+	void Draw(HandleManager& handleManager)const;
 
 	/// <summary>
 	/// 位置の取得
@@ -55,7 +56,6 @@ private:	// 変数
 	VECTOR m_move;	// 移動量
 	float m_dirY;	// Y方向の向き
 
-	int m_modelHandle;	// 3Dモデル	
 	int m_jumpSeHandle;	// ジャンプ時のSE
 
 	float m_jumpPower;	// ジャンプ力

@@ -4,42 +4,42 @@
 Input::Input()
 {
 	// 上ボタン
-	commandTable["up"] = { {InputType::kwybd,KEY_INPUT_UP},
+	m_commandTable["up"] = { {InputType::kwybd,KEY_INPUT_UP},
 								{InputType::pad,PAD_INPUT_UP} };
 
 	// 下ボタン
-	commandTable["down"] = { {InputType::kwybd,KEY_INPUT_DOWN},
+	m_commandTable["down"] = { {InputType::kwybd,KEY_INPUT_DOWN},
 								{InputType::pad,PAD_INPUT_DOWN} };
 
 	// 右ボタン
-	commandTable["right"] = { {InputType::kwybd,KEY_INPUT_RIGHT},
+	m_commandTable["right"] = { {InputType::kwybd,KEY_INPUT_RIGHT},
 								{InputType::pad,PAD_INPUT_RIGHT} };
 
 	// 左ボタン
-	commandTable["left"] = { {InputType::kwybd,KEY_INPUT_LEFT},
+	m_commandTable["left"] = { {InputType::kwybd,KEY_INPUT_LEFT},
 								{InputType::pad,PAD_INPUT_LEFT} };
 
 	// Aボタン
-	commandTable["A"] = { {InputType::kwybd,KEY_INPUT_Z},
+	m_commandTable["A"] = { {InputType::kwybd,KEY_INPUT_Z},
 								{InputType::pad,PAD_INPUT_A} };
 
 	// Bボタン
-	commandTable["B"] = { {InputType::kwybd,KEY_INPUT_X},
+	m_commandTable["B"] = { {InputType::kwybd,KEY_INPUT_X},
 								{InputType::pad,PAD_INPUT_B} };
 
 	// Yボタン
-	commandTable["Y"] = { {InputType::kwybd,KEY_INPUT_C},
+	m_commandTable["Y"] = { {InputType::kwybd,KEY_INPUT_C},
 								{InputType::pad,PAD_INPUT_Y} };
 
 	// Xボタン
-	commandTable["X"] = { {InputType::kwybd,KEY_INPUT_V},
+	m_commandTable["X"] = { {InputType::kwybd,KEY_INPUT_V},
 								{InputType::pad,PAD_INPUT_X} };
 }
 
 void Input::Update()
 {
 	// 直前入力をコピーしておく
-	lastInputData = nowInputData;
+	m_lastInputData = m_nowInputData;
 
 	// ハードウェア入力チェック
 	char keystate[256];	// キーボード用の配列
@@ -48,10 +48,10 @@ void Input::Update()
 
 	// 登録された情報とハードの情報を照らし合わせる
 	// それをもとにinputDataの内容を更新する
-	for (const auto& cmd : commandTable)
+	for (const auto& cmd : m_commandTable)
 	{
 		// コマンドの名前から入力データを作る
-		auto& input = nowInputData[cmd.first];
+		auto& input = m_nowInputData[cmd.first];
 
 		for (const auto& hardIO : cmd.second)
 		{
@@ -81,33 +81,33 @@ void Input::Update()
 
 bool Input::IsTriggered(const char* command) const
 {
-	auto it = nowInputData.find(command);
-	if (it == nowInputData.end())	// 要素無し
+	auto it = m_nowInputData.find(command);
+	if (it == m_nowInputData.end())	// 要素無し
 	{
 		return false;	// 反応しない
 	}
 
-	return(nowInputData.at(command) && !lastInputData.at(command));
+	return(m_nowInputData.at(command) && !m_lastInputData.at(command));
 }
 
 bool Input::IsPressing(const char* command) const
 {
-	auto it = nowInputData.find(command);
-	if (it == nowInputData.end())	// 要素無し
+	auto it = m_nowInputData.find(command);
+	if (it == m_nowInputData.end())	// 要素無し
 	{
 		return false;	// 反応しない
 	}
 
-	return(nowInputData.at(command));
+	return(m_nowInputData.at(command));
 }
 
 bool Input::IsReleased(const char* command) const
 {
-	auto it = nowInputData.find(command);
-	if (it == nowInputData.end())	// 要素無し
+	auto it = m_nowInputData.find(command);
+	if (it == m_nowInputData.end())	// 要素無し
 	{
 		return false;	// 反応しない
 	}
 
-	return(!nowInputData.at(command) && lastInputData.at(command));
+	return(!m_nowInputData.at(command) && m_lastInputData.at(command));
 }

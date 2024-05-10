@@ -101,7 +101,7 @@ void SceneMain::Init()
 	ItemInit();	
 }
 
-shared_ptr<SceneBase> SceneMain::Update(Input& input)
+shared_ptr<SceneBase> SceneMain::Update(Input& input, HandleManager& handle)
 {
 	m_pCamera->Update(*m_pPlayer);
 
@@ -115,7 +115,7 @@ shared_ptr<SceneBase> SceneMain::Update(Input& input)
 	}
 	else if (m_isPlay)
 	{
-		PlayUpdate(input);
+		PlayUpdate(input,handle);
 	}
 	else if (m_isClear)
 	{
@@ -133,11 +133,11 @@ shared_ptr<SceneBase> SceneMain::Update(Input& input)
 	return shared_from_this();
 }
 
-void SceneMain::Draw()
+void SceneMain::Draw(HandleManager& handle)
 {
 	DrawGraph(0, 0, m_backHandle, false);
 	SetWriteZBufferFlag(true);
-	m_pPlayer->Draw();
+	m_pPlayer->Draw(handle);
 	// ’n–Êƒ‚ƒfƒ‹‚Ì•`‰æ
 	MV1DrawModel(m_groundModelHandle);
 	for (const auto& item : m_pItem)
@@ -224,7 +224,7 @@ void SceneMain::StartUpdate(Input& input)
 	}
 }
 
-void SceneMain::PlayUpdate(Input& input)
+void SceneMain::PlayUpdate(Input& input, HandleManager& handle)
 {
 	// •b”
 	m_timeFrame++;
@@ -252,7 +252,7 @@ void SceneMain::PlayUpdate(Input& input)
 		m_isPlay = false;
 	}
 
-	m_pPlayer->Update(input);
+	m_pPlayer->Update(input,handle);
 	
 
 	for (const auto& item : m_pItem)

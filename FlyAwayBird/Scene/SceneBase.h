@@ -1,5 +1,6 @@
 #pragma once
 #include "../Util/Input.h"
+#include "../Util/HandleManager.h"
 #include "../Util/Game.h"
 #include <memory>
 #include <math.h>
@@ -24,11 +25,11 @@ public:
 	/// </summary>
 	/// <param name="input">入力</param>
 	/// <returns>現在のシーン</returns>
-	virtual shared_ptr<SceneBase> Update(Input& input) = 0;
+	virtual shared_ptr<SceneBase> Update(Input& input, HandleManager& handle) = 0;
 	/// <summary>
 	/// 描画
 	/// </summary>
-	virtual void Draw() = 0;
+	virtual void Draw(HandleManager& handle) = 0;
 	/// <summary>
 	/// シーン終了時の処理
 	/// </summary>

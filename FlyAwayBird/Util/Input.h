@@ -57,11 +57,11 @@ public:
 
 
 private:
-	InputTable_t commandTable;	// コマンド名と入力をペアにしたテーブル
+	InputTable_t m_commandTable;	// コマンド名と入力をペアにしたテーブル
 
 	// コマンドの入力を覚えておく
-	map<string, bool> nowInputData;	// 現在の入力
-	map<string, bool>lastInputData;	// 直前の入力
+	map<string, bool> m_nowInputData;	// 現在の入力
+	map<string, bool>m_lastInputData;	// 直前の入力
 
 
 };

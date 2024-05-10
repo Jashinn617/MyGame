@@ -2,6 +2,7 @@
 #include "SceneTitle.h"
 #include "SceneMain.h"
 #include "../Util/Input.h"
+#include "../Util/HandleManager.h"
 
 SceneManager::SceneManager() :
 	m_pScene(nullptr)
@@ -19,9 +20,9 @@ void SceneManager::Init()
 	m_pScene->Init();
 }
 
-void SceneManager::Update(Input& input)
+void SceneManager::Update(Input& input, HandleManager& handle)
 {
-	shared_ptr<SceneBase> pNext = m_pScene->Update(input);
+	shared_ptr<SceneBase> pNext = m_pScene->Update(input,handle);
 	if (pNext != m_pScene)
 	{
 		// Œ»İˆ—’†‚ÌƒV[ƒ“‚ÌI—¹ˆ—
@@ -33,9 +34,9 @@ void SceneManager::Update(Input& input)
 	}
 }
 
-void SceneManager::Draw()
+void SceneManager::Draw(HandleManager& handle)
 {
-	m_pScene->Draw();
+	m_pScene->Draw(handle);
 }
 
 void SceneManager::End()

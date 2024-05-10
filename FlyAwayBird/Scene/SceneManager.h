@@ -4,6 +4,7 @@
 using namespace std;
 
 class SceneBase;
+class HandleManager;
 class Input;
 
 /// <summary>
@@ -23,11 +24,11 @@ public:
 	/// 更新
 	/// </summary>
 	/// <param name="input">入力</param>
-	void Update(Input& input);
+	void Update(Input& input, HandleManager& handle);
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw();
+	void Draw(HandleManager& handle);
 	/// <summary>
 	/// ゲーム終了時の処理
 	/// </summary>
