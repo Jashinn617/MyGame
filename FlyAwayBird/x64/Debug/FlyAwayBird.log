@@ -1,2 +1,15 @@
-﻿  Player.cpp
-  FlyAwayBird.vcxproj -> C:\Users\fko2347024\Documents\GitHub\MyGame\FlyAwayBird\x64\Debug\FlyAwayBird.exe
+﻿  Main.cpp
+  Player.cpp
+  SceneBase.cpp
+  SceneMain.cpp
+D:\GitHub\MyGame\FlyAwayBird\Scene\SceneMain.h(61,40): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
+  (ソース ファイル 'Scene/SceneMain.cpp' をコンパイルしています)
+  
+  SceneManager.cpp
+D:\GitHub\MyGame\FlyAwayBird\Scene\SceneMain.h(61,40): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
+  (ソース ファイル 'Scene/SceneManager.cpp' をコンパイルしています)
+  
+  SceneTitle.cpp
+  HandleManager.cpp
+  コードを生成中...
+  FlyAwayBird.vcxproj -> D:\GitHub\MyGame\FlyAwayBird\x64\Debug\FlyAwayBird.exe

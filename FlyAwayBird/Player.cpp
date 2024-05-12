@@ -4,21 +4,15 @@
 #include "Util/Input.h"
 #include "Util/HandleManager.h"
 
-#include <cassert>
-
 
 Player::Player():
 	m_pos{0,0,-kWallZ},
 	m_move{0,0,0},
 	m_dirY(90),
-	m_jumpSeHandle(-1),
 	m_jumpPower(0.0f),
 	m_isJump(false)
 {
-	/*SE‚Ìƒ[ƒh*/
-	m_jumpSeHandle = LoadSoundMem("Data/Sound/SE/JumpSE.mp3");
-	assert(m_jumpSeHandle != -1);
-
+	/*ˆ—–³‚µ*/
 }
 
 Player::~Player()

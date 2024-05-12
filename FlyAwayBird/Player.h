@@ -56,8 +56,6 @@ private:	// 変数
 	VECTOR m_move;	// 移動量
 	float m_dirY;	// Y方向の向き
 
-	int m_jumpSeHandle;	// ジャンプ時のSE
-
 	float m_jumpPower;	// ジャンプ力
 	bool m_isJump;		// ジャンプ中かどうか
 

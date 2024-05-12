@@ -19,15 +19,18 @@ public:
 	int GetModel(const char* command)const;
 	int GetImg(const char* command)const;
 	int GetSound(const char* command)const;
+	int GetFont(const char* command)const;
 
 private:	// 関数
 	void LoadModel();
 	void LoadImg();
 	void LoadSound();
+	void LoadFont();
 
 	void DeleteModel();
 	void DeleteImg();
 	void DeleteSound();
+	void DeleteFont();
 
 private:// 変数
 	/*ハンドル名とハンドルをペアにしたテーブル*/

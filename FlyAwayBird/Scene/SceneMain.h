@@ -22,31 +22,18 @@ public:
 private:	// 関数
 	void ItemInit();
 
-	void StartUpdate(Input& input);
+	void StartUpdate(Input& input, HandleManager& handle);
 	void PlayUpdate(Input& input, HandleManager& handle);
-	void ClearUpdate(Input& input);
+	void ClearUpdate(Input& input, HandleManager& handle);
 
-	void StartDraw();
-	void PlayDraw();
-	void ClearDraw();
+	void StartDraw(HandleManager& handle);
+	void PlayDraw(HandleManager& handle);
+	void ClearDraw(HandleManager& handle);
 
-	void TimeDraw();
-	void ItemNumDraw();
+	void TimeDraw(HandleManager& handle);
+	void ItemNumDraw(HandleManager& handle);
 
 private:	// 変数
-	int m_startHandle;	// スタート画面の画像ハンドル
-	int m_clearHandle;	// クリア画面の画像ハンドル
-	int m_backHandle;	// 背景のハンドル
-	int m_groundModelHandle;	// 地面のモデルハンドル
-	int m_fastClearSeHandle;		// ゴール時のSE(30秒以下)
-	int m_clearSeHandle;			// ゴール時のSE
-	int m_slowClearSeHandle;		// ゴール時のSE(50秒以上)
-	int m_startBgmHandle;			// スタート画面のBGM
-	int m_mainBgmHandle;			// プレイング画面のBGM
-	int m_clearBgmHandle;			// クリア画面のBGM
-	int m_timeFontHandle;		// 秒数表示用のフォントのハンドル(前)
-	int m_itemFontHandle;	// アイテム表示用のフォントのハンドル(前)
-	int m_clearTimeFontHandle;	// クリアタイム表示用のフォントのハンドル(前)
 	int m_timeFrame;	// 経過フレーム
 	int m_time;			// 経過秒数
 	int m_clearTime;	// クリア時の秒数
