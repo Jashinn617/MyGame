@@ -12,8 +12,21 @@ public:
 	Player();
 	~Player();
 
-	void Init();
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="handle">ハンドル</param>
+	void Init(HandleManager& handle);
+	/// <summary>
+	/// 更新
+	/// </summary>
+	/// <param name="input">入力</param>
+	/// <param name="handle">ハンドル</param>
 	void Update(Input& input, HandleManager& handle);
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="handleManager">ハンドル</param>
 	void Draw(HandleManager& handleManager)const;
 
 	/// <summary>
@@ -28,6 +41,12 @@ public:
 	/// <returns>半径</returns>
 	const float GetRadius()const { return kRadius; }
 
+	/// <summary>
+	/// カメラの角度を設定する
+	/// </summary>
+	/// <param name="angle">カメラのアングル</param>
+	void SetCameraAngle(float angle) { m_cameraAngle = angle; }
+
 private:	// 関数
 	/// <summary>
 	/// 移動処理
@@ -39,7 +58,8 @@ private:	// 関数
 	/// ジャンプ処理
 	/// </summary>
 	/// <param name="input">入力</param>
-	void Jump(Input& input);
+	/// <param name="handle">ハンドル</param>
+	void Jump(Input& input, HandleManager& handle);
 
 	/// <summary>
 	/// 重力と地面に関する処理
@@ -47,20 +67,19 @@ private:	// 関数
 	void GravityAndGround();
 
 	/// <summary>
-	/// 壁に関する処理
+	/// 壁の当たり判定に関する処理
 	/// </summary>
 	void Wall();
 
 private:	// 変数
 	VECTOR m_pos;	// 位置
-	VECTOR m_move;	// 移動量
-	float m_dirY;	// Y方向の向き
-
+	float m_dir;	// Y方向の向き
 	float m_jumpPower;	// ジャンプ力
 	bool m_isJump;		// ジャンプ中かどうか
+	float m_cameraAngle;	// カメラ情報
 
 private:	// 定数
-	static constexpr float kSpeed = 0.3f;			// 速度
+	static constexpr float kMaxSpeed = 400.0f;			// 速度
 	static constexpr float kScale = 0.002f;			// 拡大率
 	static constexpr float kRadius = 0.5f;			// 半径
 	static constexpr float kGravity = 0.025f;		// 重力
@@ -69,4 +88,9 @@ private:	// 定数
 	static constexpr float kWallZ = 30;				// z軸の壁
 	static constexpr float kWallX = 50;				// x軸の壁
 	static constexpr int kSeVolume = 255;			// SEの音量
+	static constexpr int kShadowSizeX = 8;			// 影のXサイズ
+	static constexpr int kShadowSizeY = 8;			// 影のYサイズ
+	static constexpr float kAnalogRangeMax = 0.8f;	// アナログスティックの有効範囲の最大値
+	static constexpr float kAnalogRangeMim = 0.1f;	// アナログスティックの有効範囲の最小値
+	static constexpr float kAnalogInputMax = 1000.0f;	// アナログスティックの最大入力範囲
 };

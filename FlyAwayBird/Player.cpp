@@ -7,33 +7,30 @@
 
 Player::Player():
 	m_pos{0,0,-kWallZ},
-	m_move{0,0,0},
-	m_dirY(90),
+	m_dir(0),
 	m_jumpPower(0.0f),
-	m_isJump(false)
+	m_isJump(false),
+	m_cameraAngle(0.0f)
 {
 	/*処理無し*/
 }
 
 Player::~Player()
 {
-	/*処理無し*/
 }
 
-void Player::Init()
+void Player::Init(HandleManager& handle)
 {
-	/*処理無し*/
+	// モデルを初期位置に戻す
+	MV1SetPosition(handle.GetModel("player"), m_pos);
 }
 
 void Player::Update(Input& input, HandleManager& handle)
 {
-	// 移動値の初期化
-	m_move = VGet(0, 0, 0);
-
 	// モデルのスケールを設定する
 	MV1SetScale(handle.GetModel("player"), VGet(kScale,kScale,kScale));
 	// 回転
-	MV1SetRotationXYZ(handle.GetModel("player"), VGet(0.0f, m_dirY * Game::kRadianConversion, 0.0f));
+	MV1SetRotationXYZ(handle.GetModel("player"), VGet(0.0f, m_dir, 0.0f));
 
 	// 移動
 	Move(input);
@@ -42,13 +39,10 @@ void Player::Update(Input& input, HandleManager& handle)
 	GravityAndGround();
 	
 	// ジャンプ処理
-	Jump(input);
+	Jump(input,handle);
 
 	// 壁の処理
 	Wall();
-
-	// 位置の更新
-	m_pos = VAdd(m_pos, m_move);
 
 	// モデルの位置設定
 	MV1SetPosition(handle.GetModel("player"), m_pos);
@@ -56,7 +50,7 @@ void Player::Update(Input& input, HandleManager& handle)
 
 void Player::Draw(HandleManager& handle) const
 {
-	// 3Dモデルの描画
+	// モデルの描画
 	MV1DrawModel(handle.GetModel("player"));
 
 	// 当たり判定の表示
@@ -64,35 +58,57 @@ void Player::Draw(HandleManager& handle) const
 	VECTOR pos = MV1GetPosition(handle.GetModel("player"));
 	pos.y += 0.1f;
 	DrawSphere3D(pos, kRadius, 32, 0x0000ff, 0x0000ff, false);
+	// プレイヤーの位置
+	DrawFormatString(0, 0, 0xffffff, "(%.2f,%.2f,%.2f)\n", m_pos.x, m_pos.y, m_pos.z);		
 #endif // _DEBUG
 }
 
 void Player::Move(Input& input)
 {
-	// 移動
-	if (input.IsPressing("up"))
+	// アナログスティックを使っての移動
+	int analogX = 0;
+	int analogY = 0;
+	// コントローラーのアナログスティックの入力値を取得する
+	GetJoypadAnalogInput(&analogX, &analogY, DX_INPUT_PAD1);
+
+	// アナログスティックの入力の10～80%の範囲を使用する
+	VECTOR move = VGet(analogX, 0.0f, -analogY);
+	// ベクトルの長さを取得する
+	float len = VSize(move);
+
+	/* ベクトルの長さを0.0～1.0の割合に変換する*/
+	float rate = len / kAnalogInputMax;
+	// アナログスティックが無効になる範囲を除外する
+	rate = (rate - kAnalogRangeMim) / (kAnalogInputMax - kAnalogRangeMim);
+	rate = min(rate, 1.0f);
+	rate = max(rate, 0.0f);
+
+	// 速度を決定し、移動ベクトルに反映する
+	move = VNorm(move);
+	float speed = kMaxSpeed * rate;
+	move = VScale(move, speed);
+
+	// カメラのいる場所(角度)からコントローラーによる移動方向を決定する
+	MATRIX mtx = MGetRotY(-m_cameraAngle - DX_PI_F / 2);
+	move = VTransform(move, mtx);
+
+	// 移動方向からプレイヤーの向く方向を決定する
+	// 移動していない場合(0ベクトルの場合)は変更しない
+	if (VSquareSize(move) > 0.0f)
 	{
-		m_move = VAdd(m_move, VGet(0.0f, 0.0f, kSpeed));
+		m_dir = -atan2f(move.z, move.x) - DX_PI_F;
 	}
-	if (input.IsPressing("down"))
-	{
-		m_move = VAdd(m_move, VGet(0.0f, 0.0f, -kSpeed));
-	}
-	if (input.IsPressing("right"))
-	{
-		m_move = VAdd(m_move, VGet(kSpeed, 0.0f, 0.0f));
-	}
-	if (input.IsPressing("left"))
-	{
-		m_move = VAdd(m_move, VGet(-kSpeed, 0.0f, 0.0f));
-	}
+
+	// 位置の更新
+	m_pos = VAdd(m_pos, move);
 }
 
-void Player::Jump(Input& input)
+void Player::Jump(Input& input, HandleManager& handle)
 {
 	// ジャンプ処理
 	if (input.IsTriggered("A") && !m_isJump)
 	{
+		PlaySoundMem(handle.GetSound("jumpSE"), DX_PLAYTYPE_BACK);
 		m_jumpPower = kJumpPower;
 		m_isJump = true;
 	}

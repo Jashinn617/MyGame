@@ -43,7 +43,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// ƒV[ƒ“ŠÇ—
 	shared_ptr<SceneManager> pScene = make_shared<SceneManager>();
-	pScene->Init();
+	pScene->Init(handle);
 
 	// “ü—Í
 	Input input;

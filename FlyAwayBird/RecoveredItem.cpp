@@ -3,6 +3,7 @@
 #include "WorldSprite.h"
 #include "Player.h"
 #include "Util/Game.h"
+#include "Util/HandleManager.h"
 
 #include <cassert>
 #include <cmath>
@@ -10,7 +11,6 @@
 RecoveredItem::RecoveredItem(shared_ptr<Player> pPlayer):
 	m_pos{0,0,0},
 	m_modelHandle(-1),
-	m_chatchSeHandle(-1),
 	m_w(0),
 	m_h(0),
 	m_isExist(true),
@@ -23,22 +23,15 @@ RecoveredItem::RecoveredItem(shared_ptr<Player> pPlayer):
 
 RecoveredItem::~RecoveredItem()
 {
-	/*モデルのデリート*/
-	MV1DeleteModel(m_modelHandle);
-	/*SEのデリート*/
-	DeleteSoundMem(m_chatchSeHandle);
+	/*処理無し*/
 }
 
-void RecoveredItem::Init(float x, float z)
+void RecoveredItem::Init(float x, float z, HandleManager& handle)
 {
-	// モデルのロード
-	m_modelHandle = MV1LoadModel("Data/Model/Heart.mv1");
-	assert(m_modelHandle != -1);
-	/*SEのロード*/
-	m_chatchSeHandle = LoadSoundMem("Data/Sound/SE/ItemChatchSE.mp3");
-	assert(m_chatchSeHandle != -1);
+	
 	/*SEの音量調整*/
-	ChangeVolumeSoundMem(kSeVolume, m_chatchSeHandle);
+	ChangeVolumeSoundMem(kSeVolume,handle.GetSound("itemChatchSE"));
+	m_modelHandle = MV1DuplicateModel(handle.GetModel("item"));
 
 	int rand = GetRand(1);
 	if (rand == 0)
@@ -51,7 +44,7 @@ void RecoveredItem::Init(float x, float z)
 	}
 }
 
-void RecoveredItem::Update()
+void RecoveredItem::Update(HandleManager& handle)
 {
 	if (!m_isExist) return;
 
@@ -61,22 +54,21 @@ void RecoveredItem::Update()
 	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f,0.0f, 0.0f));
 
 	// 当たり判定
-	CollisionToPlayer(m_pPlayer->GetPos(), m_pPlayer->GetRadius());
+	CollisionToPlayer(m_pPlayer->GetPos(), m_pPlayer->GetRadius(),handle);
 	// 移動
 	m_sinCount += kSinSpeed;
 	m_sinPosY = sinf(m_sinCount) * kMoveSwing;
 	m_pos.y += m_sinPosY;
 
 	MV1SetPosition(m_modelHandle, m_pos);
-
-
 }
 
-void RecoveredItem::Draw()
+void RecoveredItem::Draw(HandleManager& handle)
 {
 	if (!m_isExist) return;
 
 	MV1DrawModel(m_modelHandle);
+	
 
 	// 当たり判定の表示
 #ifdef _DEBUG
@@ -86,12 +78,12 @@ void RecoveredItem::Draw()
 #endif // _DEBUG
 }
 
-void RecoveredItem::CollisionToPlayer(VECTOR pVec, float pRad)
+void RecoveredItem::CollisionToPlayer(VECTOR pPos, float pRad, HandleManager& handle)
 {
 	// プレイヤーとアイテムの半径の合計
 	float rad = kRadius + pRad;
 	// プレイヤーとアイテムの距離の計算
-	VECTOR dirVec = VSub(m_pos, pVec);
+	VECTOR dirVec = VSub(m_pos, pPos);
 	float dir = VSize(dirVec);
 	
 	// プレイヤーと当たっているかどうか
@@ -100,7 +92,7 @@ void RecoveredItem::CollisionToPlayer(VECTOR pVec, float pRad)
 #ifdef _DEBUG
 		printfDx("当たった");
 #endif // _DEBUG
-		PlaySoundMem(m_chatchSeHandle, DX_PLAYTYPE_BACK);
+		PlaySoundMem(handle.GetSound("itemChatchSE"), DX_PLAYTYPE_BACK);
 		m_isExist = false;
 	}
 }

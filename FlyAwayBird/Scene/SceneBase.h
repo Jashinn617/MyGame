@@ -19,19 +19,22 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	virtual void Init() = 0;
+	/// <param name="handle">ハンドル</param>
+	virtual void Init(HandleManager& handle) = 0;
 	/// <summary>
 	/// 更新
 	/// </summary>
 	/// <param name="input">入力</param>
-	/// <returns>現在のシーン</returns>
+	/// <param name="handle">ハンドル</param>
+	/// <returns>シーンポインタ</returns>
 	virtual shared_ptr<SceneBase> Update(Input& input, HandleManager& handle) = 0;
 	/// <summary>
 	/// 描画
 	/// </summary>
+	/// <param name="handle">ハンドル</param>
 	virtual void Draw(HandleManager& handle) = 0;
 	/// <summary>
-	/// シーン終了時の処理
+	/// 終了処理
 	/// </summary>
 	virtual void End() = 0;
 };

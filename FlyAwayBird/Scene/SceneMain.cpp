@@ -32,30 +32,35 @@ SceneMain::~SceneMain()
 	/*処理無し*/
 }
 
-void SceneMain::Init()
+void SceneMain::Init(HandleManager& handle)
 {
+	// ライトの設定
+	// 標準のライトをディレクショナルライトにする
+	ChangeLightTypeDir(VGet(0.0f, -1.0f, 0.0f));
+
 	/*ポインタの生成*/
 	m_pPlayer = make_shared<Player>();
-	m_pCamera = make_shared<Camera>();
+	m_pPlayer->Init(handle);
+	m_pCamera = make_shared<Camera>(m_pPlayer);
 	for (int i = 0; i < m_pItem.size(); i++)
 	{
 		m_pItem[i] = make_shared<RecoveredItem>(m_pPlayer);
 	}
+	ItemInit(handle);
 
-	///*BGM、SEの音量の調整*/
-	//ChangeVolumeSoundMem(kSeVolume, m_fastClearSeHandle);
-	//ChangeVolumeSoundMem(kSeVolume, m_clearSeHandle);
-	//ChangeVolumeSoundMem(kSeVolume, m_slowClearSeHandle);
-	//ChangeVolumeSoundMem(kBgmVolume, m_startBgmHandle);
-	//ChangeVolumeSoundMem(kBgmVolume, m_mainBgmHandle);
-	//ChangeVolumeSoundMem(kBgmVolume, m_clearBgmHandle);
+	/*BGM、SEの音量の調整*/
+	ChangeVolumeSoundMem(kSeVolume, handle.GetSound("fastClearSE"));
+	ChangeVolumeSoundMem(kSeVolume, handle.GetSound("normalClearSE"));
+	ChangeVolumeSoundMem(kSeVolume, handle.GetSound("slowClearSE"));
+	ChangeVolumeSoundMem(kBgmVolume, handle.GetSound("startBGM"));
+	ChangeVolumeSoundMem(kBgmVolume, handle.GetSound("mainBGM"));
+	ChangeVolumeSoundMem(kBgmVolume, handle.GetSound("clearBGM"));
 
-	ItemInit();
 }
 
 shared_ptr<SceneBase> SceneMain::Update(Input& input, HandleManager& handle)
 {
-	m_pCamera->Update(*m_pPlayer);
+	
 
 	//地面モデルの位置、大きさの設定
 	MV1SetScale(handle.GetModel("ground"), VGet(kGroundModelScale, 1, kGroundModelScale));
@@ -67,6 +72,7 @@ shared_ptr<SceneBase> SceneMain::Update(Input& input, HandleManager& handle)
 	}
 	else if (m_isPlay)
 	{
+		m_pCamera->Update(input);
 		PlayUpdate(input, handle);
 	}
 	else if (m_isClear)
@@ -94,7 +100,7 @@ void SceneMain::Draw(HandleManager& handle)
 	MV1DrawModel(handle.GetModel("ground"));
 	for (const auto& item : m_pItem)
 	{
-		item->Draw();
+		item->Draw(handle);
 	}
 
 	SetWriteZBufferFlag(false);
@@ -131,7 +137,7 @@ void SceneMain::End()
 	/*処理無し*/
 }
 
-void SceneMain::ItemInit()
+void SceneMain::ItemInit(HandleManager& handle)
 {
 	for (const auto& item : m_pItem)
 	{
@@ -157,7 +163,7 @@ void SceneMain::ItemInit()
 			z = static_cast<float>(GetRand(static_cast<int>(-kWallZ)));
 
 		}
-		item->Init(x, z);
+		item->Init(x, z,handle);
 	}
 }
 
@@ -209,7 +215,7 @@ void SceneMain::PlayUpdate(Input& input, HandleManager& handle)
 
 	for (const auto& item : m_pItem)
 	{
-		item->Update();
+		item->Update(handle);
 	}
 
 #ifdef _DEBUG
@@ -256,6 +262,7 @@ void SceneMain::ClearUpdate(Input& input, HandleManager& handle)
 	if (input.IsTriggered("A"))
 	{
 		m_isClear = false;
+		StopSoundMem(handle.GetSound("clearBGM"));
 	}
 }
 
@@ -266,8 +273,13 @@ void SceneMain::StartDraw(HandleManager& handle)
 
 void SceneMain::PlayDraw(HandleManager& handle)
 {
-	TimeDraw(handle);
-	ItemNumDraw(handle);
+	// 秒数の描画
+	DrawFormatStringToHandle(kTimePosX + kBackFontShiftPosX, kTimePosY, 0x00008b, handle.GetFont("timeFont"), "%dけいか", m_time);
+	DrawFormatStringToHandle(kTimePosX, kTimePosY, 0xff7f50, handle.GetFont("timeFont"), "%dけいか", m_time);
+
+	// 残りのアイテム数の描画
+	DrawFormatStringToHandle(kItemPosX + kBackFontShiftPosX, kItemPosY, 0x000086, handle.GetFont("itemNumFont"), "のこり：%dこ", kItemNum - m_itemNum);
+	DrawFormatStringToHandle(kItemPosX, kItemPosY, 0xff6347, handle.GetFont("itemNumFont"), "のこり：%dこ", kItemNum - m_itemNum);
 }
 
 void SceneMain::ClearDraw(HandleManager& handle)
@@ -277,18 +289,4 @@ void SceneMain::ClearDraw(HandleManager& handle)
 	// 秒数の描画
 	DrawFormatStringToHandle(kClearTimePosX + kBackFontShiftPosX, kClearTimePosY, 0x00008b, handle.GetFont("clearTimeFont"), "けっか：%dびょう！", m_clearTime);
 	DrawFormatStringToHandle(kClearTimePosX, kClearTimePosY, 0xff7f50, handle.GetFont("clearTimeFont"), "けっか：%dびょう！", m_clearTime);
-}
-
-void SceneMain::TimeDraw(HandleManager& handle)
-{
-	// 秒数の描画
-	DrawFormatStringToHandle(kTimePosX + kBackFontShiftPosX, kTimePosY, 0x00008b, handle.GetFont("timeFont"), "%dけいか", m_time);
-	DrawFormatStringToHandle(kTimePosX, kTimePosY, 0xff7f50, handle.GetFont("timeFont"), "%dけいか", m_time);
-}
-
-void SceneMain::ItemNumDraw(HandleManager& handle)
-{
-	// 残りのアイテム数の描画
-	DrawFormatStringToHandle(kItemPosX + kBackFontShiftPosX, kItemPosY, 0x000086, handle.GetFont("itemNumFont"), "のこり：%dこ", kItemNum - m_itemNum);
-	DrawFormatStringToHandle(kItemPosX, kItemPosY, 0xff6347, handle.GetFont("itemNumFont"), "のこり：%dこ", kItemNum - m_itemNum);
 }

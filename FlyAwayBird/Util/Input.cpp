@@ -34,6 +34,14 @@ Input::Input()
 	// Xボタン
 	m_commandTable["X"] = { {InputType::kwybd,KEY_INPUT_V},
 								{InputType::pad,PAD_INPUT_X} };
+
+	// Rボタン
+	m_commandTable["R"] = { {InputType::kwybd,KEY_INPUT_S},
+								{InputType::pad,PAD_INPUT_5} };
+
+	// Lボタン
+	m_commandTable["L"] = { {InputType::kwybd,KEY_INPUT_D},
+								{InputType::pad,PAD_INPUT_6} };
 }
 
 void Input::Update()

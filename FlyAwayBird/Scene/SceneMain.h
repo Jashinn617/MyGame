@@ -14,24 +14,69 @@ public:
 	SceneMain();
 	virtual ~SceneMain();
 
-	virtual void Init();
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="handle">ハンドル</param>
+	virtual void Init(HandleManager& handle);
+	/// <summary>
+	/// 更新
+	/// </summary>
+	/// <param name="input">入力</param>
+	/// <param name="handle">ハンドル</param>
+	/// <returns>シーンポインタ</returns>
 	virtual shared_ptr<SceneBase> Update(Input& input, HandleManager& handle);
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="handle">ハンドル</param>
 	virtual void Draw(HandleManager& handle);
+	/// <summary>
+	/// 終了処理
+	/// </summary>
 	virtual void End();
 
 private:	// 関数
-	void ItemInit();
+	/// <summary>
+	/// アイテムの初期化
+	/// </summary>
+	/// <param name="handle">ハンドル</param>
+	void ItemInit(HandleManager& handle);
 
+	/// <summary>
+	/// スタート画面の更新
+	/// </summary>
+	/// <param name="input">入力</param>
+	/// <param name="handle">ハンドル</param>
 	void StartUpdate(Input& input, HandleManager& handle);
+	/// <summary>
+	/// プレイ画面の更新
+	/// </summary>
+	/// <param name="input">入力</param>
+	/// <param name="handle">ハンドル</param>
 	void PlayUpdate(Input& input, HandleManager& handle);
+	/// <summary>
+	/// クリア画面の更新
+	/// </summary>
+	/// <param name="input">入力</param>
+	/// <param name="handle">ハンドル</param>
 	void ClearUpdate(Input& input, HandleManager& handle);
 
+	/// <summary>
+	/// スタート画面の描画
+	/// </summary>
+	/// <param name="handle">ハンドル</param>
 	void StartDraw(HandleManager& handle);
+	/// <summary>
+	/// プレイ画面の描画
+	/// </summary>
+	/// <param name="handle">ハンドル</param>
 	void PlayDraw(HandleManager& handle);
+	/// <summary>
+	/// クリア画面の描画
+	/// </summary>
+	/// <param name="handle">ハンドル</param>
 	void ClearDraw(HandleManager& handle);
-
-	void TimeDraw(HandleManager& handle);
-	void ItemNumDraw(HandleManager& handle);
 
 private:	// 変数
 	int m_timeFrame;	// 経過フレーム
@@ -45,10 +90,9 @@ private:	// 変数
 	bool m_isSe;		// SEがなったかどうか
 
 	/*ポインタ*/
-	shared_ptr<Player> m_pPlayer;
-	shared_ptr<Camera> m_pCamera;
-	//shared_ptr<RecoveredItem> m_pItem;
-	vector<shared_ptr<RecoveredItem>> m_pItem;
+	shared_ptr<Player> m_pPlayer;					// プレイヤーのポインタ
+	shared_ptr<Camera> m_pCamera;					// カメラのポインタ
+	vector<shared_ptr<RecoveredItem>> m_pItem;		// アイテムのポインタ
 
 private:	 // 定数
 	static constexpr float kWallZ = 30;				// z軸の壁
@@ -66,8 +110,8 @@ private:	 // 定数
 	static constexpr int kItemPosY = 150;			// アイテムのY位置
 	static constexpr int kClearTimePosX = 500;		// クリアタイムのX位置
 	static constexpr int kClearTimePosY = 120;		// クリアタイムのY位置
-	static constexpr int kBackFontShiftPosX = 10;		// 後ろのフォントをずらす位置
+	static constexpr int kBackFontShiftPosX = 10;	// 後ろのフォントをずらす位置
 	/*クリア時のタイム*/
-	static constexpr int kClearFastTime = 30;
-	static constexpr int kClearSlowTime = 50;
+	static constexpr int kClearFastTime = 35;		// 速いクリア
+	static constexpr int kClearSlowTime = 55;		// 遅いクリア
 };

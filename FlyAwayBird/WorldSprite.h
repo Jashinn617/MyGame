@@ -27,6 +27,10 @@ public:
 	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// ˆÊ’u‚ÌŽæ“¾
+	/// </summary>
+	/// <returns></returns>
 	const VECTOR& GetPos()const { return m_pos; }
 
 private:

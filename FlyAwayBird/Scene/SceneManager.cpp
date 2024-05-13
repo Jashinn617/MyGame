@@ -1,5 +1,4 @@
 #include "SceneManager.h"
-#include "SceneTitle.h"
 #include "SceneMain.h"
 #include "../Util/Input.h"
 #include "../Util/HandleManager.h"
@@ -13,11 +12,11 @@ SceneManager::~SceneManager()
 {
 }
 
-void SceneManager::Init()
+void SceneManager::Init(HandleManager& handle)
 {
 	// 最初のシーンのメモリを確保する
 	m_pScene = make_shared<SceneMain>();
-	m_pScene->Init();
+	m_pScene->Init(handle);
 }
 
 void SceneManager::Update(Input& input, HandleManager& handle)
@@ -30,7 +29,7 @@ void SceneManager::Update(Input& input, HandleManager& handle)
 
 		// Updateが返した新しいシーンの開始処理を行う
 		m_pScene = pNext;
-		m_pScene->Init();
+		m_pScene->Init(handle);
 	}
 }
 

@@ -17,20 +17,23 @@ public:
 	virtual ~SceneManager();
 
 	/// <summary>
-	///  初期化
+	/// 初期化
 	/// </summary>
-	void Init();
+	/// <param name="handle">ハンドル</param>
+	void Init(HandleManager& handle);
 	/// <summary>
 	/// 更新
 	/// </summary>
 	/// <param name="input">入力</param>
+	/// <param name="handle">ハンドル</param>
 	void Update(Input& input, HandleManager& handle);
 	/// <summary>
-	/// 描画
+	///	描画
 	/// </summary>
+	/// <param name="handle">ハンドル</param>
 	void Draw(HandleManager& handle);
 	/// <summary>
-	/// ゲーム終了時の処理
+	/// 終了処理
 	/// </summary>
 	void End();
 

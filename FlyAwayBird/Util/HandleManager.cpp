@@ -13,6 +13,10 @@ HandleManager::HandleManager()
 
 HandleManager::~HandleManager()
 {
+	DeleteModel();
+	DeleteImg();
+	DeleteSound();
+	DeleteFont();
 }
 
 int HandleManager::GetModel(const char* command) const
@@ -63,7 +67,7 @@ void HandleManager::LoadSound()
 	m_modelHandleTable["fastClearSE"] = LoadSoundMem("Data/Sound/SE/FastClearSE.mp3");
 	m_modelHandleTable["normalClearSE"] = LoadSoundMem("Data/Sound/SE/NormalClearSE.mp3");
 	m_modelHandleTable["slowClearSE"] = LoadSoundMem("Data/Sound/SE/SlowClearSE.mp3");
-	m_modelHandleTable["ItemChatchSE"] = LoadSoundMem("Data/Sound/SE/ItemChatchSE.mp3");
+	m_modelHandleTable["itemChatchSE"] = LoadSoundMem("Data/Sound/SE/ItemChatchSE.mp3");
 	m_modelHandleTable["startBGM"] = LoadSoundMem("Data/Sound/BGM/StartBGM.mp3");
 	m_modelHandleTable["mainBGM"] = LoadSoundMem("Data/Sound/BGM/MainBGM.mp3");
 	m_modelHandleTable["clearBGM"] = LoadSoundMem("Data/Sound/BGM/ClearBGM.mp3");

@@ -1,12 +1,15 @@
+#include "DxLib.h"
 #include "Camera.h"
 #include "Player.h"
 
-Camera::Camera():
-	m_pos{0,0,0}
+#include "Util/Input.h"
+
+Camera::Camera(shared_ptr<Player> player):
+	m_pos{0,0,0},
+	m_angle(-DX_PI_F/2),
+	m_pPlayer(player)
 {
-	// ƒJƒƒ‰‚Ì•`‰æ”ÍˆÍ‚Ìİ’è
-	// ‰œs0.1`1000‚Ü‚Å‚ğ•`‰æ”ÍˆÍ‚É‚·‚é
-	SetCameraNearFar(0.1f, 1000.0f);
+	
 }
 
 Camera::~Camera()
@@ -14,15 +17,30 @@ Camera::~Camera()
 	/*ˆ—–³‚µ*/
 }
 
-void Camera::Update(const Player& player)
+void Camera::Update(Input& input)
 {
-	VECTOR playerPos = player.GetPos();
-	VECTOR cameraPos = VGet(playerPos.x, 3.0f, playerPos.z - 6);
+	// ƒJƒƒ‰‚Ì‰ñ“]
+	if (input.IsPressing("R"))
+	{
+		m_angle += kSpeed;
+	}
+	if (input.IsPressing("L"))
+	{
+		m_angle -= kSpeed;
+	}
+	m_pPlayer->SetCameraAngle(m_angle);
+
+	// ƒJƒƒ‰‚Ì•`‰æ”ÍˆÍ‚Ìİ’è
+	SetCameraNearFar(kCameraNear, kCameraFar);
+	VECTOR playerPos = m_pPlayer->GetPos();
+
+	// ƒJƒƒ‰‚Ì‰ñ“]ˆ—
+	m_pos.x = playerPos.x + cosf(m_angle) * kCameraDist;
+	m_pos.y = kCameraHeight;
+	m_pos.z = playerPos.z + sinf(m_angle) * kCameraDist;
 
 	VECTOR targetPos = VGet(playerPos.x, 1.0f, playerPos.z);
 
-	m_pos = cameraPos;
-
-	// ƒJƒƒ‰‚ÉˆÊ’u‚ğ”½‰f‚·‚é
+	// ƒJƒƒ‰‚ÌˆÊ’uİ’è
 	SetCameraPositionAndTarget_UpVecY(m_pos, targetPos);
 }
