@@ -55,6 +55,10 @@ private:	// 関数
 	/// </summary>
 	void LoadSound();
 	/// <summary>
+	/// サウンドの初期音量の設定
+	/// </summary>
+	void ChangeSoundVolume();
+	/// <summary>
 	/// フォントのロード
 	/// </summary>
 	void LoadFont();
@@ -76,10 +80,14 @@ private:	// 関数
 	/// </summary>
 	void DeleteFont();
 
-private:// 変数
+private:	// 変数
 	/*ハンドル名とハンドルをペアにしたテーブル*/
 	HandleTable_t m_modelHandleTable;	// 3Dモデルのハンドル
 	HandleTable_t m_imgHandleTable;		// 画像のハンドル
 	HandleTable_t m_soundHandleTable;	// サウンドのハンドル
+
+private:	// 定数
+	static constexpr int kBgmVolume = 130;			// BGMの音量
+	static constexpr int kSeVolume = 255;			// SEの音量
 };
 

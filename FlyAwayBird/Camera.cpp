@@ -17,17 +17,22 @@ Camera::~Camera()
 	/*処理無し*/
 }
 
-void Camera::Update(Input& input)
+void Camera::Update(Input& input, bool isOperate)
 {
-	// カメラの回転
-	if (input.IsPressing("R"))
+	// 操作を受け付けるときだけ、この中の処理をする
+	if (isOperate)
 	{
-		m_angle += kSpeed;
+		// カメラの回転
+		if (input.IsPressing("R"))
+		{
+			m_angle += kSpeed;
+		}
+		if (input.IsPressing("L"))
+		{
+			m_angle -= kSpeed;
+		}
 	}
-	if (input.IsPressing("L"))
-	{
-		m_angle -= kSpeed;
-	}
+	
 	m_pPlayer->SetCameraAngle(m_angle);
 
 	// カメラの描画範囲の設定

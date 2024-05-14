@@ -1,4 +1,2 @@
-﻿  Player.cpp
-C:\Users\fko2347024\Documents\GitHub\MyGame\FlyAwayBird\Player.cpp(75,36): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\fko2347024\Documents\GitHub\MyGame\FlyAwayBird\Player.cpp(75,21): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+﻿  HandleManager.cpp
   FlyAwayBird.vcxproj -> C:\Users\fko2347024\Documents\GitHub\MyGame\FlyAwayBird\x64\Debug\FlyAwayBird.exe

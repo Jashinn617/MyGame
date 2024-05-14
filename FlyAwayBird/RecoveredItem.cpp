@@ -23,14 +23,12 @@ RecoveredItem::RecoveredItem(shared_ptr<Player> pPlayer):
 
 RecoveredItem::~RecoveredItem()
 {
-	/*処理無し*/
+	
 }
 
 void RecoveredItem::Init(float x, float z, HandleManager& handle)
 {
-	
-	/*SEの音量調整*/
-	ChangeVolumeSoundMem(kSeVolume,handle.GetSound("itemChatchSE"));
+	// 同じモデルで複数作るため、同じデータを使用するモデルハンドルを作成しておく
 	m_modelHandle = MV1DuplicateModel(handle.GetModel("item"));
 
 	int rand = GetRand(1);
@@ -68,7 +66,6 @@ void RecoveredItem::Draw(HandleManager& handle)
 	if (!m_isExist) return;
 
 	MV1DrawModel(m_modelHandle);
-	
 
 	// 当たり判定の表示
 #ifdef _DEBUG
@@ -89,10 +86,13 @@ void RecoveredItem::CollisionToPlayer(VECTOR pPos, float pRad, HandleManager& ha
 	// プレイヤーと当たっているかどうか
 	if (dir < rad)
 	{
+		PlaySoundMem(handle.GetSound("itemChatchSE"), DX_PLAYTYPE_BACK);
+		m_isExist = false;
+
+		// デバック用の表示
 #ifdef _DEBUG
 		printfDx("当たった");
 #endif // _DEBUG
-		PlaySoundMem(handle.GetSound("itemChatchSE"), DX_PLAYTYPE_BACK);
-		m_isExist = false;
+		// 当たった時にSEを鳴らして消える
 	}
 }

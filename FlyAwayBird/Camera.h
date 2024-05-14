@@ -18,8 +18,9 @@ public:
 	/// <summary>
 	/// 更新
 	/// </summary>
-	/// <param name="player">プレイヤーへの参照</param>
-	void Update(Input& input);
+	/// <param name="input">入力</param>
+	/// <param name="isOperate">操作ができるかどうか</param>
+	void Update(Input& input, bool isOperate);
 
 	/// <summary>
 	/// 位置の取得
@@ -29,7 +30,6 @@ public:
 
 private:	// 変数
 	VECTOR m_pos;	// 位置
-
 	float m_angle;	// 角度
 
 	shared_ptr<Player> m_pPlayer;	// プレイヤーのポインタ

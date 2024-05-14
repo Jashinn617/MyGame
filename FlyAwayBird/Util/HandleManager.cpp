@@ -8,6 +8,7 @@ HandleManager::HandleManager()
 	LoadModel();
 	LoadImg();
 	LoadSound();
+	ChangeSoundVolume();
 	LoadFont();
 }
 
@@ -68,9 +69,25 @@ void HandleManager::LoadSound()
 	m_modelHandleTable["normalClearSE"] = LoadSoundMem("Data/Sound/SE/NormalClearSE.mp3");
 	m_modelHandleTable["slowClearSE"] = LoadSoundMem("Data/Sound/SE/SlowClearSE.mp3");
 	m_modelHandleTable["itemChatchSE"] = LoadSoundMem("Data/Sound/SE/ItemChatchSE.mp3");
+	m_modelHandleTable["selectSE"] = LoadSoundMem("Data/Sound/SE/SelectSE.mp3");
+	m_modelHandleTable["countdownSE"] = LoadSoundMem("Data/Sound/SE/CountdownSE.mp3");
 	m_modelHandleTable["startBGM"] = LoadSoundMem("Data/Sound/BGM/StartBGM.mp3");
 	m_modelHandleTable["mainBGM"] = LoadSoundMem("Data/Sound/BGM/MainBGM.mp3");
 	m_modelHandleTable["clearBGM"] = LoadSoundMem("Data/Sound/BGM/ClearBGM.mp3");
+}
+
+void HandleManager::ChangeSoundVolume()
+{
+	ChangeVolumeSoundMem(kSeVolume, m_modelHandleTable["jumpSE"]);
+	ChangeVolumeSoundMem(kSeVolume, m_modelHandleTable["fastClearSE"]);
+	ChangeVolumeSoundMem(kSeVolume, m_modelHandleTable["normalClearSE"]);
+	ChangeVolumeSoundMem(kSeVolume, m_modelHandleTable["slowClearSE"]);
+	ChangeVolumeSoundMem(kSeVolume, m_modelHandleTable["itemChatchSE"]);
+	ChangeVolumeSoundMem(kSeVolume, m_modelHandleTable["selectSE"]);
+	ChangeVolumeSoundMem(kSeVolume, m_modelHandleTable["countdownSE"]);
+	ChangeVolumeSoundMem(kBgmVolume, m_modelHandleTable["startBGM"]);
+	ChangeVolumeSoundMem(kBgmVolume, m_modelHandleTable["mainBGM"]);
+	ChangeVolumeSoundMem(kBgmVolume, m_modelHandleTable["clearBGM"]);
 }
 
 void HandleManager::LoadFont()
@@ -100,6 +117,8 @@ void HandleManager::DeleteSound()
 	DeleteSoundMem(m_modelHandleTable["fastClearSE"]);
 	DeleteSoundMem(m_modelHandleTable["normalClearSE"]);
 	DeleteSoundMem(m_modelHandleTable["slowClearSE"]);
+	DeleteSoundMem(m_modelHandleTable["selectSE"]);
+	DeleteSoundMem(m_modelHandleTable["countdownSE"]);
 	DeleteSoundMem(m_modelHandleTable["startBGM"]);
 	DeleteSoundMem(m_modelHandleTable["mainBGM"]);
 	DeleteSoundMem(m_modelHandleTable["clearBGM"]);

@@ -65,7 +65,8 @@ void Input::Update()
 		{
 			
 			input = false;
-			if (hardIO.first == InputType::kwybd)	// キーボードのチェック
+			// キーボードのチェック
+			if (hardIO.first == InputType::kwybd)
 			{
 				// キーボードが押されていた場合
 				if (keystate[hardIO.second])
@@ -74,7 +75,8 @@ void Input::Update()
 					break;	// 同時押しをできないようにここでbreakする
 				}
 			}
-			else if (hardIO.first == InputType::pad)	// ゲームパッドのチェック
+			// ゲームパッドのチェック
+			else if (hardIO.first == InputType::pad)
 			{
 				// ゲームパッドが押されていた場合
 				if (padstate & hardIO.second)
@@ -89,33 +91,42 @@ void Input::Update()
 
 bool Input::IsTriggered(const char* command) const
 {
+	// 引数で渡されたコマンド名と一致するコマンド名があるか調べる
 	auto it = m_nowInputData.find(command);
-	if (it == m_nowInputData.end())	// 要素無し
+	// 一致するコマンド名がなかった場合はfalseを返す
+	if (it == m_nowInputData.end())
 	{
-		return false;	// 反応しない
+		return false;
 	}
 
+	// 現在押されており、直前に押されていなかった場合、trueを返す
 	return(m_nowInputData.at(command) && !m_lastInputData.at(command));
 }
 
 bool Input::IsPressing(const char* command) const
 {
+	// 引数で渡されたコマンド名と一致するコマンド名があるか調べる
 	auto it = m_nowInputData.find(command);
-	if (it == m_nowInputData.end())	// 要素無し
+	// 一致するコマンド名がなかった場合はfalseを返す
+	if (it == m_nowInputData.end())
 	{
-		return false;	// 反応しない
+		return false;
 	}
 
+	// 現在押され手入ればtrueを返す
 	return(m_nowInputData.at(command));
 }
 
 bool Input::IsReleased(const char* command) const
 {
+	// 引数で渡されたコマンド名と一致するコマンド名があるか調べる
 	auto it = m_nowInputData.find(command);
-	if (it == m_nowInputData.end())	// 要素無し
+	// 一致するコマンド名がなかった場合はfalseを返す
+	if (it == m_nowInputData.end())
 	{
-		return false;	// 反応しない
+		return false;
 	}
 
+	// 現在押されてなく、直前に押されていたらtrueを返す
 	return(!m_nowInputData.at(command) && m_lastInputData.at(command));
 }

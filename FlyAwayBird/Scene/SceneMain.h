@@ -50,6 +50,12 @@ private:	// 関数
 	/// <param name="handle">ハンドル</param>
 	void StartUpdate(Input& input, HandleManager& handle);
 	/// <summary>
+	/// カウントダウンの更新
+	/// </summary>
+	/// /// <param name="input">入力</param>
+	/// <param name="handle">ハンドル</param>
+	void CountdownUpdate(Input& input, HandleManager& handle);
+	/// <summary>
 	/// プレイ画面の更新
 	/// </summary>
 	/// <param name="input">入力</param>
@@ -79,15 +85,18 @@ private:	// 関数
 	void ClearDraw(HandleManager& handle);
 
 private:	// 変数
-	int m_timeFrame;	// 経過フレーム
-	int m_time;			// 経過秒数
-	int m_clearTime;	// クリア時の秒数
-	int m_itemNum;		// とったアイテム数
-	int m_fadeAlpha;	// フェードイン・アウトの濃さ
-	bool m_isStart;		// スタート画面かどうか
-	bool m_isPlay;		// プレイ画面かどうか
-	bool m_isClear;		// ゴール画面かどうか
-	bool m_isSe;		// SEがなったかどうか
+	int m_shadowMapHandle;	// シャドウマップのハンドル
+	int m_timeFrame;		// 経過フレーム
+	int m_time;				// 経過秒数
+	int m_clearTime;		// クリア時の秒数
+	int m_itemNum;			// とったアイテム数
+	int m_fadeAlpha;		// フェードイン・アウトの濃さ
+	int m_countdownFrame;	// カウントダウンの経過フレーム
+	bool m_isStart;			// スタート画面かどうか
+	bool m_isCountdown;		// カウントダウン中かどうか
+	bool m_isPlay;			// プレイ画面かどうか
+	bool m_isClear;			// ゴール画面かどうか
+	bool m_isSe;			// SEがなったかどうか
 
 	/*ポインタ*/
 	shared_ptr<Player> m_pPlayer;					// プレイヤーのポインタ
@@ -98,11 +107,10 @@ private:	 // 定数
 	static constexpr float kWallZ = 30;				// z軸の壁
 	static constexpr float kWallX = 50;				// x軸の壁
 	static constexpr int kItemNum = 20;				// アイテムの数
-	static constexpr int kBgmVolume = 130;			// BGMの音量
-	static constexpr int kSeVolume = 255;			// SEの音量
-	static constexpr int kFadeSpeed = 4;			// フェードのスピード
+	static constexpr int kFadeSpeed = 2;			// フェードのスピード
 	static constexpr float kGroundModelScale = 20;	// 地面モデルのスケール
-	static constexpr float kGroundPosY = -1.2;		// 地面のY位置
+	static constexpr float kGroundPosY = -1.2f;		// 地面のY位置
+	static constexpr float kCountdownTime = 3 * 60;	// カウントダウンをする秒数
 	/*秒数の表示位置*/
 	static constexpr int kTimePosX = 600;			// 秒数のX位置
 	static constexpr int kTimePosY = 40;			// 秒数のY位置
@@ -114,4 +122,12 @@ private:	 // 定数
 	/*クリア時のタイム*/
 	static constexpr int kClearFastTime = 35;		// 速いクリア
 	static constexpr int kClearSlowTime = 55;		// 遅いクリア
+	/*シャドウマップ*/
+	static constexpr int kShadowMapSizeX = 1024;							// シャドウマップのサイズX
+	static constexpr int kShadowMapSizeY = 1024;							// シャドウマップのサイズY
+	static constexpr VECTOR kShadowMapRangeMin = { -100.0f,-1.2f,-100.0f };	// シャドウマップを描画する最大範囲
+	static constexpr VECTOR kShadowMapRangeMax = { 100.0f,50.0f,100.0f };	// シャドウマップを描画する最小範囲
+	static constexpr VECTOR kShadowMapLightDir = { 0.01f, -0.5f, 0.0f };		// シャドウマップが想定するライトの方向
+	
+	static constexpr VECTOR kLightDir = { 0.0f,-0.5f,0.0f };					// ライトの方向
 };

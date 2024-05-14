@@ -1,6 +1,5 @@
 #include "DxLib.h"
 #include "Player.h"
-#include "Util/Game.h"
 #include "Util/Input.h"
 #include "Util/HandleManager.h"
 
@@ -17,29 +16,38 @@ Player::Player():
 
 Player::~Player()
 {
+	/*処理無し*/
 }
 
 void Player::Init(HandleManager& handle)
 {
 	// モデルを初期位置に戻す
 	MV1SetPosition(handle.GetModel("player"), m_pos);
+
+	// モデルの初期の向きを設定する
+	MV1SetRotationXYZ(handle.GetModel("player"), VGet(0.0f, kStartModelDir, 0.0f));
 }
 
-void Player::Update(Input& input, HandleManager& handle)
+void Player::Update(Input& input, HandleManager& handle, bool isOperate)
 {
 	// モデルのスケールを設定する
 	MV1SetScale(handle.GetModel("player"), VGet(kScale,kScale,kScale));
-	// 回転
-	MV1SetRotationXYZ(handle.GetModel("player"), VGet(0.0f, m_dir, 0.0f));
 
-	// 移動
-	Move(input);
+	// 操作を受け付けるときだけ、この中の処理をする
+	if (isOperate)
+	{
+		// 回転
+		MV1SetRotationXYZ(handle.GetModel("player"), VGet(0.0f, m_dir, 0.0f));
+		
+		// 移動
+		Move(input);
 
+		// ジャンプ処理
+		Jump(input, handle);
+	}
+	
 	// 重力と地面の処理
 	GravityAndGround();
-	
-	// ジャンプ処理
-	Jump(input,handle);
 
 	// 壁の処理
 	Wall();
