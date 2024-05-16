@@ -85,9 +85,11 @@ private:	// 変数
 	HandleTable_t m_modelHandleTable;	// 3Dモデルのハンドル
 	HandleTable_t m_imgHandleTable;		// 画像のハンドル
 	HandleTable_t m_soundHandleTable;	// サウンドのハンドル
+	HandleTable_t m_fontHandleTable;	// フォントのハンドル
 
 private:	// 定数
 	static constexpr int kBgmVolume = 130;			// BGMの音量
 	static constexpr int kSeVolume = 255;			// SEの音量
+	static constexpr int kItemChatchSeVolume = 200;	// アイテムをとるときのSEの音量
 };
 

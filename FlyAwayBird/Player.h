@@ -50,7 +50,7 @@ public:
 
 private:	// 関数
 	/// <summary>
-	/// 移動処理
+	/// コントローラーでの移動処理
 	/// </summary>
 	/// <param name="input">入力</param>
 	void Move(Input& input);

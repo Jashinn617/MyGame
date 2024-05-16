@@ -1,2 +1,12 @@
-﻿  HandleManager.cpp
+﻿  Camera.cpp
+  HandleManager.cpp
+  SceneBase.cpp
+  Input.cpp
+  Main.cpp
+  Player.cpp
+  RecoveredItem.cpp
+  SceneMain.cpp
+  SceneManager.cpp
+  WorldSprite.cpp
+  コードを生成中...
   FlyAwayBird.vcxproj -> C:\Users\fko2347024\Documents\GitHub\MyGame\FlyAwayBird\x64\Debug\FlyAwayBird.exe

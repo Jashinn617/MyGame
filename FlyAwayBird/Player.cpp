@@ -41,7 +41,7 @@ void Player::Update(Input& input, HandleManager& handle, bool isOperate)
 		
 		// 移動
 		Move(input);
-
+		
 		// ジャンプ処理
 		Jump(input, handle);
 	}
@@ -80,7 +80,7 @@ void Player::Move(Input& input)
 	GetJoypadAnalogInput(&analogX, &analogY, DX_INPUT_PAD1);
 
 	// アナログスティックの入力の10～80%の範囲を使用する
-	VECTOR move = VGet(analogX, 0.0f, -analogY);
+	VECTOR move = VGet(static_cast<float>(analogX), 0.0f, static_cast<float>(-analogY));
 	// ベクトルの長さを取得する
 	float len = VSize(move);
 
@@ -110,6 +110,7 @@ void Player::Move(Input& input)
 	// 位置の更新
 	m_pos = VAdd(m_pos, move);
 }
+
 
 void Player::Jump(Input& input, HandleManager& handle)
 {

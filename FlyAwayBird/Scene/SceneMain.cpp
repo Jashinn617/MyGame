@@ -7,13 +7,15 @@
 using namespace std;
 
 SceneMain::SceneMain() :
+	m_scrollX(0),
 	m_shadowMapHandle(-1),
 	m_timeFrame(0),
 	m_time(0),
 	m_clearTime(0),
 	m_itemNum(0),
 	m_fadeAlpha(0),
-	m_countdownFrame(kCountdownTime),
+	m_countdownFrame(0),
+	m_countdownScale(0),
 	m_isStart(true),
 	m_isCountdown(false),
 	m_isPlay(false),
@@ -67,6 +69,9 @@ shared_ptr<SceneBase> SceneMain::Update(Input& input, HandleManager& handle)
 	MV1SetScale(handle.GetModel("ground"), VGet(kGroundModelScale, 1, kGroundModelScale));
 	MV1SetPosition(handle.GetModel("ground"), VGet(0, kGroundPosY, 0));
 
+	// 背景のスクロール
+	m_scrollX += kScrollSpeed;
+
 	if (m_isStart)
 	{
 		StartUpdate(input, handle);
@@ -85,10 +90,12 @@ shared_ptr<SceneBase> SceneMain::Update(Input& input, HandleManager& handle)
 	}
 	else if (m_fadeAlpha >= 255)
 	{
+		// シーンを最初からやり直す
 		return make_shared<SceneMain>();
 	}
 	else
 	{
+		// フェードアウト
 		m_fadeAlpha += kFadeSpeed;
 	}
 
@@ -97,7 +104,8 @@ shared_ptr<SceneBase> SceneMain::Update(Input& input, HandleManager& handle)
 
 void SceneMain::Draw(HandleManager& handle)
 {
-	DrawGraph(0, 0, handle.GetImg("backSky"), false);
+	// 背景の描画
+	BackDraw(handle);
 	SetWriteZBufferFlag(true);
 
 	// シャドウマップへの描画の準備
@@ -132,6 +140,11 @@ void SceneMain::Draw(HandleManager& handle)
 	// 描画に使用するシャドウマップの設定を解除
 	SetUseShadowMap(0, -1);
 
+#ifdef _DEBUG
+	// 画面の左上にシャドウマップのテスト描画をする
+	TestDrawShadowMap(m_shadowMapHandle, 0, 0, 320, 240);
+#endif // _DEBUG
+
 
 
 	SetWriteZBufferFlag(false);
@@ -141,7 +154,7 @@ void SceneMain::Draw(HandleManager& handle)
 	}
 	else if (m_isCountdown)
 	{
-
+		CountdownDraw(handle);
 	}
 	else if (m_isPlay)
 	{
@@ -178,6 +191,7 @@ void SceneMain::ItemInit(HandleManager& handle)
 	{
 		// アイテムの位置をランダムにする
 		int rand = GetRand(1);
+		// X位置を決める
 		float x = 0;
 		if (rand == 0)
 		{
@@ -188,6 +202,7 @@ void SceneMain::ItemInit(HandleManager& handle)
 			x = static_cast<float>(GetRand(static_cast<int>(-kWallX)));
 		}
 		rand = GetRand(1);
+		// Z位置を決める
 		float z = 0;
 		if (rand == 0)
 		{
@@ -219,14 +234,27 @@ void SceneMain::StartUpdate(Input& input, HandleManager& handle)
 
 void SceneMain::CountdownUpdate(Input& input, HandleManager& handle)
 {
-	m_countdownFrame--;
+	m_countdownFrame++;
+	// カウントダウンのスケールを大きくする
+	m_countdownScale += kCountdownShrinkSpeed;
+	// カウントダウンのスケールが大きくなりすぎないようにする
+	if (m_countdownScale >= kCountdownMaxScale)
+	{
+		m_countdownScale = kCountdownMaxScale;
+	}
+	// それぞれの秒数が経つたびにスケールを元に戻す
+	if (m_countdownFrame == kOneSecond || m_countdownFrame == kTwoSecond)
+	{
+		m_countdownScale = 0;
+	}
+
 	// カウントダウン用のSE
 	if (!CheckSoundMem(handle.GetSound("countdownSE")))
 	{
 		PlaySoundMem(handle.GetSound("countdownSE"), DX_PLAYTYPE_BACK);
 	}
 
-	/*カウントダウン時は、操作を受け付けないようにする*/
+	// カウントダウン時は、操作を受け付けないようにする
 	// カメラ
 	m_pCamera->Update(input,false);
 	// プレイヤー
@@ -238,7 +266,7 @@ void SceneMain::CountdownUpdate(Input& input, HandleManager& handle)
 	}
 
 	// カウントダウンが0になったらゲームスタート
-	if (m_countdownFrame <= 0)
+	if (m_countdownFrame >= kCountdownTime)
 	{
 		m_countdownFrame = 0;
 		m_isPlay = true;
@@ -324,7 +352,6 @@ void SceneMain::ClearUpdate(Input& input, HandleManager& handle)
 		{
 			PlaySoundMem(handle.GetSound("slowClearSE"), DX_PLAYTYPE_NORMAL);
 		}
-
 		// SEがループしないようにする
 		m_isSe = true;
 	}
@@ -344,25 +371,101 @@ void SceneMain::ClearUpdate(Input& input, HandleManager& handle)
 
 void SceneMain::StartDraw(HandleManager& handle)
 {
-	DrawGraph(200, 100, handle.GetImg("startScreen"), false);
+	// スタート画面
+	DrawGraph(kScreenPosX, kScreenPosY, handle.GetImg("startScreen"), false);
+	// スタートロゴ
+	DrawGraph(kLogoX, kLogoY, handle.GetImg("startLogo"), true);
+}
+
+void SceneMain::CountdownDraw(HandleManager& handle)
+{
+	// カウントダウン3
+	if (m_countdownFrame <= kOneSecond && m_countdownFrame > 0)
+	{
+		DrawRotaGraph(kCountdownPosX, kCountdownPosY, 
+			m_countdownScale, 0.0,
+			handle.GetImg("countdown3"), true, false);
+	}
+	// カウントダウン2
+	if (m_countdownFrame <= kTwoSecond && m_countdownFrame > kOneSecond)
+	{
+		DrawRotaGraph(kCountdownPosX, kCountdownPosY,
+			m_countdownScale, 0.0,
+			handle.GetImg("countdown2"), true, false);
+	}
+	// カウントダウン1
+	if (m_countdownFrame <= kCountdownTime && m_countdownFrame > kTwoSecond)
+	{
+		DrawRotaGraph(kCountdownPosX, kCountdownPosY,
+			m_countdownScale, 0.0,
+			handle.GetImg("countdown1"), true, false);
+	}
 }
 
 void SceneMain::PlayDraw(HandleManager& handle)
 {
-	// 秒数の描画
-	DrawFormatStringToHandle(kTimePosX + kBackFontShiftPosX, kTimePosY, 0x00008b, handle.GetFont("timeFont"), "%dけいか", m_time);
-	DrawFormatStringToHandle(kTimePosX, kTimePosY, 0xff7f50, handle.GetFont("timeFont"), "%dけいか", m_time);
+	// 最初の2秒間だけGoを表示する
+	if (m_timeFrame <= kTwoSecond)
+	{
+		DrawRotaGraph(kGoPosX, kGoPosY, m_countdownScale, 0.0, handle.GetImg("go"), true, false);
+	}
 
-	// 残りのアイテム数の描画
-	DrawFormatStringToHandle(kItemPosX + kBackFontShiftPosX, kItemPosY, 0x000086, handle.GetFont("itemNumFont"), "のこり：%dこ", kItemNum - m_itemNum);
-	DrawFormatStringToHandle(kItemPosX, kItemPosY, 0xff6347, handle.GetFont("itemNumFont"), "のこり：%dこ", kItemNum - m_itemNum);
+	// 秒数
+	// 前
+	DrawFormatStringToHandle(kTimePosX + kBackFontShiftPosX, kTimePosY,
+		kFrontCharColor, handle.GetFont("timeFont"), "%dけいか", m_time);
+	// 後ろ
+	DrawFormatStringToHandle(kTimePosX, kTimePosY, 
+		kBackCharColor, handle.GetFont("timeFont"), "%dけいか", m_time);
+
+	// 残りのアイテム数
+	// 前
+	DrawFormatStringToHandle(kItemPosX + kBackFontShiftPosX, kItemPosY,
+		kFrontCharColor, handle.GetFont("itemNumFont"), "のこり：%dこ", kItemNum - m_itemNum);
+	// 後ろ
+	DrawFormatStringToHandle(kItemPosX, kItemPosY,
+		kBackCharColor, handle.GetFont("itemNumFont"), "のこり：%dこ", kItemNum - m_itemNum);
 }
 
 void SceneMain::ClearDraw(HandleManager& handle)
 {
-	DrawGraph(200, 100, handle.GetImg("clearScreen"), false);
+	// クリアタイムによって、表示される画像が変わる
+	if (m_clearTime <= kClearFastTime)
+	{
+		DrawGraph(kScreenPosX, kScreenPosY, handle.GetImg("fastClearScreen"), false);
+	}
+	else if (m_clearTime > kClearFastTime && m_clearTime < kClearSlowTime)
+	{
+		DrawGraph(kScreenPosX, kScreenPosY, handle.GetImg("normalClearScreen"), false);
+	}
+	else if (m_clearTime >= kClearSlowTime)
+	{
+		DrawGraph(kScreenPosX, kScreenPosY, handle.GetImg("slowClearScreen"), false);
+	}
 
 	// 秒数の描画
-	DrawFormatStringToHandle(kClearTimePosX + kBackFontShiftPosX, kClearTimePosY, 0x00008b, handle.GetFont("clearTimeFont"), "けっか：%dびょう！", m_clearTime);
-	DrawFormatStringToHandle(kClearTimePosX, kClearTimePosY, 0xff7f50, handle.GetFont("clearTimeFont"), "けっか：%dびょう！", m_clearTime);
+	DrawFormatStringToHandle(kClearTimePosX + kBackFontShiftPosX, kClearTimePosY,
+		kFrontCharColor, handle.GetFont("clearTimeFont"), "けっか：%dびょう！", m_clearTime);
+
+	DrawFormatStringToHandle(kClearTimePosX, kClearTimePosY,
+		kBackCharColor, handle.GetFont("clearTimeFont"), "けっか：%dびょう！", m_clearTime);
+
+	DrawGraph(kLogoX, kLogoY, handle.GetImg("clearLogo"), true);
+}
+
+void SceneMain::BackDraw(HandleManager& handle)
+{
+	// 背景のサイズを取得する
+	BgSize bgSize;
+	GetGraphSize(handle.GetImg("backSky"), &bgSize.width, &bgSize.height);
+
+	// 背景画像をスクロールさせる
+	int scrollBack = static_cast<int>(m_scrollX) % bgSize.width;
+	for (int index = 0; index < kIndexBack; ++index)
+	{
+		DrawGraph(-scrollBack + index * bgSize.width,
+			Game::kScreenHeight - bgSize.height,
+			handle.GetImg("backSky"),
+			true);
+	}
 }

@@ -23,7 +23,7 @@ RecoveredItem::RecoveredItem(shared_ptr<Player> pPlayer):
 
 RecoveredItem::~RecoveredItem()
 {
-	
+	/*ˆ—–³‚µ*/
 }
 
 void RecoveredItem::Init(float x, float z, HandleManager& handle)
