@@ -123,8 +123,8 @@ private:	// 変数
 	};
 
 private:	 // 定数
-	static constexpr float kWallZ = 30;						// z軸の壁
 	static constexpr float kWallX = 50;						// x軸の壁
+	static constexpr float kWallZ = 30;						// z軸の壁
 	static constexpr int kItemNum = 20;						// アイテムの数
 	static constexpr int kFadeSpeed = 2;					// フェードのスピード
 	static constexpr float kGroundModelScale = 20;			// 地面モデルのスケール

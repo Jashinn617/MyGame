@@ -4,6 +4,9 @@
 #include "../Util/Game.h"
 #include "../RecoveredItem.h"
 
+#include <random>
+#include <Windows.h>
+
 using namespace std;
 
 SceneMain::SceneMain() :
@@ -140,27 +143,20 @@ void SceneMain::Draw(HandleManager& handle)
 	// 描画に使用するシャドウマップの設定を解除
 	SetUseShadowMap(0, -1);
 
-#ifdef _DEBUG
-	// 画面の左上にシャドウマップのテスト描画をする
-	TestDrawShadowMap(m_shadowMapHandle, 0, 0, 320, 240);
-#endif // _DEBUG
-
-
-
 	SetWriteZBufferFlag(false);
-	if (m_isStart)
+	if (m_isStart)// スタート画面
 	{
 		StartDraw(handle);
 	}
-	else if (m_isCountdown)
+	else if (m_isCountdown)// カウントダウン
 	{
 		CountdownDraw(handle);
 	}
-	else if (m_isPlay)
+	else if (m_isPlay)// プレイ画面
 	{
 		PlayDraw(handle);
 	}
-	else
+	else// クリア画面
 	{
 		ClearDraw(handle);
 	}
@@ -172,6 +168,9 @@ void SceneMain::Draw(HandleManager& handle)
 	DrawLine3D(VGet(0, -lineSize, 0), VGet(0, lineSize, 0), GetColor(0, 255, 0));
 	DrawLine3D(VGet(0, 0, -lineSize), VGet(0, 0, lineSize), GetColor(0, 0, 255));
 	DrawString(8, 8, "MainScene", 0xffffff);
+
+	// 画面の左上にシャドウマップのテスト描画をする
+	TestDrawShadowMap(m_shadowMapHandle, 0, 0, 320, 240);
 #endif // DEBUG
 
 	// フェードの描画
@@ -187,32 +186,20 @@ void SceneMain::End()
 
 void SceneMain::ItemInit(HandleManager& handle)
 {
+	// アイテムの位置はランダムにする
+	random_device rd;
+	mt19937 mt(rd());
+
+	// X位置
+	std::uniform_real_distribution<float> urdX(-kWallX, kWallX);
+	// Z位置
+	std::uniform_real_distribution<float> urdZ(-kWallZ, kWallZ);
+
 	for (const auto& item : m_pItem)
 	{
-		// アイテムの位置をランダムにする
-		int rand = GetRand(1);
-		// X位置を決める
-		float x = 0;
-		if (rand == 0)
-		{
-			x = static_cast<float>(GetRand(static_cast<int>(kWallX)));
-		}
-		else if (rand == 1)
-		{
-			x = static_cast<float>(GetRand(static_cast<int>(-kWallX)));
-		}
-		rand = GetRand(1);
-		// Z位置を決める
-		float z = 0;
-		if (rand == 0)
-		{
-			z = static_cast<float>(GetRand(static_cast<int>(kWallZ)));
-		}
-		else if (rand == 1)
-		{
-			z = static_cast<float>(GetRand(static_cast<int>(-kWallZ)));
-
-		}
+		float x = urdX(mt);
+		float z = urdZ(mt);
+		
 		item->Init(x, z,handle);
 	}
 }
@@ -444,12 +431,13 @@ void SceneMain::ClearDraw(HandleManager& handle)
 	}
 
 	// 秒数の描画
+	// 前
 	DrawFormatStringToHandle(kClearTimePosX + kBackFontShiftPosX, kClearTimePosY,
 		kFrontCharColor, handle.GetFont("clearTimeFont"), "けっか：%dびょう！", m_clearTime);
-
+	// 後ろ
 	DrawFormatStringToHandle(kClearTimePosX, kClearTimePosY,
 		kBackCharColor, handle.GetFont("clearTimeFont"), "けっか：%dびょう！", m_clearTime);
-
+	// クリアロゴ
 	DrawGraph(kLogoX, kLogoY, handle.GetImg("clearLogo"), true);
 }
 

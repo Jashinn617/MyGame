@@ -1,2 +1,0 @@
-D:\GitHub\MyGame\FlyAwayBird\x64\Debug\FlyAwayBird.exe
-C:\Users\fko2347024\Documents\GitHub\MyGame\FlyAwayBird\x64\Debug\FlyAwayBird.exe
