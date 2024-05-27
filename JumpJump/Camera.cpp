@@ -35,7 +35,7 @@ void Camera::Update(const Input& input, const Player& player, const StageTest& s
 
 	// カメラの注視点の設定
 	// ターゲットよりも少し高い位置を注視点にする
-	m_targetpos = VAdd(player.GetPos(), VGet(0.0f, kTargetH, 0.0f));
+	m_targetPos = VAdd(player.GetPos(), VGet(0.0f, kTargetH, 0.0f));
 
 	// カメラの座標を設定する
 	/*後で関数化したい*/
@@ -50,7 +50,7 @@ void Camera::Update(const Input& input, const Player& player, const StageTest& s
 		CameraToTargetDir = kStartTargetDir;
 
 		// カメラ座標の計算
-		m_pos = VAdd(VTransform(VGet(-CameraToTargetDir, 0.0f, 0.0f), RotY));
+		m_pos = VAdd(VTransform(VGet(-CameraToTargetDir, 0.0f, 0.0f), RotY),m_targetPos);
 
 		/*ステージとの当たり判定*/
 		// 後でやる
@@ -59,6 +59,9 @@ void Camera::Update(const Input& input, const Player& player, const StageTest& s
 	}
 
 	// カメラの位置を設定する
-	SetCameraPositionAndTarget_UpVecY(m_pos, m_targetpos);
+	SetCameraPositionAndTarget_UpVecY(m_pos, m_targetPos);
+
+	DrawFormatString(0, 20, 0xffffff, "Camera:%f,y:%f,z:%f", m_pos.x, m_pos.y, m_pos.z);
+	DrawFormatString(0, 40, 0xffffff, "CameraTarget:%f,y:%f,z:%f", m_targetPos.x, m_targetPos.y, m_targetPos.z);
 
 }

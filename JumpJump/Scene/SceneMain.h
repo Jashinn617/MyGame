@@ -3,6 +3,9 @@
 
 class Player;
 class Camera;
+class StageTest;
+
+using namespace std;
 
 /// <summary>
 /// メインシーンクラス
@@ -35,4 +38,14 @@ public:
 	/// </summary>
 	virtual void End();
 
+private:
+
+	shared_ptr<Player> m_pPlayer;
+	shared_ptr<Camera> m_pCamera;
+	shared_ptr<StageTest> m_pStage;
+
+
+private:
+
+	void DrawGrid();
 };

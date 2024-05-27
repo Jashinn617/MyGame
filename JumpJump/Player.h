@@ -2,12 +2,21 @@
 
 class Input;
 class Camera;
+class Stage;
 
 /// <summary>
 /// プレイヤークラス
 /// </summary>
 class Player
 {
+public:
+	enum class State : int
+	{
+		Idle = 0,
+		Run = 1,
+		Jump = 2,
+	};
+
 public:
 	Player();
 	~Player();
@@ -17,15 +26,20 @@ public:
 	void Draw();
 	void End();
 
-	const VECTOR GetPos()const { return m_pos; }
+	const VECTOR& GetPos()const { return m_pos; }
 
 
 private:	// 変数
 	VECTOR m_pos;			// 座標
-	VECTOR m_targetDir;		// 向いている方向のベクトル
+	VECTOR m_targetDir;		// 向きたい方向のベクトル
 	float m_angle;			// 向いている角度
-	float m_currentJunpPower;		// ジャンプする際の速度
+	float m_nowJunpPower;		// ジャンプ時の現在の速度
 	int m_modelHandle;		// モデルのハンドル
+
+	State m_state;		// 現在の状態
+
+
+	bool m_isMove;		// そのフレームで動いたかどうか
 	
 
 
@@ -35,6 +49,10 @@ private:	// 定数
 	static constexpr float kGravity = 3.0f;			// 重力
 
 private:	// 関数
+
+	State UpdateMoveParamerer(const Input& input, const Camera& camera, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
+
+	void Move(VECTOR& MoveVector);
 	
 	/// <summary>
 	/// 回転制御
