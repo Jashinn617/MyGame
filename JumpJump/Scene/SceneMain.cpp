@@ -22,6 +22,10 @@ void SceneMain::Init()
 
 	m_pPlayer->Init();
 	m_pCamera->Init();
+
+	// ƒ‰ƒCƒg‚Ìİ’è
+	ChangeLightTypeDir(VGet(0.0f, -0.5f, 0.0f));
+
 }
 
 shared_ptr<SceneBase> SceneMain::Update(Input& input)

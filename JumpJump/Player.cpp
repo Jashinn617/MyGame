@@ -13,6 +13,7 @@ Player::Player():
 	m_angle(0.0f),
 	m_nowJunpPower(0.0f),
 	m_modelHandle(-1),
+	m_state(State::Idle),
 	m_isMove(false)
 {
 	// モデルのロード
@@ -34,7 +35,32 @@ void Player::Init()
 
 void Player::Update(const Input& input, const Camera& camera)
 {
-	//MV1SetScale(m_modelHandle, VGet(3, 3, 3));
+	MV1SetScale(m_modelHandle,VGet(3,3,3));
+
+	// ルートフレームのZ軸方向の移動パラメーターを無効にする
+	DisableRootFrameZMove();
+
+	/* 移動パラメーターの設定 */
+	// ↑ボタンを押したときの移動方向ベクトル
+	VECTOR upMoveVec;
+	// ←ボタンを押したときの移動方向ベクトル
+	VECTOR leftMoveVec;
+	// このフレームでの移動ベクトル
+	VECTOR moveVec;
+	// 現在の状態
+	State prevState = m_state;
+	m_state = UpdateMoveParamerer(input, camera, upMoveVec, leftMoveVec, moveVec);
+
+	// 移動方向にモデルを近づける
+	UpdateAngle();
+
+
+	// 移動ベクトルを元に当たり判定を考慮しながらプレイヤーを移動させる
+	Move(moveVec);
+
+	//アニメーション処理
+
+
 }
 
 void Player::Draw()
@@ -46,6 +72,25 @@ void Player::Draw()
 
 void Player::End()
 {
+
+}
+
+void Player::DisableRootFrameZMove()
+{
+	MATRIX localMatrix;
+
+	// ユーザー行列を解除する
+	MV1ResetFrameUserLocalMatrix(m_modelHandle, 2);
+
+	// 現在のルートフレームの行列を取得する
+	localMatrix = MV1GetFrameLocalMatrix(m_modelHandle, 2);
+
+	// Z軸方向の平行移動成分を無効にする
+	localMatrix.m[3][2] = 0.0f;
+
+	// ユーザー行列として平行移動成分を無効にした行列をルートフレームにセットする
+	MV1SetFrameUserLocalMatrix(m_modelHandle, 2, localMatrix);
+
 
 }
 
@@ -111,10 +156,22 @@ Player::State Player::UpdateMoveParamerer(const Input& input, const Camera& came
 		isMove = true;
 	}
 
-	/*ジャンプ処理*/
+	// ジャンプしていない状態でAボタンが押されていた場合はジャンプをする
+	if (m_state != State::Jump && (input.IsTriggered("A")))
+	{
+		// Y軸方向の速度をセットする
+		m_nowJunpPower = kJunpPower;
 
+		// 状態をジャンプにする
+		nextState = State::Jump;
+	}
 
-	
+	// ジャンプしている状態だった場合は重力を適用する
+	if (m_state == State::Jump)
+	{
+		m_nowJunpPower -= kGravity;
+	}
+
 	if (isMove)// 移動ボタンが押されていた場合
 	{
 		if (m_state == State::Idle)	// 今の状態が立ち止まっている状態だった場合
@@ -140,16 +197,17 @@ Player::State Player::UpdateMoveParamerer(const Input& input, const Camera& came
 	}
 
 	// 移動ベクトルのy成分をy軸方向の速度にする
+	moveVec.y = m_nowJunpPower;
 
 	return nextState;
 }
 
-void Player::Move(VECTOR& MoveVector)
+void Player::Move(const VECTOR& moveVec)
 {
 	// 移動距離が0.01未満の場合は少しずつ移動してバグるため、
 	// 0.01以上移動していた場合は移動したかのフラグをtrueにしておく
 	// fabs：floatの絶対値(absだとint型になる)
-	if (fabs(MoveVector.x) > 0.01f || fabs(MoveVector.z) > 0.01f)
+	if (fabs(moveVec.x) > 0.01f || fabs(moveVec.z) > 0.01f)
 	{
 		m_isMove = true;
 	}
@@ -157,6 +215,8 @@ void Player::Move(VECTOR& MoveVector)
 	{
 		m_isMove = false;
 	}
+
+	m_pos = VAdd(m_pos, moveVec);
 
 	// プレイヤーのモデルの座標を更新する
 	MV1SetPosition(m_modelHandle, m_pos);

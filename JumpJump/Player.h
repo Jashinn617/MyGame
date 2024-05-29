@@ -44,15 +44,17 @@ private:	// 変数
 
 
 private:	// 定数
-	static constexpr float kSpeed = 30.0f;			// 移動速度
-	static constexpr float kJunpPower = 100.0f;		// ジャンプ力
+	static constexpr float kSpeed = 1.0f;			// 移動速度
+	static constexpr float kJunpPower = 3.0f;		// ジャンプ力
 	static constexpr float kGravity = 3.0f;			// 重力
 
 private:	// 関数
 
+	void DisableRootFrameZMove();
+
 	State UpdateMoveParamerer(const Input& input, const Camera& camera, VECTOR& upMoveVec, VECTOR& leftMoveVec, VECTOR& moveVec);
 
-	void Move(VECTOR& MoveVector);
+	void Move(const VECTOR& moveVec);
 	
 	/// <summary>
 	/// 回転制御
