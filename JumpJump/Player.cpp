@@ -29,16 +29,14 @@ Player::~Player()
 
 void Player::Init()
 {
-	
+	MV1SetScale(m_modelHandle, VGet(3, 3, 3));
 
 }
 
 void Player::Update(const Input& input, const Camera& camera)
 {
-	MV1SetScale(m_modelHandle,VGet(3,3,3));
-
 	// ルートフレームのZ軸方向の移動パラメーターを無効にする
-	DisableRootFrameZMove();
+	//DisableRootFrameZMove();
 
 	/* 移動パラメーターの設定 */
 	// ↑ボタンを押したときの移動方向ベクトル
@@ -73,6 +71,54 @@ void Player::Draw()
 void Player::End()
 {
 
+}
+
+void Player::OnHitRoof()
+{
+	// Y軸方向の速度を反転させる
+	m_nowJunpPower = -m_nowJunpPower;
+
+}
+
+void Player::OnHitFloor()
+{
+	// Y軸方向の移動速度は0にする
+	m_nowJunpPower = 0.0f;
+
+	// もしジャンプ中だった場合は着地状態にする
+	if (m_state == State::Jump)
+	{
+		// 移動していたかどうかで着地後の状態と再生するアニメーションを分岐する
+		if (m_isMove)
+		{
+			// 移動している場合は走り状態になる
+			m_state = State::Run;
+		}
+		else
+		{
+			// 移動していない場合は立ち止まり状態になる
+			m_state = State::Idle;
+		}
+
+		// 着地時はアニメーションのブレンドを行わない
+		
+	}
+
+}
+
+void Player::OnFall()
+{
+	if (m_state != State::Jump)
+	{
+		// ジャンプ中にする
+		m_state = State::Jump;
+
+		// ちょっとだけジャンプする
+		m_nowJunpPower = kFallUpPower;
+
+		// アニメーションを落下中のものにする
+
+	}
 }
 
 void Player::DisableRootFrameZMove()
@@ -184,7 +230,7 @@ Player::State Player::UpdateMoveParamerer(const Input& input, const Camera& came
 		m_targetDir = VNorm(moveVec);
 
 		// プレイヤーが向いている方向のベクトルにスピードを掛けたものを移動ベクトルにする
-		moveVec = VScale(m_targetDir, kSpeed);
+		moveVec = VScale(m_targetDir, kMoveSpeed);
 	}
 	else
 	{
@@ -250,7 +296,7 @@ void Player::UpdateAngle()
 	// 角度の差を0に近づける
 	if (difference > 0.0f)// 差がプラスの場合は引く
 	{
-		difference -= kSpeed;
+		difference -= kAngleSpeed;
 		if (difference < 0.0f)
 		{
 			difference = 0.0f;
@@ -258,7 +304,7 @@ void Player::UpdateAngle()
 	}
 	else// 差がマイナスの場合は足す
 	{
-		difference += kSpeed;
+		difference += kAngleSpeed;
 		if (difference > 0.0f)
 		{
 			difference = 0.0f;

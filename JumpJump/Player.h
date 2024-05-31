@@ -27,6 +27,13 @@ public:
 	void End();
 
 	const VECTOR& GetPos()const { return m_pos; }
+	bool GetIsMove() const { return m_isMove; }
+	State GetState()const { return m_state; }
+	float GetJumpPower()const { return m_nowJunpPower; }
+
+	void OnHitRoof();
+	void OnHitFloor();
+	void OnFall();
 
 
 private:	// 変数
@@ -44,8 +51,10 @@ private:	// 変数
 
 
 private:	// 定数
-	static constexpr float kSpeed = 1.0f;			// 移動速度
+	static constexpr float kMoveSpeed = 1.0f;		// 移動速度
+	static constexpr float kAngleSpeed = 0.2f;		// 回転速度
 	static constexpr float kJunpPower = 3.0f;		// ジャンプ力
+	static constexpr float kFallUpPower = 0.6f;		// 足を踏み外したときのジャンプ力
 	static constexpr float kGravity = 3.0f;			// 重力
 
 private:	// 関数

@@ -20,6 +20,7 @@ void SceneMain::Init()
 	m_pCamera = make_shared<Camera>();
 	m_pStage = make_shared<StageTest>();
 
+	m_pStage->Init();
 	m_pPlayer->Init();
 	m_pCamera->Init();
 
@@ -39,6 +40,7 @@ shared_ptr<SceneBase> SceneMain::Update(Input& input)
 
 void SceneMain::Draw()
 {
+	m_pStage->Draw();
 	m_pPlayer->Draw();
 
 	DrawGrid();
