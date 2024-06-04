@@ -4,6 +4,17 @@
 #include "Player.h"
 #include "Stage/StageTest.h"
 
+/// <summary>
+/// 定数定義
+/// </summary>
+namespace
+{
+	constexpr float kSpeed = 0.1f;				// 回転速度
+	constexpr float kTargetH = 8.0f;			// ターゲットの座標から注視点までの高さ
+	constexpr float kStartTargetDir = 45.0f;	// ターゲットとの初期の距離
+	constexpr float kColSize = 50.0f;			// カメラ自体の当たり判定のサイズ
+}
+
 void Camera::Init()
 {
 	m_angle = DX_PI_F;

@@ -4,6 +4,14 @@
 #include "../Camera.h"
 #include "../Stage/StageTest.h"
 
+/// <summary>
+/// ’è”’è‹`
+/// </summary>
+namespace
+{
+
+}
+
 SceneMain::SceneMain():
 	m_pPlayer(nullptr),
 	m_pCamera(nullptr)
@@ -31,7 +39,7 @@ void SceneMain::Init()
 
 shared_ptr<SceneBase> SceneMain::Update(Input& input)
 {
-	m_pPlayer->Update(input, *m_pCamera);
+	m_pPlayer->Update(input, *m_pCamera, *m_pStage);
 	m_pCamera->Update(input, *m_pPlayer, *m_pStage);
 
 
@@ -53,6 +61,7 @@ void SceneMain::End()
 
 void SceneMain::DrawGrid()
 {
+#ifdef _DEBUG
 	for (int x = -50; x <= 50; x += 10)
 	{
 		DrawLine3D(VGet(static_cast<float>(x), 0, -50), VGet(static_cast<float>(x), 0, 50), 0xffff00);
@@ -62,7 +71,7 @@ void SceneMain::DrawGrid()
 		DrawLine3D(VGet(-50, 0, static_cast<float>(z)), VGet(50, 0, static_cast<float>(z)), 0xff0000);
 	}
 
-	// X+-,Z+-‚Ì•ûŒü‚ª•ª‚©‚è‚â‚·‚¢‚æ‚¤‚É•\¦‚ğ’Ç‰Á‚·‚é
+	// X+-,Z+-‚Ì•ûŒü•\¦‚ğ’Ç‰Á‚·‚é
 	VECTOR dispPos = ConvWorldPosToScreenPos(VGet(50, 0, 0));
 	if (dispPos.z >= 0.0f && dispPos.z <= 1.0f)
 	{
@@ -86,4 +95,5 @@ void SceneMain::DrawGrid()
 	{
 		DrawStringF(dispPos.x, dispPos.y, "Z-", 0xffffff);
 	}
+#endif // _DEBUG
 }

@@ -38,14 +38,17 @@ public:
 	/// </summary>
 	virtual void End();
 
-private:
+private:	// 関数
 
+	/// <summary>
+	/// デバッグ表示用
+	/// </summary>
+	void DrawGrid();
+
+private:	// 変数
 	shared_ptr<Player> m_pPlayer;
 	shared_ptr<Camera> m_pCamera;
 	shared_ptr<StageTest> m_pStage;
 
 
-private:
-
-	void DrawGrid();
 };

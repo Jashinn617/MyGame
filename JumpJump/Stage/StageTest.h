@@ -36,13 +36,5 @@ private:	// 変数
 
 	MV1_COLL_RESULT_POLY* m_wall[kMaxHitColl];	// 壁ポリゴンと判断されたポリゴンの構造体のアドレスを保存する配列
 	MV1_COLL_RESULT_POLY* m_floor[kMaxHitColl];	// 床ポリゴンと判断されたポリゴンの構造体のアドレスを保存する配列
-
-private:	// 定数
-	static constexpr float kDefaultSize = 800.0f;	// 周囲のポリゴン検出に使用する球の初期サイズ
-	static constexpr float kHitWidth = 200.0f;		// 当たり判定のカプセルの横の半径
-	static constexpr float kHitHeight = 700.0f;		// 当たり判定のカプセルの高さ
-	static constexpr float kHitSlideLength = 5.0f;	// 一度の壁の押し出し処理でスライドさせる距離
-	static constexpr int   kHitTryNum = 16;			// 壁の押し出し処理の最大試行回数
-
 };
 

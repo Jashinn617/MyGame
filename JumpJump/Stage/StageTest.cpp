@@ -2,12 +2,24 @@
 #include "StageTest.h"
 #include "../Player.h"
 
-StageTest::StageTest():
+/// <summary>
+/// 定数定義
+/// </summary>
+namespace
+{
+	constexpr float kDefaultSize = 800.0f;	// 周囲のポリゴン検出に使用する球の初期サイズ
+	constexpr float kHitWidth = 200.0f;		// 当たり判定のカプセルの横の半径
+	constexpr float kHitHeight = 700.0f;		// 当たり判定のカプセルの高さ
+	constexpr float kHitSlideLength = 5.0f;	// 一度の壁の押し出し処理でスライドさせる距離
+	constexpr int   kHitTryNum = 16;			// 壁の押し出し処理の最大試行回数
+}
+
+StageTest::StageTest() :
 	m_modelHandle(-1),
 	m_wallNum(0),
 	m_floorNum(0),
-	m_wall{nullptr},
-	m_floor{nullptr}
+	m_wall{ nullptr },
+	m_floor{ nullptr }
 {
 	/*処理無し*/
 }
@@ -142,14 +154,14 @@ VECTOR StageTest::CheckHitWithWall(Player& player, const VECTOR& checkPosition)
 				{
 					// 当たっていたらループを抜ける
 					poly = m_wall[j];
-					if (HitCheck_Capsule_Triangle(fixedPos, VAdd(fixedPos, VGet(0.0f, kHitHeight, 0.0f)), 
+					if (HitCheck_Capsule_Triangle(fixedPos, VAdd(fixedPos, VGet(0.0f, kHitHeight, 0.0f)),
 						kHitWidth, poly->Position[0], poly->Position[1], poly->Position[2]))
 					{
 						isHitWall = true;
 						break;
 					}
 				}
-				
+
 				// 全てのポリゴンと当らなくなった場合はここでループを終了する
 				if (!isHitWall)
 				{
@@ -243,14 +255,34 @@ VECTOR StageTest::CheckHitWithFloor(Player& player, const VECTOR& checkPosition)
 				// (傾斜で落下状態にならないためにする)
 				lineResult = HitCheck_Line_Triangle(VAdd(fixedPos, VGet(0.0f, kHitHeight, 0.0f)),
 					VAdd(fixedPos, VGet(0.0f, -40.0f, 0.0f)), poly->Position[0], poly->Position[1], poly->Position[2]);
-
 			}
 
-
+			// 既に当たったポリゴンがあり、今まで検出した床ポリゴンよりも低いは愛は何もしない
+			if (lineResult.HitFlag)
+			{
+				if (!(isHitFloor && maxY > lineResult.Position.y))
+				{
+					// 接触したY座標を保持する
+					isHitFloor = true;
+					maxY = lineResult.Position.y;
+				}
+			}
 		}
 
+		// 床ポリゴンに当たった
+		if (isHitFloor)
+		{
+			// 接触したポリゴンで一番高いY座標をプレイヤーのY座標にする
+			fixedPos.y = maxY;
+
+			// 床に当たった時
+			player.OnHitFloor();
+		}
+		else
+		{
+			// 床コリジョンに当たっていなくてジャンプ状態でなかった場合は落下状態になる
+			player.OnFall();
+		}
 	}
-
-
 	return fixedPos;
 }

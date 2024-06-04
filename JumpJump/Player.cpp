@@ -7,6 +7,21 @@
 #include <math.h>
 #include <cassert>
 
+/// <summary>
+/// 定数定義
+/// </summary>
+namespace
+{
+	constexpr float kMoveSpeed = 1.0f;			// 移動速度
+	constexpr float kAngleSpeed = 0.2f;			// 回転速度
+	constexpr float kJunpPower = 8.5f;			// ジャンプ力
+	constexpr float kFallUpPower = 0.6f;		// 足を踏み外したときのジャンプ力
+	constexpr float kGravity = 0.5f;			// 重力
+	constexpr float kPlayAnimSpeed = 0.5f;	// アニメーションの速度
+	constexpr float kAnimBlendSpeed = 0.1f;		// アニメーションのブレンド率の変化速度
+
+}
+
 Player::Player():
 	m_pos{0.0f,0.0f,0.0f},
 	m_targetDir{1.0f,0.0f,0.0f},
@@ -14,6 +29,11 @@ Player::Player():
 	m_nowJunpPower(0.0f),
 	m_modelHandle(-1),
 	m_state(State::Idle),
+	m_nowPlayAnim(1),
+	m_prevPlayAnim(1),
+	m_nowAnimCount(0.0f),
+	m_prevAnimCount(0.0f),
+	m_animBlendRate(0.0f),
 	m_isMove(false)
 {
 	// モデルのロード
@@ -33,7 +53,7 @@ void Player::Init()
 
 }
 
-void Player::Update(const Input& input, const Camera& camera)
+void Player::Update(const Input& input, const Camera& camera, StageTest& stage)
 {
 	// ルートフレームのZ軸方向の移動パラメーターを無効にする
 	//DisableRootFrameZMove();
@@ -49,15 +69,18 @@ void Player::Update(const Input& input, const Camera& camera)
 	State prevState = m_state;
 	m_state = UpdateMoveParamerer(input, camera, upMoveVec, leftMoveVec, moveVec);
 
+	// アニメーションステートの更新
+	UpdateAnimationState(prevState);
+
 	// 移動方向にモデルを近づける
 	UpdateAngle();
 
 
 	// 移動ベクトルを元に当たり判定を考慮しながらプレイヤーを移動させる
-	Move(moveVec);
+	Move(moveVec,stage);
 
 	//アニメーション処理
-
+	UpdateAnimation();
 
 }
 
@@ -248,7 +271,7 @@ Player::State Player::UpdateMoveParamerer(const Input& input, const Camera& came
 	return nextState;
 }
 
-void Player::Move(const VECTOR& moveVec)
+void Player::Move(const VECTOR& moveVec, StageTest& stage)
 {
 	// 移動距離が0.01未満の場合は少しずつ移動してバグるため、
 	// 0.01以上移動していた場合は移動したかのフラグをtrueにしておく
@@ -262,7 +285,7 @@ void Player::Move(const VECTOR& moveVec)
 		m_isMove = false;
 	}
 
-	m_pos = VAdd(m_pos, moveVec);
+	m_pos = stage.CheckCollision(*this, moveVec);
 
 	// プレイヤーのモデルの座標を更新する
 	MV1SetPosition(m_modelHandle, m_pos);
@@ -314,5 +337,123 @@ void Player::UpdateAngle()
 	// モデルの角度を更新する
 	m_angle = targetAngle - difference;
 	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, m_angle + DX_PI_F, 0.0f));
+
+}
+
+void Player::UpdateAnimationState(State prevState)
+{
+	// 立ち止まり状態から走り状態に変わった
+	if (prevState == State::Idle && m_state == State::Run)
+	{
+		// 走るアニメーションの再生
+		PlayAnimation(AnimKind::Run);
+	}
+	// 走り状態から立ち止まり状態に変わった
+	else if (prevState == State::Run && m_state == State::Idle)
+	{
+		// 立ち止まるアニメーションの再生
+		PlayAnimation(AnimKind::Stop);
+	}
+	// ジャンプ状態だった場合
+	else if (m_state == State::Jump)
+	{
+		// 落下していてアニメーションが上昇中用の物だった場合
+		if (m_nowJunpPower < 0.0f)
+		{
+			bool isJumpAnim = MV1GetAttachAnim(m_modelHandle, m_nowPlayAnim) == static_cast<int>(AnimKind::Jump);
+			// 落下中用アニメーションを再生する
+			if (isJumpAnim)
+			{
+				PlayAnimation(AnimKind::Fall);
+			}
+		}
+		else
+		{
+			PlayAnimation(AnimKind::Jump);
+		}
+	}
+}
+
+void Player::PlayAnimation(AnimKind nextPlayAnim)
+{
+	// 直前に再生していたアニメーションとの入れ替えをするので、
+	// 1つ前のモーションが有効だった場合はデタッチする
+	if (m_prevPlayAnim != -1)
+	{
+		MV1DetachAnim(m_modelHandle, m_prevPlayAnim);
+		m_prevPlayAnim = -1;
+	}
+
+	// 今まで再生中のモーションだったものの情報をPrevに移動する
+	m_prevPlayAnim = m_nowPlayAnim;
+	m_prevAnimCount = m_nowAnimCount;
+
+	// 新しく指定したモーションをモデルにアタッチしてアタッチ番号を保存する
+	m_nowPlayAnim = MV1AttachAnim(m_modelHandle, static_cast<int>(nextPlayAnim));
+
+	// Prevが有効ではない場合はm_animBlendRate(ブレンド率)を1.0fにする
+	m_animBlendRate = m_prevPlayAnim == -1 ? 1.0f : 0.0f;
+}
+
+void Player::UpdateAnimation()
+{
+	// 再生しているアニメーションの総時間
+	float animTotalTime;
+
+	// ブレンド率が1以下の場合は1に近づける
+	if (m_animBlendRate < 1.0f)
+	{
+		m_animBlendRate += kAnimBlendSpeed;
+		if (m_animBlendRate > 1.0f)
+		{
+			m_animBlendRate = 1.0f;
+		}
+	}
+
+	// 再生しているアニメーション1の処理
+	if (m_nowPlayAnim != -1)	// 現在のアニメーション番号が-1(無し)でない場合
+	{
+		// アニメーションの総時間を取得する
+		animTotalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_nowPlayAnim);
+
+		// 再生時間を進める
+		m_nowAnimCount += kPlayAnimSpeed;
+
+		// ループ処理
+		if (m_nowAnimCount >= animTotalTime)
+		{
+			// 剰余(%)
+			m_nowAnimCount = static_cast<float>(fmod(m_nowAnimCount, animTotalTime));
+		}
+
+		// 変更した再生時間をモデルに反映させる
+		MV1SetAttachAnimTime(m_modelHandle, m_nowPlayAnim, m_nowAnimCount);
+
+		// アニメーション1のモデルに対する反映率をセットする
+		MV1SetAttachAnimBlendRate(m_modelHandle, m_nowPlayAnim, m_animBlendRate);
+	}
+
+	// 再生しているアニメーション2の処理
+	if (m_prevPlayAnim != -1)
+	{
+		// アニメーションの総時間を取得する
+		animTotalTime = MV1GetAttachAnimTotalTime(m_modelHandle, m_prevPlayAnim);
+
+		// 再生時間を進める
+		m_prevAnimCount += kPlayAnimSpeed;
+
+		// ループ処理
+		if (m_prevAnimCount > animTotalTime)
+		{
+			m_prevAnimCount = static_cast<float>(fmod(m_prevAnimCount, animTotalTime));
+		}
+
+		// 変更した再生時間をモデルに反映させる
+		MV1SetAttachAnimTime(m_modelHandle, m_prevPlayAnim, m_prevAnimCount);
+
+		// アニメーション2のモデルの対する反映率をセットする
+		MV1SetAttachAnimBlendRate(m_modelHandle, m_prevPlayAnim, 1.0f - m_animBlendRate);
+	}
+
 
 }
