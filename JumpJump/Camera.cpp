@@ -11,13 +11,24 @@ namespace
 {
 	constexpr float kSpeed = 0.1f;				// 回転速度
 	constexpr float kTargetH = 8.0f;			// ターゲットの座標から注視点までの高さ
-	constexpr float kStartTargetDir = 45.0f;	// ターゲットとの初期の距離
+	constexpr float kStartTargetDir = 30.0f;	// ターゲットとの初期の距離
 	constexpr float kColSize = 50.0f;			// カメラ自体の当たり判定のサイズ
+}
+
+Camera::Camera():
+	m_angle(-DX_PI_F/2),
+	m_pos{0,0,0},
+	m_targetPos{0,0,0}
+{
+}
+
+Camera::~Camera()
+{
 }
 
 void Camera::Init()
 {
-	m_angle = DX_PI_F;
+	
 
 }
 
@@ -43,6 +54,8 @@ void Camera::Update(const Input& input, const Player& player, const StageTest& s
 			m_angle -= DX_TWO_PI_F;
 		}
 	}
+
+	SetCameraNearFar(1.0f, 200.0f);
 
 	// カメラの注視点の設定
 	// ターゲットよりも少し高い位置を注視点にする

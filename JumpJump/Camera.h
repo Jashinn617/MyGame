@@ -7,6 +7,10 @@ class StageTest;
 class Camera
 {
 public:
+
+	Camera();
+	~Camera();
+
 	void Init();
 	void Update(const Input& input, const Player& player, const StageTest& stage);
 

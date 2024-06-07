@@ -14,16 +14,19 @@ namespace
 
 SceneMain::SceneMain():
 	m_pPlayer(nullptr),
-	m_pCamera(nullptr)
+	m_pCamera(nullptr),
+	m_back(-1)
 {
 }
 
 SceneMain::~SceneMain()
 {
+	DeleteGraph(m_back);
 }
 
 void SceneMain::Init()
 {
+	
 	m_pPlayer = make_shared<Player>();
 	m_pCamera = make_shared<Camera>();
 	m_pStage = make_shared<StageTest>();
@@ -33,25 +36,39 @@ void SceneMain::Init()
 	m_pCamera->Init();
 
 	// ÉâÉCÉgÇÃê›íË
-	ChangeLightTypeDir(VGet(0.0f, -0.5f, 0.0f));
+	ChangeLightTypeDir(VGet(0.0f, 10.0f, 0.0f));
+
+	m_back = LoadGraph("Data/img/Sky.png");
+
+	updateFunc = &SceneMain::PlayingUpdate;
 
 }
 
 shared_ptr<SceneBase> SceneMain::Update(Input& input)
 {
-	m_pPlayer->Update(input, *m_pCamera, *m_pStage);
+	/*m_pPlayer->Update(input, *m_pCamera, *m_pStage);
 	m_pCamera->Update(input, *m_pPlayer, *m_pStage);
 
 
-	return shared_from_this();
+	return shared_from_this();*/
+
+	
+
+	return (this->*UpdateFunc)(input);
 }
 
 void SceneMain::Draw()
 {
+	DrawGraph(0, 0, m_back, false);
+
 	m_pStage->Draw();
 	m_pPlayer->Draw();
 
+#ifdef _DEBUG
 	DrawGrid();
+#endif // _DEBUG
+
+	
 
 }
 
@@ -61,7 +78,6 @@ void SceneMain::End()
 
 void SceneMain::DrawGrid()
 {
-#ifdef _DEBUG
 	for (int x = -50; x <= 50; x += 10)
 	{
 		DrawLine3D(VGet(static_cast<float>(x), 0, -50), VGet(static_cast<float>(x), 0, 50), 0xffff00);
@@ -95,5 +111,13 @@ void SceneMain::DrawGrid()
 	{
 		DrawStringF(dispPos.x, dispPos.y, "Z-", 0xffffff);
 	}
-#endif // _DEBUG
+}
+
+shared_ptr<SceneBase> SceneMain::PlayingUpdate(Input& input)
+{
+	m_pPlayer->Update(input, *m_pCamera, *m_pStage);
+	m_pCamera->Update(input, *m_pPlayer, *m_pStage);
+
+
+	return shared_from_this();
 }

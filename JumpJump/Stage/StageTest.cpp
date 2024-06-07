@@ -7,10 +7,11 @@
 /// </summary>
 namespace
 {
-	constexpr float kDefaultSize = 800.0f;	// 周囲のポリゴン検出に使用する球の初期サイズ
-	constexpr float kHitWidth = 200.0f;		// 当たり判定のカプセルの横の半径
+	constexpr float kDefaultSize = 800.0f;		// 周囲のポリゴン検出に使用する球の初期サイズ
+	constexpr float kHitWidth = 200.0f;			// 当たり判定のカプセルの横の半径
 	constexpr float kHitHeight = 700.0f;		// 当たり判定のカプセルの高さ
-	constexpr float kHitSlideLength = 5.0f;	// 一度の壁の押し出し処理でスライドさせる距離
+	constexpr float kHitSlideLength = 5.0f;		// 一度の壁の押し出し処理でスライドさせる距離
+	constexpr float kModelScale = 15.0f;		// モデルのスケール
 	constexpr int   kHitTryNum = 16;			// 壁の押し出し処理の最大試行回数
 }
 
@@ -36,9 +37,9 @@ void StageTest::Init()
 	m_modelHandle = MV1LoadModel("Data/Model/Ground.mv1");
 
 	// モデルの大きさの設定
-	MV1SetScale(m_modelHandle, VGet(30, 10, 30));
+	MV1SetScale(m_modelHandle, VGet(kModelScale, kModelScale, kModelScale));
 
-	// モデルの位置の設定
+	// モデルの位置の設定(仮)
 	MV1SetPosition(m_modelHandle, VGet(0, -10, 0));
 
 	// モデル全体のコリジョン情報のセットアップ
@@ -47,6 +48,7 @@ void StageTest::Init()
 
 void StageTest::Draw()
 {
+	// モデルのデリート
 	MV1DrawModel(m_modelHandle);
 }
 
@@ -56,9 +58,9 @@ void StageTest::End()
 
 VECTOR StageTest::CheckCollision(Player& player, const VECTOR& moveVector)
 {
-	// 移動前の座標を記憶しておく
+	// 移動前のプレイヤーの座標を記憶しておく
 	VECTOR oldPos = player.GetPos();
-	// 移動後の座標の計算
+	// 移動後のプレイヤーの座標の計算
 	VECTOR nextPos = VAdd(oldPos, moveVector);
 
 	// ステージポリゴンが複数ある場合はここが繰り返しの処理になる
@@ -79,7 +81,6 @@ VECTOR StageTest::CheckCollision(Player& player, const VECTOR& moveVector)
 		// 検出したプレイヤーの周囲のポリゴン情報を解放する
 		MV1CollResultPolyDimTerminate(hitDim);
 	}
-
 	return nextPos;
 }
 
