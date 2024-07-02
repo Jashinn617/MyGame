@@ -1,2 +1,6 @@
-﻿  Camera.cpp
-  JumpJump.vcxproj -> C:\Users\fko2347024\Documents\GitHub\MyGame\JumpJump\x64\Debug\JumpJump.exe
+﻿  SceneMain.cpp
+  SceneManager.cpp
+  Player.cpp
+  コードを生成中...
+  LINK : 前回のインクリメンタル リンクで C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump\x64\Debug\JumpJump.exe が見つからなかったか、ビルドされませんでした。フル リンクを行います。
+  JumpJump.vcxproj -> C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump\x64\Debug\JumpJump.exe

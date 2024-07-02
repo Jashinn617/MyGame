@@ -45,12 +45,8 @@ private:	// 関数
 	/// </summary>
 	void DrawGrid();
 
-	shared_ptr<SceneBase> PlayingUpdate(Input& input);
-
 private:	// メンバ関数ポインタ
-	using UpdateFunc = shared_ptr<SceneBase>(SceneMain::*)(Input& input);
-	UpdateFunc updateFunc = nullptr;
-
+	
 private:	// 変数
 	shared_ptr<Player> m_pPlayer;
 	shared_ptr<Camera> m_pCamera;

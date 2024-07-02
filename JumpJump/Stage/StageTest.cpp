@@ -54,6 +54,7 @@ void StageTest::Draw()
 
 void StageTest::End()
 {
+	/*ˆ—–³‚µ*/
 }
 
 VECTOR StageTest::CheckCollision(Player& player, const VECTOR& moveVector)

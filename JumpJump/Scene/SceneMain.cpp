@@ -40,21 +40,15 @@ void SceneMain::Init()
 
 	m_back = LoadGraph("Data/img/Sky.png");
 
-	updateFunc = &SceneMain::PlayingUpdate;
-
 }
 
 shared_ptr<SceneBase> SceneMain::Update(Input& input)
 {
-	/*m_pPlayer->Update(input, *m_pCamera, *m_pStage);
+	m_pPlayer->Update(input, *m_pCamera, *m_pStage);
 	m_pCamera->Update(input, *m_pPlayer, *m_pStage);
 
 
-	return shared_from_this();*/
-
-	
-
-	return (this->*UpdateFunc)(input);
+	return shared_from_this();
 }
 
 void SceneMain::Draw()
@@ -67,13 +61,11 @@ void SceneMain::Draw()
 #ifdef _DEBUG
 	DrawGrid();
 #endif // _DEBUG
-
-	
-
 }
 
 void SceneMain::End()
 {
+
 }
 
 void SceneMain::DrawGrid()
@@ -111,13 +103,4 @@ void SceneMain::DrawGrid()
 	{
 		DrawStringF(dispPos.x, dispPos.y, "Z-", 0xffffff);
 	}
-}
-
-shared_ptr<SceneBase> SceneMain::PlayingUpdate(Input& input)
-{
-	m_pPlayer->Update(input, *m_pCamera, *m_pStage);
-	m_pCamera->Update(input, *m_pPlayer, *m_pStage);
-
-
-	return shared_from_this();
 }
