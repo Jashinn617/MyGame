@@ -2,6 +2,8 @@
 #include "StageTest.h"
 #include "../Player.h"
 
+#include <cassert>
+
 /// <summary>
 /// 定数定義
 /// </summary>
@@ -11,12 +13,14 @@ namespace
 	constexpr float kHitWidth = 200.0f;			// 当たり判定のカプセルの横の半径
 	constexpr float kHitHeight = 700.0f;		// 当たり判定のカプセルの高さ
 	constexpr float kHitSlideLength = 5.0f;		// 一度の壁の押し出し処理でスライドさせる距離
-	constexpr float kModelScale = 15.0f;		// モデルのスケール
+	constexpr float kModelScale = 50.0f;		// モデルのスケール
 	constexpr int   kHitTryNum = 16;			// 壁の押し出し処理の最大試行回数
 }
 
 StageTest::StageTest() :
 	m_modelHandle(-1),
+	m_vs(-1),
+	m_ps(-1),
 	m_wallNum(0),
 	m_floorNum(0),
 	m_wall{ nullptr },
@@ -35,6 +39,12 @@ void StageTest::Init()
 {
 	// モデルのロード
 	m_modelHandle = MV1LoadModel("Data/Model/Ground.mv1");
+	assert(m_modelHandle != -1);
+	// シェーダのロード
+	m_vs = LoadVertexShader("VertexShader.vso");
+	assert(m_vs != -1);
+	m_ps = LoadPixelShader("PixelTest.pso");
+	assert(m_ps != -1);
 
 	// モデルの大きさの設定
 	MV1SetScale(m_modelHandle, VGet(kModelScale, kModelScale, kModelScale));
@@ -48,8 +58,16 @@ void StageTest::Init()
 
 void StageTest::Draw()
 {
-	// モデルのデリート
+	// シェーダを有効にする
+	MV1SetUseOrigShader(true);
+	SetUseVertexShader(m_vs);
+	SetUsePixelShader(m_ps);
+
+	// モデルの描画
 	MV1DrawModel(m_modelHandle);
+
+	// シェーダを無効にする
+	MV1SetUseOrigShader(false);
 }
 
 void StageTest::End()

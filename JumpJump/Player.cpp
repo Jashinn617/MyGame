@@ -19,7 +19,7 @@ namespace
 	constexpr float kGravity = 0.5f;			// 重力
 	constexpr float kPlayAnimSpeed = 0.5f;		// アニメーションの速度
 	constexpr float kAnimBlendSpeed = 0.1f;		// アニメーションのブレンド率の変化速度
-	constexpr float kModelScale = 3;
+	constexpr float kModelScale = 0.015;
 
 	// アニメーションの切り替えにかかるフレーム数
 	static constexpr float kAnimChangeFrame = 8.0f;
@@ -29,7 +29,7 @@ namespace
 }
 
 Player::Player():
-	m_pos{0.0f,0.0f,0.0f},
+	m_pos{0.0f,100.0f,0.0f},
 	m_targetDir{1.0f,0.0f,0.0f},
 	m_angle(0.0f),
 	m_nowJunpPower(0.0f),
@@ -54,14 +54,19 @@ Player::~Player()
 void Player::Init()
 {
 	// モデルのロード
-	m_modelHandle = MV1LoadModel("Data/Model/Player/Mage.mv1");
+	m_modelHandle = MV1LoadModel("Data/Model/Player/Robot.mv1");
 	assert(m_modelHandle != -1);
+	// シェーダのロード
+	m_vs = LoadVertexShader("VertexShader2.vso");
+	assert(m_vs != -1);
+	m_ps = LoadPixelShader("PixelTest2.pso");
+	assert(m_ps != -1);
 
 	// モデルのスケールの設定
 	MV1SetScale(m_modelHandle, VGet(kModelScale, kModelScale, kModelScale));
 
 	// 初期のアニメーションの設定
-	m_currentAnimNo = MV1AttachAnim(m_modelHandle, static_cast<int>(AnimKind::Stop), -1, false);
+	m_currentAnimNo = MV1AttachAnim(m_modelHandle, static_cast<int>(AnimKind::Idle), -1, false);
 
 }
 
@@ -111,9 +116,16 @@ void Player::Draw()
 #ifdef _DEBUG
 	DrawFormatString(0, 0, 0xffffff, "Playerx:%f,y:%f,z:%f", m_pos.x, m_pos.y, m_pos.z);
 #endif // _DEBUG	
+	// シェーダを有効にする
+	MV1SetUseOrigShader(true);
+	SetUseVertexShader(m_vs);
+	SetUsePixelShader(m_ps);
 
-	// プレイヤーモデルの描画
+	// モデルの描画
 	MV1DrawModel(m_modelHandle);
+
+	// シェーダを無効にする
+	MV1SetUseOrigShader(false);
 }
 
 void Player::End()
@@ -139,13 +151,13 @@ void Player::OnHitFloor()
 		if (m_isMove)
 		{
 			// 移動している場合は走り状態になる
-			ChangeAnim(static_cast<int>(AnimKind::Run));
-			m_currentState = State::Run;
+			ChangeAnim(static_cast<int>(AnimKind::Walk));
+			m_currentState = State::Walk;
 		}
 		else
 		{
 			// 移動していない場合は立ち止まり状態になる
-			ChangeAnim(static_cast<int>(AnimKind::Stop));
+			ChangeAnim(static_cast<int>(AnimKind::Idle));
 			m_currentState = State::Idle;
 		}
 		// 着地時はアニメーションのブレンドを行わない
@@ -165,7 +177,7 @@ void Player::OnFall()
 		m_nowJunpPower = kFallUpPower;
 
 		// アニメーションを落下中のものにする
-		ChangeAnim(static_cast<int>(AnimKind::Fall));
+		ChangeAnim(static_cast<int>(AnimKind::Idle));
 	}
 }
 
@@ -271,7 +283,7 @@ Player::State Player::UpdateMoveParamerer(const Input& input, const Camera& came
 		if (m_currentState == State::Idle)	// 今の状態が立ち止まっている状態だった場合
 		{
 			// 今の状態を走り状態にする
-			nextState = State::Run;
+			nextState = State::Walk;
 		}
 
 		// 移動ベクトルを正規化したものをプレイヤーが向く方向として保存する
@@ -283,7 +295,7 @@ Player::State Player::UpdateMoveParamerer(const Input& input, const Camera& came
 	else
 	{
 		// このフレームで走っている状態だった場合
-		if (m_currentState == State::Run)
+		if (m_currentState == State::Walk)
 		{
 			// 立ち止まる状態にする
 			nextState = State::Idle;
@@ -369,16 +381,16 @@ void Player::UpdateAngle()
 void Player::UpdateAnimationState(State prevState)
 {
 	// 立ち止まり状態から走り状態に変わった
-	if (prevState == State::Idle && m_currentState == State::Run)
+	if (prevState == State::Idle && m_currentState == State::Walk)
 	{
 		// 走るアニメーションの再生
-		ChangeAnim(static_cast<int>(AnimKind::Run));
+		ChangeAnim(static_cast<int>(AnimKind::Walk));
 	}
 	// 走り状態から立ち止まり状態に変わった
-	else if (prevState == State::Run && m_currentState == State::Idle)
+	else if (prevState == State::Walk && m_currentState == State::Idle)
 	{
 		// 立ち止まるアニメーションの再生
-		ChangeAnim(static_cast<int>(AnimKind::Stop));
+		ChangeAnim(static_cast<int>(AnimKind::Idle));
 	}
 	// 立ち止まり状態からジャンプ状態になった
 	else if (prevState == State::Idle && m_currentState == State::Jump)
@@ -386,25 +398,9 @@ void Player::UpdateAnimationState(State prevState)
 		ChangeAnim(static_cast<int>(AnimKind::Jump));
 	}
 	// 走り状態からジャンプ状態になった
-	else if (prevState == State::Run && m_currentState == State::Jump)
+	else if (prevState == State::Walk && m_currentState == State::Jump)
 	{
 		ChangeAnim(static_cast<int>(AnimKind::Jump));
-	}
-	// ジャンプ状態だった場合
-	else if (m_currentState == State::Jump)
-	{
-		// 落下している
-		if (m_nowJunpPower < 0.0f)
-		{
-			// アニメーションが上昇中用の物である
-			bool isJumpAnim = MV1GetAttachAnim(m_modelHandle, m_currentAnimNo) 
-				== static_cast<int>(AnimKind::Jump);			
-			if (isJumpAnim)
-			{
-				// 落下中用アニメーションを再生する
-				ChangeAnim(static_cast<int>(AnimKind::Fall));
-			}
-		}
 	}
 }
 

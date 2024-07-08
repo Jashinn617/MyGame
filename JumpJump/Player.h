@@ -14,8 +14,9 @@ public:
 	enum class State : int
 	{
 		Idle = 0,		// 立ち止まり
-		Run = 1,		// 走り
-		Jump = 2,		// ジャンプ
+		Walk = 1,		// 歩き
+		Run = 2,		// 走り
+		Jump = 3,		// ジャンプ
 	};
 
 	// アニメーション種別
@@ -23,10 +24,10 @@ public:
 	{
 		None = -1,		// 無し
 		Unknown = 0,	// 不明
-		Run = 7,		// 走る
-		Jump = 12,		// ジャンプ
-		Fall = 13,		// 落下中
-		Stop = 1,		// 立ち止まり
+		Walk = 10,		// 歩く
+		Run = 6,		// 走る
+		Jump = 3,		// ジャンプ
+		Idle = 2,		// 立ち止まり
 	};
 
 public:
@@ -153,6 +154,9 @@ private:	// 変数
 	float m_angle;					// 向いている角度
 	float m_nowJunpPower;			// ジャンプ時の現在の速度
 	int m_modelHandle;				// モデルのハンドル
+	int m_ps;
+	int m_vs;
+
 	State m_currentState;				// 現在の状態
 
 	int m_currentAnimNo;			// 今再生しているアニメーションの番号

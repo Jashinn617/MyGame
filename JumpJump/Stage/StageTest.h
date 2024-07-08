@@ -30,6 +30,8 @@ private:	// 定数
 
 private:	// 変数
 	int m_modelHandle;	// モデルハンドル
+	int m_vs;			// 頂点シェーダ
+	int m_ps;			// ピクセルシェーダ
 
 	int m_wallNum;		// 壁ポリゴンだと判断されたポリゴンの数
 	int m_floorNum;		// 床ポリゴンだと判断されたポリゴンの数

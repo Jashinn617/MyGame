@@ -74,7 +74,7 @@ void Camera::Update(const Input& input, const Player& player, const StageTest& s
 		CameraToTargetDir = kStartTargetDir;
 
 		// カメラ座標の計算
-		m_pos = VAdd(VTransform(VGet(-CameraToTargetDir, 0.0f, 0.0f), RotY),m_targetPos);
+		m_pos = VAdd(VTransform(VGet(-CameraToTargetDir, 15.0f, 0.0f), RotY),m_targetPos);
 
 		/*ステージとの当たり判定*/
 		// 後でやる

@@ -5,7 +5,20 @@
       <FullPath>C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump\x64\Debug\JumpJump.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
-  <ContentFiles />
+  <ContentFiles>
+    <ContentFile>
+      <FullPath>C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump\PixelTest.pso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump\PixelTest2.pso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump\VertexShader.vso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump\VertexShader2.vso</FullPath>
+    </ContentFile>
+  </ContentFiles>
   <SatelliteDlls />
   <NonRecipeFileRefs />
 </Project>

@@ -66,4 +66,10 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="PixelTest.hlsl" />
+    <FxCompile Include="VertexShader.hlsl" />
+    <FxCompile Include="PixelTest2.hlsl" />
+    <FxCompile Include="VertexShader2.hlsl" />
+  </ItemGroup>
 </Project>
