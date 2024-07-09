@@ -13,10 +13,11 @@
 namespace
 {
 	constexpr float kMoveSpeed = 1.0f;			// 移動速度
+	constexpr float kDashSpeed = 2.0f;			// ダッシュ時の移動速度
 	constexpr float kAngleSpeed = 0.2f;			// 回転速度
 	constexpr float kJunpPower = 8.5f;			// ジャンプ力
 	constexpr float kFallUpPower = 0.6f;		// 足を踏み外したときのジャンプ力
-	constexpr float kGravity = 0.5f;			// 重力
+	constexpr float kGravity = 0.3f;			// 重力
 	constexpr float kPlayAnimSpeed = 0.5f;		// アニメーションの速度
 	constexpr float kAnimBlendSpeed = 0.1f;		// アニメーションのブレンド率の変化速度
 	constexpr float kModelScale = 0.015;
@@ -28,12 +29,14 @@ namespace
 
 }
 
-Player::Player():
-	m_pos{0.0f,100.0f,0.0f},
-	m_targetDir{1.0f,0.0f,0.0f},
+Player::Player() :
+	m_pos{ 0.0f,100.0f,0.0f },
+	m_targetDir{ 1.0f,0.0f,0.0f },
 	m_angle(0.0f),
 	m_nowJunpPower(0.0f),
 	m_modelHandle(-1),
+	m_vs(-1),
+	m_ps(-1),
 	m_currentState(State::Idle),
 	m_currentAnimNo(-1),
 	m_prevAnimNo(-1),
@@ -101,13 +104,13 @@ void Player::Update(const Input& input, const Camera& camera, StageTest& stage)
 	// アニメーションの更新
 	UpdateAnimationState(prevState);
 	// アニメーションを進める
-	bool isLoop = LoopAnim(m_currentAnimNo);
+	LoopAnim(m_currentAnimNo);
 
 	// 移動方向にモデルを近づける
 	UpdateAngle();
 
 	// 移動ベクトルを元に当たり判定を考慮しながらプレイヤーを移動させる
-	Move(moveVec,stage);
+	Move(moveVec, stage);
 }
 
 void Player::Draw()
@@ -115,17 +118,21 @@ void Player::Draw()
 	// プレイヤーの位置のデバッグ表示
 #ifdef _DEBUG
 	DrawFormatString(0, 0, 0xffffff, "Playerx:%f,y:%f,z:%f", m_pos.x, m_pos.y, m_pos.z);
+
 #endif // _DEBUG	
-	// シェーダを有効にする
-	MV1SetUseOrigShader(true);
-	SetUseVertexShader(m_vs);
-	SetUsePixelShader(m_ps);
+
+
+	//// シェーダを有効にする
+	//MV1SetUseOrigShader(true);
+	//SetUseVertexShader(m_vs);
+	//SetUsePixelShader(m_ps);
+
 
 	// モデルの描画
 	MV1DrawModel(m_modelHandle);
 
-	// シェーダを無効にする
-	MV1SetUseOrigShader(false);
+	//// シェーダを無効にする
+	//MV1SetUseOrigShader(false);
 }
 
 void Player::End()
@@ -150,15 +157,15 @@ void Player::OnHitFloor()
 		// 移動していたかどうかで着地後の状態と再生するアニメーションを分岐する
 		if (m_isMove)
 		{
-			// 移動している場合は走り状態になる
-			ChangeAnim(static_cast<int>(AnimKind::Walk));
+			// 移動している場合は歩き状態になる
 			m_currentState = State::Walk;
+			ChangeAnim(static_cast<int>(AnimKind::Walk));
 		}
 		else
 		{
 			// 移動していない場合は立ち止まり状態になる
-			ChangeAnim(static_cast<int>(AnimKind::Idle));
 			m_currentState = State::Idle;
+			ChangeAnim(static_cast<int>(AnimKind::Idle));
 		}
 		// 着地時はアニメーションのブレンドを行わない
 		m_animBlendRate = 1.0f;
@@ -209,36 +216,32 @@ Player::State Player::UpdateMoveParamerer(const Input& input, const Camera& came
 	// カメラの視線方向からY成分を抜いたもの
 	upMoveVec = VSub(camera.GetTarget(), camera.GetPos());
 	upMoveVec.y = 0.0f;
-
 	// ←ボタンを押したときのプレイヤーの移動ベクトルは、
 	// 上を押したときの方向ベクトルとY軸のプラス方向のベクトルに垂直な方向
 	leftMoveVec = VCross(upMoveVec, VGet(0.0f, 1.0f, 0.0f));
-
 	// 二つのベクトルを正規化する
 	upMoveVec = VNorm(upMoveVec);
 	leftMoveVec = VNorm(leftMoveVec);
-
 	// 今のフレームでの移動ベクトルを初期化する
 	moveVec = VGet(0.0f, 0.0f, 0.0f);
 
 	// 移動したかのフラグを初期状態ではfalseにする
 	bool isMove = false;
+	bool isDash = input.IsPressing("B");
 
 	// 左ボタンが入力されたらカメラの見ている方向から見て左に移動する
 	if (input.IsPressing("left"))
 	{
 		// 移動ベクトルに左が入力された時の移動ベクトルを加算する
 		moveVec = VAdd(moveVec, leftMoveVec);
-
 		// 移動フラグをtrueにする
 		isMove = true;
 	}
 	// 右ボタンが入力されたらカメラの見ている方向から見て右に移動する
-	else if(input.IsPressing("right"))
+	else if (input.IsPressing("right"))
 	{
 		// 移動ベクトルに左が入力された時の移動ベクトルを反転(マイナス)した物を加算する
 		moveVec = VAdd(moveVec, VScale(leftMoveVec, -1.0f));
-
 		// 移動フラグをtrueにする
 		isMove = true;
 	}
@@ -248,7 +251,6 @@ Player::State Player::UpdateMoveParamerer(const Input& input, const Camera& came
 	{
 		// 移動ベクトルに上が入力された時の移動ベクトルを加算する
 		moveVec = VAdd(moveVec, upMoveVec);
-
 		// 移動フラグをtrueにする
 		isMove = true;
 	}
@@ -257,10 +259,32 @@ Player::State Player::UpdateMoveParamerer(const Input& input, const Camera& came
 	{
 		// 移動ベクトルに上が入力された時の移動ベクトルを反転(マイナス)した物を加算する
 		moveVec = VAdd(moveVec, VScale(upMoveVec, -1.0f));
-
 		// 移動フラグをtrueにする
 		isMove = true;
 	}
+
+
+	if (isMove)// 移動ボタンが押されていた場合
+	{
+		// 移動ベクトルを正規化したものをプレイヤーが向く方向として保存する
+		m_targetDir = VNorm(moveVec);
+
+		if (m_currentState == State::Idle || m_currentState == State::Walk || m_currentState == State::Run)
+		{
+			moveVec = VScale(m_targetDir, isDash ? kDashSpeed : kMoveSpeed);
+			nextState = isDash ? State::Run : State::Walk;
+		}
+	}
+	else
+	{
+		// このフレームで走っているか歩いている状態だった場合
+		if (m_currentState == State::Walk || m_currentState == State::Run)
+		{
+			// 立ち止まる状態にする
+			nextState = State::Idle;
+		}
+	}
+
 
 	// ジャンプしていない状態でAボタンが押されていた場合はジャンプをする
 	if (m_currentState != State::Jump && (input.IsTriggered("A")))
@@ -276,29 +300,10 @@ Player::State Player::UpdateMoveParamerer(const Input& input, const Camera& came
 	if (m_currentState == State::Jump)
 	{
 		m_nowJunpPower -= kGravity;
-	}
 
-	if (isMove)// 移動ボタンが押されていた場合
-	{
-		if (m_currentState == State::Idle)	// 今の状態が立ち止まっている状態だった場合
+		if (isMove)
 		{
-			// 今の状態を走り状態にする
-			nextState = State::Walk;
-		}
-
-		// 移動ベクトルを正規化したものをプレイヤーが向く方向として保存する
-		m_targetDir = VNorm(moveVec);
-
-		// プレイヤーが向いている方向のベクトルにスピードを掛けたものを移動ベクトルにする
-		moveVec = VScale(m_targetDir, kMoveSpeed);
-	}
-	else
-	{
-		// このフレームで走っている状態だった場合
-		if (m_currentState == State::Walk)
-		{
-			// 立ち止まる状態にする
-			nextState = State::Idle;
+			moveVec = VScale(m_targetDir, isDash ? kDashSpeed : kMoveSpeed);
 		}
 	}
 
@@ -380,25 +385,50 @@ void Player::UpdateAngle()
 
 void Player::UpdateAnimationState(State prevState)
 {
-	// 立ち止まり状態から走り状態に変わった
+	// 立ち止まり状態から歩き状態に変わった
 	if (prevState == State::Idle && m_currentState == State::Walk)
 	{
 		// 走るアニメーションの再生
 		ChangeAnim(static_cast<int>(AnimKind::Walk));
 	}
-	// 走り状態から立ち止まり状態に変わった
-	else if (prevState == State::Walk && m_currentState == State::Idle)
+	// 立ち止まり状態から走り状態になった
+	else if (prevState == State::Idle && m_currentState == State::Run)
 	{
-		// 立ち止まるアニメーションの再生
-		ChangeAnim(static_cast<int>(AnimKind::Idle));
+		ChangeAnim(static_cast<int>(AnimKind::Run));
 	}
 	// 立ち止まり状態からジャンプ状態になった
 	else if (prevState == State::Idle && m_currentState == State::Jump)
 	{
 		ChangeAnim(static_cast<int>(AnimKind::Jump));
 	}
-	// 走り状態からジャンプ状態になった
+	// 歩き状態から立ち止まり状態に変わった
+	else if (prevState == State::Walk && m_currentState == State::Idle)
+	{
+		// 立ち止まるアニメーションの再生
+		ChangeAnim(static_cast<int>(AnimKind::Idle));
+	}
+	// 歩き状態から走り状態になった
+	else if (prevState == State::Walk && m_currentState == State::Run)
+	{
+		ChangeAnim(static_cast<int>(AnimKind::Run));
+	}
+	// 歩き状態からジャンプ状態になった
 	else if (prevState == State::Walk && m_currentState == State::Jump)
+	{
+		ChangeAnim(static_cast<int>(AnimKind::Jump));
+	}
+	// 走り状態から歩き状態になった
+	else if (prevState == State::Run && m_currentState == State::Walk)
+	{
+		ChangeAnim(static_cast<int>(AnimKind::Walk));
+	}
+	// 走り状態から立ち止まり状態になった
+	else if (prevState == State::Run && m_currentState == State::Idle)
+	{
+		ChangeAnim(static_cast<int>(AnimKind::Idle));
+	}	
+	// 走り状態からジャンプ状態になった
+	else if (prevState == State::Run && m_currentState == State::Jump)
 	{
 		ChangeAnim(static_cast<int>(AnimKind::Jump));
 	}

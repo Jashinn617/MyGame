@@ -26,5 +26,5 @@ struct PS_OUTPUT
 float4 main(PS_INPUT input) : SV_Target
 {
     // モデルのディフューズカラーを使用して色を出力
-    return input.Diffuse.brga;
+    return input.Diffuse;
 }
