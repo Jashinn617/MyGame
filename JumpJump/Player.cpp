@@ -12,16 +12,23 @@
 /// </summary>
 namespace
 {
-	constexpr float kMoveSpeed = 1.0f;			// 移動速度
-	constexpr float kDashSpeed = 2.0f;			// ダッシュ時の移動速度
-	constexpr float kAngleSpeed = 0.2f;			// 回転速度
-	constexpr float kJunpPower = 8.5f;			// ジャンプ力
-	constexpr float kFallUpPower = 2.0f;		// 足を踏み外したときのジャンプ力
-	constexpr float kGravity = 0.3f;			// 重力
-	constexpr float kPlayAnimSpeed = 0.5f;		// アニメーションの速度
-	constexpr float kAnimBlendSpeed = 0.1f;		// アニメーションのブレンド率の変化速度
-	constexpr float kModelScale = 0.02;
-	constexpr float kFall = 3.0f;				// 落下判定が入る高さ
+	constexpr float kMoveSpeed = 1.0f;				// 移動速度
+	constexpr float kDashSpeed = 2.0f;				// ダッシュ時の移動速度
+	constexpr float kLackStaminaSpeed = 0.1f;		// スタミナ不足状態時の移動速度
+	constexpr float kAngleSpeed = 0.2f;				// 回転速度
+	constexpr float kJunpPower = 8.5f;				// ジャンプ力
+	constexpr float kFallUpPower = 2.0f;			// 足を踏み外したときのジャンプ力
+	constexpr float kGravity = 0.3f;				// 重力
+	constexpr float kPlayAnimSpeed = 0.5f;			// アニメーションの速度
+	constexpr float kAnimBlendSpeed = 0.1f;			// アニメーションのブレンド率の変化速度
+	constexpr float kModelScale = 0.02;				// モデルのスケール
+	constexpr float kFall = 3.0f;					// 落下判定が入る高さ
+	constexpr float kMaxStamina = 100.0f;			// スタミナの最大値
+	constexpr float kDecreaseStaminaSpeed = 0.5f;	// スタミナが減る速度
+	constexpr float kIncreaseStaminaSpeed = 0.5f;	// スタミナが増える速度
+	constexpr float kDecreaseJumpStamina = 30.0f;	// ジャンプで減るスタミナの量
+	constexpr float kRadius = 3.0f;					// 半径
+	
 
 	// アニメーションの切り替えにかかるフレーム数
 	static constexpr float kAnimChangeFrame = 8.0f;
@@ -35,9 +42,8 @@ Player::Player() :
 	m_targetDir{ 1.0f,0.0f,0.0f },
 	m_angle(0.0f),
 	m_nowJunpPower(0.0f),
+	m_stamina(kMaxStamina),
 	m_modelHandle(-1),
-	m_vs(-1),
-	m_ps(-1),
 	m_currentState(State::Idle),
 	m_currentAnimNo(-1),
 	m_prevAnimNo(-1),
@@ -45,7 +51,8 @@ Player::Player() :
 	m_prevAnimCount(0.0f),
 	m_animBlendRate(0.0f),
 	m_isMove(false),
-	m_useOriginalShader(false)
+	m_isLackStamina(false),
+	m_isDash(false)
 {
 	/*処理無し*/
 }
@@ -54,6 +61,8 @@ Player::~Player()
 {
 	// モデルのデリート
 	MV1DeleteModel(m_modelHandle);
+	// シェーダのデリート
+	InitShader();
 }
 
 void Player::Init()
@@ -68,12 +77,6 @@ void Player::Init()
 	assert(m_vsHs.back() != -1);
 	m_vsHs.push_back(LoadVertexShader("MV1VertexShader8Frame.vso"));
 	assert(m_vsHs.back() != -1);
-
-
-	m_vs = LoadVertexShader("VertexShader4Frame.vso");
-	assert(m_vs != -1);
-	m_ps = LoadPixelShader("PixelTest2.pso");
-	assert(m_ps != -1);
 
 	// モデルのスケールの設定
 	MV1SetScale(m_modelHandle, VGet(kModelScale, kModelScale, kModelScale));
@@ -141,14 +144,17 @@ void Player::Update(const Input& input, const Camera& camera, StageTest& stage)
 
 	// 移動ベクトルを元に当たり判定を考慮しながらプレイヤーを移動させる
 	Move(moveVec, stage);
+
+	Stamina();
 }
 
 void Player::Draw()
 {
-	// プレイヤーの位置のデバッグ表示
+	// プレイヤーの位置とスタミナのデバッグ表示
 #ifdef _DEBUG
-	DrawFormatString(0, 0, 0xffffff, "Playerx:%f,y:%f,z:%f", m_pos.x, m_pos.y, m_pos.z);
+	DrawFormatString(0, 0, 0xffffff, "PlayerPos x:%f,y:%f,z:%f	Stamina %f", m_pos.x, m_pos.y, m_pos.z, m_stamina);
 
+	DrawSphere3D(VAdd(m_pos, VGet(0, kRadius, 0)), kRadius, 32, 0x00ffff, 0x00ffff, false);
 #endif // _DEBUG	
 
 	auto num = MV1GetTriangleListNum(m_modelHandle);
@@ -262,7 +268,7 @@ Player::State Player::UpdateMoveParamerer(const Input& input, const Camera& came
 
 	// 移動したかのフラグを初期状態ではfalseにする
 	bool isMove = false;
-	bool isDash = input.IsPressing("B");
+	m_isDash = input.IsPressing("B");
 
 	// 左ボタンが入力されたらカメラの見ている方向から見て左に移動する
 	if (input.IsPressing("left"))
@@ -306,8 +312,13 @@ Player::State Player::UpdateMoveParamerer(const Input& input, const Camera& came
 
 		if (m_currentState == State::Idle || m_currentState == State::Walk || m_currentState == State::Run)
 		{
-			moveVec = VScale(m_targetDir, isDash ? kDashSpeed : kMoveSpeed);
-			nextState = isDash ? State::Run : State::Walk;
+			moveVec = VScale(m_targetDir, m_isDash ? kDashSpeed : kMoveSpeed);
+			nextState = m_isDash ? State::Run : State::Walk;
+			if (m_isLackStamina)
+			{
+				moveVec = VScale(m_targetDir, kLackStaminaSpeed);
+				nextState = State::Walk;
+			}
 		}
 	}
 	else
@@ -322,8 +333,12 @@ Player::State Player::UpdateMoveParamerer(const Input& input, const Camera& came
 
 
 	// ジャンプしていない状態でAボタンが押されていた場合はジャンプをする
-	if (m_currentState != State::Jump && (input.IsTriggered("A")))
+	// スタミナ不足状態だった場合はジャンプはできない
+	if (m_currentState != State::Jump && (input.IsTriggered("A")) && !m_isLackStamina)
 	{
+		// スタミナを減らす
+		m_stamina -= kDecreaseJumpStamina;
+
 		// Y軸方向の速度をセットする
 		m_nowJunpPower = kJunpPower;
 
@@ -338,7 +353,7 @@ Player::State Player::UpdateMoveParamerer(const Input& input, const Camera& came
 
 		if (isMove)
 		{
-			moveVec = VScale(m_targetDir, isDash ? kDashSpeed : kMoveSpeed);
+			moveVec = VScale(m_targetDir, m_isDash ? kDashSpeed : kMoveSpeed);
 		}
 	}
 
@@ -367,6 +382,38 @@ void Player::Move(const VECTOR& moveVec, StageTest& stage)
 
 	// プレイヤーのモデルの座標を更新する
 	MV1SetPosition(m_modelHandle, m_pos);
+}
+
+void Player::Stamina()
+{
+	// ダッシュ中はスタミナが減る
+	if (m_currentState == State::Run && m_stamina > 0.0f)
+	{
+		m_stamina -= kDecreaseStaminaSpeed;
+	}
+	// ダッシュ中出なかった場合はスタミナは増える
+	else
+	{
+		m_stamina += kIncreaseStaminaSpeed;
+	}
+
+	// スタミナが0になったらしばらくスタミナ不足状態になる
+	if (m_stamina <= 0.0f)
+	{
+		m_isLackStamina = true;
+	}
+
+	// スタミナはmax値以上にならないようにする
+	if (m_stamina >= kMaxStamina)
+	{
+		m_stamina = kMaxStamina;
+
+		// スタミナ不足状態だった場合はここで不足状態から復帰する
+		m_isLackStamina = false;
+	}
+
+	
+
 }
 
 void Player::UpdateAngle()

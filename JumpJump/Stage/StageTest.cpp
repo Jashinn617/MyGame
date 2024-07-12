@@ -33,6 +33,8 @@ StageTest::~StageTest()
 {
 	// モデルのデリート
 	MV1DeleteModel(m_modelHandle);
+	// シェーダのデリート
+	InitShader();
 }
 
 void StageTest::Init()

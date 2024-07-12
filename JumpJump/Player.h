@@ -123,6 +123,11 @@ private:	// 関数
 	/// <param name="moveVec">移動ベクトル</param>
 	/// <param name="stage">現在の状態</param>
 	void Move(const VECTOR& moveVec, StageTest& stage);
+
+	/// <summary>
+	/// スタミナの処理
+	/// </summary>
+	void Stamina();
 	
 	/// <summary>
 	/// 回転制御
@@ -155,14 +160,13 @@ private:	// 変数
 	VECTOR m_targetDir;				// 向きたい方向のベクトル
 	float m_angle;					// 向いている角度
 	float m_nowJunpPower;			// ジャンプ時の現在の速度
-	int m_modelHandle;				// モデルのハンドル
-	int m_ps;
-	int m_vs;
-	std::vector<int> m_psHs;
-	std::vector<int> m_vsHs;
+	float m_stamina;				// スタミナ
+	int m_modelHandle;				// モデルハンドル
 
-	std::vector<int> m_pixelShaderNumbers;
-	std::vector<int> m_vertexShaderNumbers;
+	std::vector<int> m_psHs;		// ピクセルシェーダハンドル
+	std::vector<int> m_vsHs;		// 頂点シェーダハンドル
+	std::vector<int> m_pixelShaderNumbers;	// どのピクセルシェーダを使うか
+	std::vector<int> m_vertexShaderNumbers;	// どの頂点シェーダを使うか
 
 	State m_currentState;				// 現在の状態
 
@@ -173,6 +177,7 @@ private:	// 変数
 	float m_animBlendRate;			// 前と今のアニメーションのブレンド率
 
 	bool m_isMove;					// そのフレームで動いたかどうか
-	bool m_useOriginalShader;
+	bool m_isLackStamina;			// スタミナが不足しているかどうか
+	bool m_isDash;					// ダッシュ中かどうか
 };
 
