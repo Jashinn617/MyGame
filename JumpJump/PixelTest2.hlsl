@@ -78,9 +78,14 @@ struct PS_INPUT
     float4 VPosition : POSITION2; // 座標(ワールド空間*ビュー )//
 };
 float4 main(PS_INPUT input) : SV_TARGET
-{
+{  
     float amb = 0.25;
     float b = max(dot(normalize(-g_Common.Light[0].Direction), input.Normal), amb);
     float4 col = tex.Sample(smp, input.uv);
-    return float4(col.rgb * b, col.a);
+    
+    
+    // ノーマルマップの表示
+    return float4(input.Normal, 1);
+    
+    return float4(col.rbg * b, col.a);
 }

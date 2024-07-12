@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 
 class Input;
 class Camera;
@@ -24,10 +25,11 @@ public:
 	{
 		None = -1,		// 無し
 		Unknown = 0,	// 不明
-		Walk = 10,		// 歩く
-		Run = 6,		// 走る
-		Jump = 3,		// ジャンプ
-		Idle = 2,		// 立ち止まり
+		Walk = 14,		// 歩く
+		Run = 11,		// 走る
+		Jump = 6,		// ジャンプ
+		Fall = 7,		// 落下
+		Idle = 3,		// 立ち止まり
 	};
 
 public:
@@ -156,6 +158,11 @@ private:	// 変数
 	int m_modelHandle;				// モデルのハンドル
 	int m_ps;
 	int m_vs;
+	std::vector<int> m_psHs;
+	std::vector<int> m_vsHs;
+
+	std::vector<int> m_pixelShaderNumbers;
+	std::vector<int> m_vertexShaderNumbers;
 
 	State m_currentState;				// 現在の状態
 
@@ -166,5 +173,6 @@ private:	// 変数
 	float m_animBlendRate;			// 前と今のアニメーションのブレンド率
 
 	bool m_isMove;					// そのフレームで動いたかどうか
+	bool m_useOriginalShader;
 };
 

@@ -16,11 +16,12 @@ namespace
 	constexpr float kDashSpeed = 2.0f;			// ダッシュ時の移動速度
 	constexpr float kAngleSpeed = 0.2f;			// 回転速度
 	constexpr float kJunpPower = 8.5f;			// ジャンプ力
-	constexpr float kFallUpPower = 0.6f;		// 足を踏み外したときのジャンプ力
+	constexpr float kFallUpPower = 2.0f;		// 足を踏み外したときのジャンプ力
 	constexpr float kGravity = 0.3f;			// 重力
 	constexpr float kPlayAnimSpeed = 0.5f;		// アニメーションの速度
 	constexpr float kAnimBlendSpeed = 0.1f;		// アニメーションのブレンド率の変化速度
-	constexpr float kModelScale = 0.015;
+	constexpr float kModelScale = 0.02;
+	constexpr float kFall = 3.0f;				// 落下判定が入る高さ
 
 	// アニメーションの切り替えにかかるフレーム数
 	static constexpr float kAnimChangeFrame = 8.0f;
@@ -43,7 +44,8 @@ Player::Player() :
 	m_nowAnimCount(0.0f),
 	m_prevAnimCount(0.0f),
 	m_animBlendRate(0.0f),
-	m_isMove(false)
+	m_isMove(false),
+	m_useOriginalShader(false)
 {
 	/*処理無し*/
 }
@@ -57,10 +59,18 @@ Player::~Player()
 void Player::Init()
 {
 	// モデルのロード
-	m_modelHandle = MV1LoadModel("Data/Model/Player/Robot.mv1");
+	m_modelHandle = MV1LoadModel("Data/Model/Player/Character.mv1");
 	assert(m_modelHandle != -1);
 	// シェーダのロード
-	m_vs = LoadVertexShader("VertexShader2.vso");
+	m_psHs.push_back(LoadPixelShader("PixelTest2.pso"));
+	assert(m_psHs.back() != -1);
+	m_vsHs.push_back(LoadVertexShader("MV1VertexShader4Frame.vso"));
+	assert(m_vsHs.back() != -1);
+	m_vsHs.push_back(LoadVertexShader("MV1VertexShader8Frame.vso"));
+	assert(m_vsHs.back() != -1);
+
+
+	m_vs = LoadVertexShader("VertexShader4Frame.vso");
 	assert(m_vs != -1);
 	m_ps = LoadPixelShader("PixelTest2.pso");
 	assert(m_ps != -1);
@@ -71,6 +81,26 @@ void Player::Init()
 	// 初期のアニメーションの設定
 	m_currentAnimNo = MV1AttachAnim(m_modelHandle, static_cast<int>(AnimKind::Idle), -1, false);
 
+
+	auto num = MV1GetTriangleListNum(m_modelHandle);
+	for (int i = 0; i < num; i++)
+	{
+		switch (MV1GetTriangleListVertexType(m_modelHandle, i))
+		{
+		case DX_MV1_VERTEX_TYPE_4FRAME:
+			m_pixelShaderNumbers.push_back(0);
+			m_vertexShaderNumbers.push_back(0);
+			break;
+		case DX_MV1_VERTEX_TYPE_8FRAME:
+			m_pixelShaderNumbers.push_back(0);
+			m_vertexShaderNumbers.push_back(1);
+			break;
+		default:
+			m_pixelShaderNumbers.push_back(-1);
+			m_vertexShaderNumbers.push_back(-1);
+			break;
+		}
+	}
 }
 
 void Player::Update(const Input& input, const Camera& camera, StageTest& stage)
@@ -121,18 +151,23 @@ void Player::Draw()
 
 #endif // _DEBUG	
 
-
-	//// シェーダを有効にする
-	//MV1SetUseOrigShader(true);
-	//SetUseVertexShader(m_vs);
-	//SetUsePixelShader(m_ps);
-
-
-	// モデルの描画
-	MV1DrawModel(m_modelHandle);
-
-	//// シェーダを無効にする
-	//MV1SetUseOrigShader(false);
+	auto num = MV1GetTriangleListNum(m_modelHandle);
+	for (int i = 0; i < num; i++)
+	{
+		if (m_vertexShaderNumbers[i] && m_pixelShaderNumbers[i] == -1)
+		{
+			MV1SetUseOrigShader(false);
+			SetUseVertexShader(-1);
+			SetUsePixelShader(-1);
+		}
+		else
+		{
+			MV1SetUseOrigShader(true);
+			SetUseVertexShader(m_vsHs[m_vertexShaderNumbers[i]]);
+			SetUsePixelShader(m_psHs[m_pixelShaderNumbers[i]]);
+		}
+		MV1DrawTriangleList(m_modelHandle, i);
+	}
 }
 
 void Player::End()
@@ -184,7 +219,7 @@ void Player::OnFall()
 		m_nowJunpPower = kFallUpPower;
 
 		// アニメーションを落下中のものにする
-		ChangeAnim(static_cast<int>(AnimKind::Idle));
+		ChangeAnim(static_cast<int>(AnimKind::Fall));
 	}
 }
 
@@ -380,7 +415,6 @@ void Player::UpdateAngle()
 	// モデルの角度を更新する
 	m_angle = targetAngle - difference;
 	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, m_angle + DX_PI_F, 0.0f));
-
 }
 
 void Player::UpdateAnimationState(State prevState)
@@ -431,6 +465,22 @@ void Player::UpdateAnimationState(State prevState)
 	else if (prevState == State::Run && m_currentState == State::Jump)
 	{
 		ChangeAnim(static_cast<int>(AnimKind::Jump));
+	}
+	// ジャンプ状態だった場合
+	else if (m_currentState == State::Jump)
+	{
+		// 落下している
+		if (m_nowJunpPower < kFall)
+		{
+			// アニメーションが上昇中用の物である
+			bool isJumpAnim = MV1GetAttachAnim(m_modelHandle, m_currentAnimNo)
+				== static_cast<int>(AnimKind::Jump);
+			if (isJumpAnim)
+			{
+				// 落下中用アニメーションを再生する
+				ChangeAnim(static_cast<int>(AnimKind::Fall));
+			}
+		}
 	}
 }
 

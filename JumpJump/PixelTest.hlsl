@@ -25,6 +25,9 @@ struct PS_OUTPUT
 
 float4 main(PS_INPUT input) : SV_Target
 {
+    // ノーマルマップの表示
+    return float4(input.Normal, 1);
+    
     // モデルのディフューズカラーを使用して色を出力
-    return input.Diffuse;
+    return input.Diffuse.gbra;
 }

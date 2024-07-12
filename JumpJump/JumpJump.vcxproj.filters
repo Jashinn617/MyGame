@@ -70,6 +70,7 @@
     <FxCompile Include="PixelTest.hlsl" />
     <FxCompile Include="VertexShader.hlsl" />
     <FxCompile Include="PixelTest2.hlsl" />
-    <FxCompile Include="VertexShader2.hlsl" />
+    <FxCompile Include="MV1VertexShader4Frame.hlsl" />
+    <FxCompile Include="MV1VertexShader8Frame.hlsl" />
   </ItemGroup>
 </Project>
