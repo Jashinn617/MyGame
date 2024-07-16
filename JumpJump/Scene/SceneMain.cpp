@@ -3,6 +3,7 @@
 #include "../Player.h"
 #include "../Camera.h"
 #include "../Stage/StageTest.h"
+#include "../Enemy/EnemyManager.h"
 
 /// <summary>
 /// ’è”’è‹`
@@ -26,14 +27,18 @@ SceneMain::~SceneMain()
 
 void SceneMain::Init()
 {
-	
 	m_pPlayer = make_shared<Player>();
 	m_pCamera = make_shared<Camera>();
 	m_pStage = make_shared<StageTest>();
+	m_pEnemy = make_shared<EnemyManager>(1);
 
 	m_pStage->Init();
 	m_pPlayer->Init();
 	m_pCamera->Init();
+
+	// “G‚Ì¶¬
+	m_pEnemy->CreateEnemyes();
+	m_pEnemy->Init();
 
 	// ƒ‰ƒCƒg‚Ìİ’è
 	ChangeLightTypeDir(VGet(0.0f, 10.0f, 0.0f));
@@ -46,6 +51,7 @@ shared_ptr<SceneBase> SceneMain::Update(Input& input)
 {
 	m_pPlayer->Update(input, *m_pCamera, *m_pStage);
 	m_pCamera->Update(input, *m_pPlayer, *m_pStage);
+	m_pEnemy->Update();
 
 
 	return shared_from_this();
@@ -57,6 +63,7 @@ void SceneMain::Draw()
 
 	m_pStage->Draw();
 	m_pPlayer->Draw();
+	m_pEnemy->Draw();
 
 #ifdef _DEBUG
 	DrawGrid();
@@ -65,7 +72,7 @@ void SceneMain::Draw()
 
 void SceneMain::End()
 {
-
+	m_pEnemy->DestroyEnemyes();
 }
 
 void SceneMain::DrawGrid()

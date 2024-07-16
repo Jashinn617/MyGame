@@ -1,18 +1,30 @@
 #pragma once
+#include <vector>
+#include <memory>
+
+class EnemyBase;
+
 class EnemyManager
 {
 public:
-	EnemyManager();
+	EnemyManager(int enemyNum);
 	~EnemyManager();
 
 	void CreateEnemyes();
 	void DestroyEnemyes();
 
+	void Init();
 	void Update();
 	void Draw();
 
-private:
+private:	// 関数
 
-	void CollisionToPlayer();
+private:	// 変数
+	int m_beeModelHandle;		// ハチの3Dモデル
+	int m_crabModelHandle;		// カニの3Dモデル
+	int m_ogreModelHandle;		// オニの3Dモデル
+	int m_skullModelHandle;		// ホネの3Dモデル
+
+	std::vector<std::shared_ptr<EnemyBase>> m_pEnemy;
 };
 

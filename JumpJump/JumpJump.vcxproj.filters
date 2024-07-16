@@ -87,7 +87,7 @@
     <ClCompile Include="Item\ItemManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy\ReturnTripEnemy.cpp">
+    <ClCompile Include="Enemy\EnemyBee.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -128,7 +128,7 @@
     <ClInclude Include="Item\ItemManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy\ReturnTripEnemy.h">
+    <ClInclude Include="Enemy\EnemyBee.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
@@ -145,7 +145,7 @@
     <FxCompile Include="PixelShader\PixelTest.hlsl">
       <Filter>PixelShader</Filter>
     </FxCompile>
-    <FxCompile Include="PixelShader\PixelTest2.hlsl">
+    <FxCompile Include="PixelShader\MV1PixelShader.hlsl">
       <Filter>PixelShader</Filter>
     </FxCompile>
   </ItemGroup>

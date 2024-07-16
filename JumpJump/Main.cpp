@@ -9,6 +9,9 @@
 // プログラムは WinMain から始まります
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
+	// ゲームバーのタイトル
+	SetWindowText(_T("ジャンプジャンプ"));
+
 	// windowモード設定
 	ChangeWindowMode(true);
 
@@ -33,8 +36,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//	MessageBox(NULL, _T("フォント読込失敗"), _T(""), MB_OK);
 	//}
 
-	// ゲームバーのタイトル
-	SetWindowText(_T("ジャンプジャンプ"));
+	
 
 	// シーン管理
 	shared_ptr<SceneManager> pScene = make_shared<SceneManager>();

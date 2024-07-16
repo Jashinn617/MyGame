@@ -140,11 +140,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Enemy\EnemyBee.cpp" />
     <ClCompile Include="Enemy\EnemyManager.cpp" />
     <ClCompile Include="Enemy\EnemyBase.cpp" />
     <ClCompile Include="Item\ItemManager.cpp" />
     <ClCompile Include="Item\ItemBase.cpp" />
-    <ClCompile Include="Enemy\ReturnTripEnemy.cpp" />
     <ClCompile Include="Scene\SceneBase.cpp" />
     <ClCompile Include="Scene\SceneMain.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
@@ -155,11 +155,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Enemy\EnemyBee.h" />
     <ClInclude Include="Enemy\EnemyManager.h" />
     <ClInclude Include="Enemy\EnemyBase.h" />
     <ClInclude Include="Item\ItemManager.h" />
     <ClInclude Include="Item\ItemBase.h" />
-    <ClInclude Include="Enemy\ReturnTripEnemy.h" />
     <ClInclude Include="Scene\SceneBase.h" />
     <ClInclude Include="Scene\SceneMain.h" />
     <ClInclude Include="Scene\SceneManager.h" />
@@ -179,7 +179,7 @@
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).pso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)%(Filename).pso</ObjectFileOutput>
     </FxCompile>
-    <FxCompile Include="PixelShader\PixelTest2.hlsl">
+    <FxCompile Include="PixelShader\MV1PixelShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>

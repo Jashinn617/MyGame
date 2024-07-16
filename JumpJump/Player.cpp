@@ -16,7 +16,7 @@ namespace
 	constexpr float kDashSpeed = 2.0f;				// ダッシュ時の移動速度
 	constexpr float kLackStaminaSpeed = 0.1f;		// スタミナ不足状態時の移動速度
 	constexpr float kAngleSpeed = 0.2f;				// 回転速度
-	constexpr float kJunpPower = 8.5f;				// ジャンプ力
+	constexpr float kJunpPower = 5.0f;				// ジャンプ力
 	constexpr float kFallUpPower = 2.0f;			// 足を踏み外したときのジャンプ力
 	constexpr float kGravity = 0.3f;				// 重力
 	constexpr float kPlayAnimSpeed = 0.5f;			// アニメーションの速度
@@ -71,7 +71,7 @@ void Player::Init()
 	m_modelHandle = MV1LoadModel("Data/Model/Player/Character.mv1");
 	assert(m_modelHandle != -1);
 	// シェーダのロード
-	m_psHs.push_back(LoadPixelShader("PixelTest2.pso"));
+	m_psHs.push_back(LoadPixelShader("MV1PixelShader.pso"));
 	assert(m_psHs.back() != -1);
 	m_vsHs.push_back(LoadVertexShader("MV1VertexShader4Frame.vso"));
 	assert(m_vsHs.back() != -1);
@@ -84,7 +84,7 @@ void Player::Init()
 	// 初期のアニメーションの設定
 	m_currentAnimNo = MV1AttachAnim(m_modelHandle, static_cast<int>(AnimKind::Idle), -1, false);
 
-
+	// モデルのトライアングルリスト毎に対応するシェーダを設定する
 	auto num = MV1GetTriangleListNum(m_modelHandle);
 	for (int i = 0; i < num; i++)
 	{
