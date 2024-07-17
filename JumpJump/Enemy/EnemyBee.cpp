@@ -1,5 +1,6 @@
 #include "EnemyBee.h"
 
+
 namespace
 {
 	constexpr float kPlayAnimSpeed = 0.5f;	// アニメーション速度
@@ -28,6 +29,9 @@ void EnemyBee::Update()
 {
 	// アニメーションの更新
 	UpdateAnim(m_currentAnimNo);
+
+	// 角度の更新
+	UpdateAngle();
 }
 
 bool EnemyBee::UpdateAnim(int attachNo)
@@ -54,3 +58,9 @@ bool EnemyBee::UpdateAnim(int attachNo)
 
 	return isLoop;
 }
+
+void EnemyBee::Move()
+{
+
+}
+

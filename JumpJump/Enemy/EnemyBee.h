@@ -11,6 +11,7 @@ public:
 
 private:
 	bool UpdateAnim(int attachNo);
+	void Move();
 
 private:
 	int m_currentAnimNo;	// 現在のアニメーション番号

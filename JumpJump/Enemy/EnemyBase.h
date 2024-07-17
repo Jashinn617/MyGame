@@ -24,6 +24,9 @@ protected:	// 関数
 	/// </summary>
 	void AdjustmentModelPos()const;
 
+	// 角度の更新
+	void UpdateAngle();
+
 protected:	// 変数
 	int m_modelHandle;	// モデルハンドル
 	std::vector<int> m_psHs;		// ピクセルシェーダハンドル
@@ -33,6 +36,7 @@ protected:	// 変数
 	float m_rad;		// 半径
 	float m_scale;		// スケール
 	VECTOR m_pos;		// 位置
-	VECTOR m_angle;		// 回転
+	float m_angle;		// 回転
+	VECTOR m_targetDir;	// 向きたい方向のベクトル
 };
 

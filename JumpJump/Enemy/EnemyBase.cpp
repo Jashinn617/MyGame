@@ -1,8 +1,10 @@
 #include "EnemyBase.h"
 #include <assert.h>
+#include <math.h>
 
 namespace
 {
+	constexpr float kAngleSpeed = 0.2f;	// 回転速度
 	constexpr float kScale = 0.05f;		// スケール
 }
 
@@ -12,7 +14,8 @@ EnemyBase::EnemyBase(int modelHandle):
 	m_rad(4),
 	m_scale(1),
 	m_pos{0,0,0},
-	m_angle{0,0,0}
+	m_angle(-1),
+	m_targetDir{0,0,0}
 {
 	// モデルの読み込み
 	m_modelHandle = MV1DuplicateModel(modelHandle);
@@ -87,4 +90,47 @@ void EnemyBase::AdjustmentModelPos() const
 {
 	// モデルの位置設定
 	MV1SetPosition(m_modelHandle, m_pos);
+}
+
+void EnemyBase::UpdateAngle()
+{
+	float targetAngle;	// 目標角度
+	float difference;	// 目標角度と現在の角度の差
+
+	targetAngle = static_cast<float>(atan2(m_targetDir.x, m_targetDir.z));
+
+	difference = targetAngle - m_angle;
+
+	// ある方向からある方向差が180°以上になることは無い
+	// そのため、差の値が180°以上になっていたら修正しておく
+	if (difference < -DX_PI_F)// -180以下だったら360を足す
+	{
+		difference += DX_TWO_PI_F;
+	}
+	else if (difference > DX_PI_F)// 180以上だったら360を引く
+	{
+		difference -= DX_TWO_PI_F;
+	}
+
+	// 角度の差を0に近づける
+	if (difference > 0.0f)// 差がプラスの場合は引く
+	{
+		difference -= kAngleSpeed;
+		if (difference < 0.0f)
+		{
+			difference = 0.0f;
+		}
+	}
+	else// 差がマイナスの場合は足す
+	{
+		difference += kAngleSpeed;
+		if (difference > 0.0f)
+		{
+			difference = 0.0f;
+		}
+	}
+
+	// 角度を更新する
+	m_angle = targetAngle - difference;
+	MV1SetRotationXYZ(m_modelHandle, VGet(0.0f, m_angle + DX_PI_F, 0.0f));
 }
