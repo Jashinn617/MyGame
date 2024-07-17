@@ -1,8 +1,11 @@
-#include "DxLib.h"
 #include "EnemyManager.h"
 #include "EnemyBase.h"
 #include "EnemyBee.h"
 
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <assert.h>
 
 
 EnemyManager::EnemyManager(int enemyNum):
@@ -17,8 +20,12 @@ EnemyManager::EnemyManager(int enemyNum):
 	m_ogreModelHandle = MV1LoadModel("Data/Model/Enemy/Ogre.mv1");
 	m_skullModelHandle = MV1LoadModel("Data/Model/Enemy/Skull.mv1");
 
-	m_pEnemy.resize(1);
-	m_pEnemy[0] = std::make_shared<EnemyBee>(m_beeModelHandle);
+	m_pEnemy.resize(enemyNum);
+	for (int i = 0; i < m_pEnemy.size(); i++)
+	{
+		m_pEnemy[i] = std::make_shared<EnemyBee>(m_beeModelHandle);
+	}
+	
 }
 
 EnemyManager::~EnemyManager()
@@ -27,7 +34,35 @@ EnemyManager::~EnemyManager()
 
 void EnemyManager::CreateEnemyes()
 {
-	m_pEnemy[0]->SetPos(VGet(0, 40, 0));
+	// ファイルの読み込み
+	std::ifstream file;
+	file.open("Data/File/EnemyPos/EnemyPosTest.csv");
+	assert(file.is_open());
+
+	// 読み取り元
+	std::string path;
+	while (std::getline(file, path))
+	{
+		std::istringstream istream(path);
+		std::string line;
+		VECTOR pos = VGet(0.0f, 0.0f, 0.0f);
+
+		if (std::getline(istream, line, ',') &&
+			std::getline(istream, line, ',') && sscanf_s(line.c_str(), "%f", &pos.x) &&
+			std::getline(istream, line, ',') && sscanf_s(line.c_str(), "%f", &pos.y) &&
+			std::getline(istream, line, ',') && sscanf_s(line.c_str(), "%f", &pos.z))
+		{
+			// 位置をm_posに入れる
+			m_pos.push_back(pos);
+		}
+	}
+	file.close();
+
+	for (int i=0;i<m_pEnemy.size();i++)
+	{
+		m_pEnemy[i]->SetPos(m_pos[i]);
+	}
+	
 }
 
 void EnemyManager::DestroyEnemyes()

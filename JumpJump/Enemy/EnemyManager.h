@@ -1,4 +1,5 @@
 #pragma once
+#include "DxLib.h"
 #include <vector>
 #include <memory>
 
@@ -24,6 +25,8 @@ private:	// 変数
 	int m_crabModelHandle;		// カニの3Dモデル
 	int m_ogreModelHandle;		// オニの3Dモデル
 	int m_skullModelHandle;		// ホネの3Dモデル
+
+	std::vector<VECTOR> m_pos;
 
 	std::vector<std::shared_ptr<EnemyBase>> m_pEnemy;
 };

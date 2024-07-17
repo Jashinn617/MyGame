@@ -10,7 +10,7 @@
 namespace
 {
 	constexpr float kSpeed = 0.1f;				// 回転速度
-	constexpr float kTargetH = 8.0f;			// ターゲットの座標から注視点までの高さ
+	constexpr float kTargetH = -1.0f;			// ターゲットの座標から注視点までの高さ
 	constexpr float kStartTargetDir = 30.0f;	// ターゲットとの初期の距離
 	constexpr float kColSize = 50.0f;			// カメラ自体の当たり判定のサイズ
 }
@@ -55,7 +55,7 @@ void Camera::Update(const Input& input, const Player& player, const StageTest& s
 		}
 	}
 
-	SetCameraNearFar(1.0f, 200.0f);
+	SetCameraNearFar(1.0f, 500.0f);
 
 	// カメラの注視点の設定
 	// ターゲットよりも少し高い位置を注視点にする

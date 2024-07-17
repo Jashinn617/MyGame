@@ -143,6 +143,7 @@
     <ClCompile Include="Enemy\EnemyBee.cpp" />
     <ClCompile Include="Enemy\EnemyManager.cpp" />
     <ClCompile Include="Enemy\EnemyBase.cpp" />
+    <ClCompile Include="Item\ItemNotMove.cpp" />
     <ClCompile Include="Item\ItemManager.cpp" />
     <ClCompile Include="Item\ItemBase.cpp" />
     <ClCompile Include="Scene\SceneResult.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="Enemy\EnemyBee.h" />
     <ClInclude Include="Enemy\EnemyManager.h" />
     <ClInclude Include="Enemy\EnemyBase.h" />
+    <ClInclude Include="Item\ItemNotMove.h" />
     <ClInclude Include="Item\ItemManager.h" />
     <ClInclude Include="Item\ItemBase.h" />
     <ClInclude Include="Scene\SceneResult.h" />

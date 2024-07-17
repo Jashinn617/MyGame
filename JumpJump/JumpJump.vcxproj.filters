@@ -114,6 +114,9 @@
     <ClCompile Include="Scene\SceneTutorial.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Item\ItemNotMove.cpp">
+      <Filter>ソース ファイル\Item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h">
@@ -178,6 +181,9 @@
     </ClInclude>
     <ClInclude Include="Scene\SceneTutorial.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Item\ItemNotMove.h">
+      <Filter>ヘッダー ファイル\Item</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

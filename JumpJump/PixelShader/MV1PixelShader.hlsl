@@ -87,5 +87,5 @@ float4 main(PS_INPUT input) : SV_TARGET
     // ノーマルマップの表示
     //return float4(input.Normal, 1);
 
-    return float4(col.rgb * b, col.a);
+    return float4(col.rbg * b, col.a);
 }

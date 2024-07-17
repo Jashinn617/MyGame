@@ -5,6 +5,7 @@ class Player;
 class Camera;
 class StageTest;
 class EnemyManager;
+class ItemManager;
 
 /// <summary>
 /// メインシーンクラス
@@ -47,6 +48,7 @@ private:	// 変数
 	std::shared_ptr<Camera> m_pCamera;
 	std::shared_ptr<StageTest> m_pStage;
 	std::shared_ptr<EnemyManager> m_pEnemy;
+	std::shared_ptr<ItemManager> m_pItem;
 
 	int m_back;
 

@@ -3,7 +3,7 @@
 class ItemBase
 {
 public:
-	ItemBase();
+	ItemBase(int modelHandle);
 	virtual ~ItemBase();
 
 	virtual void Init() abstract;
@@ -11,6 +11,10 @@ public:
 	virtual void Draw();
 
 	const VECTOR GetPos() const {}
+	void SetPos(const VECTOR pos) { m_pos = pos; }
+
+protected:	// 関数
+	void UpdateAngle();
 
 protected:	// 変数
 	int m_modelHandle;	// モデルハンドル
@@ -19,5 +23,5 @@ protected:	// 変数
 	float m_rad;		// 半径
 	float m_scale;		// スケール
 	VECTOR m_pos;		// 位置
-	VECTOR m_angle;
+	float m_angle;		// 角度
 };

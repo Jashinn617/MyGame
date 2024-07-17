@@ -20,7 +20,7 @@ EnemyBee::~EnemyBee()
 
 void EnemyBee::Init()
 {
-	MV1SetPosition(m_modelHandle, VGet(0, 40, 0));
+	MV1SetPosition(m_modelHandle, m_pos);
 	// アニメーションの設定
 	m_currentAnimNo = MV1AttachAnim(m_modelHandle, kAnimNum, -1, false);
 }

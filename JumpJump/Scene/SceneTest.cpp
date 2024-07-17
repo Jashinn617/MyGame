@@ -4,13 +4,14 @@
 #include "../Camera.h"
 #include "../Stage/StageTest.h"
 #include "../Enemy/EnemyManager.h"
+#include "../Item/ItemManager.h"
 
 /// <summary>
 /// 定数定義
 /// </summary>
 namespace
 {
-
+	constexpr int kEnemyNum = 4;
 }
 
 SceneTest::SceneTest():
@@ -30,7 +31,8 @@ void SceneTest::Init()
 	m_pPlayer = make_shared<Player>();
 	m_pCamera = make_shared<Camera>();
 	m_pStage = make_shared<StageTest>();
-	m_pEnemy = make_shared<EnemyManager>(1);
+	m_pEnemy = make_shared<EnemyManager>(kEnemyNum);
+	m_pItem = make_shared<ItemManager>(1);
 
 	m_pStage->Init();
 	m_pPlayer->Init();
@@ -39,6 +41,10 @@ void SceneTest::Init()
 	// 敵の生成
 	m_pEnemy->CreateEnemyes();
 	m_pEnemy->Init();
+
+	// アイテムの生成
+	m_pItem->CreateItem();
+	m_pItem->Init();
 
 	// ライトの設定
 	ChangeLightTypeDir(VGet(0.0f, 10.0f, 0.0f));
@@ -52,6 +58,7 @@ shared_ptr<SceneBase> SceneTest::Update(Input& input)
 	m_pPlayer->Update(input, *m_pCamera, *m_pStage);
 	m_pCamera->Update(input, *m_pPlayer, *m_pStage);
 	m_pEnemy->Update();
+	m_pItem->Update();
 
 
 	return shared_from_this();
@@ -64,6 +71,7 @@ void SceneTest::Draw()
 	m_pStage->Draw();
 	m_pPlayer->Draw();
 	m_pEnemy->Draw();
+	m_pItem->Draw();
 
 #ifdef _DEBUG
 	DrawFormatString(0, 0, 0xffffff, "Test");
@@ -74,6 +82,7 @@ void SceneTest::Draw()
 void SceneTest::End()
 {
 	m_pEnemy->DestroyEnemyes();
+	m_pItem->DestroyItem();
 }
 
 void SceneTest::DrawGrid()
