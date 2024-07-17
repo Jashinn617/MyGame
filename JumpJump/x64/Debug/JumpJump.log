@@ -1,3 +1,2 @@
-﻿  Main.cpp
-C:\EffekseerForDXLib_170e_324b\EffekseerForDXLib_170e_324b\プロジェクトに追加すべきファイル_VC用\DxLib.h(3344,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+﻿  compilation object save succeeded; see C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump\MV1PixelShader.pso
   JumpJump.vcxproj -> C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump\x64\Debug\JumpJump.exe

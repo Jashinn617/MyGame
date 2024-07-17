@@ -1,5 +1,6 @@
 #include "SceneManager.h"
-#include "SceneMain.h"
+#include "SceneTest.h"
+#include "SceneDebug.h"
 #include "../Util/Input.h"
 
 SceneManager::SceneManager() :
@@ -13,8 +14,14 @@ SceneManager::~SceneManager()
 
 void SceneManager::Init()
 {
+#ifdef _DEBUG
 	// 最初のシーンのメモリを確保する
-	m_pScene = make_shared<SceneMain>();
+	m_pScene = make_shared<SceneDebug>();
+#else
+	// 最初のシーンのメモリを確保する
+	m_pScene = make_shared<SceneTest>();
+#endif // _DEBUG
+
 	m_pScene->Init();
 }
 

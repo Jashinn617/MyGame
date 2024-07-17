@@ -1,5 +1,6 @@
-Texture2D<float4> tex : register(t0);
-SamplerState smp : register(s0);
+//Texture2D<float4> tex : register(t0);
+//SamplerState smp : register(s0);
+
 #define DX_D3D11_COMMON_CONST_LIGHT_NUM			(6)		// 共通パラメータのライトの最大数
 #define DX_LIGHTTYPE_POINT							(1)				// D_D3DLIGHT_POINT
 #define DX_LIGHTTYPE_SPOT							(2)				// D_D3DLIGHT_SPOT
@@ -81,10 +82,10 @@ float4 main(PS_INPUT input) : SV_TARGET
 {  
     float amb = 0.25;
     float b = max(dot(normalize(-g_Common.Light[0].Direction), input.Normal), amb);
-    float4 col = tex.Sample(smp, input.uv);
+    float4 col = g_Common.Material.Diffuse;
     
     // ノーマルマップの表示
     //return float4(input.Normal, 1);
 
-    return float4(col.rbg * b, col.a);
+    return float4(col.rgb * b, col.a);
 }

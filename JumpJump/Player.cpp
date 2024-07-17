@@ -21,13 +21,13 @@ namespace
 	constexpr float kGravity = 0.3f;				// 重力
 	constexpr float kPlayAnimSpeed = 0.5f;			// アニメーションの速度
 	constexpr float kAnimBlendSpeed = 0.1f;			// アニメーションのブレンド率の変化速度
-	constexpr float kModelScale = 0.02;				// モデルのスケール
+	constexpr float kModelScale = 0.02f;				// モデルのスケール
 	constexpr float kFall = 3.0f;					// 落下判定が入る高さ
 	constexpr float kMaxStamina = 100.0f;			// スタミナの最大値
 	constexpr float kDecreaseStaminaSpeed = 0.5f;	// スタミナが減る速度
 	constexpr float kIncreaseStaminaSpeed = 0.5f;	// スタミナが増える速度
 	constexpr float kDecreaseJumpStamina = 30.0f;	// ジャンプで減るスタミナの量
-	constexpr float kRadius = 3.0f;					// 半径
+	constexpr float kRadius = 2.5f;					// 半径
 	
 
 	// アニメーションの切り替えにかかるフレーム数
@@ -411,9 +411,6 @@ void Player::Stamina()
 		// スタミナ不足状態だった場合はここで不足状態から復帰する
 		m_isLackStamina = false;
 	}
-
-	
-
 }
 
 void Player::UpdateAngle()
