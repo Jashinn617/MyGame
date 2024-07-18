@@ -11,7 +11,10 @@ public:
 	virtual void Draw();
 
 	const VECTOR GetPos() const {}
+
 	void SetPos(const VECTOR pos) { m_pos = pos; }
+	void SetAngleSpeed(const float angle) { m_angleSpeed = angle; }
+	void SetRadius(const float radius) { m_radius = radius; }
 
 protected:	// ŠÖ”
 	void UpdateAngle();
@@ -24,4 +27,6 @@ protected:	// •Ï”
 	float m_scale;		// ƒXƒP[ƒ‹
 	VECTOR m_pos;		// ˆÊ’u
 	float m_angle;		// Šp“x
+	float m_angleSpeed;		// ‰ñ“]‘¬“x
+	float m_radius;			// ‰ñ“]‚·‚é‰~‚Ì”¼Œa
 };

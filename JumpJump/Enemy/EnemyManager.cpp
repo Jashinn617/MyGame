@@ -16,10 +16,15 @@ EnemyManager::EnemyManager(int enemyNum):
 {
 	// モデルのロード
 	m_beeModelHandle = MV1LoadModel("Data/Model/Enemy/Bee.mv1");
+	assert(m_beeModelHandle != -1);
 	m_crabModelHandle = MV1LoadModel("Data/Model/Enemy/Crab.mv1");
+	assert(m_crabModelHandle != -1);
 	m_ogreModelHandle = MV1LoadModel("Data/Model/Enemy/Ogre.mv1");
+	assert(m_ogreModelHandle != -1);
 	m_skullModelHandle = MV1LoadModel("Data/Model/Enemy/Skull.mv1");
+	assert(m_skullModelHandle != -1);
 
+	// 敵のポインタの設定
 	m_pEnemy.resize(enemyNum);
 	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
@@ -30,13 +35,14 @@ EnemyManager::EnemyManager(int enemyNum):
 
 EnemyManager::~EnemyManager()
 {
+	/*処理無し*/
 }
 
 void EnemyManager::CreateEnemyes()
 {
 	// ファイルの読み込み
 	std::ifstream file;
-	file.open("Data/File/EnemyPos/EnemyPosTest.csv");
+	file.open("Data/File/Enemy/EnemyPosTest.csv");
 	assert(file.is_open());
 
 	// 読み取り元
@@ -58,11 +64,11 @@ void EnemyManager::CreateEnemyes()
 	}
 	file.close();
 
-	for (int i=0;i<m_pEnemy.size();i++)
+	// 変数の代入
+	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
 		m_pEnemy[i]->SetPos(m_pos[i]);
-	}
-	
+	}	
 }
 
 void EnemyManager::DestroyEnemyes()

@@ -14,6 +14,7 @@ public:
 
 	const VECTOR GetPos() const { return m_pos; }
 	const float GetRad() const { return m_rad; }
+
 	void SetPos(const VECTOR pos) { m_pos = pos; }
 
 protected:	// ä÷êî

@@ -9,8 +9,12 @@
 // プログラムは WinMain から始まります
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	// ゲームバーのタイトル
-	SetWindowText(_T("ジャンプジャンプ"));
+	// ゲームバーのタイトルの設定
+	SetWindowText(_T("HOP!STEP!JUMP★JUMP!!"));
+
+	// スクリーンサイズの設定
+	ChangeWindowMode(true);
+	SetGraphMode(Game::kScreenWidth, Game::kScreenHeight, Game::kColorDepth);
 
 	// windowモード設定
 	ChangeWindowMode(true);

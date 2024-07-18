@@ -12,6 +12,7 @@
 namespace
 {
 	constexpr int kEnemyNum = 4;
+	constexpr int kItemNum = 5;
 }
 
 SceneTest::SceneTest():
@@ -32,7 +33,7 @@ void SceneTest::Init()
 	m_pCamera = make_shared<Camera>();
 	m_pStage = make_shared<StageTest>();
 	m_pEnemy = make_shared<EnemyManager>(kEnemyNum);
-	m_pItem = make_shared<ItemManager>(1);
+	m_pItem = make_shared<ItemManager>(kItemNum);
 
 	m_pStage->Init();
 	m_pPlayer->Init();

@@ -13,7 +13,8 @@ ItemBase::ItemBase(int modelHandle):
 	m_rad(4),
 	m_scale(0),
 	m_pos{0,0,0},
-	m_angle(0)
+	m_angle(0),
+	m_angleSpeed(0)
 {
 	// ƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ
 	m_modelHandle = MV1DuplicateModel(modelHandle);
