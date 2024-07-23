@@ -139,8 +139,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Circle.cpp" />
+    <ClCompile Include="Object\Camera.cpp" />
+    <ClCompile Include="Object\Circle.cpp" />
     <ClCompile Include="Object\CharacterBase.cpp" />
     <ClCompile Include="Object\Model.cpp" />
     <ClCompile Include="Object\ObjectBase.cpp" />
@@ -152,6 +152,7 @@
     <ClCompile Include="Object\Item\ItemNotMove.cpp" />
     <ClCompile Include="Object\Item\ItemManager.cpp" />
     <ClCompile Include="Object\Item\ItemBase.cpp" />
+    <ClCompile Include="Object\Player\PlayerState.cpp" />
     <ClCompile Include="Scene\SceneResult.cpp" />
     <ClCompile Include="Scene\SceneGame2.cpp" />
     <ClCompile Include="Scene\SceneGame1.cpp" />
@@ -164,15 +165,18 @@
     <ClCompile Include="Scene\SceneTest.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="Object\Stage\StageTest.cpp" />
+    <ClCompile Include="Object\Player\Stamina.cpp" />
     <ClCompile Include="Util\Time.cpp" />
     <ClCompile Include="Util\Input.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Object\Player.cpp" />
+    <ClCompile Include="Object\Player\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="Circle.h" />
+    <ClInclude Include="Object\Camera.h" />
+    <ClInclude Include="Object\Circle.h" />
     <ClInclude Include="Object\CharacterBase.h" />
+    <ClInclude Include="Object\Player\PlayerState.h" />
+    <ClInclude Include="Object\Player\Stamina.h" />
     <ClInclude Include="Util\Time.h" />
     <ClInclude Include="Util\CharacterData.h" />
     <ClInclude Include="Object\Model.h" />
@@ -199,7 +203,7 @@
     <ClInclude Include="Object\Stage\StageTest.h" />
     <ClInclude Include="Util\Game.h" />
     <ClInclude Include="Util\Input.h" />
-    <ClInclude Include="Object\Player.h" />
+    <ClInclude Include="Object\Player\Player.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="PixelShader\PixelTest.hlsl">

@@ -40,7 +40,7 @@ StageTest::~StageTest()
 void StageTest::Init()
 {
 	// モデルのロード
-	m_modelHandle = MV1LoadModel("Data/Model/Ground.mv1");
+	m_modelHandle = MV1LoadModel("Data/Model/Stage/Ground.mv1");
 	assert(m_modelHandle != -1);
 	// シェーダのロード
 	m_vs = LoadVertexShader("VertexShader.vso");

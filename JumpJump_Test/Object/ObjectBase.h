@@ -9,6 +9,7 @@ class Model;
 class ObjectManager;
 class Time;
 class Player;
+class Circle;
 
 namespace ColInfo
 {
@@ -93,6 +94,7 @@ protected:	// 変数
 	float m_angle;		// キャラクターの向き
 	float m_moveSpeed;	// 移動スピード
 	int m_modelH;		// モデルハンドル
+	bool m_isDamage;	// 攻撃を受けたか
 
 	ObjectManager* m_pObjectManager = nullptr;
 
