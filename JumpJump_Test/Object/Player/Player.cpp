@@ -45,7 +45,10 @@ namespace
 	};
 }
 
-Player::Player()
+Player::Player():
+	m_walkSpeed(0),
+	m_dashSpeed(0),
+	m_acc(0)
 {
 }
 

@@ -19,22 +19,13 @@ Input::Input()
 	m_commandTable["left"] = { {InputType::kwybd,KEY_INPUT_LEFT},
 								{InputType::pad,PAD_INPUT_LEFT} };
 
-	// Aボタン
-	m_commandTable["A"] = { {InputType::kwybd,KEY_INPUT_Z},
+	// ジャンプボタン
+	m_commandTable["jump"] = { {InputType::kwybd,KEY_INPUT_Z},
 								{InputType::pad,PAD_INPUT_A} };
 
-	// Bボタン
-	m_commandTable["B"] = { {InputType::kwybd,KEY_INPUT_X},
+	// ダッシュボタン
+	m_commandTable["dash"] = { {InputType::kwybd,KEY_INPUT_X},
 								{InputType::pad,PAD_INPUT_B} };
-
-	// Yボタン
-	m_commandTable["Y"] = { {InputType::kwybd,KEY_INPUT_C},
-								{InputType::pad,PAD_INPUT_Y} };
-
-	// Xボタン
-	m_commandTable["X"] = { {InputType::kwybd,KEY_INPUT_V},
-								{InputType::pad,PAD_INPUT_X} };
-
 	// Rボタン
 	m_commandTable["R"] = { {InputType::kwybd,KEY_INPUT_S},
 								{InputType::pad,PAD_INPUT_5} };

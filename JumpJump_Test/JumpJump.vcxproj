@@ -139,6 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Util\Collision.cpp" />
+    <ClCompile Include="Util\Context.cpp" />
+    <ClCompile Include="Util\CsvLoad.cpp" />
+    <ClCompile Include="Util\Font.cpp" />
+    <ClCompile Include="Util\MoveDirectionVec.cpp" />
     <ClCompile Include="Object\Camera.cpp" />
     <ClCompile Include="Object\Circle.cpp" />
     <ClCompile Include="Object\CharacterBase.cpp" />
@@ -166,17 +171,30 @@
     <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="Object\Stage\StageTest.cpp" />
     <ClCompile Include="Object\Player\Stamina.cpp" />
+    <ClCompile Include="Util\SoundManager.cpp" />
+    <ClCompile Include="Util\State.cpp" />
+    <ClCompile Include="Util\Text.cpp" />
     <ClCompile Include="Util\Time.cpp" />
     <ClCompile Include="Util\Input.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Object\Player\Player.cpp" />
+    <ClCompile Include="Util\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Util\Collision.h" />
+    <ClInclude Include="Util\Context.h" />
+    <ClInclude Include="Util\CsvLoad.h" />
+    <ClInclude Include="Util\Easing.h" />
+    <ClInclude Include="Util\Font.h" />
+    <ClInclude Include="Util\MoveDirectionVec.h" />
     <ClInclude Include="Object\Camera.h" />
     <ClInclude Include="Object\Circle.h" />
     <ClInclude Include="Object\CharacterBase.h" />
     <ClInclude Include="Object\Player\PlayerState.h" />
     <ClInclude Include="Object\Player\Stamina.h" />
+    <ClInclude Include="Util\SoundManager.h" />
+    <ClInclude Include="Util\State.h" />
+    <ClInclude Include="Util\Text.h" />
     <ClInclude Include="Util\Time.h" />
     <ClInclude Include="Util\CharacterData.h" />
     <ClInclude Include="Object\Model.h" />
@@ -204,6 +222,7 @@
     <ClInclude Include="Util\Game.h" />
     <ClInclude Include="Util\Input.h" />
     <ClInclude Include="Object\Player\Player.h" />
+    <ClInclude Include="Util\Vec2.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="PixelShader\PixelTest.hlsl">

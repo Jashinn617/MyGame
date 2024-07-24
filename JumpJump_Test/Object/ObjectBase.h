@@ -32,7 +32,6 @@ public:	// 列挙体
 		Player,		// プレイヤー
 		Enemy,		// エネミー
 		Field,		// フィールド
-		Object,		// オブジェクト
 		Item,		// アイテム
 	};
 
