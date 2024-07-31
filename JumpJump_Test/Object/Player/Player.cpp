@@ -1,9 +1,10 @@
 #include "DxLib.h"
 #include "Player.h"
+#include "PlayerState.h"
+#include "Stamina.h"
 #include "../Camera.h"
 #include "../Stage/StageTest.h"
 #include "../../Util/Input.h"
-#include "Stamina.h"
 
 #include <math.h>
 #include <cassert>
@@ -48,8 +49,20 @@ namespace
 Player::Player():
 	m_walkSpeed(0),
 	m_dashSpeed(0),
-	m_acc(0)
+	m_acc(0),
+	m_moveDirectVec{0,0,0},
+	m_cameraToPlayer{0,0,0}	
 {
+	// ポインタの作成
+	m_pStamina = std::make_shared<Stamina>();
+	m_pState = std::make_shared<PlayerState>(m_pStamina);
+
+	/*状態の追加*/
+	// 待機
+	m_pState->AddState([=] {IdleUpdate(); },
+		[=] {IdleInit(); },
+		PlayerState::StateKind::Idle);
+	
 }
 
 Player::~Player()
