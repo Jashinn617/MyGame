@@ -29,7 +29,7 @@ bool Circle::IsCollide(const std::shared_ptr<Circle> that) const
 	// ‘ŠŽè‚Ì^‚ñ’†‚ÌÀ•W
 	VECTOR targetCenter = VAdd(*that->m_center, VGet(0.0f, that->m_height, 0.0f));
 
-	float distance = fabs(VSize(VSub(targetCenter, center)));
+	float distance = static_cast<float>(fabs(VSize(VSub(targetCenter, center))));
 	float radius = m_radius + that->m_radius;
 
 	return distance <= radius;

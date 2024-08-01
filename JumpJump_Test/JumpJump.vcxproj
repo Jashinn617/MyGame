@@ -169,7 +169,6 @@
     <ClCompile Include="Scene\SceneBase.cpp" />
     <ClCompile Include="Scene\SceneTest.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
-    <ClCompile Include="Object\Stage\StageTest.cpp" />
     <ClCompile Include="Object\Player\Stamina.cpp" />
     <ClCompile Include="Util\SoundManager.cpp" />
     <ClCompile Include="Util\State.cpp" />
@@ -218,7 +217,6 @@
     <ClInclude Include="Scene\SceneBase.h" />
     <ClInclude Include="Scene\SceneTest.h" />
     <ClInclude Include="Scene\SceneManager.h" />
-    <ClInclude Include="Object\Stage\StageTest.h" />
     <ClInclude Include="Util\Game.h" />
     <ClInclude Include="Util\Input.h" />
     <ClInclude Include="Object\Player\Player.h" />

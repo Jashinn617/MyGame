@@ -44,13 +44,5 @@ private:	// 関数
 private:	// メンバ関数ポインタ
 	
 private:	// 変数
-	std::shared_ptr<Player> m_pPlayer;
-	std::shared_ptr<Camera> m_pCamera;
-	std::shared_ptr<StageTest> m_pStage;
-	std::shared_ptr<EnemyManager> m_pEnemy;
-	std::shared_ptr<ItemManager> m_pItem;
-
-	int m_back;
-
-
+	
 };

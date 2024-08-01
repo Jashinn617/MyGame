@@ -1,31 +1,21 @@
-﻿  Camera.cpp
-C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\Object\Camera.cpp(62,28): error C2039: 'GetPos': 'Player' のメンバーではありません
-C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\Object\Stage\StageTest.h(3,7): message : 'Player' の宣言を確認してください
-  CharacterBase.cpp
-  ObjectBase.cpp
-  ObjectManager.cpp
+﻿  Collision.cpp
+C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\Util\Collision.cpp(31,31): error C2039: 'GetCamera': 'Player' のメンバーではありません
+C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\Object\Player\Player.h(22,7): message : 'Player' の宣言を確認してください
+  Context.cpp
+  Circle.cpp
+  SceneGame2.cpp
   Player.cpp
-  StageTest.cpp
-C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\Object\Stage\StageTest.cpp(83,25): error C2039: 'GetPos': 'Player' のメンバーではありません
-C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\Object\Player.h(20,7): message : 'Player' の宣言を確認してください
-C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\Object\Stage\StageTest.cpp(213,13): error C2039: 'GetState': 'Player' のメンバーではありません
-C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\Object\Player.h(20,7): message : 'Player' の宣言を確認してください
-C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\Object\Stage\StageTest.cpp(213,35): error C3083: 'State': '::' の左側のシンボルには、型を指定しなければなりません
-C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\Object\Stage\StageTest.cpp(213,42): error C2039: 'Jump': 'Player' のメンバーではありません
-C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\Object\Player.h(20,7): message : 'Player' の宣言を確認してください
-C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\Object\Stage\StageTest.cpp(213,5): error C2065: 'Jump': 定義されていない識別子です。
-C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\Object\Stage\StageTest.cpp(252,11): error C2039: 'OnHitRoof': 'Player' のメンバーではありません
-C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\Object\Player.h(20,7): message : 'Player' の宣言を確認してください
-C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\Object\Stage\StageTest.cpp(268,15): error C2039: 'GetState': 'Player' のメンバーではありません
-C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\Object\Player.h(20,7): message : 'Player' の宣言を確認してください
-C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\Object\Stage\StageTest.cpp(268,37): error C3083: 'State': '::' の左側のシンボルには、型を指定しなければなりません
-C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\Object\Stage\StageTest.cpp(268,44): error C2039: 'Jump': 'Player' のメンバーではありません
-C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\Object\Player.h(20,7): message : 'Player' の宣言を確認してください
-C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\Object\Stage\StageTest.cpp(268,48): error C2065: 'Jump': 定義されていない識別子です。
-C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\Object\Stage\StageTest.cpp(301,11): error C2039: 'OnHitFloor': 'Player' のメンバーではありません
-C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\Object\Player.h(20,7): message : 'Player' の宣言を確認してください
-C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\Object\Stage\StageTest.cpp(306,11): error C2039: 'OnFall': 'Player' のメンバーではありません
-C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\Object\Player.h(20,7): message : 'Player' の宣言を確認してください
-  SceneTest.cpp
-C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\Scene\SceneTest.cpp(4,10): fatal  error C1083: include ファイルを開けません。'../Camera.h':No such file or directory
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\xmemory(1982,9): error C2079: 'std::_Wrap<_Ty>::_Value' が 未定義の class 'Time' で使用しています。
+          with
+          [
+              _Ty=Time
+          ]
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\memory(2044,1): message : コンパイル対象の クラス テンプレート インスタンス化 'std::_Wrap<_Ty>' のリファレンスを確認してください
+          with
+          [
+              _Ty=Time
+          ]
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\memory(2703,36): message : コンパイル対象の クラス テンプレート インスタンス化 'std::_Ref_count_obj2<Time>' のリファレンスを確認してください
+C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\Object\Player\Player.cpp(59,60): message : コンパイル対象の関数 テンプレート インスタンス化 'std::shared_ptr<Time> std::make_shared<Time,const int&>(const int &)' のリファレンスを確認してください
+  Vec2.cpp
   コードを生成中...

@@ -3,7 +3,6 @@
 #include "Model.h"
 #include "ObjectManager.h"
 #include "../Util/Time.h"
-#include "Player.h"
 #include "Circle.h"
 
 namespace
