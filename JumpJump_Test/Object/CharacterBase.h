@@ -1,6 +1,7 @@
 #pragma once
 #include "ObjectBase.h"
 
+class Input;
 class Circle;
 
 class CharacterBase : public ObjectBase
@@ -32,9 +33,20 @@ public:
 	virtual ~CharacterBase() {};
 
 	virtual void Init() abstract;
-	virtual void Update() abstract;
+	virtual void Update(Input& input) abstract;
 
 	virtual void Draw();
+
+	/// <summary>
+	/// 攻撃を受けた時の処理
+	/// </summary>
+	/// <param name="targetPos">攻撃を当てた相手の座標</param>
+	virtual void OnDamage(VECTOR targetPos);
+
+	/// <summary>
+	/// ステージクリア時
+	/// </summary>
+	void StageClear() override final;
 
 	/// <summary>
 	/// 角度の取得
@@ -98,7 +110,7 @@ public:
 	/// <summary>
 	/// ジャンプ状態の終了処理
 	/// </summary>
-	virtual void EndJumpState();
+	virtual void EndJump();
 
 	/// <summary>
 	/// 地面に当たっているときの処理

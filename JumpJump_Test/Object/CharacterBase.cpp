@@ -1,5 +1,6 @@
 #include "CharacterBase.h"
 #include "Circle.h"
+#include "../Util/Input.h"
 
 
 namespace
@@ -26,6 +27,14 @@ CharacterBase::CharacterBase():
 }
 
 void CharacterBase::Draw()
+{
+}
+
+void CharacterBase::OnDamage(VECTOR targetPos)
+{
+}
+
+void CharacterBase::StageClear()
 {
 }
 
@@ -93,7 +102,7 @@ void CharacterBase::AttackEnemyCollPlayer(CharacterBase* pPlayer)
 	if (pPlayer->IsDamage()) return;
 }
 
-void CharacterBase::EndJumpState()
+void CharacterBase::EndJump()
 {
 	m_isJump = false;
 	m_jumpPower = 0.0f;

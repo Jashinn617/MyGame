@@ -26,8 +26,43 @@ public:
 	~Player();
 
 	void Init();
-	void Update() override final;
+	void Update(Input& input) override final;
 	virtual void Draw();
+
+	/// <summary>
+	/// 攻撃を受けた
+	/// </summary>
+	/// <param name="targetPos"></param>
+	void OnDamage(VECTOR targetPos) override final;
+
+	/// <summary>
+	/// ジャンプ状態の終了
+	/// </summary>
+	void EndJump()override final;	
+
+	/// <summary>
+	/// ジャンプ力の設定
+	/// </summary>
+	/// <param name="jumpPower"></param>
+	void SetJumpPower(float jumpPower) { m_jumpPower = jumpPower; }
+
+	/// <summary>
+	/// 座標の取得
+	/// </summary>
+	/// <returns></returns>
+	const VECTOR& GetPos()const { return m_info.pos; }
+
+	/// <summary>
+	/// 当たり判定の種類の取得
+	/// </summary>
+	/// <returns></returns>
+	ColType GetColType()const { return ColType::Player; }
+
+	/// <summary>
+	/// カメラの取得
+	/// </summary>
+	/// <returns></returns>
+	const std::shared_ptr<Camera> GetCamera() const { return m_pCamera; }
 
 private:	// 関数
 	/// <summary>
@@ -81,7 +116,8 @@ private:	// 変数
 	bool m_isStageClear;	// ステージをクリアしたかどうか
 
 	VECTOR m_moveDirectVec;	// 移動方向ベクトル
-	VECTOR m_cameraToPlayer;	// プレイヤーからカメラまでの距離
+	VECTOR m_cameraToPlayerVec;	// プレイヤーからカメラまでの距離
+
 
 	std::shared_ptr<PlayerState> m_pState;		// 状態のポインタ
 	std::shared_ptr<Stamina> m_pStamina;		// スタミナのポインタ

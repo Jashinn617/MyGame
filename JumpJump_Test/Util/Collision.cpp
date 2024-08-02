@@ -2,6 +2,7 @@
 #include "../Object/ObjectBase.h"
 #include "../Object/Player/Player.h"
 #include "../Object/Enemy/EnemyBase.h"
+#include "../Object/Camera.h"
 
 #include <array>
 
@@ -28,7 +29,7 @@ void Collision::Update(ObjectBase* my, ObjectBase* target)
 		// ターゲットのオブジェクトタイプがフィールドの場合
 		if (my->GetColType() == ObjectBase::ColType::Field)
 		{
-			dynamic_cast<Player*>(my)->GetCamera()->MoveColUpdate(target);
+			dynamic_cast<Player*>(my)->GetCamera()->ColUpdate(target);
 			my->MoveCollFieldUpdate(target);
 			return;
 		}

@@ -1,11 +1,14 @@
 #pragma once
+#include "DxLib.h"
+#include "ObjectBase.h"
+
+#include <memory>
+#include <vector>
 
 class Input;
 class Circle;
 class Player;
 class Time;
-
-class StageTest;
 
 class Camera
 {
@@ -28,6 +31,29 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw();
+
+	/// <summary>
+	/// カメラの座標のリセット
+	/// </summary>
+	void ResetCamera();
+
+	/// <summary>
+	/// 当たり判定の更新
+	/// </summary>
+	/// <param name="Field"></param>
+	void ColUpdate(ObjectBase* Field);
+
+	/// <summary>
+	/// ステージクリア時のカメラの更新
+	/// </summary>
+	void StageClearUpdate();
+
+	/// <summary>
+	/// ステージをクリア時
+	/// </summary>
+	/// <param name="angle"></param>
+	/// <param name="targetPos"></param>
+	void StageClear(float angle, VECTOR targetPos);
 
 	/// <summary>
 	/// カメラのX角度の取得
@@ -60,11 +86,32 @@ public:
 	const VECTOR& GetPrevPos()const { return m_prevPos; }
 
 
-private:
+private:	// 関数
 	/// <summary>
 	/// 角度の更新
 	/// </summary>
-	void AngleUpdate(bool lockOn);
+	void UpdateAngle();
+
+	/// <summary>
+	/// 通常時の更新
+	/// </summary>
+	/// <param name="targetPos"></param>
+	void NormalUpdate(VECTOR targetPos);
+
+	/// <summary>
+	/// 座標の更新
+	/// </summary>
+	void UpdatePos();
+
+	/// <summary>
+	/// 当たり判定を考慮した座標更新
+	/// </summary>
+	void FixPos();
+
+	/// <summary>
+	/// 押し出し処理
+	/// </summary>
+	void FixPosInternal();
 
 
 private:	// 変数
@@ -76,6 +123,7 @@ private:	// 変数
 	float m_stageClearTargetEasingTime;	// ゲームクリア時のターゲットの移動時のイージングにかかる時間
 	bool m_isStageClear;	// ステージをクリアしたか
 
+	VECTOR m_pos;		// 座標
 	VECTOR m_nextPos;	// 次の座標
 	VECTOR m_prevPos;	// 前の座標
 	VECTOR m_targetPos;	// ターゲットの座標

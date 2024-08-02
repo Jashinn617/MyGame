@@ -5,7 +5,101 @@
 #include <list>
 #include <functional>
 
+class EnemyBase;
+class ObjectBase;
+class Player;
+class Field;
+class Camera;
+class EnemyManager;
+class Collision;
+class SkyDome;
+class Time;
+
 class ObjectManager
 {
-};
+public:
+	ObjectManager();
+	virtual ~ObjectManager();
 
+	void Update();
+
+	void Draw();
+
+	/// <summary>
+	/// オブジェクトの追加
+	/// </summary>
+	/// <typeparam name="T">ObjectBaseを継承し型名</typeparam>
+	/// <param name="pObj">何のオブジェクトを追加するか</param>
+	template <class T>
+	void AddObject(T* pObj)
+	{
+		m_pObject.push_back(pObj);
+		m_pObject.back()->SetMain(this);
+	}
+
+	/// <summary>
+	/// プレイヤーが存在するかどうか
+	/// </summary>
+	/// <returns></returns>
+	bool IsPlayerExist();
+
+	/// <summary>
+	/// 敵が存在するかどうか
+	/// </summary>
+	/// <returns></returns>
+	bool IsEnemyExist();
+
+	/// <summary>
+	/// アイテムが存在するかどうか
+	/// </summary>
+	/// <returns></returns>
+	bool IsItemExist();
+
+	/// <summary>
+	/// 敵の数の取得
+	/// </summary>
+	/// <returns></returns>
+	int GetItemNum()const;
+
+	/// <summary>
+	/// ゲームをクリアしたかどうか
+	/// </summary>
+	/// <returns></returns>
+	bool IsGameClear()const { return m_isGameClear; }
+
+	/// <summary>
+	/// プレイヤーポインタの取得
+	/// </summary>
+	/// <returns></returns>
+	Player* const GetPlayer();
+
+	/// <summary>
+	/// エネミーマネージャーポインタの取得
+	/// </summary>
+	/// <returns></returns>
+	std::shared_ptr<EnemyManager> const GetEnemyManager() { return m_pEnemyManager; }
+
+	/// <summary>
+	/// 強制的にゲームクリアにする
+	/// </summary>
+	void SetGameClear();
+
+
+
+private:	// 関数
+	/// <summary>
+	/// ステージクリア時の更新処理
+	/// </summary>
+	void GameClearUpdate();
+
+private:	// 変数
+	bool m_isGameClear;		// ゲームをクリアしたか
+	bool m_isGoal;			// ゴールしたかどうか
+	bool m_isTutorial;		// チュートリアルかどうか
+
+	std::shared_ptr<Collision> m_pCollision;	// 当たり判定
+	std::shared_ptr<SkyDome> m_pSkyDome;		// スカイドーム
+	std::shared_ptr<EnemyManager> m_pEnemyManager;	// エネミーマネージャー
+	std::list<ObjectBase*> m_pObject;		// オブジェクト
+
+};

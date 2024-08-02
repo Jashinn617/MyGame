@@ -2,8 +2,12 @@
 #include "Player.h"
 #include "PlayerState.h"
 #include "Stamina.h"
+#include "../Model.h"
 #include "../Camera.h"
 #include "../../Util/Input.h"
+#include "../../Util/Time.h"
+#include "../ObjectManager.h"
+#include "../ObjectBase.h"
 
 #include <math.h>
 #include <cassert>
@@ -51,7 +55,7 @@ Player::Player():
 	m_acc(0),
 	m_isStageClear(false),
 	m_moveDirectVec{0,0,0},
-	m_cameraToPlayer{0,0,0}	
+	m_cameraToPlayerVec{0,0,0}	
 {
 	/*ポインタの作成*/
 	m_pStamina = std::make_shared<Stamina>();
@@ -95,16 +99,124 @@ void Player::Init()
 {
 }
 
-void Player::Update()
+void Player::Update(Input& input)
 {
 	// ステージクリア時
 	if (m_isStageClear)
 	{
 		// カメラをステージクリア用にする
+		m_pCamera->StageClearUpdate();
 
 	}
+
+	// 状態更新
+	m_pState->Update(input);
+
+	// スタミナの値を変更させるかどうか
+	if (ChangeStaminaValue())
+	{
+		// ダッシュ中かジャンプの時以外はスタミナを使わない
+		bool useStamina = (m_pState->GetState() == PlayerState::StateKind::Dash);
+
+		// スタミナ更新
+		m_pStamina->Update(useStamina);
+	}
+
+	// 移動更新
+	m_info.vec = MoveUpdate();
+
+	// 重力を考慮した更新
+	GravityUpdate();
+
+	// 攻撃を受けた時のシェーダの更新
+	// 後でする
+
+	// 攻撃を受けた時
+	if (m_isDamage)
+	{
+		// 無敵時間を計測して無敵時間が終わったらダメージを受ける状態を解除する
+		if (m_pInvincibleTime->Update())
+		{
+			m_pInvincibleTime->Reset();
+			m_isDamage = false;
+		}
+	}
+
+	// アニメーションの更新
+	m_pModel->Update();
+
+	// モデルの座標を設定する
+	m_pModel->SetPos(m_info.pos);
+
+	// モデルの角度を設定する
+	m_pModel->SetRot(VGet(0.0f, m_angle, 0.0f));
+
+	// カメラの更新
+	CameraUpdate();
+
+	// プレイヤーからカメラまでの距離の更新
+	m_cameraToPlayerVec = VSub(m_info.pos, m_pCamera->GetPos());
 }
 
 void Player::Draw()
+{
+	// モデルのフレームごとに描画をする
+	for (int i = 0; i < MV1GetTriangleListNum(m_pModel->GetModelHandle()); i++)
+	{
+		// 攻撃を受けた時はダメージシェーダを適応する
+		
+	}
+}
+
+void Player::OnDamage(VECTOR targetPos)
+{
+	// ゲームクリア状態だったら何もせずに終了する
+	if (m_pObjectManager->IsGameClear())return;
+
+}
+
+void Player::EndJump()
+{
+}
+
+bool Player::ChangeStaminaValue()
+{
+	return false;
+}
+
+void Player::CameraUpdate()
+{
+}
+
+void Player::AngleUpdate()
+{
+}
+
+void Player::MoveDirectionUpdate()
+{
+}
+
+VECTOR Player::MoveUpdate()
+{
+	return VECTOR();
+}
+
+void Player::IdleUpdate()
+{
+}
+
+void Player::WalkUpdate()
+{
+}
+
+void Player::DashUpdate()
+{
+}
+
+void Player::JumpUpdate()
+{
+}
+
+void Player::KnockBackUpdate()
 {
 }

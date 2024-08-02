@@ -394,7 +394,7 @@ void ObjectBase::FixPosWithFloor()
 			if (dynamic_cast<CharacterBase*>(this)->GetJumpPower() <= 0.0f &&
 				dynamic_cast<CharacterBase*>(this)->IsJump())
 			{
-				dynamic_cast<CharacterBase*>(this)->EndJumpState();
+				dynamic_cast<CharacterBase*>(this)->EndJump();
 			}
 		}
 		

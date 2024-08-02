@@ -41,9 +41,21 @@ public:	// 関数
 	virtual ~ObjectBase();
 
 	virtual void Init() abstract;
-	virtual void Update() abstract;
+	virtual void Update(Input& input) abstract;
 
 	virtual void Draw() abstract;
+
+	/// <summary>
+	/// メインポインタの設定
+	/// </summary>
+	/// <param name="objectManager"></param>
+	void SetMain(ObjectManager* objectManager) { m_pObjectManager = objectManager; }
+
+	/// <summary>
+	/// モデルハンドルの設定
+	/// </summary>
+	/// <param name="handle"></param>
+	void SetModelHandle(int handle) { m_modelH = handle; }
 
 	/// <summary>
 	/// 存在が消えてからのカウント
