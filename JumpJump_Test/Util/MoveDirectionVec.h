@@ -23,6 +23,6 @@ public:
 	VECTOR GetDirectionVec()const { return m_directionVec; }
 
 private:
-	VECTOR m_directionVec;
+	VECTOR m_directionVec;	// •ûŒüƒxƒNƒgƒ‹
 };
 

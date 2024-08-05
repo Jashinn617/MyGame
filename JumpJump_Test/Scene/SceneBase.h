@@ -1,39 +1,105 @@
 #pragma once
-#include "../Util/Input.h"
-#include "../Util/Game.h"
-#include <memory>
-#include <math.h>
 
-using namespace std;
 
 /// <summary>
-/// シーンの基底クラス
+/// 各シーンの基底クラス
 /// </summary>
-class SceneBase :public enable_shared_from_this<SceneBase>
+class SceneBase
 {
 public:
-	SceneBase() {}
-	virtual ~SceneBase() {};
+	// シーン遷移時の処理
+	enum class Transition
+	{
+		Leave,		// 残す
+		Delete,		// 削除
+	};
+
+	// シーンの種類
+	enum class SceneKind
+	{
+		Debug,			// デバッグ	
+		Title,			// タイトル
+		GameClear,		// ゲームクリア	
+		Main,			// メイン
+		Option,			// オプション
+		StageSelect,	// ステージセレクト
+		Tutorial,		// チュートリアル
+	};
+
+public:
+	SceneBase();
+	~SceneBase() {};
+
+	virtual void Init() abstract;
+	virtual SceneBase* Update();
+	virtual void Draw() abstract;
+	virtual void End() abstract;
 
 	/// <summary>
-	/// 初期化
+	/// シーンの種類の取得
 	/// </summary>
-	/// <param name="handle">ハンドル</param>
-	virtual void Init() = 0;
+	/// <returns></returns>
+	virtual SceneKind GetSceneKind() abstract;
+
 	/// <summary>
-	/// 更新
+	/// フェードの更新
 	/// </summary>
-	/// <param name="input">入力</param>
-	/// <param name="handle">ハンドル</param>
-	/// <returns>シーンポインタ</returns>
-	virtual shared_ptr<SceneBase> Update(Input& input) = 0;
+	void UpdateFade();
+
 	/// <summary>
-	/// 描画
+	/// フェードの描画
 	/// </summary>
-	/// <param name="handle">ハンドル</param>
-	virtual void Draw() = 0;
+	void DrawFade();
+
 	/// <summary>
-	/// 終了処理
+	/// フェードインのスキップ
 	/// </summary>
-	virtual void End() = 0;
+	void SkipFadeIn();
+
+	/// <summary>
+	/// フェードアウトのスキップ
+	/// </summary>
+	void SkipFadeOut();
+
+	/// <summary>
+	/// フェードイン中か
+	/// </summary>
+	/// <returns></returns>
+	bool IsFadeIn() const;
+
+	/// <summary>
+	/// フェードアウト中か
+	/// </summary>
+	/// <returns></returns>
+	bool IsFadeOut() const;
+
+	/// <summary>
+	/// フェード中か
+	/// </summary>
+	/// <returns></returns>
+	bool IsFade()const { return IsFadeIn() || IsFadeOut(); }
+
+	/// <summary>
+	/// フェードアウトの開始
+	/// </summary>
+	void StartFadeOut();
+
+	/// <summary>
+	/// フェードの明るさの取得
+	/// </summary>
+	/// <returns></returns>
+	int GetFadeBright()const { return m_fadeBright; }
+
+	/// <summary>
+	/// シーン遷移時の処理の種類の取得
+	/// </summary>
+	/// <returns></returns>
+	virtual Transition GetTransitionType() { return m_transition; }
+
+private:
+	int m_fadeColor;		// フェードの色
+	int m_fadeBright;		// フェードの明るさ
+	int m_fadeSpeed;		// フェードのスピード
+
+	Transition m_transition;	// シーン遷移の種類
 };

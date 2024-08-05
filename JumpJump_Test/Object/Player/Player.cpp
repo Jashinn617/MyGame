@@ -6,6 +6,7 @@
 #include "../Camera.h"
 #include "../../Util/Input.h"
 #include "../../Util/Time.h"
+#include "../../Util/MoveDirectionVec.h"
 #include "../ObjectManager.h"
 #include "../ObjectBase.h"
 
@@ -39,13 +40,17 @@ namespace
 	constexpr float kNowVecNum = 0.8f;
 	constexpr float kNextVecNum = 0.2f;
 
+	constexpr int kStageClearAnim = 65;				// ステージクリアアニメーション
+
 	/*アニメーション速度*/
 	enum kAnimSpeed
 	{
 		Idle = 2,
 		Walk = 2,
 		Dash = 1,
-		KnockBack = 1
+		Jump = 1,
+		KnockBack = 1,
+		StageClear = 1,
 	};
 }
 
@@ -123,7 +128,7 @@ void Player::Update(Input& input)
 	}
 
 	// 移動更新
-	m_info.vec = MoveUpdate();
+	m_info.vec = MoveUpdate(input);
 
 	// 重力を考慮した更新
 	GravityUpdate();
@@ -168,55 +173,207 @@ void Player::Draw()
 	}
 }
 
+void Player::Draw2D()
+{
+	m_pStamina->Draw(m_info.pos);
+}
+
+void Player::StageClear()
+{
+	// 座標をゴールの座標にする
+	m_info.pos = VGet(0.0f, 0.0f, 0.0f);
+
+	// 角度を変える
+	m_angle = 0.0f;
+	m_isStageClear = true;
+	m_pCamera->StageClear(m_angle, m_info.pos);
+	m_pState->StageClear();
+}
+
 void Player::OnDamage(VECTOR targetPos)
 {
 	// ゲームクリア状態だったら何もせずに終了する
 	if (m_pObjectManager->IsGameClear())return;
 
+	// ノックバックのスピードと方向を計算する
+	m_moveSpeed = kKnockBackSpeed;
+	m_isDamage = true;
+	
+	m_pState->OnDamage();
+
+	m_moveDirectVec = VNorm(VSub(
+		VGet(m_info.pos.x, 0.0f, m_info.pos.z),
+		VGet(targetPos.x, 0.0f, targetPos.z)));
+
+	// シェーダをONにする
+
+	// ダメージ音を鳴らす
+
 }
 
 void Player::EndJump()
 {
+	m_isJump = false;
+	m_jumpPower = 0.0f;
+
+	// ジャンプ音を鳴らす
+
+	// ステージクリア時は処理を終了する
+	if (m_pState->GetState() == PlayerState::StateKind::StateClear) return;
+
+	m_pState->EndState();
 }
 
 bool Player::ChangeStaminaValue()
 {
+	// ダッシュ中はスタミナを変更する
+	if (m_pState->GetState() == PlayerState::StateKind::Dash) return false;
+
+	// どの条件にも当てはまらない場合はスタミナを変更しない
 	return false;
 }
 
 void Player::CameraUpdate()
 {
+	m_pCamera->Update(m_info.pos);
 }
 
 void Player::AngleUpdate()
 {
+	// ノックバック中は処理をしない
+	if (m_pState->GetState() == PlayerState::StateKind::KnockBack) return;
+
+	float nextAngle = atan2(m_moveDirectVec.z, m_moveDirectVec.x) +
+		DX_PI_F * 0.5f + m_pCamera->GetCameraAngleX();
+
+	SmoothAngle(m_angle, nextAngle);
+	
 }
 
-void Player::MoveDirectionUpdate()
+void Player::MoveDirectionUpdate(Input& input)
 {
+	// ジャンプ中、ノックバック中は処理をせずに終了する
+	if (m_pState->GetState() == PlayerState::StateKind::Jump ||
+		m_pState->GetState() == PlayerState::StateKind::KnockBack) return;
+
+	// 移動方向ベクトルクラスを生成
+	MoveDirectionVec moveVec;
+
+	// 移動方向アップデート
+	moveVec.Update(input);
+	
+	// 進みたい方向と今の方向の線形補完
+	m_moveDirectVec = VAdd(VScale(m_moveDirectVec, kNowVecNum),
+		VScale(moveVec.GetDirectionVec(), kNextVecNum));
+
+	// 進みたい方向のY軸を省く
+	m_moveDirectVec.y = 0.0f;
 }
 
-VECTOR Player::MoveUpdate()
+VECTOR Player::MoveUpdate(Input& input)
 {
-	return VECTOR();
+	// 移動スピードが0の場合は移動しない
+	if (m_moveSpeed == 0.0f)return VGet(0.0f, 0.0f, 0.0f);
+	// 移動方向の更新
+	MoveDirectionUpdate(input);
+	// 角度の更新
+	AngleUpdate();
+
+	// 移動ベクトル生成
+	VECTOR move = VNorm(m_moveDirectVec);
+
+	// ノックバック中の処理
+	if (m_pState->GetState() == PlayerState::StateKind::KnockBack)
+	{
+		move.x *= m_moveSpeed;
+		move.z *= m_moveSpeed;
+
+		return move;
+	}
+
+	// 移動ベクトルにスピードをかける
+	// X軸は反転させる
+	move.x *= -m_moveSpeed;
+	move.z *= m_moveSpeed;
+
+	// カメラの角度によって進む方向を変える
+	MATRIX playerRotMtx = MGetRotY(m_pCamera->GetCameraAngleX());
+
+	// 移動ベクトルとカメラ角度行列を乗算する
+	move = VTransform(move, playerRotMtx);
+
+	return move;
+}
+
+void Player::JumpInit()
+{
+	m_isJump = true;
+	m_jumpPower = kJumpMaxSpeed;
+	// ジャンプ音を鳴らす
+
+	m_pStamina->JumpUpdate();
 }
 
 void Player::IdleUpdate()
 {
+	m_moveSpeed = max(m_moveSpeed - m_acc, 0.0f);
+
+	// アニメーションを待機状態に変更する
+	m_pModel->ChangeAnim(m_animData.idle, true, false, kAnimSpeed::Idle);
 }
 
 void Player::WalkUpdate()
 {
+	// X軸方向の移動ベクトルに歩きスピードを代入する
+	m_moveSpeed = min(m_moveSpeed + m_acc, m_walkSpeed);
+
+	// アニメーションを歩きアニメーションに変更する
+	m_pModel->ChangeAnim(m_animData.walk, true, false, kAnimSpeed::Walk);
+
+	// 足音を鳴らす
+
 }
 
 void Player::DashUpdate()
 {
+	m_moveSpeed = m_dashSpeed;
+
+	// アニメーションをダッシュモーションに変更する
+	m_pModel->ChangeAnim(m_animData.run, true, false, kAnimSpeed::Dash);
+
+	// 足音を鳴らす(ダッシュ時)
+
 }
 
 void Player::JumpUpdate()
 {
+	// 上昇中
+	if (m_jumpPower > kJumpRise)
+	{
+		m_pModel->ChangeAnim(m_animData.jumpStart, false, false, kAnimSpeed::Jump);
+	}
+	// 空中にとどまっている、下降中
+	else
+	{
+		m_pModel->ChangeAnim(m_animData.jumpIdle, false, false, kAnimSpeed::Jump);
+	}
 }
 
 void Player::KnockBackUpdate()
 {
+	m_moveSpeed = max(m_moveSpeed - kKnockBackSpeedDecrease, 0.0f);
+	m_pModel->ChangeAnim(m_animData.knockBack, false, false, kAnimSpeed::KnockBack);
+	// アニメーションが終わったら待機状態に戻る
+	if (m_pModel->IsAnimEnd())
+	{
+		m_pModel->ChangeAnim(m_animData.idle, true, false, kAnimSpeed::Idle);
+		m_pState->EndState();
+	}
+}
+
+void Player::StageClearUpdate()
+{
+	m_moveSpeed = 0.0f;
+	// モデルをステージクリア状態に変更する
+	m_pModel->ChangeAnim(kStageClearAnim, true, false, kAnimSpeed::StageClear);
 }

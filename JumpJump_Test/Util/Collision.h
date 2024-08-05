@@ -7,6 +7,7 @@ class ObjectBase;
 
 class Collision
 {
+public:
 	Collision();
 	~Collision();
 

@@ -59,7 +59,7 @@ public:
 	/// カメラのX角度の取得
 	/// </summary>
 	/// <returns></returns>
-	float MoveCameraAngleX() { return m_angleH; }
+	float GetCameraAngleX() { return m_angleH; }
 	
 	/// <summary>
 	/// 当たり判定のサークル取得

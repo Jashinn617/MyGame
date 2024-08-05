@@ -29,6 +29,10 @@ public:
 	void Update(Input& input) override final;
 	virtual void Draw();
 
+	void Draw2D() override final;
+
+	void StageClear() override final;
+
 	/// <summary>
 	/// 攻撃を受けた
 	/// </summary>
@@ -84,13 +88,13 @@ private:	// 関数
 	/// <summary>
 	/// 移動方向の更新
 	/// </summary>
-	void MoveDirectionUpdate();
+	void MoveDirectionUpdate(Input& input);
 
 	/// <summary>
 	/// 移動
 	/// </summary>
 	/// <returns></returns>
-	VECTOR MoveUpdate();
+	VECTOR MoveUpdate(Input& input);
 
 private:	// メンバ関数用関数
 
@@ -98,8 +102,9 @@ private:	// メンバ関数用関数
 	void IdleInit() {};
 	void WalkInit() {};
 	void DashInit() {};
-	void JumpInit() {};
+	void JumpInit();
 	void KnockBackInit() {};
+	void StageClearInit() {};
 
 	/*各状態の更新*/
 	void IdleUpdate();
@@ -107,6 +112,7 @@ private:	// メンバ関数用関数
 	void DashUpdate();
 	void JumpUpdate();
 	void KnockBackUpdate();
+	void StageClearUpdate();
 
 private:	// 変数
 	float m_walkSpeed;	// 移動速度

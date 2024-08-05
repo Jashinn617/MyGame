@@ -1,9 +1,6 @@
-﻿  SceneDebug.cpp
-  SceneTest.cpp
+﻿  ObjectManager.cpp
+  EnemyBee.cpp
+  EnemyManager.cpp
+  Player.cpp
   コードを生成中...
-Player.obj : error LNK2019: 未解決の外部シンボル "private: void __cdecl Player::IdleUpdate(void)" (?IdleUpdate@Player@@AEAAXXZ) が関数 "public: __cdecl `public: __cdecl Player::Player(void)'::`2'::<lambda_2>::operator()(void)const " (??R<lambda_2>@?1???0Player@@QEAA@XZ@QEBA@XZ) で参照されました
-Player.obj : error LNK2019: 未解決の外部シンボル "private: void __cdecl Player::WalkUpdate(void)" (?WalkUpdate@Player@@AEAAXXZ) が関数 "public: __cdecl `public: __cdecl Player::Player(void)'::`2'::<lambda_4>::operator()(void)const " (??R<lambda_4>@?1???0Player@@QEAA@XZ@QEBA@XZ) で参照されました
-Player.obj : error LNK2019: 未解決の外部シンボル "private: void __cdecl Player::DashUpdate(void)" (?DashUpdate@Player@@AEAAXXZ) が関数 "public: __cdecl `public: __cdecl Player::Player(void)'::`2'::<lambda_6>::operator()(void)const " (??R<lambda_6>@?1???0Player@@QEAA@XZ@QEBA@XZ) で参照されました
-Player.obj : error LNK2019: 未解決の外部シンボル "private: void __cdecl Player::JumpUpdate(void)" (?JumpUpdate@Player@@AEAAXXZ) が関数 "public: __cdecl `public: __cdecl Player::Player(void)'::`2'::<lambda_8>::operator()(void)const " (??R<lambda_8>@?1???0Player@@QEAA@XZ@QEBA@XZ) で参照されました
-Player.obj : error LNK2019: 未解決の外部シンボル "private: void __cdecl Player::KnockBackUpdate(void)" (?KnockBackUpdate@Player@@AEAAXXZ) が関数 "public: __cdecl `public: __cdecl Player::Player(void)'::`2'::<lambda_10>::operator()(void)const " (??R<lambda_10>@?1???0Player@@QEAA@XZ@QEBA@XZ) で参照されました
-C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\x64\Debug\JumpJump.exe : fatal error LNK1120: 5 件の未解決の外部参照
+  JumpJump.vcxproj -> C:\Users\fko2347024\Desktop\GitHub\MyGame\JumpJump_Test\x64\Debug\JumpJump.exe

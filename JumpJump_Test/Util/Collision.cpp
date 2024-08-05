@@ -6,6 +6,10 @@
 
 #include <array>
 
+Collision::Collision()
+{
+}
+
 Collision::~Collision()
 {
 }

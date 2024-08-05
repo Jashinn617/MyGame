@@ -35,18 +35,13 @@ public:
 	virtual void Init() abstract;
 	virtual void Update(Input& input) abstract;
 
-	virtual void Draw();
+	virtual void Draw() abstract;
 
 	/// <summary>
 	/// 攻撃を受けた時の処理
 	/// </summary>
 	/// <param name="targetPos">攻撃を当てた相手の座標</param>
 	virtual void OnDamage(VECTOR targetPos);
-
-	/// <summary>
-	/// ステージクリア時
-	/// </summary>
-	void StageClear() override final;
 
 	/// <summary>
 	/// 角度の取得

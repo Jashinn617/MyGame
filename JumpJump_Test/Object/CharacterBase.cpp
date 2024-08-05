@@ -26,15 +26,7 @@ CharacterBase::CharacterBase():
 	/*ˆ—–³‚µ*/
 }
 
-void CharacterBase::Draw()
-{
-}
-
 void CharacterBase::OnDamage(VECTOR targetPos)
-{
-}
-
-void CharacterBase::StageClear()
 {
 }
 

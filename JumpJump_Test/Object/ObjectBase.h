@@ -10,6 +10,7 @@ class ObjectManager;
 class Time;
 class Player;
 class Circle;
+class Input;
 
 namespace ColInfo
 {
@@ -44,6 +45,16 @@ public:	// 関数
 	virtual void Update(Input& input) abstract;
 
 	virtual void Draw() abstract;
+
+	/// <summary>
+	/// 2Dの描画
+	/// </summary>
+	virtual void Draw2D() abstract;
+
+	/// <summary>
+	/// ステージクリア時
+	/// </summary>
+	virtual void StageClear() abstract;
 
 	/// <summary>
 	/// メインポインタの設定
@@ -92,11 +103,6 @@ public:	// 関数
 	/// </summary>
 	/// <param name="pField"></param>
 	void MoveCollFieldUpdate(ObjectBase* pField);
-
-	/// <summary>
-	/// ステージクリア時
-	/// </summary>
-	virtual void StageClear() abstract;
 
 protected:	// 変数
 	std::shared_ptr<Model> m_pModel;	// モデルクラス
