@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Scene\StageSceneManager.cpp" />
     <ClCompile Include="Object\Field.cpp" />
     <ClCompile Include="Object\SkyDome.cpp" />
     <ClCompile Include="Util\Collision.cpp" />
@@ -182,6 +183,7 @@
     <ClCompile Include="Util\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Scene\StageSceneManager.h" />
     <ClInclude Include="Object\Field.h" />
     <ClInclude Include="Object\SkyDome.h" />
     <ClInclude Include="Util\Collision.h" />

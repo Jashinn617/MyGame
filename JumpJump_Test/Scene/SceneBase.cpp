@@ -16,9 +16,9 @@ SceneBase::SceneBase():
 	/*ˆ—–³‚µ*/
 }
 
-SceneBase* SceneBase::Update()
+std::shared_ptr<SceneBase> SceneBase::Update()
 {
-	return this;
+	return shared_from_this();
 }
 
 void SceneBase::UpdateFade()

@@ -8,18 +8,30 @@
 #include "SceneGame1.h"
 #include "SceneGame2.h"
 #include "SceneResult.h"
+#include "StageSceneManager.h"
+
+#include "../Util/Input.h"
+#include "../Util/Vec2.h"
 
 namespace
 {
-	int kSceneNum = 8;
+	constexpr float kCursorPosX = 500.0f;		// 初期カーソル位置X
+	constexpr float kCursorPosY = 300.0f;		// 初期カーソル位置Y
 
-	int kSceneTextPosX = 40;
-	int kSceneTextPosY = 20;
+	constexpr float kCursorMove = 50.0f;		// カーソルの移動量
 }
 
 SceneDebug::SceneDebug():
 	m_count(0)
 {
+	m_sceneString[static_cast<int>(SceneType::Debug)] = "Debug";
+	m_sceneString[static_cast<int>(SceneType::Stage1)] = "Stage1";
+	m_sceneString[static_cast<int>(SceneType::Stage2)] = "Stage2";
+	m_sceneString[static_cast<int>(SceneType::Option)] = "Option";
+	m_sceneString[static_cast<int>(SceneType::GameClear)] = "GameClear";
+	m_sceneString[static_cast<int>(SceneType::Title)] = "Title";
+	m_sceneString[static_cast<int>(SceneType::StageSelect)] = "StageSelect";
+	m_sceneString[static_cast<int>(SceneType::Tutorial)] = "Tutorial";
 }
 
 SceneDebug::~SceneDebug()
@@ -32,94 +44,76 @@ void SceneDebug::Init()
 
 std::shared_ptr<SceneBase> SceneDebug::Update(Input& input)
 {
-	if (input.IsTriggered("up"))
+	// ボタンが押されたら選択されたシーンに遷移する
+	if (input.IsTriggered("select"))
 	{
-		m_count--;
-	}
-	else if (input.IsTriggered("down"))
-	{
-		m_count++;
+		return UpdateNextScene();
 	}
 
-	if (m_count >= kSceneNum)
-	{
-		m_count = 0;
-	}
-	if (m_count < 0)
-	{
-		m_count = kSceneNum-1;
-	}
+	UpdateCursor(input);
 
-	if (input.IsTriggered("A"))
-	{
-		if (m_count == 0)
-		{
-			return make_shared<SceneTest>();
-		}
-		else if (m_count == 1)
-		{
-			return make_shared<SceneTitle>();
-		}
-		else if (m_count == 2)
-		{
-			return make_shared<SceneSelect>();
-		}
-		else if (m_count == 3)
-		{
-			return make_shared<SceneRanking>();
-		}
-		else if (m_count == 4)
-		{
-			return make_shared<SceneTutorial>();
-		}
-		else if (m_count == 5)
-		{
-			return make_shared<SceneGame1>();
-		}
-		else if (m_count == 6)
-		{
-			return make_shared<SceneGame2>();
-		}
-		else if (m_count == 7)
-		{
-			return make_shared<SceneResult>();
-		}
-	}
-
-
+	UpdateFade();
+	
 	return shared_from_this();
 }
 
 void SceneDebug::Draw()
 {
-	vector<int> color;
-	color.resize(kSceneNum);
-	for (int i = 0; i < color.size(); i++)
+	for (int i = 0; i < static_cast<int>(m_sceneString.size()); i++)
 	{
-		if (i == m_count)
+		DrawString(static_cast<int>(kCursorPosX), 
+			static_cast<int>(kCursorPosY + (i * kCursorMove)), 
+			m_sceneString[i].c_str(), 
+			0xffffff);
+
+		if (m_count == i)
 		{
-			color[i] = 0xff0000;
-		}
-		else
-		{
-			color[i] = 0xffffff;
+			// 選ばれている文字は赤くする
+			DrawString(static_cast<int>(kCursorPosX),
+				static_cast<int>(kCursorPosY + (i * kCursorMove)),
+				m_sceneString[i].c_str(),
+				0xff0000);
 		}
 	}
 
-	DrawFormatString(kSceneTextPosX, kSceneTextPosY, color[0], "Test");
-	DrawFormatString(kSceneTextPosX, kSceneTextPosY*2, color[1], "Title");
-	DrawFormatString(kSceneTextPosX, kSceneTextPosY*3, color[2], "Select");
-	DrawFormatString(kSceneTextPosX, kSceneTextPosY*4, color[3], "Ranking");
-	DrawFormatString(kSceneTextPosX, kSceneTextPosY*5, color[4], "Tutorial");
-	DrawFormatString(kSceneTextPosX, kSceneTextPosY*6, color[5], "Game1");
-	DrawFormatString(kSceneTextPosX, kSceneTextPosY*7, color[6], "Game2");
-	DrawFormatString(kSceneTextPosX, kSceneTextPosY*8, color[7], "Result");
-
-
 	DrawFormatString(0, 0, 0x00ffff, "Debug");
 	DrawFormatString(60, 0, 0x00ffff, "シーンを選択してください(Aで決定)");
+
+	DrawFade();
 }
 
 void SceneDebug::End()
 {
+}
+
+void SceneDebug::UpdateCursor(Input& input)
+{
+	if (input.IsTriggered("up"))
+	{
+		m_count--;
+		if (m_count < 0)
+		{
+			m_count = static_cast<int>(m_sceneString.size() - 1);
+		}
+	}
+
+	if (input.IsTriggered("down"))
+	{
+		m_count++;
+		if (m_count >= static_cast<int>(m_sceneString.size()))
+		{
+			m_count = 0;
+		}
+	}
+}
+
+std::shared_ptr<SceneBase> SceneDebug::UpdateNextScene()
+{
+	std::shared_ptr<SceneBase> nextScene = nullptr;
+	std::shared_ptr<StageSceneManager> mainSceneManager = nullptr;
+
+	// 選択されたシーンに遷移する
+	
+
+	return nextScene;
 }

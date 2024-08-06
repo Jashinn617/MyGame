@@ -1,10 +1,12 @@
 #pragma once
+#include <memory>
 
+class Input;
 
 /// <summary>
 /// 各シーンの基底クラス
 /// </summary>
-class SceneBase
+class SceneBase : public std::enable_shared_from_this<SceneBase>
 {
 public:
 	// シーン遷移時の処理
@@ -20,7 +22,7 @@ public:
 		Debug,			// デバッグ	
 		Title,			// タイトル
 		GameClear,		// ゲームクリア	
-		Main,			// メイン
+		Stage,			// ゲームステージ
 		Option,			// オプション
 		StageSelect,	// ステージセレクト
 		Tutorial,		// チュートリアル
@@ -31,7 +33,7 @@ public:
 	~SceneBase() {};
 
 	virtual void Init() abstract;
-	virtual SceneBase* Update();
+	virtual std::shared_ptr<SceneBase> Update(Input& input);
 	virtual void Draw() abstract;
 	virtual void End() abstract;
 

@@ -23,6 +23,10 @@ Input::Input()
 	m_commandTable["jump"] = { {InputType::kwybd,KEY_INPUT_Z},
 								{InputType::pad,PAD_INPUT_A} };
 
+	// セレクトボタン
+	m_commandTable["select"] = { {InputType::kwybd,KEY_INPUT_Z},
+								{InputType::pad,PAD_INPUT_A} };
+
 	// ダッシュボタン
 	m_commandTable["dash"] = { {InputType::kwybd,KEY_INPUT_X},
 								{InputType::pad,PAD_INPUT_B} };
