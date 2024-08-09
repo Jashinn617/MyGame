@@ -1,5 +1,6 @@
 #include "DxLib.h"
 #include "SceneSelect.h"
+#include "../Util/Input.h"
 
 SceneSelect::SceneSelect()
 {

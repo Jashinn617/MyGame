@@ -11,5 +11,7 @@ public:
 	virtual std::shared_ptr<SceneBase> Update(Input& input);
 	virtual void Draw();
 	virtual void End();
+
+	virtual SceneKind GetSceneKind() { return SceneKind::StageSelect; }
 };
 

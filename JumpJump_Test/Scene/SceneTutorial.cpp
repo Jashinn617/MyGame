@@ -1,5 +1,5 @@
-#include "DxLib.h"
 #include "SceneTutorial.h"
+#include "../Util/Input.h"
 
 SceneTutorial::SceneTutorial()
 {
@@ -20,11 +20,12 @@ std::shared_ptr<SceneBase> SceneTutorial::Update(Input& input)
 
 void SceneTutorial::Draw()
 {
-#ifdef _DEBUG
-	DrawFormatString(0, 0, 0xffffff, "Tutorial");
-#endif // _DEBUG   
 }
 
 void SceneTutorial::End()
+{
+}
+
+void SceneTutorial::GameClear()
 {
 }

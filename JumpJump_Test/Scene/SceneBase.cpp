@@ -16,7 +16,7 @@ SceneBase::SceneBase():
 	/*ˆ—–³‚µ*/
 }
 
-std::shared_ptr<SceneBase> SceneBase::Update()
+std::shared_ptr<SceneBase> SceneBase::Update(Input& input)
 {
 	return shared_from_this();
 }

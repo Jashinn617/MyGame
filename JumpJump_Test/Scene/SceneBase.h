@@ -1,4 +1,5 @@
 #pragma once
+#include "DxLib.h"
 #include <memory>
 
 class Input;
@@ -26,6 +27,7 @@ public:
 		Option,			// オプション
 		StageSelect,	// ステージセレクト
 		Tutorial,		// チュートリアル
+		Ranking,		// ランキング
 	};
 
 public:

@@ -1,8 +1,6 @@
 #pragma once
 #include <memory>
 
-using namespace std;
-
 class SceneBase;
 class Input;
 
@@ -25,7 +23,7 @@ public:
 	/// </summary>
 	/// <param name="input">入力</param>
 	/// <param name="handle">ハンドル</param>
-	void Update(Input& input);
+	bool Update(Input& input);
 	/// <summary>
 	///	描画
 	/// </summary>
@@ -37,5 +35,8 @@ public:
 	void End();
 
 private:	// 変数
-	shared_ptr<SceneBase> m_pScene;			// 描画するシーンのポインタ
+	std::shared_ptr<SceneBase> m_pScene;	// 描画するシーンのポインタ
+
+	float m_updateTime;		// 更新にかかる時間
+	float m_drawTime;		// 描画にかかる時間
 };

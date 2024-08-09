@@ -17,6 +17,8 @@ public:
 		Title,			// タイトル
 		StageSelect,	// ステージセレクト
 		Tutorial,		// チュートリアル
+		Ranking,		// ランキング
+		Test,			// テスト
 
 		SceneNum,		// シーン数
 	};

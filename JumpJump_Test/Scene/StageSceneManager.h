@@ -4,6 +4,7 @@
 #include <memory>
 #include <functional>
 
+class Input;
 class ObjectManager;
 
 class StageSceneManager
@@ -14,7 +15,7 @@ public:
 
 	void Init();
 
-	void Update();
+	void Update(Input& input);
 	void Draw();
 
 	void AttachGameClear(std::function<void(void)> gameClear);

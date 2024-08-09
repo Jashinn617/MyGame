@@ -11,7 +11,6 @@ namespace
 		"Data/Model/Stage/stage.mv1",
 		"Data/Model/Stage/stage.mv1",
 		"Data/Model/Stage/stage.mv1",
-		"Data/Model/Stage/stage.mv1",
 	};
 }
 

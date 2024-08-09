@@ -5,6 +5,7 @@
 #include <list>
 #include <functional>
 
+class Input;
 class EnemyBase;
 class ObjectBase;
 class Player;
@@ -21,7 +22,7 @@ public:
 	ObjectManager();
 	virtual ~ObjectManager();
 
-	void Update();
+	void Update(Input& input);
 
 	void Draw();
 

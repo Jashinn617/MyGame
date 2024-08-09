@@ -1,5 +1,6 @@
 #include "DxLib.h"
 #include "SceneRanking.h"
+#include "../Util/Input.h"
 
 SceneRanking::SceneRanking()
 {

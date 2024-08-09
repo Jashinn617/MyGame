@@ -1,14 +1,16 @@
 #include "DxLib.h"
 #include "SceneDebug.h"
-#include "SceneTest.h"
+#include "StageSceneManager.h"
+#include "SceneStage.h"
+#include "SceneOption.h"
+#include "SceneGameClear.h"
 #include "SceneTitle.h"
 #include "SceneSelect.h"
-#include "SceneRanking.h"
 #include "SceneTutorial.h"
-#include "SceneGame1.h"
-#include "SceneGame2.h"
+#include "SceneRanking.h"
 #include "SceneResult.h"
-#include "StageSceneManager.h"
+
+#include "../Object/ObjectManager.h"
 
 #include "../Util/Input.h"
 #include "../Util/Vec2.h"
@@ -32,6 +34,8 @@ SceneDebug::SceneDebug():
 	m_sceneString[static_cast<int>(SceneType::Title)] = "Title";
 	m_sceneString[static_cast<int>(SceneType::StageSelect)] = "StageSelect";
 	m_sceneString[static_cast<int>(SceneType::Tutorial)] = "Tutorial";
+	m_sceneString[static_cast<int>(SceneType::Ranking)] = "Ranking";
+	m_sceneString[static_cast<int>(SceneType::Test)] = "Test";
 }
 
 SceneDebug::~SceneDebug()
@@ -113,7 +117,42 @@ std::shared_ptr<SceneBase> SceneDebug::UpdateNextScene()
 	std::shared_ptr<StageSceneManager> mainSceneManager = nullptr;
 
 	// ëIëÇ≥ÇÍÇΩÉVÅ[ÉìÇ…ëJà⁄Ç∑ÇÈ
-	
-
+	switch (m_count)
+	{
+	case static_cast<int>(SceneType::Debug):
+		nextScene = make_shared<SceneDebug>();
+		break;
+	case static_cast<int>(SceneType::Stage1):
+		nextScene = make_shared<SceneStage>(Game::Stage::Stage1);
+		break;
+	case static_cast<int>(SceneType::Stage2):
+		nextScene = make_shared<SceneStage>(Game::Stage::Stage2);
+		break;
+	case static_cast<int>(SceneType::Option):
+		nextScene = make_shared<SceneOption>(make_shared<SceneDebug>());
+		break;
+	case static_cast<int>(SceneType::GameClear):
+		mainSceneManager = std::make_shared<StageSceneManager>(Game::Stage::Stage1);
+		mainSceneManager->GetObjectManager()->SetGameClear();
+		nextScene = make_shared<SceneGameClear>(mainSceneManager);
+		break;
+	case static_cast<int>(SceneType::Title):
+		nextScene = make_shared<SceneTitle>();
+		break;
+	case static_cast<int>(SceneType::StageSelect):
+		nextScene = make_shared<SceneSelect>();
+		break;
+	case static_cast<int>(SceneType::Tutorial):
+		nextScene = make_shared<SceneTutorial>();
+		break;
+	case static_cast<int>(SceneType::Ranking):
+		nextScene = make_shared<SceneRanking>();
+		break;
+	case static_cast<int>(SceneType::Test):
+		nextScene = make_shared<SceneStage>(Game::Stage::Test);
+		break;
+	default:
+		break;
+	}
 	return nextScene;
 }

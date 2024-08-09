@@ -17,10 +17,9 @@ namespace Game
 	// ステージ名
 	enum class Stage
 	{
+		Test,
 		Stage1,
 		Stage2,
-		Trutorial,
-		StageSelect,
 		StageName,
 	};
 }

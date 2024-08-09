@@ -139,6 +139,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Image\FadeImage.cpp" />
+    <ClCompile Include="Image\Image.cpp" />
+    <ClCompile Include="Image\ImageBase.cpp" />
+    <ClCompile Include="Scene\SceneGameClear.cpp" />
+    <ClCompile Include="Scene\SceneOption.cpp" />
+    <ClCompile Include="Scene\SceneTutorial.cpp" />
+    <ClCompile Include="Scene\SceneStage.cpp" />
     <ClCompile Include="Scene\StageSceneManager.cpp" />
     <ClCompile Include="Object\Field.cpp" />
     <ClCompile Include="Object\SkyDome.cpp" />
@@ -153,24 +160,17 @@
     <ClCompile Include="Object\Model.cpp" />
     <ClCompile Include="Object\ObjectBase.cpp" />
     <ClCompile Include="Object\ObjectManager.cpp" />
-    <ClCompile Include="Object\Enemy\EnemyBee.cpp" />
     <ClCompile Include="Object\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Object\Enemy\EnemyBase.cpp" />
-    <ClCompile Include="Object\Item\ItemRotationMove.cpp" />
-    <ClCompile Include="Object\Item\ItemNotMove.cpp" />
     <ClCompile Include="Object\Item\ItemManager.cpp" />
     <ClCompile Include="Object\Item\ItemBase.cpp" />
     <ClCompile Include="Object\Player\PlayerState.cpp" />
     <ClCompile Include="Scene\SceneResult.cpp" />
-    <ClCompile Include="Scene\SceneGame2.cpp" />
-    <ClCompile Include="Scene\SceneGame1.cpp" />
-    <ClCompile Include="Scene\SceneTutorial.cpp" />
     <ClCompile Include="Scene\SceneRanking.cpp" />
     <ClCompile Include="Scene\SceneSelect.cpp" />
     <ClCompile Include="Scene\SceneTitle.cpp" />
     <ClCompile Include="Scene\SceneDebug.cpp" />
     <ClCompile Include="Scene\SceneBase.cpp" />
-    <ClCompile Include="Scene\SceneTest.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="Object\Player\Stamina.cpp" />
     <ClCompile Include="Util\SoundManager.cpp" />
@@ -183,6 +183,13 @@
     <ClCompile Include="Util\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Image\FadeImage.h" />
+    <ClInclude Include="Image\Image.h" />
+    <ClInclude Include="Image\ImageBase.h" />
+    <ClInclude Include="Scene\SceneGameClear.h" />
+    <ClInclude Include="Scene\SceneOption.h" />
+    <ClInclude Include="Scene\SceneTutorial.h" />
+    <ClInclude Include="Scene\SceneStage.h" />
     <ClInclude Include="Scene\StageSceneManager.h" />
     <ClInclude Include="Object\Field.h" />
     <ClInclude Include="Object\SkyDome.h" />
@@ -205,23 +212,16 @@
     <ClInclude Include="Object\Model.h" />
     <ClInclude Include="Object\ObjectBase.h" />
     <ClInclude Include="Object\ObjectManager.h" />
-    <ClInclude Include="Object\Enemy\EnemyBee.h" />
     <ClInclude Include="Object\Enemy\EnemyManager.h" />
     <ClInclude Include="Object\Enemy\EnemyBase.h" />
-    <ClInclude Include="Object\Item\ItemRotationMove.h" />
-    <ClInclude Include="Object\Item\ItemNotMove.h" />
     <ClInclude Include="Object\Item\ItemManager.h" />
     <ClInclude Include="Object\Item\ItemBase.h" />
     <ClInclude Include="Scene\SceneResult.h" />
-    <ClInclude Include="Scene\SceneGame2.h" />
-    <ClInclude Include="Scene\SceneGame1.h" />
-    <ClInclude Include="Scene\SceneTutorial.h" />
     <ClInclude Include="Scene\SceneRanking.h" />
     <ClInclude Include="Scene\SceneSelect.h" />
     <ClInclude Include="Scene\SceneTitle.h" />
     <ClInclude Include="Scene\SceneDebug.h" />
     <ClInclude Include="Scene\SceneBase.h" />
-    <ClInclude Include="Scene\SceneTest.h" />
     <ClInclude Include="Scene\SceneManager.h" />
     <ClInclude Include="Util\Game.h" />
     <ClInclude Include="Util\Input.h" />

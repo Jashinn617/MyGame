@@ -1,5 +1,6 @@
 #include "DxLib.h"
 #include "SceneTitle.h"
+#include "../Util/Input.h"
 
 SceneTitle::SceneTitle()
 {
