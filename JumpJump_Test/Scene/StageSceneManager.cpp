@@ -7,7 +7,7 @@ StageSceneManager::StageSceneManager(Game::Stage stageKind):
 	m_isGameClear(false),
 	m_stageKind(stageKind)
 {
-	m_pObjectManager = std::make_shared<ObjectManager>();
+	m_pObjectManager = std::make_shared<ObjectManager>(stageKind);
 }
 
 StageSceneManager::~StageSceneManager()

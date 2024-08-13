@@ -14,7 +14,7 @@ class ObjectManager;
 class EnemyManager
 {
 public:
-	EnemyManager(Game::Stage stage, std::shared_ptr<ObjectManager> pObjectManager);
+	EnemyManager(Game::Stage stage, ObjectManager* pObjectManager);
 	~EnemyManager();
 
 	void Init();

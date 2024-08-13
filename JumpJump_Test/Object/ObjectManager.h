@@ -19,7 +19,7 @@ class Time;
 class ObjectManager
 {
 public:
-	ObjectManager();
+	ObjectManager(Game::Stage stage);
 	virtual ~ObjectManager();
 
 	void Update(Input& input);

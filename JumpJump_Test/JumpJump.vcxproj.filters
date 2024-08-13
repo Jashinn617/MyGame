@@ -73,6 +73,12 @@
     <Filter Include="ヘッダー ファイル\Image">
       <UniqueIdentifier>{1ad7b4fa-27c2-489c-8590-2aab4108fb05}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Shader">
+      <UniqueIdentifier>{68dc4d5d-79b6-403c-8831-5aad2dca40eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Shader">
+      <UniqueIdentifier>{fef1f69a-3b43-4fe0-9915-6809e6cc14fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -200,6 +206,15 @@
     </ClCompile>
     <ClCompile Include="Image\ImageBase.cpp">
       <Filter>ソース ファイル\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\DamageShader.cpp">
+      <Filter>ソース ファイル\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\ShadowMapShader.cpp">
+      <Filter>ソース ファイル\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\ToonShader.cpp">
+      <Filter>ソース ファイル\Shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -334,6 +349,15 @@
     </ClInclude>
     <ClInclude Include="Image\ImageBase.h">
       <Filter>ヘッダー ファイル\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\DamageShader.h">
+      <Filter>ヘッダー ファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\ShadowMapShader.h">
+      <Filter>ヘッダー ファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\ToonShader.h">
+      <Filter>ヘッダー ファイル\Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

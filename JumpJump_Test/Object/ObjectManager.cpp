@@ -18,14 +18,14 @@ namespace
 }
 
 
-ObjectManager::ObjectManager():
+ObjectManager::ObjectManager(Game::Stage stage):
 	m_isGameClear(false),
 	m_isGoal(false),
 	m_isTutorial(false)
 {
 	m_pCollision = std::make_shared<Collision>();
 	m_pSkyDome = std::make_shared<SkyDome>();
-	m_pEnemyManager = std::make_shared<EnemyManager>();
+	m_pEnemyManager = std::make_shared<EnemyManager>(stage, this);
 
 	AddObject(new Player);
 }

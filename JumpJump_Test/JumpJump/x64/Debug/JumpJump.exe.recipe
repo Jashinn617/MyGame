@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>D:\GitHub\MyGame\JumpJump_Test\x64\Debug\JumpJump.exe</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles>
+    <ContentFile>
+      <FullPath>D:\GitHub\MyGame\JumpJump_Test\PixelTest.pso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\GitHub\MyGame\JumpJump_Test\MV1PixelShader.pso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\GitHub\MyGame\JumpJump_Test\VertexShader.vso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\GitHub\MyGame\JumpJump_Test\MV1VertexShader4Frame.vso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\GitHub\MyGame\JumpJump_Test\MV1VertexShader8Frame.vso</FullPath>
+    </ContentFile>
+  </ContentFiles>
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>

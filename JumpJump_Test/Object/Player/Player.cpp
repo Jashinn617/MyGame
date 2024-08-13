@@ -67,6 +67,10 @@ Player::Player():
 	m_pState = std::make_shared<PlayerState>(m_pStamina);
 	m_pInvincibleTime = std::make_shared<Time>(kInvinvibleTime);
 	m_pCamera = std::make_shared<Camera>();
+	m_pModel = std::make_shared<Model>(kPlayerFileName);
+
+	m_pModel->SetAnim(m_animData.idle, false, true);
+	m_pModel->SetScale(VGet(kModelSize, kModelSize, kModelSize));
 
 	/*èÛë‘ÇÃí«â¡*/
 	// ë“ã@

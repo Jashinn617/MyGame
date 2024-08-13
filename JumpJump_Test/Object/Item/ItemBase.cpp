@@ -1,57 +1,87 @@
 #include "ItemBase.h"
+#include "../Player/Player.h"
+#include "../ObjectBase.h"
+#include "../Model.h"
+#include "../Circle.h"
+#include "../../Util/Time.h"
+#include "../../Util/Input.h"
 #include <assert.h>
 
-namespace
+ItemBase::ItemBase()
 {
-	constexpr float kScale = 0.05f;
 }
 
-ItemBase::ItemBase(int modelHandle):
-	m_modelHandle(-1),
-	m_psH(-1),
-	m_vsH(-1),
-	m_rad(4),
-	m_scale(0),
-	m_pos{0,0,0},
-	m_angle(0),
-	m_angleSpeed(0)
+ItemBase::ItemBase(VECTOR pos)
 {
-	// モデルの読み込み
-	m_modelHandle = MV1DuplicateModel(modelHandle);
-	assert(m_modelHandle != -1);
-	// シェーダのロード
-	m_psH = LoadPixelShader("PixelTest.pso");
-	assert(m_psH != -1);
-	m_vsH = LoadVertexShader("VertexShader.vso");
-	assert(m_vsH != -1);
-
-	MV1SetScale(m_modelHandle, VGet(kScale, kScale, kScale));
 }
 
 ItemBase::~ItemBase()
 {
-	// モデルのデリート
-	MV1DeleteModel(m_modelHandle);
+}
+
+void ItemBase::Init()
+{
+}
+
+void ItemBase::Update(Input& input)
+{
 }
 
 void ItemBase::Draw()
 {
-	// 当たり判定のデバッグ表示
-#ifdef _DEBUG
-	DrawSphere3D(m_pos, m_rad, 32, 0xff0000, 0xff00000, false);
-#endif // _DEBUG
-	// シェーダを適用する
-	MV1SetUseOrigShader(true);
-	SetUseVertexShader(m_vsH);
-	SetUsePixelShader(m_psH);
-	// モデルの描画
-	MV1DrawModel(m_modelHandle);
-	// シェーダを無効化する
-	MV1SetUseOrigShader(false);
-	SetUseVertexShader(-1);
-	SetUsePixelShader(-1);
 }
 
-void ItemBase::UpdateAngle()
+void ItemBase::Draw2D()
+{
+}
+
+void ItemBase::OnGet()
+{
+}
+
+void ItemBase::StageClear()
+{
+}
+
+void ItemBase::InitMoveSpeed(float moveSpeed)
+{
+}
+
+void ItemBase::AngleUpdate()
+{
+}
+
+void ItemBase::MoveDirectionUpdate()
+{
+}
+
+VECTOR ItemBase::MoveUpdate()
+{
+	return VECTOR();
+}
+
+void ItemBase::StateTransitionUpdate()
+{
+}
+
+bool ItemBase::StateTransitionMove()
+{
+	return false;
+}
+
+bool ItemBase::StateTransitionDead()
+{
+	return false;
+}
+
+void ItemBase::IdleStateUpdate()
+{
+}
+
+void ItemBase::MoveStateUpdate()
+{
+}
+
+void ItemBase::DeadStateUpdate()
 {
 }
