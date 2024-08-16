@@ -15,6 +15,8 @@ class EnemyManager;
 class Collision;
 class SkyDome;
 class Time;
+class ToonShader;
+class ShadowMapShader;
 
 class ObjectManager
 {
@@ -101,6 +103,8 @@ private:	// 変数
 	std::shared_ptr<Collision> m_pCollision;	// 当たり判定
 	std::shared_ptr<SkyDome> m_pSkyDome;		// スカイドーム
 	std::shared_ptr<EnemyManager> m_pEnemyManager;	// エネミーマネージャー
+	std::shared_ptr<ToonShader> m_pToonShader;		// トゥーンシェーダ
+	std::shared_ptr<ShadowMapShader> m_pShadowMapShader;	// シャドウマップ
 	std::list<ObjectBase*> m_pObject;		// オブジェクト
 
 };

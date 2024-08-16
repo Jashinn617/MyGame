@@ -15,6 +15,7 @@ class Model;
 class Circle;
 class PlayerState;
 class Stamina;
+class DamageShader;
 
 /// <summary>
 /// プレイヤークラス
@@ -27,7 +28,7 @@ public:
 
 	void Init();
 	void Update(Input& input) override final;
-	virtual void Draw();
+	virtual void Draw(std::shared_ptr<ToonShader> pToonShader);
 
 	void Draw2D() override final;
 
@@ -129,5 +130,6 @@ private:	// 変数
 	std::shared_ptr<Stamina> m_pStamina;		// スタミナのポインタ
 	std::shared_ptr<Time> m_pInvincibleTime;	// 攻撃を食らった後の無敵時間
 	std::shared_ptr<Camera> m_pCamera;			// カメラポインタの取得
+	std::shared_ptr<DamageShader> m_pDamageShader;	// ダメージシェーダ
 };
 

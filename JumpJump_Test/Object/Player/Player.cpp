@@ -9,6 +9,9 @@
 #include "../../Util/MoveDirectionVec.h"
 #include "../ObjectManager.h"
 #include "../ObjectBase.h"
+#include "../../Shader/ToonShader.h"
+#include "../../Shader/DamageShader.h"
+
 
 #include <math.h>
 #include <cassert>
@@ -42,6 +45,8 @@ namespace
 
 	constexpr int kStageClearAnim = 65;				// ステージクリアアニメーション
 
+	constexpr float kDrawDistance = 50.0f;			// 描画可能距離
+
 	/*アニメーション速度*/
 	enum kAnimSpeed
 	{
@@ -68,6 +73,7 @@ Player::Player():
 	m_pInvincibleTime = std::make_shared<Time>(kInvinvibleTime);
 	m_pCamera = std::make_shared<Camera>();
 	m_pModel = std::make_shared<Model>(kPlayerFileName);
+	m_pDamageShader = std::make_shared<DamageShader>();
 
 	m_pModel->SetAnim(m_animData.idle, false, true);
 	m_pModel->SetScale(VGet(kModelSize, kModelSize, kModelSize));
@@ -167,13 +173,38 @@ void Player::Update(Input& input)
 	m_cameraToPlayerVec = VSub(m_info.pos, m_pCamera->GetPos());
 }
 
-void Player::Draw()
+void Player::Draw(std::shared_ptr<ToonShader> pToonShader)
 {
 	// モデルのフレームごとに描画をする
 	for (int i = 0; i < MV1GetTriangleListNum(m_pModel->GetModelHandle()); i++)
 	{
 		// 攻撃を受けた時はダメージシェーダを適応する
-		
+		if (m_pDamageShader->GetUseShader())
+		{
+			int triangleType = MV1GetTriangleListVertexType(m_pModel->GetModelHandle(), i);
+
+			m_pDamageShader->DrawFirst(triangleType);
+
+			// 描画可能な距離を超えていない時のみ描画する
+			if (VSize(m_cameraToPlayerVec) > kDrawDistance)
+			{
+				MV1DrawTriangleList(m_pModel->GetModelHandle(), i);
+			}
+
+			// シェーダを元に戻す
+			m_pDamageShader->DrawEnd();
+		}
+		else	// ダメージを食らっていないときはトゥーンシェーダを使う
+		{
+			for (int i = 0; i < MV1GetTriangleListNum(m_pModel->GetModelHandle()); i++)
+			{
+				int triangleType = MV1GetTriangleListVertexType(m_pModel->GetModelHandle(), i);
+
+				pToonShader->SetShader(triangleType);
+
+				MV1DrawTriangleList(m_pModel->GetModelHandle(), i);
+			}
+		}
 	}
 }
 

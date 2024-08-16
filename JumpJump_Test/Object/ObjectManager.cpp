@@ -1,4 +1,6 @@
 #include "ObjectManager.h"
+#include "../Shader/ToonShader.h"
+#include "../Shader/ShadowMapShader.h"
 #include "../Object/ObjectBase.h"
 #include "../Object/Enemy/EnemyBase.h"
 #include "../Object/Enemy/EnemyManager.h"
@@ -26,6 +28,8 @@ ObjectManager::ObjectManager(Game::Stage stage):
 	m_pCollision = std::make_shared<Collision>();
 	m_pSkyDome = std::make_shared<SkyDome>();
 	m_pEnemyManager = std::make_shared<EnemyManager>(stage, this);
+	m_pToonShader = std::make_shared<ToonShader>();
+	m_pShadowMapShader = std::make_shared<ShadowMapShader>();
 
 	AddObject(new Player);
 }
@@ -123,7 +127,7 @@ void ObjectManager::Draw()
 	// オブジェクトの描画
 	for (auto& obj : m_pObject)
 	{
-		obj->Draw();
+		obj->Draw(m_pToonShader);
 	}
 
 	// シャドウマップの書き込み開始

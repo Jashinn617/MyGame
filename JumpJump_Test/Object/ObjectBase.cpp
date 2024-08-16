@@ -46,6 +46,11 @@ ObjectBase::~ObjectBase()
 {
 }
 
+void ObjectBase::ShadowMapDraw(std::shared_ptr<ShadowMapShader> pShadoeMapShader)
+{
+	/*ˆ—–³‚µ*/
+}
+
 bool ObjectBase::IsExistCount()
 {
 	// ‹K’èŠÔ‚ª‰ß‚¬‚½‚ç‘¶İ‚ğÁ‚·

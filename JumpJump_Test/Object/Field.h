@@ -1,8 +1,6 @@
 #pragma once
-#include "../Util/Game.h"
 #include "ObjectBase.h"
-
-#include <memory>
+#include "../Util/Game.h"
 
 class Input;
 class Model;
@@ -17,7 +15,9 @@ public:
 	void Init();
 	void Update(Input& input) override final;
 	
-	virtual void Draw() override final;
+	virtual void Draw(std::shared_ptr<ToonShader> pToonShader) override final;
+
+	virtual void ShadowMapDraw(std::shared_ptr<ShadowMapShader> pShadoeMapShader) override final;
 
 	/// <summary>
 	/// ©g‚Ì“–‚½‚è”»’èî•ñ

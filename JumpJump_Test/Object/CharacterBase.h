@@ -35,7 +35,7 @@ public:
 	virtual void Init() abstract;
 	virtual void Update(Input& input) abstract;
 
-	virtual void Draw() abstract;
+	virtual void Draw(std::shared_ptr<ToonShader> pToonShader) abstract;
 
 	/// <summary>
 	/// UŒ‚‚ğó‚¯‚½‚Ìˆ—

@@ -351,13 +351,13 @@
       <Filter>ヘッダー ファイル\Image</Filter>
     </ClInclude>
     <ClInclude Include="Shader\DamageShader.h">
-      <Filter>ヘッダー ファイル\Stage</Filter>
+      <Filter>ヘッダー ファイル\Shader</Filter>
     </ClInclude>
     <ClInclude Include="Shader\ShadowMapShader.h">
-      <Filter>ヘッダー ファイル\Stage</Filter>
+      <Filter>ヘッダー ファイル\Shader</Filter>
     </ClInclude>
     <ClInclude Include="Shader\ToonShader.h">
-      <Filter>ヘッダー ファイル\Stage</Filter>
+      <Filter>ヘッダー ファイル\Shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -376,5 +376,9 @@
     <FxCompile Include="PixelShader\MV1PixelShader.hlsl">
       <Filter>PixelShader</Filter>
     </FxCompile>
+    <FxCompile Include="PixelShader\ShadowMapShader.hlsl" />
+    <FxCompile Include="PixelShader\ToonShader.hlsl" />
+    <FxCompile Include="PixelShader\DamageShader.hlsl" />
+    <FxCompile Include="PixelShader\ToomFieldShader.hlsl" />
   </ItemGroup>
 </Project>

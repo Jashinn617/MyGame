@@ -5,12 +5,14 @@
 #include <array>
 #include <memory>
 
+class Input;
 class Model;
 class ObjectManager;
 class Time;
 class Player;
 class Circle;
-class Input;
+class ToonShader;
+class ShadowMapShader;
 
 namespace ColInfo
 {
@@ -44,7 +46,13 @@ public:	// ŠÖ”
 	virtual void Init() abstract;
 	virtual void Update(Input& input) abstract;
 
-	virtual void Draw() abstract;
+	virtual void Draw(std::shared_ptr<ToonShader> pToonShader) abstract;
+
+	/// <summary>
+	/// ‰e‚Ì•`‰æ
+	/// </summary>
+	/// <param name="pShadoeMapShader"></param>
+	virtual void ShadowMapDraw(std::shared_ptr<ShadowMapShader> pShadoeMapShader);
 
 	/// <summary>
 	/// 2D‚Ì•`‰æ
