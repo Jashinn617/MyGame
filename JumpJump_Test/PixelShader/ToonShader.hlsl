@@ -1,5 +1,6 @@
 SamplerState smp : register(s0);    // ディフューズマップテクスチャ
-Texture2D tex : register(t1);       // ディフューズマップテクスチャ
+
+Texture2D tex : register(t0);       // ディフューズマップテクスチャ
 
 struct PS_INPUT
 {
@@ -14,9 +15,9 @@ struct PS_INPUT
 
 struct PS_OUTPUT
 {
-    float4 col : SV_TARGET0;
-    float4 depth : SV_TARGET1;
-    float4 norm : SV_TARGET2;
+    float4 col : SV_TARGET0;    // 色
+    float4 depth : SV_TARGET1;  // 深度
+    float4 norm : SV_TARGET2;   // 法線
 };
 
 cbuffer ConstantBuffer : register(b0)
@@ -73,7 +74,7 @@ PS_OUTPUT main(PS_INPUT input)
     
     // リムライトの強さが-0.25～0.25の場合は
     // 
-    if(rim>-0.25f&&rim<0.25f)
+    if (rim > -0.25f && rim < 0.25f)
     {
         ret.col.rbg = 0.05f;
     }

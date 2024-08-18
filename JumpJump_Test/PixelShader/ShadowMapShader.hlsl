@@ -1,4 +1,5 @@
 float4 main() : SV_TARGET
 {
-	return float4(1.0f, 1.0f, 1.0f, 1.0f);
+	// シャドウマップの明るさを返す
+	return float4(0.4f, 0.4f, 0.4f, 1.0f);
 }
