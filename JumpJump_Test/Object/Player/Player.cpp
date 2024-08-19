@@ -11,6 +11,7 @@
 #include "../ObjectBase.h"
 #include "../../Shader/ToonShader.h"
 #include "../../Shader/DamageShader.h"
+#include "../Circle.h"
 
 
 #include <math.h>
@@ -20,7 +21,7 @@ namespace
 {
 	const char* const kPlayerFileName = "Data/Model/Player/Character.mv1";	// プレイヤーモデルファイル名
 	constexpr float kSize = 15.0f;	// プレイヤーサイズ
-	constexpr float kModelSize = 20.0f;	// プレイヤーモデルのサイズ
+	constexpr float kModelSize = 0.11f;	// プレイヤーモデルのサイズ
 	/*スピード関係*/
 	constexpr float kMoveSpeedDashRate = 2.2f;	// 走っているときのスピード
 	constexpr float kAccelerationRate = 0.5f;	// 加速度
@@ -45,7 +46,7 @@ namespace
 
 	constexpr int kStageClearAnim = 65;				// ステージクリアアニメーション
 
-	constexpr float kDrawDistance = 50.0f;			// 描画可能距離
+	constexpr float kDrawDistance = 500.0f;			// 描画可能距離
 
 	/*アニメーション速度*/
 	enum kAnimSpeed
@@ -67,11 +68,14 @@ Player::Player():
 	m_moveDirectVec{0,0,0},
 	m_cameraToPlayerVec{0,0,0}	
 {
+	// アニメーションの初期化
+
 	/*ポインタの作成*/
 	m_pStamina = std::make_shared<Stamina>();
 	m_pState = std::make_shared<PlayerState>(m_pStamina);
 	m_pInvincibleTime = std::make_shared<Time>(kInvinvibleTime);
 	m_pCamera = std::make_shared<Camera>();
+	m_pCircle = std::make_shared<Circle>(m_info.pos, kSize, kHeight * 0.5f);
 	m_pModel = std::make_shared<Model>(kPlayerFileName);
 	m_pDamageShader = std::make_shared<DamageShader>();
 
@@ -108,10 +112,12 @@ Player::Player():
 
 Player::~Player()
 {
+	/*処理無し*/
 }
 
 void Player::Init()
 {
+	/*処理無し*/
 }
 
 void Player::Update(Input& input)
@@ -211,6 +217,10 @@ void Player::Draw(std::shared_ptr<ToonShader> pToonShader)
 void Player::Draw2D()
 {
 	m_pStamina->Draw(m_info.pos);
+#ifdef _DEBUG
+	DrawFormatString(0, 20, 0xffffff, "プレイヤー座標：%f,%f,%f",m_info.pos.x,m_info.pos.y,m_info.pos.z);
+#endif // _DEBUG
+
 }
 
 void Player::StageClear()
@@ -271,6 +281,7 @@ bool Player::ChangeStaminaValue()
 void Player::CameraUpdate()
 {
 	m_pCamera->Update(m_info.pos);
+	m_pCamera->Draw();
 }
 
 void Player::AngleUpdate()

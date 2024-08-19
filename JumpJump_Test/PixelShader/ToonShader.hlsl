@@ -43,7 +43,7 @@ PS_OUTPUT main(PS_INPUT input)
     PS_OUTPUT ret;
     
     ret.depth = input.Position.zwyx;
-    ret.col = input.Diffuse * tex.Sample(smp, input.TexCoords0_1.xy);
+    ret.col = input.Diffuse;
     ret.norm = float4(input.VNormal, 1.0f);
     
     // ƒ‰ƒCƒg‚ÌŒü‚«‚Ìİ’è

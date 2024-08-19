@@ -2,6 +2,7 @@
 #include "../Util/Input.h"
 #include "../Object/ObjectManager.h"
 
+
 StageSceneManager::StageSceneManager(Game::Stage stageKind):
 	m_gameClearTime(0),
 	m_isGameClear(false),

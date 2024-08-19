@@ -5,14 +5,6 @@
 #include <list>
 
 class StageSceneManager;
-class ObjectBase;
-class Player;
-class Camera;
-class EnemyBase;
-class EnemyManager;
-class Field;
-class SkyDome;
-class Collision;
 class Input;
 
 
@@ -33,9 +25,9 @@ private:
 	void GameClear();
 
 
-	bool m_isSceneEnd;
+	bool m_isSceneEnd;		// シーンが終了したかどうか
 
 	std::shared_ptr<StageSceneManager> m_pStageSceneManager;
-	std::shared_ptr<SceneBase> m_nextScene;
+	std::shared_ptr<SceneBase> m_nextScene;		// 次のシーンのポインタ
 };
 

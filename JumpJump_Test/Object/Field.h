@@ -19,6 +19,10 @@ public:
 
 	virtual void ShadowMapDraw(std::shared_ptr<ShadowMapShader> pShadoeMapShader) override final;
 
+	virtual void Draw2D() override final;
+
+	virtual void StageClear() override final;
+
 	/// <summary>
 	/// ©g‚Ì“–‚½‚è”»’èî•ñ
 	/// </summary>

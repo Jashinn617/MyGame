@@ -22,8 +22,16 @@ public:
 
 	void SetGameClear();
 
+	/// <summary>
+	/// ステージの取得
+	/// </summary>
+	/// <returns>ステージの種類</returns>
 	Game::Stage GetStageKind() const { return m_stageKind; }
 	const std::shared_ptr<ObjectManager> GetObjectManager() { return m_pObjectManager; }
+	/// <summary>
+	/// ゲームクリア時間の取得
+	/// </summary>
+	/// <returns></returns>
 	int GetGameClearTime() const{return m_gameClearTime; }
 
 
@@ -33,7 +41,7 @@ private:	// 変数
 	Game::Stage m_stageKind;	// ステージの種類
 	std::shared_ptr<ObjectManager> m_pObjectManager;	// オブジェクトマネージャークラスのポインタ
 
-	std::function<void(void)> m_gameClear = [] {};	// ゲームクリア時の関数(ラムダ式)
+	std::function<void(void)> m_gameClear = [] {};	// ゲームクリア時の関数(空のラムダ式)
 
 };
 

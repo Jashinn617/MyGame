@@ -2,6 +2,8 @@
 #include "Model.h"
 #include "ObjectManager.h"
 #include "Player/Player.h"
+#include "../Shader/ToonShader.h"
+#include "../Shader/ShadowMapShader.h"
 
 namespace
 {
@@ -20,7 +22,7 @@ Field::Field(Game::Stage stage)
 	// ƒ‚ƒfƒ‹‚Ì¶¬
 	m_pModel = std::make_shared<Model>(kFileName[static_cast<int>(stage)]);
 
-	m_pModel->SetScale(VGet(1.0f, 1.0f, 1.0f));
+	m_pModel->SetScale(VGet(0.0f, 0.0f, 0.0f));
 	m_pModel->SetPos(VGet(0.0f, 0.0f, 0.0f));
 }
 
@@ -30,6 +32,7 @@ Field::~Field()
 
 void Field::Init()
 {
+	/*ˆ—–³‚µ*/
 }
 
 void Field::Update(Input& input)
@@ -46,4 +49,14 @@ void Field::ShadowMapDraw(std::shared_ptr<ShadowMapShader> pShadoeMapShader)
 {
 	// ‰e‚Ì•`‰æ
 	m_pModel->Draw();
+}
+
+void Field::Draw2D()
+{
+	/*ˆ—–³‚µ*/
+}
+
+void Field::StageClear()
+{
+	/*ˆ—–³‚µ*/
 }

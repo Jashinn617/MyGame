@@ -1,16 +1,20 @@
 #include "ObjectManager.h"
 #include "../Shader/ToonShader.h"
 #include "../Shader/ShadowMapShader.h"
+
+#include "../Object/Field.h"
 #include "../Object/ObjectBase.h"
 #include "../Object/Enemy/EnemyBase.h"
 #include "../Object/Enemy/EnemyManager.h"
 #include "../Object/Field.h"
 #include "../Object/SkyDome.h"
-#include "../Util/Input.h"
-#include "../Util/Time.h"
 #include "../Object/Player/Player.h"
 #include "../Object/Camera.h"
+
+#include "../Util/Input.h"
+#include "../Util/Time.h"
 #include "../Util/Collision.h"
+
 #include "Model.h"
 
 namespace
@@ -32,6 +36,7 @@ ObjectManager::ObjectManager(Game::Stage stage):
 	m_pShadowMapShader = std::make_shared<ShadowMapShader>();
 
 	AddObject(new Player);
+	AddObject(new Field(stage));
 }
 
 ObjectManager::~ObjectManager()
@@ -67,18 +72,8 @@ void ObjectManager::Update(Input& input)
 				continue;
 			}
 
-			// オブジェクトが敵だった場合
-			if (obj->GetColType() == ObjectBase::ColType::Enemy)
-			{
-
-			}
-			// オブジェクトがアイテムだった場合
-			if (obj->GetColType() == ObjectBase::ColType::Item)
-			{
-
-			}
-			// オブジェクトがプレイヤーだった場合
-			if (obj->GetColType() == ObjectBase::ColType::Player)
+			// オブジェクトがプレイヤー以外だった場合
+			if (obj->GetColType() != ObjectBase::ColType::Player)
 			{
 				delete obj;
 				obj = nullptr;
@@ -86,11 +81,13 @@ void ObjectManager::Update(Input& input)
 			}
 			else
 			{
+				// イテレータを進める
 				it++;
 			}
 		}
 		else
 		{
+			// イテレータを進める
 			it++;
 		}
 	}
@@ -131,15 +128,35 @@ void ObjectManager::Draw()
 	}
 
 	// シャドウマップの書き込み開始
+	m_pShadowMapShader->WriteStart(GetPlayer()->GetPos());
+
+	for (auto& obj : m_pObject)
+	{
+		// フィールド以外に処理を行う
+		if (obj->GetColType() != ObjectBase::ColType::Field)
+		{
+			obj->ShadowMapDraw(m_pShadowMapShader);
+		}
+	}
 
 	// 終了
+	m_pShadowMapShader->WriteEnd();
 
 	// カメラの位置のリセット
 	GetPlayer()->GetCamera()->ResetCamera();
 
 	// フィールドにシャドウマップを張り付ける準備をする
-
+	m_pShadowMapShader->SetShaderField(GetPlayer()->GetPos());
+	for (auto& obj : m_pObject)
+	{
+		//ここではフィールドだけ描画を行う
+		if (obj->GetColType() == ObjectBase::ColType::Field)
+		{
+			obj->ShadowMapDraw(m_pShadowMapShader);
+		}
+	}
 	// 作業終了
+	m_pShadowMapShader->WriteEnd();
 
 	// ステージクリア時は2D描画をしない
 	if (!m_isGameClear)
@@ -152,7 +169,6 @@ void ObjectManager::Draw()
 		}
 		
 	}
-
 	// カメラの位置のリセット
 	GetPlayer()->GetCamera()->ResetCamera();
 }
@@ -214,7 +230,9 @@ Player* const ObjectManager::GetPlayer()
 
 void ObjectManager::SetGameClear()
 {
+	// クリアフラグをtrueにする
 	m_isGameClear = true;
+	// クリア時の処理を行う
 	GameClearUpdate();
 }
 
@@ -222,6 +240,7 @@ void ObjectManager::GameClearUpdate()
 {
 	for (auto& obj : m_pObject)
 	{
+		// ステージクリア処理
 		obj->StageClear();
 	}
 }

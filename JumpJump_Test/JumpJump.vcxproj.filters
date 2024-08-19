@@ -379,6 +379,6 @@
     <FxCompile Include="PixelShader\ShadowMapShader.hlsl" />
     <FxCompile Include="PixelShader\ToonShader.hlsl" />
     <FxCompile Include="PixelShader\DamageShader.hlsl" />
-    <FxCompile Include="PixelShader\ToomFieldShader.hlsl" />
+    <FxCompile Include="PixelShader\ToonFieldShader.hlsl" />
   </ItemGroup>
 </Project>

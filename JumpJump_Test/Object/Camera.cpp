@@ -1,21 +1,26 @@
 #include "Camera.h"
-#include "../Util/Input.h"
-#include "Player/Player.h"
 #include "Circle.h"
 #include "Model.h"
+#include "ObjectBase.h"
+
+#include "Player/Player.h"
+
+
+#include "../Util/Input.h"
 #include "../Util/Time.h"
+#include "../Util/Easing.h"
 
 namespace
 {
 	/*通常時*/
 	constexpr float kNear = 10.0f;	// カメラのnear
-	constexpr float kFar = 7000.0f;	// カメラのfar
+	constexpr float kFar = 10000.0f;	// カメラのfar
 	constexpr int kMaxInputNum = 1000;	// アナログ入力状態最大値
 	constexpr float kCameraAngleSpeedX = 0.1f;	// カメラの旋回スピードX
 	constexpr float kCameraAngleSpeedY = 0.05f;	// カメラの旋回スピードY
 	constexpr float kCameraAngleVMax = DX_PI_F / 2.0f - 0.8f;	// カメラの最大角度
 	constexpr float kCameraAngleVMin = -DX_PI_F / 2.0f + 0.6f;	// カメラの最小角度
-	constexpr float kCameraPlayerTargetHeight = 65.0f;		// カメラの注視点(プレイヤー座標からの高さ)
+	constexpr float kCameraPlayerTargetHeight = 400.0f;		// カメラの注視点(プレイヤー座標からの高さ)
 	constexpr float kCameraToPlayerLenghtMax = 175.0f;		// カメラからプレイヤーまでの最大距離
 	constexpr float kCameraToPlayerLenghtMin = 0.0f;		// カメラからプレイヤーまでの最小距離
 	constexpr float kCameraToPlayerLenghtSpeed = 5.0f;		// カメラの距離を変えるスピード
@@ -102,7 +107,10 @@ void Camera::Update(VECTOR playerPos)
 
 void Camera::Draw()
 {
-	/*処理無し*/
+#ifdef _DEBUG
+	DrawFormatString(0, 0, 0xffffff, "カメラ座標：%f,%f,%f", m_prevPos.x, m_prevPos.y, m_prevPos.z);
+#endif // _DEBUG
+
 }
 
 void Camera::ResetCamera()

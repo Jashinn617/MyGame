@@ -1,5 +1,5 @@
 #include "ToonShader.h"
-#include "../../Util/Game.h"
+#include "../Util/Game.h"
 
 #include <cassert>
 #include <array>
@@ -11,9 +11,9 @@ ToonShader::ToonShader()
 	assert(m_vertexShader4FrameH != -1);
 	m_vertexShader8FrameH = LoadVertexShader("MV1VertexShader8Frame.vso");
 	assert(m_vertexShader8FrameH != -1);
-	m_pixelShaderH = LoadPixelShader("");
+	m_pixelShaderH = LoadPixelShader("ToonShader.pso");
 	assert(m_pixelShaderH != -1);
-	m_pixelShaderFieldH = LoadPixelShader("");
+	m_pixelShaderFieldH = LoadPixelShader("ToonFieldShader.pso");
 	assert(m_pixelShaderFieldH != -1);
 	m_graphH = MakeScreen(Game::kScreenWidth, Game::kScreenHeight);
 	assert(m_graphH != -1);
