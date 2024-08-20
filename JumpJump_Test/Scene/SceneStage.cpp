@@ -43,25 +43,25 @@ void SceneStage::Init()
 std::shared_ptr<SceneBase> SceneStage::Update(Input& input)
 {
 	UpdateFade();
-
-#ifdef _DEBUG
-	// デバッグに飛ぶ
-	if (input.IsTriggered(""))
-	{
-		return make_shared<SceneDebug>();
-	}
-#endif // _DEBUG
-
-	// オプションを開く
-	if (input.IsTriggered(""))
-	{
-		
-	}
-
-	if (m_nextScene != nullptr)
-	{
-		return m_nextScene;
-	}
+//
+//#ifdef _DEBUG
+//	// デバッグに飛ぶ
+//	if (input.IsTriggered(""))
+//	{
+//		return make_shared<SceneDebug>();
+//	}
+//#endif // _DEBUG
+//
+//	// オプションを開く
+//	if (input.IsTriggered(""))
+//	{
+//		
+//	}
+//
+//	if (m_nextScene != nullptr)
+//	{
+//		return m_nextScene;
+//	}
 
 	m_pStageSceneManager->Update(input);
 

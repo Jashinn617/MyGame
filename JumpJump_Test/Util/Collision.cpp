@@ -8,14 +8,17 @@
 
 Collision::Collision()
 {
+	/*処理無し*/
 }
 
 Collision::~Collision()
 {
+	/*処理無し*/
 }
 
 void Collision::Init()
 {
+	/*処理無し*/
 }
 
 void Collision::Update(ObjectBase* my, ObjectBase* target)
@@ -31,7 +34,7 @@ void Collision::Update(ObjectBase* my, ObjectBase* target)
 	if (my->GetColType() == ObjectBase::ColType::Player)
 	{
 		// ターゲットのオブジェクトタイプがフィールドの場合
-		if (my->GetColType() == ObjectBase::ColType::Field)
+		if (target->GetColType() == ObjectBase::ColType::Field)
 		{
 			dynamic_cast<Player*>(my)->GetCamera()->ColUpdate(target);
 			my->MoveCollFieldUpdate(target);

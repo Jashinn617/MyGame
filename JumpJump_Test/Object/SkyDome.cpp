@@ -33,10 +33,6 @@ void SkyDome::Update(VECTOR pos)
 	// スカイドームの更新
 	m_pModel->SetRot(VGet(0.0f, m_rot, 0.0f));
 	m_pModel->SetPos(VGet(pos.x, 0.0f, pos.z));
-
-#ifdef _DEBUG
-	DrawFormatString(0, 40, 0xffffff, "スカイドーム座標：%f,%f,%f", pos.x, pos.y, pos.z);
-#endif // _DEBUG
 }
 
 void SkyDome::Draw()

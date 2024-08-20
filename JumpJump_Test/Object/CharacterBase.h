@@ -8,6 +8,12 @@ class CharacterBase : public ObjectBase
 {
 public:
 
+	// ステータス情報
+	struct Status
+	{
+		float spd = 10.0f;	// スピード
+	};
+
 	// 移動情報
 	struct MoveData
 	{
@@ -22,20 +28,20 @@ public:
 	{
 		int8_t idle = 0;		// 待機
 		int8_t walk = 0;		// 歩き
-		int8_t run = 0;			// 走り
 		int8_t jumpStart = 0;	// ジャンプ時
 		int8_t jumpIdle = 0;	// ジャンプ中
+		int8_t run = 0;			// 走り
 		int8_t knockBack = 0;	// ノックバック
 	};
 
 public:
 	CharacterBase();
-	virtual ~CharacterBase() {};
+	virtual ~CharacterBase();
 
-	virtual void Init() abstract;
-	virtual void Update(Input& input) abstract;
+	virtual void Init();
+	virtual void Update(Input& input);
 
-	virtual void Draw(std::shared_ptr<ToonShader> pToonShader) abstract;
+	virtual void Draw(std::shared_ptr<ToonShader> pToonShader);
 
 	/// <summary>
 	/// 攻撃を受けた時の処理
@@ -126,6 +132,7 @@ protected:	// 関数
 	void SmoothAngle(float& nowAngle, float nextAngle);
 
 protected:	// 変数
+	Status m_statusData;	// ステータス情報
 	MoveData m_moveData;	// 移動情報
 	AnimData m_animData;	// アニメーション情報
 

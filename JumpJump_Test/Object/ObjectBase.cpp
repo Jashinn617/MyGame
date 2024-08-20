@@ -1,9 +1,14 @@
 #include "ObjectBase.h"
+
 #include "CharacterBase.h"
-#include "Model.h"
 #include "ObjectManager.h"
-#include "../Util/Time.h"
+#include "Model.h"
 #include "Circle.h"
+
+#include "../Util/Time.h"
+
+#include"../Shader/ToonShader.h"
+#include"../Shader/ShadowMapShader.h"
 
 namespace
 {
@@ -23,6 +28,7 @@ ObjectBase::ObjectBase():
 	m_angle(0.0f),
 	m_moveSpeed(0.0f),
 	m_modelH(-1),
+	m_isDamage(false),
 	m_isMove(false),
 	m_isHit(false),
 	m_wallNum(0),
@@ -33,9 +39,10 @@ ObjectBase::ObjectBase():
 	m_pPoly(nullptr),
 	m_lineRes{},
 	m_oldPos{0,0,0},
-	m_nextPos{0,0,0},
-	m_pExistCountTime(std::make_shared<Time>(kExistTimeCount))
+	m_nextPos{0,0,0}
 {
+	m_pExistCountTime = std::make_shared<Time>(kExistTimeCount);
+
 	m_info.pos = VGet(0.0f, 0.0f, 0.0f);
 	m_info.vec = VGet(0.0f, 0.0f, 0.0f);
 	m_info.rot = VGet(0.0f, 0.0f, 0.0f);
@@ -44,9 +51,44 @@ ObjectBase::ObjectBase():
 
 ObjectBase::~ObjectBase()
 {
+	/*処理無し*/
 }
 
-void ObjectBase::ShadowMapDraw(std::shared_ptr<ShadowMapShader> pShadoeMapShader)
+void ObjectBase::Init()
+{
+	/*処理無し*/
+}
+
+void ObjectBase::Update(Input& input)
+{
+	/*処理無し*/
+}
+
+void ObjectBase::Draw(std::shared_ptr<ToonShader> pToonShader)
+{
+	/*処理無し*/
+}
+
+void ObjectBase::ShadowMapDraw(std::shared_ptr<ShadowMapShader> pShadowMapShader)
+{
+	// モデルがない場合は描画をしない
+	if (m_pModel == nullptr) return;
+
+	for (int i = 0; i < MV1GetTriangleListNum(m_pModel->GetModelHandle()); i++)
+	{
+		int shaderType = MV1GetTriangleListVertexType(m_pModel->GetModelHandle(), i);
+		pShadowMapShader->SetShader(shaderType);
+
+		MV1DrawTriangleList(m_pModel->GetModelHandle(), i);
+	}
+}
+
+void ObjectBase::Draw2D()
+{
+	/*処理無し*/
+}
+
+void ObjectBase::StageClear()
 {
 	/*処理無し*/
 }
@@ -81,8 +123,7 @@ void ObjectBase::MoveCollFieldUpdate(ObjectBase* pField)
 		dynamic_cast<CharacterBase*>(this)->GetCircle()->GetRadius() + VSize(GetInfo().vec));
 
 	// XかZにkMove(0.01f)以上移動した場合は移動した事にする
-	if (fabs(dynamic_cast<CharacterBase*>(this)->GetInfo().vec.x) > kMove 
-		|| fabs(GetInfo().vec.z) > kMove)
+	if (fabs(dynamic_cast<CharacterBase*>(this)->GetInfo().vec.x) > kMove || fabs(GetInfo().vec.z) > kMove)
 	{
 		m_isMove = true;
 	}
@@ -103,8 +144,6 @@ void ObjectBase::MoveCollFieldUpdate(ObjectBase* pField)
 
 	// 検出したプレイヤーの周囲のポリゴン情報を開放する(後始末)
 	MV1CollResultPolyDimTerminate(m_hitDim);
-
-
 }
 
 void ObjectBase::CheckWallAndFloor()
@@ -118,8 +157,7 @@ void ObjectBase::CheckWallAndFloor()
 	{
 		// ポリゴンの法線のY成分がkWallPolyBorderに達しているか
 		// どうかで壁ポリゴンか床ポリゴンかを判断する
-		if (m_hitDim.Dim[i].Normal.y<kWallPolyBorder &&
-			m_hitDim.Dim[i].Normal.y>-kWallPolyBorder)
+		if (m_hitDim.Dim[i].Normal.y < kWallPolyBorder && m_hitDim.Dim[i].Normal.y > -kWallPolyBorder)
 		{
 			// 壁ポリゴンと判断された場合でも、
 			// プレイヤーのY座標よりも高いポリゴンのみと当たり判定を行う
@@ -141,7 +179,7 @@ void ObjectBase::CheckWallAndFloor()
 		else
 		{
 			// ポリゴンの数が限界数に達していなかった場合はポリゴンを配列に追加する
-			if (m_wallNum < ColInfo::kMaxColHitPolyNum)
+			if (m_floorNum < ColInfo::kMaxColHitPolyNum)
 			{
 				// ポリゴンの構造体のアドレスを壁ポリゴンポインタ配列に保存する
 				m_pFloorPoly[m_floorNum] = &m_hitDim.Dim[i];
@@ -365,6 +403,9 @@ void ObjectBase::FixPosWithFloor()
 		// 一番高い床ポリゴンにぶつけるための判定用変数を初期化する
 		float polyMaxPosY = 0.0f;
 
+		// 床ポリゴンに当たったかどうかのフラグを倒しておく
+		m_isHit = false;
+
 		// 床ポリゴンの数だけ繰り返す
 		for (int i = 0; i < m_floorNum; i++)
 		{
@@ -372,8 +413,8 @@ void ObjectBase::FixPosWithFloor()
 			m_pPoly = m_pFloorPoly[i];
 
 			// 足先から頭の高さまでの間でポリゴンと接触しているかどうかを判定する
-			m_lineRes = HitCheck_Line_Triangle(m_nextPos, VAdd(m_nextPos, VGet(0.0f, kHeadHeight, 0.0f)),
-				m_pPoly->Position[0], m_pPoly->Position[1], m_pPoly->Position[2]);
+			m_lineRes = HitCheck_Line_Triangle(VAdd(m_nextPos, VGet(0.0f, kHeadHeight, 0.0f)),
+				m_nextPos,m_pPoly->Position[0], m_pPoly->Position[1], m_pPoly->Position[2]);
 
 			// 当たっていなかったら何もせずに次のカウントに行く
 			if (!m_lineRes.HitFlag) continue;
@@ -402,8 +443,5 @@ void ObjectBase::FixPosWithFloor()
 				dynamic_cast<CharacterBase*>(this)->EndJump();
 			}
 		}
-		
-
 	}
-
 }

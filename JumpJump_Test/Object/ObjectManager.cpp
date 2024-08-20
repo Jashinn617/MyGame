@@ -23,12 +23,12 @@ namespace
 	constexpr int kGameClearTime = 40;	// ゴールについてから次のシーンに移行するまでの時間
 }
 
-
 ObjectManager::ObjectManager(Game::Stage stage):
 	m_isGameClear(false),
 	m_isGoal(false),
 	m_isTutorial(false)
 {
+	m_H = LoadGraph("Data/img/Sky.png");
 	m_pCollision = std::make_shared<Collision>();
 	m_pSkyDome = std::make_shared<SkyDome>();
 	m_pEnemyManager = std::make_shared<EnemyManager>(stage, this);
@@ -41,6 +41,7 @@ ObjectManager::ObjectManager(Game::Stage stage):
 
 ObjectManager::~ObjectManager()
 {
+	DeleteGraph(m_H);
 	std::list<ObjectBase*>::iterator it = m_pObject.begin();
 	while (it != m_pObject.end())
 	{
@@ -56,7 +57,7 @@ void ObjectManager::Update(Input& input)
 {
 	// オブジェクト配列の最初のイテレータを取得する
 	std::list<ObjectBase*>::iterator it = m_pObject.begin();
-	while (it!=m_pObject.end())
+	while (it != m_pObject.end())
 	{
 		// オブジェクトの更新
 		auto obj = (*it);
@@ -158,18 +159,20 @@ void ObjectManager::Draw()
 	// 作業終了
 	m_pShadowMapShader->WriteEnd();
 
-	// ステージクリア時は2D描画をしない
+	 //ステージクリア時は2D描画をしない
 	if (!m_isGameClear)
 	{
 		// カメラの位置のリセット
 		GetPlayer()->GetCamera()->ResetCamera();
+
+	// 2D描画
 		for (auto& obj : m_pObject)
 		{
 			obj->Draw2D();
 		}
 		
 	}
-	// カメラの位置のリセット
+	 //カメラの位置のリセット
 	GetPlayer()->GetCamera()->ResetCamera();
 }
 

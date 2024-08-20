@@ -96,6 +96,7 @@ private:	// 関数
 	void GameClearUpdate();
 
 private:	// 変数
+	int m_H;
 	bool m_isGameClear;		// ゲームをクリアしたか
 	bool m_isGoal;			// ゴールしたかどうか
 	bool m_isTutorial;		// チュートリアルかどうか

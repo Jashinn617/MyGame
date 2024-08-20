@@ -85,7 +85,7 @@ float4 main(PS_INPUT input) : SV_TARGET
     float4 col = g_Common.Material.Diffuse;
     
     // ノーマルマップの表示
-    //return float4(input.Normal, 1);
+    return float4(input.Normal, 1);
 
     return float4(col.rbg * b, col.a);
 }

@@ -20,7 +20,7 @@ public:
 	virtual void Init();
 	virtual void Update(Input& input) override;
 
-	virtual void Draw();
+	virtual void Draw(std::shared_ptr<ToonShader> pToonShader);
 	virtual void Draw2D() override;
 
 	// 存在するかどうか
@@ -63,12 +63,9 @@ protected:
 
 
 protected:	// 変数
-	VECTOR m_moveDirectionVec;	// 移動方向ベクトル
-	int m_createTime;		// 生成されてから立った時間
+	VECTOR m_moveDirectionVec;			// 移動方向ベクトル
+	int m_createTime;					// 生成されてから立った時間
+	float m_colHeight;					// 当たり判定の高さを中心にする変数
 	void(ItemBase::* m_updateFunc)();	// メンバ関数ポインタ
 	std::shared_ptr<Time> m_deadTime;	// 死んでからの時間
-	float m_colHeight;	// 当たり判定の高さを中心にする変数
-
-
-
 };

@@ -22,5 +22,25 @@ namespace LoadData
 
 class CsvLoad
 {
+public:
+	~CsvLoad();
+
+	static CsvLoad& GetInstance();
+
+	void AnimLoad(CharacterBase::AnimData& Data, const char* charcterName);
+
+private:
+	/// <summary>
+	/// シングルトンパターン
+	/// </summary>
+	CsvLoad();
+
+	/// <summary>
+	/// コピーコンストラクタ
+	/// </summary>
+	/// <param name=""></param>
+	CsvLoad(const CsvLoad&) = delete;
+	// 代入も禁止する
+	void operator=(const CsvLoad&) = delete;
 };
 

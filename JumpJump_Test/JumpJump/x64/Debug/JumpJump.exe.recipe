@@ -7,7 +7,7 @@
   </ProjectOutputs>
   <ContentFiles>
     <ContentFile>
-      <FullPath>D:\GitHub\MyGame\JumpJump_Test\x64\Debug\DamageShader.cso</FullPath>
+      <FullPath>D:\GitHub\MyGame\JumpJump_Test\DamageShader.pso</FullPath>
     </ContentFile>
     <ContentFile>
       <FullPath>D:\GitHub\MyGame\JumpJump_Test\PixelTest.pso</FullPath>
@@ -19,7 +19,7 @@
       <FullPath>D:\GitHub\MyGame\JumpJump_Test\ShadowMapShader.pso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>D:\GitHub\MyGame\JumpJump_Test\ToomFieldShader.pso</FullPath>
+      <FullPath>D:\GitHub\MyGame\JumpJump_Test\ToonFieldShader.pso</FullPath>
     </ContentFile>
     <ContentFile>
       <FullPath>D:\GitHub\MyGame\JumpJump_Test\ToonShader.pso</FullPath>

@@ -16,9 +16,29 @@ SceneBase::SceneBase():
 	/*ˆ—–³‚µ*/
 }
 
+SceneBase::~SceneBase()
+{
+	/*ˆ—–³‚µ*/
+}
+
+void SceneBase::Init()
+{
+	/*ˆ—–³‚µ*/
+}
+
 std::shared_ptr<SceneBase> SceneBase::Update(Input& input)
 {
 	return shared_from_this();
+}
+
+void SceneBase::Draw()
+{
+	/*ˆ—–³‚µ*/
+}
+
+void SceneBase::End()
+{
+	/*ˆ—–³‚µ*/
 }
 
 void SceneBase::UpdateFade()

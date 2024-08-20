@@ -135,6 +135,7 @@ private:	// 関数
 private:	// 変数
 	VECTOR m_pos;					// 位置
 	int m_modelH;					// モデルハンドル
+	int m_animSpeed;
 
 	/*アニメーションの切り替え情報*/
 	int m_animChangeFrame;			// 現在の切り替えフレーム数

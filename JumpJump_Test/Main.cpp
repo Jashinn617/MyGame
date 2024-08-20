@@ -2,6 +2,8 @@
 
 #include "Util/Game.h"
 #include "Util/Input.h"
+#include "Util//Pad.h"
+
 #include "Scene/SceneManager.h"
 
 #include <memory>
@@ -9,38 +11,49 @@
 // プログラムは WinMain から始まります
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	// ゲームバーのタイトルの設定
-	SetWindowText(_T("HOP!STEP!JUMP★JUMP!!"));
-
-	// スクリーンサイズの設定
-	ChangeWindowMode(true);
-	SetGraphMode(Game::kScreenWidth, Game::kScreenHeight, Game::kColorDepth);
-
 	// windowモード設定
 	ChangeWindowMode(true);
+
+	// ダブルバッファモード
+	SetDrawScreen(DX_SCREEN_BACK);
+
+	// ゲームバーのタイトルの設定
+	SetWindowText(Game::kTitleText);
+
+	// スクリーンサイズの設定
+	ChangeWindowMode(Game::kWindowMode);
+	SetGraphMode(Game::kScreenWidth, Game::kScreenHeight, Game::kColorDepth);	
 
 	if (DxLib_Init() == -1)		// ＤＸライブラリ初期化処理
 	{
 		return -1;			// エラーが起きたら直ちに終了
 	}
 
+	// フルスクリーンウインドウの切り替えでリソースが消えるのを防ぐ。
+	// Effekseerを使用する場合は必ず設定する。
+	SetChangeScreenModeGraphicsSystemResetFlag(false);
+
+	// DXライブラリのデバイスロストした時のコールバックを設定する。
+	// ウインドウとフルスクリーンの切り替えが発生する場合は必ず実行する。
+	// ただし、2DirectX11を使用する場合は実行する必要はない。
+	//Effekseer_SetGraphicsDeviceLostCallbackFunctions();
+
+	// Zバッファを使用する
 	SetUseZBuffer3D(true);
+	// Zバッファへの書き込みを行う
 	SetWriteZBuffer3D(true);
+
+	// ポリゴンの裏側は描画しない
 	SetUseBackCulling(true);
 
-	// ダブルバッファモード
-	SetDrawScreen(DX_SCREEN_BACK);
+	// ライトの設定
+	SetLightPosition(Game::kLightPos);
+	SetLightDirection(Game::kLightDir);
 
-	// ********** フォントのロード **********
-	//LPCSTR font_path = "Data/font/GN-KillGothic-U-KanaNA.ttf"; // 読み込むフォントファイルのパス
-	//if (AddFontResourceEx(font_path, FR_PRIVATE, NULL) > 0) {
-	//}
-	//else {
-	//	// フォント読込エラー処理
-	//	MessageBox(NULL, _T("フォント読込失敗"), _T(""), MB_OK);
-	//}
-
-	
+	// アスペクト比の設定
+	SetCameraDotAspect(Game::kAspect);
+	// カメラの視野角の設定
+	SetupCamera_Perspective(Game::kFov);
 
 	// シーン管理
 	shared_ptr<SceneManager> pScene = make_shared<SceneManager>();
@@ -77,13 +90,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 
 	pScene->End();
-
-	//// ********** フォントのアンロード **********
-	//if (RemoveFontResourceEx(font_path, FR_PRIVATE, NULL)) {
-	//}
-	//else {
-	//	MessageBox(NULL, _T("remove failure"), _T(""), MB_OK);
-	//}
 
 	DxLib_End();				// ＤＸライブラリ使用の終了処理
 

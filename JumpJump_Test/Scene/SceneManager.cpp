@@ -1,7 +1,9 @@
 #include "SceneManager.h"
 #include "SceneDebug.h"
 #include "SceneTitle.h"
+
 #include "../Util/Input.h"
+#include "../Util/Pad.h"
 #include "../Util/Game.h"
 
 #include <assert.h>
@@ -44,6 +46,9 @@ bool SceneManager::Update(Input& input)
 	LONGLONG start = GetNowHiPerformanceCount();
 
 	assert(m_pScene);
+
+	// パッド情報の更新
+	Pad::Update();
 
 	shared_ptr<SceneBase> pNext = m_pScene->Update(input);
 

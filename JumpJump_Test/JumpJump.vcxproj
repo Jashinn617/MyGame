@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Util\Pad.cpp" />
     <ClCompile Include="Shader\DamageShader.cpp" />
     <ClCompile Include="Image\FadeImage.cpp" />
     <ClCompile Include="Image\Image.cpp" />
@@ -186,6 +187,7 @@
     <ClCompile Include="Util\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Util\Pad.h" />
     <ClInclude Include="Shader\DamageShader.h" />
     <ClInclude Include="Image\FadeImage.h" />
     <ClInclude Include="Image\Image.h" />

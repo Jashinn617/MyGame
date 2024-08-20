@@ -12,7 +12,7 @@ namespace
 	constexpr float kFallMaxSpeed = -15.0f;	// 最大落下速度
 	constexpr float kChangeAngleSpeed = 0.25f;	// 滑らかに角度を移動させる速度
 	constexpr float kAngleDiffMax = DX_PI_F + 0.3f;	// 角度の最大差
-	constexpr float kAngleDiffMin = DX_PI_F - 0.3f;	// 角度の最小差
+	constexpr float kAngleDiffMin = -DX_PI_F - 0.3f;	// 角度の最小差
 	constexpr float kSlideLength = 10.0f;	// 押し出しの大きさ	
 }
 
@@ -26,8 +26,29 @@ CharacterBase::CharacterBase():
 	/*処理無し*/
 }
 
+CharacterBase::~CharacterBase()
+{
+	/*処理無し*/
+}
+
+void CharacterBase::Init()
+{
+	/*処理無し*/
+}
+
+void CharacterBase::Update(Input& input)
+{
+	/*処理無し*/
+}
+
+void CharacterBase::Draw(std::shared_ptr<ToonShader> pToonShader)
+{
+	/*処理無し*/
+}
+
 void CharacterBase::OnDamage(VECTOR targetPos)
 {
+	/*処理無し*/
 }
 
 void CharacterBase::MoveCollCharacterUpdate(CharacterBase* pTarget)
@@ -145,7 +166,8 @@ void CharacterBase::SmoothAngle(float& nowAngle, float nextAngle)
 	}
 
 	// 角度の差が少ない場合は何もせずにそのまま次の角度を返す
-	if (angleDiff<kChangeAngleSpeed && angleDiff>-kChangeAngleSpeed)
+	if (angleDiff < kChangeAngleSpeed && 
+		angleDiff > -kChangeAngleSpeed)
 	{
 		nowAngle = nextAngle;
 		return;

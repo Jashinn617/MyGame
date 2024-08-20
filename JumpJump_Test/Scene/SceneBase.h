@@ -32,18 +32,18 @@ public:
 
 public:
 	SceneBase();
-	~SceneBase() {};
+	~SceneBase();
 
-	virtual void Init() abstract;
+	virtual void Init();
 	virtual std::shared_ptr<SceneBase> Update(Input& input);
-	virtual void Draw() abstract;
-	virtual void End() abstract;
+	virtual void Draw();
+	virtual void End();
 
 	/// <summary>
 	/// シーンの種類の取得
 	/// </summary>
 	/// <returns></returns>
-	virtual SceneKind GetSceneKind() abstract;
+	virtual SceneKind GetSceneKind() = 0;
 
 	/// <summary>
 	/// フェードの更新

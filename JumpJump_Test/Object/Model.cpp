@@ -4,6 +4,8 @@
 
 Model::Model(const char* fileName):
 	m_pos{0,0,0},
+	m_modelH(-1),
+	m_animSpeed(0),
 	m_animChangeFrame(0),
 	m_animChangeFrameTotal(0),
 	m_animChangeSpeed(0),
@@ -22,6 +24,8 @@ Model::Model(const char* fileName):
 
 Model::Model(int modelH):
 	m_pos{ 0,0,0 },
+	m_modelH(-1),
+	m_animSpeed(0),
 	m_animChangeFrame(0),
 	m_animChangeFrameTotal(0),
 	m_animChangeSpeed(0),
@@ -53,14 +57,14 @@ Model::~Model()
 
 void Model::Update()
 {
-	m_animChangeSpeed++;
+	m_animSpeed++;
 	// アニメーションが一周した場合
-	if (m_animChangeSpeed >= m_animChangeFrameTotal)
+	if (m_animSpeed >= m_animChangeFrameTotal)
 	{
 		// アニメーションの更新をする
 		UpdateAnim(m_prevAnim);
 		UpdateAnim(m_nextAnim);
-		m_animChangeFrame = 0;
+		m_animSpeed = 0;
 	}
 
 	// 指定フレームかけてアニメーションを変更する
@@ -109,17 +113,17 @@ void Model::SetAnim(int animNo, bool isLoop, bool isForceChange)
 {
 	// isForceChangeがfalseだった場合、
 	// 既にアニメーションが再生されていた場合は再生しない
-	if (!isForceChange)if (m_nextAnim.animNo == animNo)return;
+	if ((!isForceChange) && (m_nextAnim.animNo == animNo))return;
 
 	// 以前のアニメーションが残っていた場合は終了する
 	if (m_prevAnim.attachNo != -1)
 	{
-		MV1DetachAnim(m_modelH, m_prevAnim.animNo);
+		MV1DetachAnim(m_modelH, m_prevAnim.attachNo);
 		ClearAnimData(m_prevAnim);
 	}
 	if (m_nextAnim.attachNo != -1)
 	{
-		MV1DetachAnim(m_modelH, m_prevAnim.animNo);
+		MV1DetachAnim(m_modelH, m_prevAnim.attachNo);
 		ClearAnimData(m_nextAnim);
 	}
 
@@ -132,19 +136,18 @@ void Model::SetAnim(int animNo, bool isLoop, bool isForceChange)
 	// 変更に掛けるフレーム数を設定する
 	m_animChangeFrameTotal = 1;
 	m_animChangeFrame = 1;
-
 }
 
 void Model::ChangeAnim(int animNo, bool isLoop, bool isForceChange, int changeFrameNum)
 {
 	// isForceChangeがfalseだった場合、
 	// 既にアニメーションが再生されていた場合は再生しない
-	if (!isForceChange)if (m_nextAnim.animNo == animNo)return;
+	if ((!isForceChange) && (m_nextAnim.animNo == animNo))return;
 
 	// 以前のアニメーションが残っていた場合は終了する
 	if (m_prevAnim.attachNo != -1)
 	{
-		MV1DetachAnim(m_modelH, m_prevAnim.animNo);
+		MV1DetachAnim(m_modelH, m_prevAnim.attachNo);
 		ClearAnimData(m_prevAnim);
 	}
 	// 現在再生中のアニメーションを古くする
@@ -170,7 +173,7 @@ bool Model::IsAnimEnd()
 	if (m_nextAnim.isLoop)return false;
 
 	// 現在のアニメーションの再生時間
-	float time = MV1GetAttachAnimTime(m_modelH, m_nextAnim.animNo);
+	float time = MV1GetAttachAnimTime(m_modelH, m_nextAnim.attachNo);
 	// 現在のアニメーションの再生時間がアニメーションの総再生時間よりも
 	// 大きかったらtrueを返す
 	if (time >= m_nextAnim.totalTime) return true;

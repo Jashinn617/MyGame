@@ -2,16 +2,20 @@
 #include "Player.h"
 #include "PlayerState.h"
 #include "Stamina.h"
+
+#include "../ObjectManager.h"
+#include "../ObjectBase.h"
 #include "../Model.h"
 #include "../Camera.h"
+#include "../Circle.h"
+
 #include "../../Util/Input.h"
 #include "../../Util/Time.h"
 #include "../../Util/MoveDirectionVec.h"
-#include "../ObjectManager.h"
-#include "../ObjectBase.h"
+#include "../../Util/CsvLoad.h"
+
 #include "../../Shader/ToonShader.h"
 #include "../../Shader/DamageShader.h"
-#include "../Circle.h"
 
 
 #include <math.h>
@@ -20,10 +24,10 @@
 namespace
 {
 	const char* const kPlayerFileName = "Data/Model/Player/Character.mv1";	// プレイヤーモデルファイル名
-	constexpr float kSize = 15.0f;	// プレイヤーサイズ
+	constexpr float kSize = 5.0f;	// プレイヤーサイズ
 	constexpr float kModelSize = 0.11f;	// プレイヤーモデルのサイズ
 	/*スピード関係*/
-	constexpr float kMoveSpeedDashRate = 2.2f;	// 走っているときのスピード
+	constexpr float kMoveSpeedDashRate = 1.2f;	// 走っているときのスピード
 	constexpr float kAccelerationRate = 0.5f;	// 加速度
 	/*ジャンプ関係*/
 	constexpr float kJumpMaxSpeed = 8.0f;		// ジャンプ時の最大速度
@@ -34,7 +38,7 @@ namespace
 	constexpr float kJumpIdleNum = -5.0f;
 	constexpr float kJumpDown = -15.0f;
 
-	constexpr float kPlayerAngleSpeed = 0.2f;		// プレイヤーの回転速度
+	constexpr float kPlayerAngleSpeed = 0.02f;		// プレイヤーの回転速度
 	constexpr int kInvinvibleTime = 60;				// 無敵時間
 	constexpr float kKnockBackSpeed = 3.0f;			// ノックバックのスピード
 	constexpr float kKnockBackSpeedDecrease = 0.2f;	// ノックバックスピード減少量
@@ -66,9 +70,23 @@ Player::Player():
 	m_acc(0),
 	m_isStageClear(false),
 	m_moveDirectVec{0,0,0},
-	m_cameraToPlayerVec{0,0,0}	
+	m_cameraToPlayerVec{0,0,0}
 {
 	// アニメーションの初期化
+	CsvLoad::GetInstance().AnimLoad(m_animData, "Player");
+
+	// 移動スピードの初期化
+	m_walkSpeed = m_statusData.spd;
+	m_dashSpeed = m_statusData.spd * kMoveSpeedDashRate;
+	m_acc = m_statusData.spd * kAccelerationRate;
+	// 情報初期化
+	m_info.pos = VGet(0.0f, 0.0f, 0.0f);
+	m_info.vec = VGet(0.0f, 0.0f, 0.0f);
+	m_info.rot = VGet(0.0f, 0.0f, 0.0f);
+	m_info.modelH = -1;
+	m_info.isExist = true;
+	m_objSize = kSize;
+	m_angle = 0.0f;
 
 	/*ポインタの作成*/
 	m_pStamina = std::make_shared<Stamina>();
@@ -76,11 +94,12 @@ Player::Player():
 	m_pInvincibleTime = std::make_shared<Time>(kInvinvibleTime);
 	m_pCamera = std::make_shared<Camera>();
 	m_pCircle = std::make_shared<Circle>(m_info.pos, kSize, kHeight * 0.5f);
-	m_pModel = std::make_shared<Model>(kPlayerFileName);
 	m_pDamageShader = std::make_shared<DamageShader>();
 
+	m_pModel = std::make_shared<Model>(kPlayerFileName);
 	m_pModel->SetAnim(m_animData.idle, false, true);
 	m_pModel->SetScale(VGet(kModelSize, kModelSize, kModelSize));
+
 
 	/*状態の追加*/
 	// 待機
@@ -107,6 +126,8 @@ Player::Player():
 	// 初期状態の設定
 	// 初期は待機状態から始まる
 	m_pState->SetState(PlayerState::StateKind::Idle);
+
+	
 	
 }
 
@@ -150,7 +171,7 @@ void Player::Update(Input& input)
 	GravityUpdate();
 
 	// 攻撃を受けた時のシェーダの更新
-	// 後でする
+	m_pDamageShader->Update();
 
 	// 攻撃を受けた時
 	if (m_isDamage)
@@ -173,7 +194,7 @@ void Player::Update(Input& input)
 	m_pModel->SetRot(VGet(0.0f, m_angle, 0.0f));
 
 	// カメラの更新
-	CameraUpdate();
+	m_pCamera->Update(m_info.pos);
 
 	// プレイヤーからカメラまでの距離の更新
 	m_cameraToPlayerVec = VSub(m_info.pos, m_pCamera->GetPos());
@@ -202,14 +223,11 @@ void Player::Draw(std::shared_ptr<ToonShader> pToonShader)
 		}
 		else	// ダメージを食らっていないときはトゥーンシェーダを使う
 		{
-			for (int i = 0; i < MV1GetTriangleListNum(m_pModel->GetModelHandle()); i++)
-			{
 				int triangleType = MV1GetTriangleListVertexType(m_pModel->GetModelHandle(), i);
 
 				pToonShader->SetShader(triangleType);
 
 				MV1DrawTriangleList(m_pModel->GetModelHandle(), i);
-			}
 		}
 	}
 }
@@ -217,6 +235,8 @@ void Player::Draw(std::shared_ptr<ToonShader> pToonShader)
 void Player::Draw2D()
 {
 	m_pStamina->Draw(m_info.pos);
+
+	m_pCamera->Draw();
 #ifdef _DEBUG
 	DrawFormatString(0, 20, 0xffffff, "プレイヤー座標：%f,%f,%f",m_info.pos.x,m_info.pos.y,m_info.pos.z);
 #endif // _DEBUG
@@ -225,9 +245,6 @@ void Player::Draw2D()
 
 void Player::StageClear()
 {
-	// 座標をゴールの座標にする
-	m_info.pos = VGet(0.0f, 0.0f, 0.0f);
-
 	// 角度を変える
 	m_angle = 0.0f;
 	m_isStageClear = true;
@@ -272,16 +289,10 @@ void Player::EndJump()
 bool Player::ChangeStaminaValue()
 {
 	// ダッシュ中はスタミナを変更する
-	if (m_pState->GetState() == PlayerState::StateKind::Dash) return false;
+	if (m_pState->GetState() == PlayerState::StateKind::Dash) return true;
 
 	// どの条件にも当てはまらない場合はスタミナを変更しない
 	return false;
-}
-
-void Player::CameraUpdate()
-{
-	m_pCamera->Update(m_info.pos);
-	m_pCamera->Draw();
 }
 
 void Player::AngleUpdate()
@@ -289,11 +300,12 @@ void Player::AngleUpdate()
 	// ノックバック中は処理をしない
 	if (m_pState->GetState() == PlayerState::StateKind::KnockBack) return;
 
-	float nextAngle = atan2(m_moveDirectVec.z, m_moveDirectVec.x) +
-		DX_PI_F * 0.5f + m_pCamera->GetCameraAngleX();
+	float nextAngle = 0;
+
+	nextAngle = atan2(m_moveDirectVec.z, m_moveDirectVec.x) 
+		+ DX_PI_F * 0.5f + m_pCamera->GetCameraAngleX();
 
 	SmoothAngle(m_angle, nextAngle);
-	
 }
 
 void Player::MoveDirectionUpdate(Input& input)

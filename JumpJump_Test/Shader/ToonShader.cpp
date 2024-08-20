@@ -11,12 +11,10 @@ ToonShader::ToonShader()
 	assert(m_vertexShader4FrameH != -1);
 	m_vertexShader8FrameH = LoadVertexShader("MV1VertexShader8Frame.vso");
 	assert(m_vertexShader8FrameH != -1);
-	m_pixelShaderH = LoadPixelShader("ToonShader.pso");
+	m_pixelShaderH = LoadPixelShader("MV1PixelShader.pso");
 	assert(m_pixelShaderH != -1);
 	m_pixelShaderFieldH = LoadPixelShader("ToonFieldShader.pso");
 	assert(m_pixelShaderFieldH != -1);
-	m_graphH = MakeScreen(Game::kScreenWidth, Game::kScreenHeight);
-	assert(m_graphH != -1);
 
 	/*ライトの定数バッファの作成*/
 	m_cbufferLightDirH = CreateShaderConstantBuffer(sizeof(float) * 4);
@@ -43,7 +41,6 @@ ToonShader::~ToonShader()
 	DeleteShader(m_vertexShader8FrameH);
 	DeleteShader(m_pixelShaderH);
 	DeleteShader(m_pixelShaderFieldH);
-	DeleteShader(m_graphH);
 	DeleteShaderConstantBuffer(m_cbufferLightDirH);
 	DeleteShaderConstantBuffer(m_cbufferCameraTargetPosH);
 	DeleteShaderConstantBuffer(m_cbufferCameraPosH);

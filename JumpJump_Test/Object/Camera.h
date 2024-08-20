@@ -140,9 +140,9 @@ private:	// 変数
 	bool m_isMove;		// 移動したかどうか
 	bool m_isHit;		// ポリゴンに当たったか
 	
-	MV1_COLL_RESULT_POLY_DIM m_hitDim;								// 当たり判定の結果を入れる構造体
-	MV1_COLL_RESULT_POLY* m_pPolyIndex[ColInfo::kMaxColHitPolyNum];	// 壁ポリゴンと判断されたポリゴンの構造体のアドレスを保存するためのポインタ配列
+	MV1_COLL_RESULT_POLY_DIM m_hitDim{};								// 当たり判定の結果を入れる構造体
+	MV1_COLL_RESULT_POLY* m_pPolyIndex[ColInfo::kMaxColHitPolyNum]{};	// 壁ポリゴンと判断されたポリゴンの構造体のアドレスを保存するためのポインタ配列
 	MV1_COLL_RESULT_POLY* m_pPoly;									// ポリゴンの構造体にアクセス数るために使用するポインタ
-	HITRESULT_LINE m_lineRes;										// 線分とポリゴンとの当たり判定の結果を代入する構造体
+	HITRESULT_LINE m_lineRes{};										// 線分とポリゴンとの当たり判定の結果を代入する構造体
 };
 

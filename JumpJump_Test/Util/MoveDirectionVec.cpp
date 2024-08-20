@@ -55,7 +55,7 @@ void MoveDirectionVec::Update(Input& input)
 		m_directionVec.z = kZero;
 	}
 
-	// 移動方向ベクトルを正規化
+	// 移動方向ベクトルを正規化する
 	if (VSize(m_directionVec) >= 1.0f)
 	{
 		m_directionVec = VNorm(m_directionVec);

@@ -77,11 +77,6 @@ private:	// 関数
 	bool ChangeStaminaValue();
 
 	/// <summary>
-	/// カメラの更新
-	/// </summary>
-	void CameraUpdate();
-
-	/// <summary>
 	/// 角度の更新
 	/// </summary>
 	void AngleUpdate();

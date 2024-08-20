@@ -43,26 +43,26 @@ public:	// 関数
 
 	virtual ~ObjectBase();
 
-	virtual void Init() abstract;
-	virtual void Update(Input& input) abstract;
+	virtual void Init();
+	virtual void Update(Input& input);
 
-	virtual void Draw(std::shared_ptr<ToonShader> pToonShader) abstract;
+	virtual void Draw(std::shared_ptr<ToonShader> pToonShader);
 
 	/// <summary>
 	/// 影の描画
 	/// </summary>
 	/// <param name="pShadoeMapShader"></param>
-	virtual void ShadowMapDraw(std::shared_ptr<ShadowMapShader> pShadoeMapShader);
+	virtual void ShadowMapDraw(std::shared_ptr<ShadowMapShader> pShadowMapShader);
 
 	/// <summary>
 	/// 2Dの描画
 	/// </summary>
-	virtual void Draw2D() abstract;
+	virtual void Draw2D();
 
 	/// <summary>
 	/// ステージクリア時
 	/// </summary>
-	virtual void StageClear() abstract;
+	virtual void StageClear();
 
 	/// <summary>
 	/// メインポインタの設定

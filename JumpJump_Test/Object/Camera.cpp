@@ -1,4 +1,5 @@
 #include "Camera.h"
+
 #include "Circle.h"
 #include "Model.h"
 #include "ObjectBase.h"
@@ -14,21 +15,30 @@ namespace
 {
 	/*通常時*/
 	constexpr float kNear = 10.0f;	// カメラのnear
-	constexpr float kFar = 10000.0f;	// カメラのfar
+	constexpr float kFar = 7000.0f;	// カメラのfar
 	constexpr int kMaxInputNum = 1000;	// アナログ入力状態最大値
+
 	constexpr float kCameraAngleSpeedX = 0.1f;	// カメラの旋回スピードX
 	constexpr float kCameraAngleSpeedY = 0.05f;	// カメラの旋回スピードY
+	
 	constexpr float kCameraAngleVMax = DX_PI_F / 2.0f - 0.8f;	// カメラの最大角度
 	constexpr float kCameraAngleVMin = -DX_PI_F / 2.0f + 0.6f;	// カメラの最小角度
-	constexpr float kCameraPlayerTargetHeight = 400.0f;		// カメラの注視点(プレイヤー座標からの高さ)
+	
+	constexpr float kCameraPlayerTargetHeight = 65.0f;		// カメラの注視点(プレイヤー座標からの高さ)
+	
 	constexpr float kCameraToPlayerLenghtMax = 175.0f;		// カメラからプレイヤーまでの最大距離
 	constexpr float kCameraToPlayerLenghtMin = 0.0f;		// カメラからプレイヤーまでの最小距離
+	
 	constexpr float kCameraToPlayerLenghtSpeed = 5.0f;		// カメラの距離を変えるスピード
+	
 	constexpr float kSize = 10.0f;							// カメラのサイズ(当たり判定用)
+	
 	constexpr int kMaxColHitTryNum = 50;					// カメラの押し出し試行回数
+	
 	/*カメラのついてくる速度*/
 	constexpr float kCameraFollowSpeed = 0.2f;
 	constexpr float kPrevCameraFollowSpeed = 1.0f - kCameraFollowSpeed;
+	
 	/*カメラの注視点を追いかける速度*/
 	constexpr float kCameraTargetFollowSpeed = 0.2f;
 	constexpr float kPrevCameraTargetFollowSpeed = 1.0f - kCameraTargetFollowSpeed;
@@ -43,6 +53,7 @@ namespace
 	constexpr float kStageClearTargetMoveLength = 43.0f;	// ステージクリア時のターゲットの移動量
 	constexpr float kStageClearTargetStartMoveTime = 200.0f;	// ステージをクリアしてからターゲットが動き出すまでの時間
 	constexpr float kStageClearTargetLength = 80.0f;		// ステージクリア時のカメラからターゲットまでの距離
+	
 	/*ステージクリア時のイージングにかかる時間*/
 	constexpr float kStageClearEasingTime = 150.0f;
 	constexpr float kStageClearTargetMoveTime = 100.0f;
@@ -54,6 +65,7 @@ Camera::Camera() :
 	m_cameraToTargetLenght(kCameraToPlayerLenghtMax),
 	m_clearCameraToTargetLength(kStageClearTargetLength),
 	m_stageClearEasingTime(0.0f),
+	m_stageClearTargetEasingTime(0.0f),
 	m_isStageClear(false),
 	m_pos{0,0,0},
 	m_nextPos{0,0,0},
@@ -86,7 +98,6 @@ void Camera::Update(VECTOR playerPos)
 {
 	// ステージクリア時は何もしない
 	if (m_isStageClear) return;
-
 	// 更新前の座標の設定
 	m_prevPos = m_nextPos;
 
@@ -109,6 +120,7 @@ void Camera::Draw()
 {
 #ifdef _DEBUG
 	DrawFormatString(0, 0, 0xffffff, "カメラ座標：%f,%f,%f", m_prevPos.x, m_prevPos.y, m_prevPos.z);
+	DrawFormatString(0, 40, 0xffffff, "ターゲット座標：%f,%f,%f", m_targetPos.x, m_targetPos.y, m_targetPos.z);
 #endif // _DEBUG
 
 }
@@ -241,10 +253,7 @@ void Camera::UpdatePos()
 	// (X軸にカメラとプレイヤーとの距離分だけ伸びたベクトルを
 	// 垂直方向回転させた後に水平方向回転して
 	// それに注視点の座標を足す)
-	m_nextPos = VAdd(
-		VTransform(VTransform(VGet(0.0f, 0.0f, m_cameraToTargetLenght), RotX),
-			RotY),
-		m_targetPos);
+	m_nextPos = VAdd(VTransform(VTransform(VGet(0.0f, 0.0f, m_cameraToTargetLenght), RotX),RotY),m_targetPos);
 }
 
 void Camera::FixPos()

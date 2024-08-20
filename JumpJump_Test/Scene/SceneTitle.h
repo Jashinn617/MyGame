@@ -1,6 +1,9 @@
 #pragma once
 #include "SceneBase.h"
 
+class SkyDome;
+class Camera;
+
 class SceneTitle : public SceneBase
 {
 public:
@@ -14,5 +17,8 @@ public:
 	virtual void End();
 
 	virtual SceneKind GetSceneKind() { return SceneKind::Title; }
+
+	std::shared_ptr<SkyDome> m_pSky;
+	std::shared_ptr<Camera> m_pCamera;
 };
 

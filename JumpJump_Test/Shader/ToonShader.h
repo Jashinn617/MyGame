@@ -18,7 +18,6 @@ private:
 	int m_vertexShader8FrameH;		// 頂点シェーダ8フレームのハンドル
 	int m_pixelShaderH;				// ピクセルシェーダのハンドル
 	int m_pixelShaderFieldH;		// ピクセルシェーダのフィールドに適用するハンドル
-	int m_graphH;
 	/*定数バッファのハンドル*/
 	int m_cbufferLightDirH;				// ライトの向き
 	int m_cbufferCameraTargetPosH;		// カメラのターゲットの位置
