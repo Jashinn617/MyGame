@@ -6,6 +6,8 @@
 #include "../Object/ObjectBase.h"
 #include "../Object/Enemy/EnemyBase.h"
 #include "../Object/Enemy/EnemyManager.h"
+#include "../Object/Item/ItemBase.h"
+#include "../Object/Item/ItemManager.h"
 #include "../Object/Field.h"
 #include "../Object/SkyDome.h"
 #include "../Object/Player/Player.h"
@@ -32,11 +34,15 @@ ObjectManager::ObjectManager(Game::Stage stage):
 	m_pCollision = std::make_shared<Collision>();
 	m_pSkyDome = std::make_shared<SkyDome>();
 	m_pEnemyManager = std::make_shared<EnemyManager>(stage, this);
+	m_pItemManager = std::make_shared<ItemManager>(stage, this);
 	m_pToonShader = std::make_shared<ToonShader>();
 	m_pShadowMapShader = std::make_shared<ShadowMapShader>();
 
 	AddObject(new Player);
 	AddObject(new Field(stage));
+
+	m_pItemManager->Init();
+	m_pEnemyManager->Init();
 }
 
 ObjectManager::~ObjectManager()
@@ -71,6 +77,15 @@ void ObjectManager::Update(Input& input)
 			{
 				it++;
 				continue;
+			}
+
+			// オブジェクトがアイテムだった場合
+			if (obj->GetColType() == ObjectBase::ColType::Item)
+			{
+				// ゲット数を増やす
+				m_pItemManager->AddGetNum();
+
+				// ゲットエフェクトを出す
 			}
 
 			// オブジェクトがプレイヤー以外だった場合
@@ -108,7 +123,11 @@ void ObjectManager::Update(Input& input)
 		}
 	}
 
+	// アイテムマネージャーの更新
+	m_pItemManager->Update();
+
 	// エネミーマネージャーの更新
+	m_pEnemyManager->Update();
 
 	// スカイドームの更新
 	m_pSkyDome->Update(GetPlayer()->GetInfo().pos);
@@ -159,7 +178,7 @@ void ObjectManager::Draw()
 	// 作業終了
 	m_pShadowMapShader->WriteEnd();
 
-	 //ステージクリア時は2D描画をしない
+	 //ステージクリア時は描画をしない
 	if (!m_isGameClear)
 	{
 		// カメラの位置のリセット
@@ -170,6 +189,11 @@ void ObjectManager::Draw()
 		{
 			obj->Draw2D();
 		}
+
+		// アイテムマネージャーの描画
+		m_pItemManager->Draw();
+		// エネミーマネージャーの描画
+		m_pEnemyManager->Draw();
 		
 	}
 	 //カメラの位置のリセット

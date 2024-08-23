@@ -17,7 +17,7 @@ namespace
 	constexpr float kColHitSlideLength = 1.0f;		// 壁押し出し時にスライドさせる距離
 	constexpr float kMove = 0.01f;			// 移動したかを判断するための変数
 	constexpr float kWallPolyBorder = 0.4f;	// 壁ポリゴンか床ポリゴン化を判断するための変数
-	constexpr float kWallPolyHeight = 5.0f;	// 壁ポリゴンと判断するための高さ変数
+	constexpr float kWallPolyHeight = 20.0f;	// 壁ポリゴンと判断するための高さ変数
 	constexpr int kExistTimeCount = 10;		// 死んでからの時間
 	constexpr float kHeadHeight = 40.0f;	// 頭の高さ
 }
@@ -89,6 +89,11 @@ void ObjectBase::Draw2D()
 }
 
 void ObjectBase::StageClear()
+{
+	/*処理無し*/
+}
+
+void ObjectBase::OnAttack()
 {
 	/*処理無し*/
 }

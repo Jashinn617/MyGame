@@ -11,7 +11,7 @@ public:
 	// ステータス情報
 	struct Status
 	{
-		float spd = 10.0f;	// スピード
+		float spd = 5.0f;	// スピード
 	};
 
 	// 移動情報
@@ -107,6 +107,12 @@ public:
 	/// </summary>
 	/// <param name="pPlayer"></param>
 	void AttackEnemyCollPlayer(CharacterBase* pPlayer);
+
+	/// <summary>
+	/// プレイヤーがアイテムに当たった
+	/// </summary>
+	/// <param name="pItem"></param>
+	void PlayerToItem(CharacterBase* pItem);
 
 	/// <summary>
 	/// ジャンプ状態の終了処理

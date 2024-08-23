@@ -16,25 +16,15 @@ class Time;
 class EnemyBase :public CharacterBase
 {
 public:
-	// 敵のタイプ
-	enum class EnemyType
-	{
-		Bee,
-		Crab,
-		Ogre,
-		Skull
-	};
-
-public:
 	EnemyBase();
-	EnemyBase(VECTOR pos);
+	EnemyBase(VECTOR pos, float speed);
+	EnemyBase(VECTOR pos, VECTOR direction, int turnTime, float speed);
 	virtual ~EnemyBase();
 
 	virtual void Init();
 	virtual void Update(Input& input) override;
 
-	virtual void Draw();
-	virtual void Draw2D()override;
+	virtual void Draw(std::shared_ptr<ToonShader> pToonShader);
 
 	/// <summary>
 	/// ステージクリア処理
@@ -43,10 +33,7 @@ public:
 
 	void OnDamage(VECTOR targetPos) override;
 
-	/// <summary>
-	/// ジャンプの終了処理
-	/// </summary>
-	virtual void EndJump();
+	void  OnDead();
 
 	/// <summary>
 	/// 存在するかどうか
@@ -66,12 +53,6 @@ public:
 	/// <returns></returns>
 	virtual ColType GetColType()const { return ColType::Enemy; }
 
-	/// <summary>
-	/// /エネミーの種類
-	/// </summary>
-	/// <returns></returns>
-	virtual EnemyType GetEnemyType()const { return EnemyType::Bee; }	
-
 protected:	// 関数
 	/// <summary>
 	/// 移動速度の初期化
@@ -82,7 +63,7 @@ protected:	// 関数
 	/// <summary>
 	/// 角度の更新
 	/// </summary>
-	virtual void AngleUpdate();
+	void AngleUpdate();
 
 	/// <summary>
 	/// 移動方向の更新
@@ -93,25 +74,12 @@ protected:	// 関数
 	/// 移動処理
 	/// </summary>
 	/// <returns></returns>
-	VECTOR MoveUpdate();
-
-	virtual void StateTransitionUpdate();		// 状態更新
-
-	virtual bool TransitionMove();		// 移動状態に遷移するかどうか
-	virtual bool TransitionKnockBack();	// ノックバック状態に遷移するかどうか
-	virtual bool TransitionDead();		// 死亡状態に遷移するかどうか
-
-	virtual void IdleStateUpdate();		// 待機状態の更新
-	virtual void MoveStateUpdate();		// 移動状態の更新
-	virtual void KnockBackStateUpdate();	// ノックバック状態の更新
-	virtual void DeadStateUpdate();		// 死亡状態の更新
-
+	virtual VECTOR MoveUpdate();
 
 protected:	// 変数
-	int m_createTime;		// 生成されてから立った時間
-	float m_colHeight;	// 当たり判定の高さをモデルの中心にする
-	VECTOR m_enemyToPlayerVec;	// 敵からプレイヤーまでのベクトル
+	float m_colHeight;			// 当たり判定の高さをモデルの中心にする
 	VECTOR m_moveDirectionVec;	// 移動方向ベクトル
-	void (EnemyBase::* m_updateFunc)();	// メンバ関数ポインタ
+	VECTOR m_enemyToPlayerVec;	// 敵からプレイヤーまでのベクトル
+	std::shared_ptr<Time> m_turnTime;	// ターンするまでの時間
 	std::shared_ptr<Time> m_deadTime;	// 死んでからの時間
 };

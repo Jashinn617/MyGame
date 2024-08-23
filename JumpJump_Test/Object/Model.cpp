@@ -9,7 +9,7 @@ Model::Model(const char* fileName):
 	m_animChangeFrame(0),
 	m_animChangeFrameTotal(0),
 	m_animChangeSpeed(0),
-	m_colFrameIndex(0),
+	m_colFrameIndex(-1),
 	m_isUseCol(false),
 	m_isUpdateCol(false)
 {
@@ -29,7 +29,7 @@ Model::Model(int modelH):
 	m_animChangeFrame(0),
 	m_animChangeFrameTotal(0),
 	m_animChangeSpeed(0),
-	m_colFrameIndex(0),
+	m_colFrameIndex(-1),
 	m_isUseCol(false),
 	m_isUpdateCol(false)
 {

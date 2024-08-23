@@ -1,7 +1,9 @@
 #include "Collision.h"
+
 #include "../Object/ObjectBase.h"
 #include "../Object/Player/Player.h"
 #include "../Object/Enemy/EnemyBase.h"
+#include "../Object/Item/ItemBase.h"
 #include "../Object/Camera.h"
 
 #include <array>
@@ -44,7 +46,7 @@ void Collision::Update(ObjectBase* my, ObjectBase* target)
 		// ターゲットのオブジェクトタイプがエネミーの場合
 		if (target->GetColType() == ObjectBase::ColType::Enemy)
 		{
-			dynamic_cast<CharacterBase*>(my)->MoveCollCharacterUpdate(dynamic_cast<CharacterBase*>(target));
+			//dynamic_cast<CharacterBase*>(my)->MoveCollCharacterUpdate(dynamic_cast<CharacterBase*>(target));
 			dynamic_cast<CharacterBase*>(my)->AttackPlayerCollEnemy(dynamic_cast<CharacterBase*>(target));
 			return;
 		}
@@ -52,6 +54,7 @@ void Collision::Update(ObjectBase* my, ObjectBase* target)
 		// ターゲットのオブジェクトタイプがアイテムの場合
 		if (target->GetColType() == ObjectBase::ColType::Item)
 		{
+			dynamic_cast<CharacterBase*>(my)->PlayerToItem(dynamic_cast<CharacterBase*>(target));
 			return;
 		}
 	}
@@ -69,7 +72,8 @@ void Collision::Update(ObjectBase* my, ObjectBase* target)
 		// ターゲットのオブジェクトタイプがプレイヤーの場合
 		if (target->GetColType() == ObjectBase::ColType::Player)
 		{
-			dynamic_cast<CharacterBase*>(my)->MoveCollCharacterUpdate(dynamic_cast<CharacterBase*>(target));
+			
+			//dynamic_cast<CharacterBase*>(my)->MoveCollCharacterUpdate(dynamic_cast<CharacterBase*>(target));
 			dynamic_cast<CharacterBase*>(my)->AttackEnemyCollPlayer(dynamic_cast<CharacterBase*>(target));
 			return;
 		}
@@ -86,7 +90,7 @@ void Collision::Update(ObjectBase* my, ObjectBase* target)
 	if (my->GetColType() == ObjectBase::ColType::Item)
 	{
 		// ターゲットのオブジェクトタイプがフィールドの場合
-		if (my->GetColType() == ObjectBase::ColType::Field)
+		if (target->GetColType() == ObjectBase::ColType::Field)
 		{
 			my->MoveCollFieldUpdate(target);
 			return;

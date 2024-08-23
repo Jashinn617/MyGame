@@ -84,8 +84,10 @@ float4 main(PS_INPUT input) : SV_TARGET
     float b = max(dot(normalize(-g_Common.Light[0].Direction), input.Normal), amb);
     float4 col = g_Common.Material.Diffuse;
     
+    //return float4(input.Diffuse);
+    
     // ノーマルマップの表示
-    return float4(input.Normal, 1);
+    //return float4(input.Normal, 1);
 
     return float4(col.rbg * b, col.a);
 }

@@ -11,7 +11,7 @@ ToonShader::ToonShader()
 	assert(m_vertexShader4FrameH != -1);
 	m_vertexShader8FrameH = LoadVertexShader("MV1VertexShader8Frame.vso");
 	assert(m_vertexShader8FrameH != -1);
-	m_pixelShaderH = LoadPixelShader("MV1PixelShader.pso");
+	m_pixelShaderH = LoadPixelShader("ToonShader.pso");
 	assert(m_pixelShaderH != -1);
 	m_pixelShaderFieldH = LoadPixelShader("ToonFieldShader.pso");
 	assert(m_pixelShaderFieldH != -1);

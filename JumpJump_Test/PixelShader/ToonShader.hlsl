@@ -39,7 +39,7 @@ cbuffer ConstantBuffer : register(b2)
 }
 
 PS_OUTPUT main(PS_INPUT input)
-{
+{    
     PS_OUTPUT ret;
     
     ret.depth = input.Position.zwyx;

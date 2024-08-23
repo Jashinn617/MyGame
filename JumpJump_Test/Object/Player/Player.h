@@ -14,7 +14,6 @@ class StageTest;
 class Model;
 class Circle;
 class PlayerState;
-class Stamina;
 class DamageShader;
 
 /// <summary>
@@ -41,9 +40,14 @@ public:
 	void OnDamage(VECTOR targetPos) override final;
 
 	/// <summary>
+	/// 攻撃をした
+	/// </summary>
+	void OnAttack() override final;
+
+	/// <summary>
 	/// ジャンプ状態の終了
 	/// </summary>
-	void EndJump()override final;	
+	void EndJump() override final;	
 
 	/// <summary>
 	/// ジャンプ力の設定
@@ -70,12 +74,6 @@ public:
 	const std::shared_ptr<Camera> GetCamera() const { return m_pCamera; }
 
 private:	// 関数
-	/// <summary>
-	/// スタミナを変化させるかどうか
-	/// </summary>
-	/// <returns></returns>
-	bool ChangeStaminaValue();
-
 	/// <summary>
 	/// 角度の更新
 	/// </summary>
@@ -122,7 +120,6 @@ private:	// 変数
 
 
 	std::shared_ptr<PlayerState> m_pState;		// 状態のポインタ
-	std::shared_ptr<Stamina> m_pStamina;		// スタミナのポインタ
 	std::shared_ptr<Time> m_pInvincibleTime;	// 攻撃を食らった後の無敵時間
 	std::shared_ptr<Camera> m_pCamera;			// カメラポインタの取得
 	std::shared_ptr<DamageShader> m_pDamageShader;	// ダメージシェーダ

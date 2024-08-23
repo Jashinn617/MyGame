@@ -18,7 +18,7 @@ using namespace CharacterData;
 namespace
 {
 	constexpr int kDeadExistTime = 60;	// 死んでから完全に消えるまでの時間
-	constexpr float kColHeight = 20.0f;	// 当たり判定の高さ
+	constexpr float kColHeight = -10.0f;	// 当たり判定の高さ
 }
 
 ItemBase::ItemBase():
@@ -34,8 +34,6 @@ ItemBase::ItemBase():
 	m_statusData.spd = 10;
 
 	m_objSize = 0.0f;
-
-	m_updateFunc = &ItemBase::IdleStateUpdate;
 
 	// 死んでからの時間
 	m_deadTime = std::make_shared<Time>(kDeadExistTime);
@@ -58,8 +56,6 @@ ItemBase::ItemBase(VECTOR pos):
 
 	m_objSize = 0.0f;
 
-	m_updateFunc = &ItemBase::IdleStateUpdate;
-
 	// 死んでからの時間
 	m_deadTime = std::make_shared<Time>(kDeadExistTime);
 
@@ -73,51 +69,36 @@ ItemBase::~ItemBase()
 
 void ItemBase::Init()
 {
+	/*処理無し*/
 }
 
 void ItemBase::Update(Input& input)
 {
-	// 状態に合わせて更新処理をする
-	StateTransitionUpdate();
-	(this->*m_updateFunc)();
-
-	// 移動ベクトルと回転行列をかけ、回転に伴った移動ベクトルを取得する
+	// 移動ベクトルの計算
 	m_info.vec = MoveUpdate();
-	GravityUpdate();
+
+	// モデル更新
+	m_pModel->Update();
+
+	// 移動ベクトルを現在座標に足す
+	m_info.pos = VAdd(m_info.pos, m_info.vec);
 
 	// 座標の設定
 	m_pModel->SetPos(m_info.pos);
-
-	// 角度の設定
-	m_pModel->SetRot(VGet(0.0f, m_angle + DX_PI_F, 0.0f));
 
 	// シェーダ更新
 }
 
 void ItemBase::Draw(std::shared_ptr<ToonShader> pToonShader)
 {
-	for (int i = 0; i < MV1GetTriangleListNum(m_pModel->GetModelHandle()); i++)
-	{
-		int shaderType = MV1GetTriangleListVertexType(m_pModel->GetModelHandle(), i);
-
-		pToonShader->SetShader(shaderType);
-		MV1DrawTriangleList(m_pModel->GetModelHandle(), i);
-	}
-	pToonShader->ShaderEnd();
-}
-
-void ItemBase::Draw2D()
-{
+	/*処理無し*/
 }
 
 void ItemBase::OnGet()
 {
 	m_isDead = true;
-}
 
-void ItemBase::StageClear()
-{
-	m_updateFunc = &ItemBase::DeadStateUpdate;
+	m_info.isExist = false;
 }
 
 void ItemBase::InitMoveSpeed(float moveSpeed)
@@ -128,59 +109,12 @@ void ItemBase::InitMoveSpeed(float moveSpeed)
 	m_moveData.acceleration = 0.0f;
 }
 
-void ItemBase::AngleUpdate()
-{
-	// 向きたい方向
-	float nextAngle = atan2(m_moveDirectionVec.x, m_moveDirectionVec.z);
-
-	// 滑らかに方向を向く
-	SmoothAngle(m_angle, nextAngle);
-}
-
 void ItemBase::MoveDirectionUpdate()
 {
+	/*処理無し*/
 }
 
 VECTOR ItemBase::MoveUpdate()
 {
-	return VECTOR();
-}
-
-void ItemBase::StateTransitionUpdate()
-{
-}
-
-bool ItemBase::StateTransitionMove()
-{
-	m_updateFunc = &ItemBase::MoveStateUpdate;
-
-	return true;
-}
-
-bool ItemBase::StateTransitionDead()
-{
-	m_updateFunc = &ItemBase::DeadStateUpdate;
-
-	return true;
-}
-
-void ItemBase::IdleStateUpdate()
-{
-
-}
-
-void ItemBase::MoveStateUpdate()
-{
-	// 移動速度の計算
-	m_moveSpeed = min(m_moveSpeed + m_moveData.acceleration, m_moveData.walkSpeed);
-}
-
-void ItemBase::DeadStateUpdate()
-{
-	m_moveSpeed = 0.0f;
-
-	static int DeadTime = 0;
-	
-	// 既定の時間を超えたら存在を消す
-	if (m_deadTime->Update()) m_info.isExist = false;
+	return VGet(0.0f,0.0f,0.0f);
 }

@@ -139,6 +139,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Object\Enemy\EnemySkull.cpp" />
+    <ClCompile Include="Object\Enemy\EnemyBee.cpp" />
+    <ClCompile Include="Object\Item\ItemRotate.cpp" />
+    <ClCompile Include="Object\Item\ItemStop.cpp" />
+    <ClCompile Include="Object\Item\CountGetItem.cpp" />
+    <ClCompile Include="Object\Item\SpownItem.cpp" />
+    <ClCompile Include="Object\Enemy\SpownEnemy.cpp" />
     <ClCompile Include="Util\Pad.cpp" />
     <ClCompile Include="Shader\DamageShader.cpp" />
     <ClCompile Include="Image\FadeImage.cpp" />
@@ -176,7 +183,6 @@
     <ClCompile Include="Scene\SceneDebug.cpp" />
     <ClCompile Include="Scene\SceneBase.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
-    <ClCompile Include="Object\Player\Stamina.cpp" />
     <ClCompile Include="Util\SoundManager.cpp" />
     <ClCompile Include="Util\State.cpp" />
     <ClCompile Include="Util\Text.cpp" />
@@ -187,6 +193,13 @@
     <ClCompile Include="Util\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Object\Enemy\EnemySkull.h" />
+    <ClInclude Include="Object\Enemy\EnemyBee.h" />
+    <ClInclude Include="Object\Item\ItemRotate.h" />
+    <ClInclude Include="Object\Item\ItemStop.h" />
+    <ClInclude Include="Object\Item\CountGetItem.h" />
+    <ClInclude Include="Object\Item\SpownItem.h" />
+    <ClInclude Include="Object\Enemy\SpownEnemy.h" />
     <ClInclude Include="Util\Pad.h" />
     <ClInclude Include="Shader\DamageShader.h" />
     <ClInclude Include="Image\FadeImage.h" />
@@ -211,7 +224,6 @@
     <ClInclude Include="Object\Circle.h" />
     <ClInclude Include="Object\CharacterBase.h" />
     <ClInclude Include="Object\Player\PlayerState.h" />
-    <ClInclude Include="Object\Player\Stamina.h" />
     <ClInclude Include="Util\SoundManager.h" />
     <ClInclude Include="Util\State.h" />
     <ClInclude Include="Util\Text.h" />

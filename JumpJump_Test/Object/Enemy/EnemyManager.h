@@ -5,11 +5,12 @@
 #include <memory>
 #include <array>
 
-class Time;
-class ObjectBase;
 class EnemyBase;
+class SpownEnemy;
+class ObjectBase;
 class Player;
 class ObjectManager;
+class Time;
 
 class EnemyManager
 {
@@ -21,11 +22,11 @@ public:
 	void Update();
 	void Draw();
 
-	void SetObjectManager(std::shared_ptr<ObjectManager> pObjectManager) { m_pObjectManager = pObjectManager; }
 
 
 private:
-	std::array<int, 11> m_modelH;
-
-	std::shared_ptr<ObjectManager> m_pObjectManager;	
+	bool m_isSpown;
+	bool m_isClear;
+	ObjectManager* m_pObjectManager;	
+	std::shared_ptr<SpownEnemy> m_pSpown;
 };

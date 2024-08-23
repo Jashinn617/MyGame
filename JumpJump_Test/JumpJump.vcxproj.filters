@@ -153,9 +153,6 @@
     <ClCompile Include="Object\SkyDome.cpp">
       <Filter>ソース ファイル\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Object\Player\Stamina.cpp">
-      <Filter>ソース ファイル\Object\Player</Filter>
-    </ClCompile>
     <ClCompile Include="Object\CharacterBase.cpp">
       <Filter>ソース ファイル\Object</Filter>
     </ClCompile>
@@ -219,6 +216,27 @@
     <ClCompile Include="Util\Pad.cpp">
       <Filter>ソース ファイル\Util</Filter>
     </ClCompile>
+    <ClCompile Include="Object\Item\CountGetItem.cpp">
+      <Filter>ソース ファイル\Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Item\ItemRotate.cpp">
+      <Filter>ソース ファイル\Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Item\ItemStop.cpp">
+      <Filter>ソース ファイル\Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Item\SpownItem.cpp">
+      <Filter>ソース ファイル\Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Enemy\SpownEnemy.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Enemy\EnemyBee.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Enemy\EnemySkull.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object\Enemy\EnemyBase.h">
@@ -264,9 +282,6 @@
       <Filter>ヘッダー ファイル\Object\Player</Filter>
     </ClInclude>
     <ClInclude Include="Object\Player\PlayerState.h">
-      <Filter>ヘッダー ファイル\Object\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\Player\Stamina.h">
       <Filter>ヘッダー ファイル\Object\Player</Filter>
     </ClInclude>
     <ClInclude Include="Object\Camera.h">
@@ -364,6 +379,27 @@
     </ClInclude>
     <ClInclude Include="Util\Pad.h">
       <Filter>ヘッダー ファイル\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Item\CountGetItem.h">
+      <Filter>ヘッダー ファイル\Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Item\ItemRotate.h">
+      <Filter>ヘッダー ファイル\Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Item\ItemStop.h">
+      <Filter>ヘッダー ファイル\Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Item\SpownItem.h">
+      <Filter>ヘッダー ファイル\Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Enemy\SpownEnemy.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Enemy\EnemyBee.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Enemy\EnemySkull.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

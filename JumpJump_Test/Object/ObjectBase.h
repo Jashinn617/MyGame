@@ -65,6 +65,11 @@ public:	// 関数
 	virtual void StageClear();
 
 	/// <summary>
+	/// 攻撃が当たった時
+	/// </summary>
+	virtual void OnAttack();
+
+	/// <summary>
 	/// メインポインタの設定
 	/// </summary>
 	/// <param name="objectManager"></param>

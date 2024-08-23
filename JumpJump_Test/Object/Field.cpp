@@ -9,7 +9,7 @@ namespace
 {
 	// フィールドのファイル名
 	// ステージごとに変える
-	const char* const kFileName[static_cast<int>(Game::Stage::StageName)]
+	const char* const kFileName[static_cast<int>(Game::Stage::StageNum)]
 	{
 		"Data/Model/Stage/TestStage.mv1",
 		"Data/Model/Stage/TestStage.mv1",

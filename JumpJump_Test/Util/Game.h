@@ -33,6 +33,7 @@ namespace Game
 		Test,
 		Stage1,
 		Stage2,
-		StageName,
+		Tutorial,
+		StageNum,
 	};
 }

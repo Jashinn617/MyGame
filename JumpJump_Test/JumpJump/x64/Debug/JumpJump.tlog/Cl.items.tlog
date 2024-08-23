@@ -1,3 +1,10 @@
+D:\GitHub\MyGame\JumpJump_Test\Object\Enemy\EnemySkull.cpp;D:\GitHub\MyGame\JumpJump_Test\JumpJump\x64\Debug\EnemySkull.obj
+D:\GitHub\MyGame\JumpJump_Test\Object\Enemy\EnemyBee.cpp;D:\GitHub\MyGame\JumpJump_Test\JumpJump\x64\Debug\EnemyBee.obj
+D:\GitHub\MyGame\JumpJump_Test\Object\Item\ItemRotate.cpp;D:\GitHub\MyGame\JumpJump_Test\JumpJump\x64\Debug\ItemRotate.obj
+D:\GitHub\MyGame\JumpJump_Test\Object\Item\ItemStop.cpp;D:\GitHub\MyGame\JumpJump_Test\JumpJump\x64\Debug\ItemStop.obj
+D:\GitHub\MyGame\JumpJump_Test\Object\Item\CountGetItem.cpp;D:\GitHub\MyGame\JumpJump_Test\JumpJump\x64\Debug\CountGetItem.obj
+D:\GitHub\MyGame\JumpJump_Test\Object\Item\SpownItem.cpp;D:\GitHub\MyGame\JumpJump_Test\JumpJump\x64\Debug\SpownItem.obj
+D:\GitHub\MyGame\JumpJump_Test\Object\Enemy\SpownEnemy.cpp;D:\GitHub\MyGame\JumpJump_Test\JumpJump\x64\Debug\SpownEnemy.obj
 D:\GitHub\MyGame\JumpJump_Test\Util\Pad.cpp;D:\GitHub\MyGame\JumpJump_Test\JumpJump\x64\Debug\Pad.obj
 D:\GitHub\MyGame\JumpJump_Test\Shader\DamageShader.cpp;D:\GitHub\MyGame\JumpJump_Test\JumpJump\x64\Debug\DamageShader.obj
 D:\GitHub\MyGame\JumpJump_Test\Image\FadeImage.cpp;D:\GitHub\MyGame\JumpJump_Test\JumpJump\x64\Debug\FadeImage.obj
@@ -35,7 +42,6 @@ D:\GitHub\MyGame\JumpJump_Test\Scene\SceneTitle.cpp;D:\GitHub\MyGame\JumpJump_Te
 D:\GitHub\MyGame\JumpJump_Test\Scene\SceneDebug.cpp;D:\GitHub\MyGame\JumpJump_Test\JumpJump\x64\Debug\SceneDebug.obj
 D:\GitHub\MyGame\JumpJump_Test\Scene\SceneBase.cpp;D:\GitHub\MyGame\JumpJump_Test\JumpJump\x64\Debug\SceneBase.obj
 D:\GitHub\MyGame\JumpJump_Test\Scene\SceneManager.cpp;D:\GitHub\MyGame\JumpJump_Test\JumpJump\x64\Debug\SceneManager.obj
-D:\GitHub\MyGame\JumpJump_Test\Object\Player\Stamina.cpp;D:\GitHub\MyGame\JumpJump_Test\JumpJump\x64\Debug\Stamina.obj
 D:\GitHub\MyGame\JumpJump_Test\Util\SoundManager.cpp;D:\GitHub\MyGame\JumpJump_Test\JumpJump\x64\Debug\SoundManager.obj
 D:\GitHub\MyGame\JumpJump_Test\Util\State.cpp;D:\GitHub\MyGame\JumpJump_Test\JumpJump\x64\Debug\State.obj
 D:\GitHub\MyGame\JumpJump_Test\Util\Text.cpp;D:\GitHub\MyGame\JumpJump_Test\JumpJump\x64\Debug\Text.obj

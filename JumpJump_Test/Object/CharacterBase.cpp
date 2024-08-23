@@ -2,6 +2,8 @@
 #include "Circle.h"
 #include "../Util/Input.h"
 
+#include "Item/ItemBase.h"
+
 
 namespace
 {
@@ -107,12 +109,30 @@ void CharacterBase::AttackPlayerCollEnemy(CharacterBase* pEnemy)
 {
 	// 敵が死んでいたら判定をしない
 	if (pEnemy->IsDead()) return;
+	// オブジェクト同士の当たり判定
+	if (!GetCircle()->IsCollide(pEnemy->GetCircle())) return;
+
+	OnAttack();
+	pEnemy->OnDamage(m_info.pos);
 }
 
 void CharacterBase::AttackEnemyCollPlayer(CharacterBase* pPlayer)
 {
 	// プレイヤーが攻撃を食らっている最中だった場合は判定をしない
 	if (pPlayer->IsDamage()) return;
+	// オブジェクト同士の当たり判定
+	if (!GetCircle()->IsCollide(pPlayer->GetCircle())) return;
+
+	pPlayer->OnDamage(m_info.pos);
+}
+
+void CharacterBase::PlayerToItem(CharacterBase* pItem)
+{
+	// オブジェクト同士の当たり判定
+	if (!GetCircle()->IsCollide(pItem->GetCircle())) return;
+
+	// アイテムをゲットする
+	dynamic_cast<ItemBase*>(pItem)->OnGet();
 }
 
 void CharacterBase::EndJump()

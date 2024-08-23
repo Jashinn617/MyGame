@@ -1,4 +1,5 @@
 #pragma once
+#include "DxLib.h"
 
 #include <vector>
 #include <memory>
@@ -23,12 +24,7 @@ public:
 	};
 
 public:
-	/// <summary>
-	/// コンストラクタ
-	/// </summary>
-	/// <param name="pStamina">スタミナのポインタ</param>
-	PlayerState(std::shared_ptr<Stamina> pStamina);
-
+	PlayerState();
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
@@ -119,6 +115,5 @@ private:	// 変数
 	bool m_isAction;						// アクション行動中か
 	std::vector<StateData> m_pState;		// 状態の格納
 	StateData m_pNowState;					// 現在の状態
-	std::shared_ptr<Stamina> m_pStamina;	// スタミナのポインタ
 };
 
