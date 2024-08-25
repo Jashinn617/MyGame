@@ -33,6 +33,12 @@ public:
 	// アイテムの取得数用のポインタの取得
 	const std::shared_ptr<CountGetItem> GetCountItem()const { return m_pCountGetItem; }
 
+	/// <summary>
+	/// クリア状態かどうか
+	/// </summary>
+	/// <returns></returns>
+	bool IsClear()const { return m_isClear; }
+
 private:
 	bool m_isSpown;		// アイテムを出現させるかどうか
 	bool m_isClear;		// クリアしたかどうか

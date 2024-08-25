@@ -63,7 +63,7 @@ void Collision::Update(ObjectBase* my, ObjectBase* target)
 	if (my->GetColType() == ObjectBase::ColType::Enemy)
 	{
 		// ターゲットのオブジェクトタイプがフィールドの場合
-		if (my->GetColType() == ObjectBase::ColType::Field)
+		if (target->GetColType() == ObjectBase::ColType::Field)
 		{
 			my->MoveCollFieldUpdate(target);
 			return;
@@ -72,8 +72,6 @@ void Collision::Update(ObjectBase* my, ObjectBase* target)
 		// ターゲットのオブジェクトタイプがプレイヤーの場合
 		if (target->GetColType() == ObjectBase::ColType::Player)
 		{
-			
-			//dynamic_cast<CharacterBase*>(my)->MoveCollCharacterUpdate(dynamic_cast<CharacterBase*>(target));
 			dynamic_cast<CharacterBase*>(my)->AttackEnemyCollPlayer(dynamic_cast<CharacterBase*>(target));
 			return;
 		}

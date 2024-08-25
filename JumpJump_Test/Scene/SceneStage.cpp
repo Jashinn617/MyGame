@@ -1,6 +1,8 @@
 #include "SceneStage.h"
 #include "StageSceneManager.h"
 #include "SceneDebug.h"
+#include "SceneGameClear.h"
+
 #include "../Object/ObjectBase.h"
 #include "../Object/Player/Player.h"
 #include "../Object/Camera.h"
@@ -8,6 +10,7 @@
 #include "../Object/Enemy/EnemyBase.h"
 #include "../Object/Field.h"
 #include "../Object/SkyDome.h"
+
 #include "../Util/Collision.h"
 #include "../Util/Input.h"
 
@@ -43,25 +46,25 @@ void SceneStage::Init()
 std::shared_ptr<SceneBase> SceneStage::Update(Input& input)
 {
 	UpdateFade();
-//
-//#ifdef _DEBUG
-//	// デバッグに飛ぶ
-//	if (input.IsTriggered(""))
-//	{
-//		return make_shared<SceneDebug>();
-//	}
-//#endif // _DEBUG
-//
-//	// オプションを開く
-//	if (input.IsTriggered(""))
-//	{
-//		
-//	}
-//
-//	if (m_nextScene != nullptr)
-//	{
-//		return m_nextScene;
-//	}
+
+#ifdef _DEBUG
+	// デバッグに飛ぶ
+	if (input.IsTriggered(""))
+	{
+		return make_shared<SceneDebug>();
+	}
+#endif // _DEBUG
+
+	//// オプションを開く
+	//if (input.IsTriggered(""))
+	//{
+	//	
+	//}
+
+	if (m_nextScene != nullptr)
+	{
+		return m_nextScene;
+	}
 
 	m_pStageSceneManager->Update(input);
 
@@ -88,5 +91,5 @@ void SceneStage::GameClear()
 	m_isSceneEnd = true;
 	
 	// クリアシーンに飛ぶ
-
+	m_nextScene = make_shared<SceneGameClear>(m_pStageSceneManager);
 }

@@ -19,7 +19,8 @@ public:
 private:
 	int m_count;						// カウント数
 	int m_maxCount;						// カウントの最大値
-	int m_H;							// 画像ハンドル
+	int m_H1;							// 画像ハンドル1
+	int m_H2;							// 画像ハンドル2
 	std::array<int, 10>m_numberH{};		// 数字の画像ハンドル
 };
 

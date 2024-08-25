@@ -1,4 +1,5 @@
 #include "DxLib.h"
+
 #include "SceneDebug.h"
 #include "StageSceneManager.h"
 #include "SceneStage.h"
@@ -14,6 +15,7 @@
 
 #include "../Util/Input.h"
 #include "../Util/Vec2.h"
+#include "../Util/Pad.h"
 
 namespace
 {
@@ -49,7 +51,7 @@ void SceneDebug::Init()
 std::shared_ptr<SceneBase> SceneDebug::Update(Input& input)
 {
 	// ボタンが押されたら選択されたシーンに遷移する
-	if (input.IsTriggered("select"))
+	if (Pad::isTrigger(PAD_INPUT_1))
 	{
 		return UpdateNextScene();
 	}

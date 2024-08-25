@@ -1,6 +1,7 @@
 #include "StageSceneManager.h"
 #include "../Util/Input.h"
 #include "../Object/ObjectManager.h"
+#include "../Util/CountTime.h"
 
 
 StageSceneManager::StageSceneManager(Game::Stage stageKind):
@@ -9,6 +10,7 @@ StageSceneManager::StageSceneManager(Game::Stage stageKind):
 	m_stageKind(stageKind)
 {
 	m_pObjectManager = std::make_shared<ObjectManager>(stageKind);
+	m_pCountTime = std::make_shared<CountTime>();
 }
 
 StageSceneManager::~StageSceneManager()
@@ -28,6 +30,8 @@ void StageSceneManager::Update(Input& input)
 	// ゲームクリア時間の更新
 	m_gameClearTime++;
 
+	m_pCountTime->Update(m_gameClearTime);
+
 	// クリア条件を達成した時
 	if (m_pObjectManager->IsGameClear() && !m_isGameClear)
 	{
@@ -40,6 +44,7 @@ void StageSceneManager::Update(Input& input)
 void StageSceneManager::Draw()
 {
 	m_pObjectManager->Draw();
+	m_pCountTime->Draw();
 }
 
 void StageSceneManager::AttachGameClear(std::function<void(void)> gameClear)

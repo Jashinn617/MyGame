@@ -127,7 +127,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(EFKLIB_DIR)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../DxLib</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -135,10 +135,14 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(EFKLIB_DIR)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../DxLib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Util\CountTime.cpp" />
+    <ClCompile Include="Util\TutorialUI.cpp" />
+    <ClCompile Include="Util\ActionTime.cpp" />
+    <ClCompile Include="Image\ExpansionImage.cpp" />
     <ClCompile Include="Object\Enemy\EnemySkull.cpp" />
     <ClCompile Include="Object\Enemy\EnemyBee.cpp" />
     <ClCompile Include="Object\Item\ItemRotate.cpp" />
@@ -146,6 +150,7 @@
     <ClCompile Include="Object\Item\CountGetItem.cpp" />
     <ClCompile Include="Object\Item\SpownItem.cpp" />
     <ClCompile Include="Object\Enemy\SpownEnemy.cpp" />
+    <ClCompile Include="Util\Result.cpp" />
     <ClCompile Include="Util\Pad.cpp" />
     <ClCompile Include="Shader\DamageShader.cpp" />
     <ClCompile Include="Image\FadeImage.cpp" />
@@ -163,7 +168,6 @@
     <ClCompile Include="Util\Collision.cpp" />
     <ClCompile Include="Util\Context.cpp" />
     <ClCompile Include="Util\CsvLoad.cpp" />
-    <ClCompile Include="Util\Font.cpp" />
     <ClCompile Include="Util\MoveDirectionVec.cpp" />
     <ClCompile Include="Object\Camera.cpp" />
     <ClCompile Include="Object\Circle.cpp" />
@@ -193,6 +197,10 @@
     <ClCompile Include="Util\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Util\CountTime.h" />
+    <ClInclude Include="Util\TutorialUI.h" />
+    <ClInclude Include="Util\ActionTime.h" />
+    <ClInclude Include="Image\ExpansionImage.h" />
     <ClInclude Include="Object\Enemy\EnemySkull.h" />
     <ClInclude Include="Object\Enemy\EnemyBee.h" />
     <ClInclude Include="Object\Item\ItemRotate.h" />
@@ -200,6 +208,7 @@
     <ClInclude Include="Object\Item\CountGetItem.h" />
     <ClInclude Include="Object\Item\SpownItem.h" />
     <ClInclude Include="Object\Enemy\SpownEnemy.h" />
+    <ClInclude Include="Util\Result.h" />
     <ClInclude Include="Util\Pad.h" />
     <ClInclude Include="Shader\DamageShader.h" />
     <ClInclude Include="Image\FadeImage.h" />
@@ -218,7 +227,6 @@
     <ClInclude Include="Util\Context.h" />
     <ClInclude Include="Util\CsvLoad.h" />
     <ClInclude Include="Util\Easing.h" />
-    <ClInclude Include="Util\Font.h" />
     <ClInclude Include="Util\MoveDirectionVec.h" />
     <ClInclude Include="Object\Camera.h" />
     <ClInclude Include="Object\Circle.h" />
@@ -256,6 +264,8 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).pso</ObjectFileOutput>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)%(Filename).pso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="PixelShader\PixelTest.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
@@ -284,6 +294,8 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).pso</ObjectFileOutput>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)%(Filename).pso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="PixelShader\ToonFieldShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
@@ -292,6 +304,8 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).pso</ObjectFileOutput>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)%(Filename).pso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="PixelShader\ToonShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
@@ -300,6 +314,8 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).pso</ObjectFileOutput>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)%(Filename).pso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="VertexShader\VertexShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>

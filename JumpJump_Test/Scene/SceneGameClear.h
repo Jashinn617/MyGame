@@ -1,8 +1,13 @@
 #pragma once
+#include "DxLib.h"
 #include "SceneBase.h"
+
+#include <memory>
 
 class Input;
 class StageSceneManager;
+class Time;
+class Result;
 
 class SceneGameClear : public SceneBase
 {
@@ -26,5 +31,9 @@ private:	// 変数
 	int m_graphH;		// 画像ハンドル
 	bool m_isSceneEnd;	// シーンが終了したかどうか
 	bool m_isNextScene;	// 次のシーンに移動可能かどうか
+
+	std::shared_ptr<StageSceneManager> m_pStageSceneManager;
+	std::shared_ptr<Time> m_pImageDrawTime;
+	std::shared_ptr<Result> m_pResult;
 };
 

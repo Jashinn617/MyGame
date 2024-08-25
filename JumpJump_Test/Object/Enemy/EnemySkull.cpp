@@ -66,9 +66,6 @@ void EnemySkull::MoveDirectionUpdate()
 	// プレイヤーのいる方向に進む
 	m_enemyToPlayerVec = VSub(m_pObjectManager->GetPlayer()->GetInfo().pos, m_info.pos);
 	m_moveDirectionVec = VNorm(m_enemyToPlayerVec);
-
-	// 進みたい方向のY軸を省く
-	m_moveDirectionVec.y = 0.0f;
 }
 
 VECTOR EnemySkull::MoveUpdate()

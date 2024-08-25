@@ -18,7 +18,9 @@ public:
 
 	virtual SceneKind GetSceneKind() { return SceneKind::Title; }
 
-	std::shared_ptr<SkyDome> m_pSky;
-	std::shared_ptr<Camera> m_pCamera;
+private:	// 変数
+	int m_H1;	// 画像ハンドル
+	int m_H2;	// 画像ハンドル
+	int m_TitlePosY;	// タイトル位置
 };
 

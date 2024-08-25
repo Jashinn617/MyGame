@@ -108,6 +108,13 @@ void ObjectManager::Update(Input& input)
 		}
 	}
 
+	// アイテムをすべて集めた場合
+	if (m_pItemManager->IsClear())
+	{
+		// クリアフラグをtrueにする
+		m_isGameClear = true;
+	}
+
 	// クリアしている場合は更新処理を行わない
 	if (m_isGameClear) return;
 

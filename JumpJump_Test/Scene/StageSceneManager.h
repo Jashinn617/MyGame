@@ -6,6 +6,7 @@
 
 class Input;
 class ObjectManager;
+class CountTime;
 
 class StageSceneManager
 {
@@ -40,8 +41,8 @@ private:	// 変数
 	bool m_isGameClear;			// ゲームをクリアしたかどうか
 	Game::Stage m_stageKind;	// ステージの種類
 	std::shared_ptr<ObjectManager> m_pObjectManager;	// オブジェクトマネージャークラスのポインタ
+	std::shared_ptr<CountTime> m_pCountTime;		// 秒数カウントのポインタ
 
 	std::function<void(void)> m_gameClear = [] {};	// ゲームクリア時の関数(空のラムダ式)
-
 };
 
