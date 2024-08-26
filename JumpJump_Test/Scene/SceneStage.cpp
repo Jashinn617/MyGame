@@ -25,7 +25,8 @@ namespace
 
 SceneStage::SceneStage(Game::Stage stage):
 	m_isSceneEnd(false),
-	m_nextScene(nullptr)
+	m_nextScene(nullptr),
+	m_stageKind(stage)
 {
 	m_pStageSceneManager = std::make_shared<StageSceneManager>(stage);
 	m_pStageSceneManager->AttachGameClear([=] {GameClear(); });
@@ -91,5 +92,5 @@ void SceneStage::GameClear()
 	m_isSceneEnd = true;
 	
 	// クリアシーンに飛ぶ
-	m_nextScene = make_shared<SceneGameClear>(m_pStageSceneManager);
+	m_nextScene = make_shared<SceneGameClear>(m_pStageSceneManager, m_stageKind);
 }

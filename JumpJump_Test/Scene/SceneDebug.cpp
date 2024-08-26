@@ -136,7 +136,7 @@ std::shared_ptr<SceneBase> SceneDebug::UpdateNextScene()
 	case static_cast<int>(SceneType::GameClear):
 		mainSceneManager = std::make_shared<StageSceneManager>(Game::Stage::Stage1);
 		mainSceneManager->GetObjectManager()->SetGameClear();
-		nextScene = make_shared<SceneGameClear>(mainSceneManager);
+		nextScene = make_shared<SceneGameClear>(mainSceneManager, Game::Stage::Test);
 		break;
 	case static_cast<int>(SceneType::Title):
 		nextScene = make_shared<SceneTitle>();

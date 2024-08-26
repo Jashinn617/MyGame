@@ -147,12 +147,12 @@ void Result::Draw()
 	/*タイム計算*/
 	// 分数
 	int clearMinutesTime = m_clearTime / 60;
-	int minutesTimeFirst = clearMinutesTime % 10;	// 一の位
-	int minutesTimeSecond = clearMinutesTime / 10;	// 十の位
+	int minutesTimeFirst = clearMinutesTime / 10;	// 一の位
+	int minutesTimeSecond = clearMinutesTime % 10;	// 十の位
 	// 秒数
 	int clearSecondTime = m_clearTime % 60;
-	int secondTimeFirst = clearSecondTime % 10;		// 一の位
-	int secondTimeSecond = clearSecondTime / 10;	// 十の位
+	int secondTimeFirst = clearSecondTime / 10;		// 一の位
+	int secondTimeSecond = clearSecondTime % 10;	// 十の位
 
 	// クリアタイムの描画
 	DrawRotaGraph(200, 300,

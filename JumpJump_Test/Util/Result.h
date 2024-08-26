@@ -1,6 +1,6 @@
 #pragma once
-#include "../../Util/Game.h"
-#include "../../Util/Vec2.h"
+#include "../Util/Game.h"
+#include "../Util/Vec2.h"
 
 #include <memory>
 #include <array>

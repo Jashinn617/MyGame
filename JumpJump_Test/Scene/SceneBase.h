@@ -3,6 +3,7 @@
 #include <memory>
 
 class Input;
+class Ranking;
 
 /// <summary>
 /// 各シーンの基底クラス
@@ -99,6 +100,9 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	virtual Transition GetTransitionType() { return m_transition; }
+
+protected:
+	std::shared_ptr<Ranking> m_pRanking;
 
 private:
 	int m_fadeColor;		// フェードの色

@@ -27,6 +27,8 @@ private:
 
 	bool m_isSceneEnd;		// シーンが終了したかどうか
 
+	Game::Stage m_stageKind;	// ステージの種類
+
 	std::shared_ptr<StageSceneManager> m_pStageSceneManager;
 	std::shared_ptr<SceneBase> m_nextScene;		// 次のシーンのポインタ
 };

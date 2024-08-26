@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Util\Ranking.cpp" />
     <ClCompile Include="Util\CountTime.cpp" />
     <ClCompile Include="Util\TutorialUI.cpp" />
     <ClCompile Include="Util\ActionTime.cpp" />
@@ -197,6 +198,7 @@
     <ClCompile Include="Util\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Util\Ranking.h" />
     <ClInclude Include="Util\CountTime.h" />
     <ClInclude Include="Util\TutorialUI.h" />
     <ClInclude Include="Util\ActionTime.h" />

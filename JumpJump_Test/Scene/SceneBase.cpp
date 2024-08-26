@@ -1,6 +1,7 @@
 #include "SceneBase.h"
 #include "DxLib.h"
 #include "../Util/Game.h"
+#include "../Util/Ranking.h"
 
 namespace
 {
@@ -13,7 +14,7 @@ SceneBase::SceneBase():
 	m_fadeSpeed(-kFadeSpeed),
 	m_transition(Transition::Delete)
 {
-	/*ˆ—–³‚µ*/
+	m_pRanking = std::make_shared<Ranking>();
 }
 
 SceneBase::~SceneBase()
