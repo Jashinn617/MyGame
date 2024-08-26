@@ -12,5 +12,8 @@ public:
 	virtual void Draw();
 	virtual void End();
 	virtual SceneKind GetSceneKind() { return SceneKind::Ranking; }
+
+private:
+	int m_backgroundH;	// ”wŒi‰æ‘œƒnƒ“ƒhƒ‹
 };
 

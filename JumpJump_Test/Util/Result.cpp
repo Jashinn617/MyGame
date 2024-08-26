@@ -22,30 +22,30 @@ namespace
 		0
 	};
 
-	const char* const kTimeFileName = "Data/Img/Time/Time.png";
+	const char* const kTimeFileName = "Data/Img/Result/ClearTimeNum/ClearTime.png";
 
 	// 数字の画像ハンドル
-	const char* const kTimeNumFileName[10] =
+	const char* const kMyTimeNumFileName[10] =
 	{
-		 "Data/Img/Time/TimeNum0.png",
-		 "Data/Img/Time/TimeNum1.png",
-		 "Data/Img/Time/TimeNum2.png",
-		 "Data/Img/Time/TimeNum3.png",
-		 "Data/Img/Time/TimeNum4.png",
-		 "Data/Img/Time/TimeNum5.png",
-		 "Data/Img/Time/TimeNum6.png",
-		 "Data/Img/Time/TimeNum7.png",
-		 "Data/Img/Time/TimeNum8.png",
-		 "Data/Img/Time/TimeNum9.png",
+		 "Data/Img/Result/ClearTimeNum/ClearTimeNum0.png",
+		 "Data/Img/Result/ClearTimeNum/ClearTimeNum1.png",
+		 "Data/Img/Result/ClearTimeNum/ClearTimeNum2.png",
+		 "Data/Img/Result/ClearTimeNum/ClearTimeNum3.png",
+		 "Data/Img/Result/ClearTimeNum/ClearTimeNum4.png",
+		 "Data/Img/Result/ClearTimeNum/ClearTimeNum5.png",
+		 "Data/Img/Result/ClearTimeNum/ClearTimeNum6.png",
+		 "Data/Img/Result/ClearTimeNum/ClearTimeNum7.png",
+		 "Data/Img/Result/ClearTimeNum/ClearTimeNum8.png",
+		 "Data/Img/Result/ClearTimeNum/ClearTimeNum9.png",
 	};
 
 	// ランクの画像ハンドル
 	const char* const kRankImage[static_cast<int>(Result::Rank::RankNum)] =
 	{
-		"Data/Img/Rank/RankS.png",
-		"Data/Img/Rank/RankA.png",
-		"Data/Img/Rank/RankB.png",
-		"Data/Img/Rank/RankC.png"
+		"Data/Img/Result/Rank/S.png",
+		"Data/Img/Result/Rank/A.png",
+		"Data/Img/Result/Rank/B.png",
+		"Data/Img/Result/Rank/C.png"
 	};
 
 	// 画像のデータ
@@ -111,7 +111,7 @@ Result::Result(int stageClearTime, Game::Stage stage):
 	// 数字の画像ハンドルロード
 	for (int i = 0; i < m_timeNumH.size(); i++)
 	{
-		m_timeNumH[i] = LoadGraph(kTimeNumFileName[i]);
+		m_timeNumH[i] = LoadGraph(kMyTimeNumFileName[i]);
 	}
 	// ランクの画像ハンドルロード
 	for (int i = 0; i < m_rankH.size(); i++)
@@ -173,7 +173,7 @@ void Result::Draw()
 		m_timeImageH, true);
 
 	// ランクの描画
-	DrawRotaGraph(500, 700,
+	DrawRotaGraph(500, 750,
 		0.8f, 0.0f,
 		m_rankH[0], true);
 

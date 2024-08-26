@@ -6,7 +6,7 @@
 namespace
 {
 	const char* const kFileName = "Data/Img/Time/Time.png";
-	const char* const kTimeNumFileName[10] =
+	const char* const kMyTimeNumFileName[10] =
 	{
 		 "Data/Img/Time/TimeNum0.png",
 		 "Data/Img/Time/TimeNum1.png",
@@ -50,7 +50,7 @@ CountTime::CountTime():
 	// 数字画像ハンドルロード
 	for (int i = 0; i < m_numberH.size(); i++)
 	{
-		m_numberH[i] = LoadGraph(kTimeNumFileName[i]);
+		m_numberH[i] = LoadGraph(kMyTimeNumFileName[i]);
 	}
 }
 
