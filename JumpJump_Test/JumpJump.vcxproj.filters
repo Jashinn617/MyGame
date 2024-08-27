@@ -234,9 +234,6 @@
     <ClCompile Include="Object\Enemy\EnemySkull.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Util\Result.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Image\ExpansionImage.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -411,9 +408,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Object\Enemy\EnemySkull.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Util\Result.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Image\ExpansionImage.h">

@@ -12,7 +12,7 @@ namespace
 	const char* const kFileName[static_cast<int>(Game::Stage::StageNum)]
 	{
 		"Data/Model/Stage/TestStage.mv1",
-		"Data/Model/Stage/TestStage.mv1",
+		"Data/Model/Stage/Stage1.mv1",
 		"Data/Model/Stage/TestStage.mv1",
 	};
 }

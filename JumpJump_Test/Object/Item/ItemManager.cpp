@@ -14,7 +14,7 @@ namespace
 	const char* const kSpownFile[static_cast<int>(Game::Stage::StageNum)] =
 	{
 		"Data/File/Item/TestItemSpown.csv",
-		"Data/File/Item/TestItemSpown.csv",
+		"Data/File/Item/Stage1ItemSpown.csv",
 		"Data/File/Item/TestItemSpown.csv",
 		"Data/File/Item/TestItemSpown.csv"
 	};

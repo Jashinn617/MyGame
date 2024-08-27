@@ -114,11 +114,6 @@ void SpownItem::Add(int createNum, std::string itemName, VECTOR pos)
 		m_pData.push_back(new Data);
 		m_pData.back()->pItem = new ItemStop(pos);
 	}
-	else if (itemName == "Rotate")
-	{
-		/*	m_pData.push_back(new Data);
-			m_pData.back()->pItem = new ItemRotate(pos);*/
-	}
 	else
 	{
 		return;

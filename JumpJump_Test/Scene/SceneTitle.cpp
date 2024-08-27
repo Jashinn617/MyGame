@@ -1,6 +1,8 @@
 #include "DxLib.h"
 #include "SceneTitle.h"
 #include "SceneSelect.h"
+#include "StageSceneManager.h"
+#include "SceneStage.h"
 
 #include "../Util/Game.h"
 #include "../Util/Input.h"
@@ -55,7 +57,7 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 	// タイトルが落ちた後に何かしらのボタンが押されていたら次のシーンに遷移する
 	if (CheckHitKeyAll() && m_TitlePosY >= kTitleLogoPosY)
 	{
-		return make_shared<SceneSelect>();
+		return make_shared<SceneStage>(Game::Stage::Stage1);
 	}
 
 	return shared_from_this();

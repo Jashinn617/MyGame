@@ -82,7 +82,7 @@ void SpownEnemy::Create()
 		// strvec[6]	: 移動方向ベクトルY		float
 		// strvec[7]	: 移動方向ベクトルZ		float
 		// strvec[8]	: 反転するまでの時間	int
-		// strvec[9]	: 移動時間				float
+		// strvec[9]	: 移動速度				float
 
 
 		// 読み取ったデータを座標に変換する

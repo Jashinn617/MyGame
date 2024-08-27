@@ -151,7 +151,6 @@
     <ClCompile Include="Object\Item\CountGetItem.cpp" />
     <ClCompile Include="Object\Item\SpownItem.cpp" />
     <ClCompile Include="Object\Enemy\SpownEnemy.cpp" />
-    <ClCompile Include="Util\Result.cpp" />
     <ClCompile Include="Util\Pad.cpp" />
     <ClCompile Include="Shader\DamageShader.cpp" />
     <ClCompile Include="Image\FadeImage.cpp" />
@@ -210,7 +209,6 @@
     <ClInclude Include="Object\Item\CountGetItem.h" />
     <ClInclude Include="Object\Item\SpownItem.h" />
     <ClInclude Include="Object\Enemy\SpownEnemy.h" />
-    <ClInclude Include="Util\Result.h" />
     <ClInclude Include="Util\Pad.h" />
     <ClInclude Include="Shader\DamageShader.h" />
     <ClInclude Include="Image\FadeImage.h" />

@@ -150,8 +150,9 @@ void EnemyBase::InitMoveSpeed(float moveSpeed)
 
 void EnemyBase::AngleUpdate()
 {
+	float angleZ = m_moveDirectionVec.z * -1;
 	//Œü‚«‚½‚¢•ûŒü
-	float nextAngle = atan2(m_moveDirectionVec.x, m_moveDirectionVec.z);
+	float nextAngle = atan2(m_moveDirectionVec.x, angleZ);
 
 	//ŠŠ‚ç‚©‚Éw’è‚µ‚½•ûŒü‚ÉŒü‚­‚½‚ß‚ÌŠÖ”
 	SmoothAngle(m_angle, nextAngle);
