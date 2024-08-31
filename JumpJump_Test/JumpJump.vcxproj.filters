@@ -249,6 +249,9 @@
     <ClCompile Include="Util\Ranking.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Util\SaveData.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object\Enemy\EnemyBase.h">
@@ -425,26 +428,19 @@
     <ClInclude Include="Util\Ranking.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Util\SaveData.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="VertexShader\MV1VertexShader4Frame.hlsl">
-      <Filter>VertexShader</Filter>
-    </FxCompile>
-    <FxCompile Include="VertexShader\MV1VertexShader8Frame.hlsl">
-      <Filter>VertexShader</Filter>
-    </FxCompile>
-    <FxCompile Include="VertexShader\VertexShader.hlsl">
-      <Filter>VertexShader</Filter>
-    </FxCompile>
-    <FxCompile Include="PixelShader\PixelTest.hlsl">
-      <Filter>PixelShader</Filter>
-    </FxCompile>
-    <FxCompile Include="PixelShader\MV1PixelShader.hlsl">
-      <Filter>PixelShader</Filter>
-    </FxCompile>
-    <FxCompile Include="PixelShader\ShadowMapShader.hlsl" />
-    <FxCompile Include="PixelShader\ToonShader.hlsl" />
-    <FxCompile Include="PixelShader\DamageShader.hlsl" />
-    <FxCompile Include="PixelShader\ToonFieldShader.hlsl" />
+    <FxCompile Include="VertexShader3D.hlsl" />
+    <FxCompile Include="VertexShader3D4Frame.hlsl" />
+    <FxCompile Include="VertexShader3DNormal4Frame.hlsl" />
+    <FxCompile Include="VertexShader3DNormal8Frame.hlsl" />
+    <FxCompile Include="VertexShaderShadowMap.hlsl" />
+    <FxCompile Include="PixelShaderShadowMap.hlsl" />
+    <FxCompile Include="ToonPixelShaderField.hlsl" />
+    <FxCompile Include="ToonPixelShader.hlsl" />
+    <FxCompile Include="VertexShader3D8Frame.hlsl" />
   </ItemGroup>
 </Project>

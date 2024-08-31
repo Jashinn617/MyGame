@@ -495,6 +495,7 @@ void Player::UpdateAnimationState(State prevState)
 	{
 		ChangeAnim(static_cast<int>(AnimKind::Jump));
 	}
+
 	// ‘–‚èó‘Ô‚©‚ç•à‚«ó‘Ô‚É‚È‚Á‚½
 	else if (prevState == State::Run && m_currentState == State::Walk)
 	{
@@ -510,6 +511,7 @@ void Player::UpdateAnimationState(State prevState)
 	{
 		ChangeAnim(static_cast<int>(AnimKind::Jump));
 	}
+
 	// ƒWƒƒƒ“ƒvó‘Ô‚¾‚Á‚½ê‡
 	else if (m_currentState == State::Jump)
 	{

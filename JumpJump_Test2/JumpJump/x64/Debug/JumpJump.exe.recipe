@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>D:\GitHub\MyGame\JumpJump_Test2\x64\Debug\JumpJump.exe</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles>
+    <ContentFile>
+      <FullPath>D:\GitHub\MyGame\JumpJump_Test2\PixelShaderShadowMap.pso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\GitHub\MyGame\JumpJump_Test2\ToonPixelShader.pso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\GitHub\MyGame\JumpJump_Test2\ToonPixelShaderField.pso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\GitHub\MyGame\JumpJump_Test2\VertexShader3D4Frame.vso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\GitHub\MyGame\JumpJump_Test2\VertexShader3D.vso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\GitHub\MyGame\JumpJump_Test2\VertexShader3D8Frame.vso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\GitHub\MyGame\JumpJump_Test2\VertexShader3DNormal4Frame.vso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\GitHub\MyGame\JumpJump_Test2\VertexShader3DNormal8Frame.vso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\GitHub\MyGame\JumpJump_Test2\VertexShaderShadowMap.vso</FullPath>
+    </ContentFile>
+  </ContentFiles>
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>
