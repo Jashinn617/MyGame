@@ -93,6 +93,7 @@ void ShadowMapShader::WriteStart(VECTOR targetPos)
 	SetCameraPositionAndTargetAndUpVec(GetLightPosition(), targetPos, VGet(1, 0, 0));
 
 	// シャドウマップ書き込み時のカメラの視野角
+	// ClearDrawScreenをしたときにクリアしたものを再設定している
 	SetupCamera_Perspective(kShadowMapFov);
 }
 

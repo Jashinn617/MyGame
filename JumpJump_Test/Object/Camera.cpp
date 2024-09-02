@@ -119,8 +119,9 @@ void Camera::Update(VECTOR playerPos)
 void Camera::Draw()
 {
 #ifdef _DEBUG
-	DrawFormatString(0, 0, 0xffffff, "カメラ座標：%f,%f,%f", m_prevPos.x, m_prevPos.y, m_prevPos.z);
-	DrawFormatString(0, 40, 0xffffff, "ターゲット座標：%f,%f,%f", m_targetPos.x, m_targetPos.y, m_targetPos.z);
+	DrawFormatString(0, 0, 0x000000, "カメラ座標：%f,%f,%f", m_prevPos.x, m_prevPos.y, m_prevPos.z);
+	DrawFormatString(0, 40, 0x000000, "ターゲット座標：%f,%f,%f", m_targetPos.x, m_targetPos.y, m_targetPos.z);
+	DrawFormatString(0, 120, 0x000000, "GetTargetPos:%f,%f,%f", GetCameraTarget().x, GetCameraTarget().y, GetCameraTarget().z);
 #endif // _DEBUG
 
 }
