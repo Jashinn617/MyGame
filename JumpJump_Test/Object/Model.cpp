@@ -219,6 +219,6 @@ void Model::UpdateAnimBlendRate()
 	// ƒuƒŒƒ“ƒh—¦‚ª1ˆÈã‚É‚È‚ç‚È‚¢‚æ‚¤‚É‚·‚é
 	if (rate > 1.0f)rate = 1.0f;
 
-	MV1SetAttachAnimBlendRate(m_modelH, m_prevAnim.animNo, 1.0f - rate);
-	MV1SetAttachAnimBlendRate(m_modelH, m_nextAnim.animNo, rate);
+	MV1SetAttachAnimBlendRate(m_modelH, m_prevAnim.attachNo, 1.0f - rate);
+	MV1SetAttachAnimBlendRate(m_modelH, m_nextAnim.attachNo, rate);
 }
