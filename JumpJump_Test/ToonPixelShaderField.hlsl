@@ -61,10 +61,10 @@ PS_OUTPUT main(PS_INPUT input)
     float bright = dot(lightDir, n) * 1.5f;
      
     //光の強さを段階に分ける
-    bright = round(bright * 4) / 4;
+    bright = round(bright * 10) / 10;
     
     //下限値を設定
-    bright = max(bright, 0.6f);
+    bright = max(bright, 0.8f);
     
     //上限値を設定
     bright = min(bright, 1.0f);
@@ -86,6 +86,9 @@ PS_OUTPUT main(PS_INPUT input)
     
     //影情報を反映させた色を返す
     ret.col.rgb = ret.col.rgb * shadowMap.rgb * bright;
+    
+    // 明るさをかさ増しする
+    ret.col.rbg *= 1.5f;
     
     return ret;
 }

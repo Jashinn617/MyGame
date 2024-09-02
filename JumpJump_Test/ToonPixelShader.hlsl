@@ -57,7 +57,7 @@ PS_OUTPUT main(PS_INPUT input)
     float bright = dot(lightDir, n);
     
     //光の強さを段階に分ける
-    bright = round(bright * 4) / 4;
+    bright = round(bright * 10) / 10;
     
     //下限値を設定
     bright = max(bright, 0.4f);
@@ -68,10 +68,16 @@ PS_OUTPUT main(PS_INPUT input)
     //カメラの向いている方向を求める
     float3 cameraDir = normalize(CameraTarget - CameraPos);
     
+    // 明るさをかさ増しする
+    ret.col.rbg *= 5.0f;
+    
+    /*リムライトをつけて立体感を出すく*/    
     //法線の向きとカメラの向きでリムライトの強さを求める
     float rim = dot(n, cameraDir);
     
     //リムライトの強さが-0.25~0.25の間の場合
+    // (法線とカメラの向きが直角の場合)
+    // その部分の色成分を0.05f(ほとんど黒)にする
     if (rim > -0.25f && rim < 0.25f)
     {
         ret.col.rbg = 0.05f;

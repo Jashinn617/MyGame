@@ -193,8 +193,8 @@ void ShadowMapShader::SetShaderField(VECTOR targetPos)
 
 	// シェーダの適用
 	MV1SetUseOrigShader(true);
+	// 頂点シェーダの設定
 	SetUseVertexShader(m_vertexShaderShadowMapFieldH);
-
 	// ピクセルシェーダの設定
 	SetUsePixelShader(m_pixelShaderFieldH);
 }

@@ -160,6 +160,7 @@ void ObjectManager::Draw()
 	for (auto& obj : m_pObject)
 	{
 		// フィールド以外に処理を行う
+		// (フィールドにシャドウマップを張り付けるため)
 		if (obj->GetColType() != ObjectBase::ColType::Field)
 		{
 			obj->ShadowMapDraw(m_pShadowMapShader);

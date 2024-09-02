@@ -313,6 +313,7 @@ VECTOR Player::MoveUpdate(Input& input)
 {
 	// 移動スピードが0の場合は移動しない
 	if (m_moveSpeed == 0.0f)return VGet(0.0f, 0.0f, 0.0f);
+
 	// 移動方向の更新
 	MoveDirectionUpdate(input);
 	// 角度の更新
