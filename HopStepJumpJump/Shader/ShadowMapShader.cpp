@@ -190,7 +190,7 @@ void ShadowMapShader::SetShaderField(VECTOR targetPos)
 	SetShaderConstantBuffer(m_cbufferCameraPosH, DX_SHADERTYPE_PIXEL, 2);
 	// ビュープロジェクション行列
 	UpdateShaderConstantBuffer(m_cbufferViewProjectionMatH);
-	SetShaderConstantBuffer(m_cbufferViewProjectionMatH, DX_SHADERTYPE_PIXEL, 4);
+	SetShaderConstantBuffer(m_cbufferViewProjectionMatH, DX_SHADERTYPE_VERTEX, 4);
 
 	// シェーダの適用
 	MV1SetUseOrigShader(true);

@@ -8,6 +8,7 @@
 
 #include "../../Util/Time.h"
 #include "../../Util/Input.h"
+#include "../../Util/SoundManager.h"
 
 #include "../../Shader/ToonShader.h"
 
@@ -139,6 +140,9 @@ void EnemyBase::OnDamage(VECTOR targetPos)
 {
 	// プレイヤーのY位置が自分の位置より低かった場合
 	if (targetPos.y <= m_info.pos.y + kHeadPos) return;
+
+	// 攻撃音を鳴らす
+	SoundManager::GetInstance().Play("Attack");
 
 	OnDead();
 }

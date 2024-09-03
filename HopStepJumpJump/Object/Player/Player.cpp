@@ -13,6 +13,7 @@
 #include "../../Util/Time.h"
 #include "../../Util/MoveDirectionVec.h"
 #include "../../Util/CsvLoad.h"
+#include "../../Util/SoundManager.h"
 
 #include "../../Shader/ToonShader.h"
 #include "../../Shader/DamageShader.h"
@@ -252,14 +253,12 @@ void Player::OnDamage(VECTOR targetPos)
 	// シェーダをONにする
 
 	// ダメージ音を鳴らす
+	SoundManager::GetInstance().Play("Damage");
 
 }
 
 void Player::OnAttack()
 {
-	// 攻撃音を鳴らす
-
-
 	m_jumpPower = kAttackHitJumpSpeed;
 	m_pState->SetState(PlayerState::StateKind::Jump);
 }
@@ -268,8 +267,6 @@ void Player::EndJump()
 {
 	m_isJump = false;
 	m_jumpPower = 0.0f;
-
-	// 着地音を鳴らす
 
 	// ステージクリア時は処理を終了する
 	if (m_pState->GetState() == PlayerState::StateKind::StateClear) return;
@@ -350,7 +347,7 @@ void Player::JumpInit()
 	m_isJump = true;
 	m_jumpPower = kJumpMaxSpeed;
 	// ジャンプ音を鳴らす
-
+	SoundManager::GetInstance().Play("Jump");
 }
 
 void Player::IdleUpdate()
@@ -370,6 +367,7 @@ void Player::WalkUpdate()
 	m_pModel->ChangeAnim(m_animData.walk, true, false, kAnimSpeed::Walk);
 
 	// 足音を鳴らす
+	SoundManager::GetInstance().Play("Walk");
 
 }
 
@@ -381,7 +379,7 @@ void Player::DashUpdate()
 	m_pModel->ChangeAnim(m_animData.run, true, false, kAnimSpeed::Dash);
 
 	// 足音を鳴らす(ダッシュ時)
-
+	SoundManager::GetInstance().Play("Dash");
 }
 
 void Player::JumpUpdate()

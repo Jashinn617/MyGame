@@ -22,5 +22,6 @@ private:	// 変数
 	int m_H1;	// 画像ハンドル
 	int m_H2;	// 画像ハンドル
 	int m_TitlePosY;	// タイトル位置
+	bool m_IsPlayFallSE;	// タイトルが落ちきったときにSEを鳴らしたかどうか
 };
 

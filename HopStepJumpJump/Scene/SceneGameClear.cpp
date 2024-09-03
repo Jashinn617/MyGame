@@ -5,6 +5,7 @@
 
 #include "../Util/Time.h"
 #include "../Util/Ranking.h"
+#include "../Util/SoundManager.h"
 
 
 
@@ -232,6 +233,9 @@ void SceneGameClear::Init()
 	// ランキングの更新、取得
 	m_pRanking->UpdateRanking(m_stageKind, m_clearTime);
 	m_ranking = m_pRanking->GetRanking(m_stageKind);
+
+	// 前のシーンのサウンドを止める
+	SoundManager::GetInstance().StopSound();
 }
 
 std::shared_ptr<SceneBase> SceneGameClear::Update(Input& input)

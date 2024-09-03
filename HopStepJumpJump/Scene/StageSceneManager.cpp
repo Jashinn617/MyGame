@@ -1,7 +1,10 @@
 #include "StageSceneManager.h"
-#include "../Util/Input.h"
+
 #include "../Object/ObjectManager.h"
+
 #include "../Util/CountTime.h"
+#include "../Util/Input.h"
+#include "../Util/SoundManager.h"
 
 
 StageSceneManager::StageSceneManager(Game::Stage stageKind):
@@ -25,7 +28,12 @@ void StageSceneManager::Init()
 
 void StageSceneManager::Update(Input& input)
 {
+	// BGMを流す
+	SoundManager::GetInstance().Play("MainScene");
+
 	m_pObjectManager->Update(input);
+
+	
 
 	// ゲームクリア時間の更新
 	m_gameClearTime++;

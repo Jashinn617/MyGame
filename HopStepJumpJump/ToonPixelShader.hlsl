@@ -65,13 +65,13 @@ PS_OUTPUT main(PS_INPUT input)
     //もとの色に光の強さをかける
     ret.col.rgb *= bright;
     
-    //カメラの向いている方向を求める
-    float3 cameraDir = normalize(CameraTarget - CameraPos);
-    
     // 明るさをかさ増しする
     ret.col.rbg *= 5.0f;
     
     /*リムライトをつけて立体感を出すく*/    
+    //カメラの向いている方向を求める
+    float3 cameraDir = normalize(CameraTarget - CameraPos);    
+    
     //法線の向きとカメラの向きでリムライトの強さを求める
     float rim = dot(n, cameraDir);
     

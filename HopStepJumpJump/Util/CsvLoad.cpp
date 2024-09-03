@@ -90,7 +90,7 @@ void CsvLoad::AnimLoad(CharacterBase::AnimData& Data, const char* charcterName)
 void CsvLoad::SoundLoad(std::unordered_map<std::string, LoadData::SoundData>& Data)
 {
 	// ファイル情報の読み込み
-	std::ifstream ifs("data/csv/Sound.csv");
+	std::ifstream ifs("Data/File/SoundData.csv");
 	std::string line;
 	while (getline(ifs, line))
 	{
@@ -105,17 +105,21 @@ void CsvLoad::SoundLoad(std::unordered_map<std::string, LoadData::SoundData>& Da
 		LoadData::SoundData data{};
 
 		std::string str;
-		str = "data/sound/" + strvec[0] + ".mp3";
-		//サウンドをロード
-		data.handle = LoadSoundMem(str.c_str());
-
+		
 		//BGMかSEかを判断する
-		if (stoi(strvec[1]) == 0)
+		if (stoi(strvec[1]) == 0)	// SE
 		{
+			str = "Data/Sound/SE/" + strvec[0] + ".mp3";
+			//サウンドをロード
+			data.handle = LoadSoundMem(str.c_str());
 			data.isBgm = false;
 		}
-		else
+		else	// BGM
 		{
+			str = "Data/Sound/BGM/" + strvec[0] + ".mp3";
+			//サウンドをロード
+			data.handle = LoadSoundMem(str.c_str());
+
 			data.isBgm = true;
 		}
 		//ボリュームの大きさを設定

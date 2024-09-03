@@ -7,6 +7,7 @@
 #include "../Util/Game.h"
 #include "../Util/Input.h"
 #include "../Util/Pad.h"
+#include "../Util/SoundManager.h"
 
 #include "../Object/SkyDome.h"
 #include "../Object/Camera.h"
@@ -31,7 +32,8 @@ namespace
 SceneTitle::SceneTitle():
 	m_H1(-1),
 	m_H2(-1),
-	m_TitlePosY(kStartTitleLogoPosY)
+	m_TitlePosY(kStartTitleLogoPosY),
+	m_IsPlayFallSE(false)
 {
 	/*画像のロード*/
 	m_H1 = LoadGraph(kTitleLogoImg);
@@ -47,6 +49,8 @@ SceneTitle::~SceneTitle()
 
 void SceneTitle::Init()
 {
+	// 前のシーンのサウンドを止める
+	SoundManager::GetInstance().StopSound();
 }
 
 std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
@@ -54,9 +58,31 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 	m_TitlePosY += kTitleFallSpeed;
 	m_TitlePosY = min(m_TitlePosY, kTitleLogoPosY);
 
+	// タイトルの落下音を流す
+	if (m_TitlePosY <= kTitleLogoPosY && !m_IsPlayFallSE)
+	{
+		SoundManager::GetInstance().Play("Fall");
+	}
+
+	// タイトルが着地したら着地音を流す
+	if (m_TitlePosY >= kTitleLogoPosY && !m_IsPlayFallSE)
+	{
+		SoundManager::GetInstance().Play("TitleLanding");
+		m_IsPlayFallSE = true;
+	}
+	// SEが流れ終わってからBGMを流す
+	if (m_TitlePosY >= kTitleLogoPosY && m_IsPlayFallSE)
+	{
+		SoundManager::GetInstance().Play("TitleScene");
+	}
+
+
 	// タイトルが落ちた後に何かしらのボタンが押されていたら次のシーンに遷移する
 	if (CheckHitKeyAll() && m_TitlePosY >= kTitleLogoPosY)
 	{
+		// 決定SEを流す
+		SoundManager::GetInstance().Play("TitleButtonPush");
+
 		return make_shared<SceneStage>(Game::Stage::Stage1);
 	}
 

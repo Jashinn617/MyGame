@@ -8,6 +8,7 @@
 
 #include "../../Util/Time.h"
 #include "../../Util/Input.h"
+#include "../../Util/SoundManager.h"
 
 #include "../../Shader/ToonShader.h"
 
@@ -91,6 +92,7 @@ void ItemBase::Update(Input& input)
 
 void ItemBase::Draw(std::shared_ptr<ToonShader> pToonShader)
 {
+	// 頂点ごとに描画する
 	for (int i = 0; i < MV1GetTriangleListNum(m_pModel->GetModelHandle()); i++)
 	{
 		int shaderType = MV1GetTriangleListVertexType(m_pModel->GetModelHandle(), i);
@@ -105,8 +107,10 @@ void ItemBase::Draw(std::shared_ptr<ToonShader> pToonShader)
 
 void ItemBase::OnGet()
 {
+	// アイテムの取得音を鳴らす
+	SoundManager::GetInstance().Play("ItemGet");
 	m_isDead = true;
-
+	// 存在を消す
 	m_info.isExist = false;
 }
 

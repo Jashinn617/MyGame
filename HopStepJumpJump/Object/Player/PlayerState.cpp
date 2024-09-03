@@ -1,6 +1,8 @@
 #include "PlayerState.h"
+
 #include "../../Util/Input.h"
 #include "../../Util/Pad.h"
+#include "../../Util/SoundManager.h"
 
 PlayerState::PlayerState():
 	m_isAction(false)
@@ -15,6 +17,14 @@ void PlayerState::Update(Input& input)
 	m_pNowState.stateUpdate();
 
 	// 歩き、走り状態ではないときはサウンドを止める
+	if (m_pNowState.stateKind != StateKind::Walk)
+	{
+		SoundManager::GetInstance().DesignationStopSound("Walk");
+	}
+	if (m_pNowState.stateKind != StateKind::Dash)
+	{
+		SoundManager::GetInstance().DesignationStopSound("Dash");
+	}
 }
 
 void PlayerState::OnDamage()

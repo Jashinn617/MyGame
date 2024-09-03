@@ -13,6 +13,7 @@
 
 #include "../Util/Collision.h"
 #include "../Util/Input.h"
+#include "../Util/SoundManager.h"
 
 #include <cassert>
 #include <functional>
@@ -42,6 +43,10 @@ SceneStage::~SceneStage()
 
 void SceneStage::Init()
 {
+	// 前のシーンのサウンドが残っていた場合は停止する
+	SoundManager::GetInstance().StopSound();
+
+
 }
 
 std::shared_ptr<SceneBase> SceneStage::Update(Input& input)
