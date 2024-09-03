@@ -58,10 +58,15 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 	m_TitlePosY += kTitleFallSpeed;
 	m_TitlePosY = min(m_TitlePosY, kTitleLogoPosY);
 
+	/*タイトル落下中*/
 	// タイトルの落下音を流す
 	if (m_TitlePosY <= kTitleLogoPosY && !m_IsPlayFallSE)
 	{
-		SoundManager::GetInstance().Play("Fall");
+		// 落下音が流れてなかった場合
+		if (!SoundManager::GetInstance().IsDesignationCheckPlaySound("Fall"))
+		{
+			SoundManager::GetInstance().Play("Fall");
+		}
 	}
 
 	// タイトルが着地したら着地音を流す
@@ -110,4 +115,5 @@ void SceneTitle::Draw()
 
 void SceneTitle::End()
 {
+	/*処理無し*/
 }

@@ -132,14 +132,14 @@ namespace
 	constexpr int kRankingTimePosY[3] = { 350,600,850 };
 	constexpr int kRankingTimeColonPosX = 1550;
 	constexpr float krankingTimeSize = 0.4f;
-	
+
 	constexpr int kColonNum = 10;
 	constexpr int kRankingNum = 3;
 	constexpr int kImageDrawTime = 120;	// 画像が表示されるまでの時間
 	constexpr int kFallSpeed = 20;		// 画像の落下速度
 }
 
-SceneGameClear::SceneGameClear(std::shared_ptr<StageSceneManager> pStageSceneManager, Game::Stage stageKind):
+SceneGameClear::SceneGameClear(std::shared_ptr<StageSceneManager> pStageSceneManager, Game::Stage stageKind) :
 	m_backgroundH(-1),
 	m_clearTime(0),
 	m_isSceneEnd(false),
@@ -246,6 +246,13 @@ std::shared_ptr<SceneBase> SceneGameClear::Update(Input& input)
 		m_plusPosY = 0;
 		m_isFall = false;
 	}
+
+
+	// BGMを流す
+	SoundManager::GetInstance().Play("ClearScene");
+
+
+
 
 
 	return shared_from_this();
@@ -369,7 +376,7 @@ void SceneGameClear::RankDraw()
 {
 	/*ランク計算*/
 	// それぞれのタイムの基準
-	float BRankTime = static_cast<float>(kResultDataTable[static_cast<int>(m_stageKind)]);	
+	float BRankTime = static_cast<float>(kResultDataTable[static_cast<int>(m_stageKind)]);
 	float ARankTime = BRankTime * 0.8f;
 	float SRankTime = ARankTime * 0.8f;
 

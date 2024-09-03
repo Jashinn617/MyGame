@@ -40,8 +40,6 @@ void SoundManager::Play(const char* name)
 	// SEの場合
 	else if(!m_data[name].isBgm)
 	{
-		// 指定したサウンドが流れていた時は処理を終了する
-		if (CheckSoundMem(m_data[name].handle)) return;
 		// サウンドを流す(バック)
 		PlaySoundMem(m_data[name].handle, DX_PLAYTYPE_BACK);
 

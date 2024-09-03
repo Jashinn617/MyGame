@@ -129,3 +129,36 @@ void CsvLoad::SoundLoad(std::unordered_map<std::string, LoadData::SoundData>& Da
 		Data[strvec[0]] = data;
 	}
 }
+
+void CsvLoad::EffectLoad(std::unordered_map<std::string, LoadData::EffectData>& Data)
+{
+	// ファイル情報の読み込み
+	std::ifstream ifs("Data/File/EffectData.csv");
+	std::string line;
+
+	std::vector<std::string> strvec;
+
+	while (getline(ifs, line))
+	{
+		// csvデータ１行を、','で複数の文字列に分割
+		strvec = Split(line, ',');
+
+		// strvec[0]	: エフェクト名	string
+		// strvec[1]	: エフェクトサイズ
+		// strvec[2]	: エフェクトの再生速度
+
+		//ファイル名
+		std::string fileName = "Data/Effect/" + strvec[0]; + ".efk";
+
+		const char* file = fileName.c_str();
+
+		//外部ファイルから持ってきたエフェクト情報をエフェクトデータに入れる
+		Data[strvec[0]].handle = LoadEffekseerEffect(file);
+		Data[strvec[0]].size = stof(strvec[1]);
+		Data[strvec[0]].speed = stof(strvec[2]);
+
+		assert(Data[strvec[0]].handle != -1);
+	}
+
+	int unti = 0;
+}

@@ -26,6 +26,7 @@ namespace
 	const char* const kPlayerFileName = "Data/Model/Player/Character.mv1";	// プレイヤーモデルファイル名
 	constexpr float kSize = 15.0f;					// プレイヤーサイズ
 	constexpr float kModelSize = 0.11f;				// プレイヤーモデルのサイズ
+	constexpr float kFallSEPosY = -300.0f;		// 落下SEが流れるY位置
 	constexpr float kFallBackPosY = -800.0f;		// スタート地点に戻される位置Y
 	/*スピード関係*/
 	constexpr float kMoveSpeedDashRate = 1.2f;		// 走っているときのスピード
@@ -189,11 +190,21 @@ void Player::Update(Input& input)
 	m_cameraToPlayerVec = VSub(m_info.pos, m_pCamera->GetPos());
 
 	// 落ちたら初期位置に戻る
-	if (m_info.pos.y <= kFallBackPosY)
+	if (m_info.pos.y <= kFallSEPosY)
 	{
-		m_info.pos = VGet(0.0f, 0.0f, 0.0f);
-		EndJump();
+		// 落下SEを流す
+		if (!SoundManager::GetInstance().IsDesignationCheckPlaySound("Fall"))
+		{
+			SoundManager::GetInstance().Play("Fall");
+		}
+
+		if (m_info.pos.y <= kFallBackPosY)
+		{
+			m_info.pos = VGet(0.0f, 0.0f, 0.0f);
+			EndJump();
+		}
 	}
+	
 }
 
 void Player::Draw(std::shared_ptr<ToonShader> pToonShader)
@@ -366,8 +377,13 @@ void Player::WalkUpdate()
 	// アニメーションを歩きアニメーションに変更する
 	m_pModel->ChangeAnim(m_animData.walk, true, false, kAnimSpeed::Walk);
 
-	// 足音を鳴らす
-	SoundManager::GetInstance().Play("Walk");
+	// 歩きサウンドが流れていなかった場合
+	if (!SoundManager::GetInstance().IsDesignationCheckPlaySound("Walk"))
+	{
+		// 足音を鳴らす
+		SoundManager::GetInstance().Play("Walk");
+	}
+	
 
 }
 
@@ -378,8 +394,13 @@ void Player::DashUpdate()
 	// アニメーションをダッシュモーションに変更する
 	m_pModel->ChangeAnim(m_animData.run, true, false, kAnimSpeed::Dash);
 
-	// 足音を鳴らす(ダッシュ時)
-	SoundManager::GetInstance().Play("Dash");
+	// 歩きサウンドが流れていなかった場合
+	if (!SoundManager::GetInstance().IsDesignationCheckPlaySound("Dash"))
+	{
+		// 足音を鳴らす(ダッシュ時)
+		SoundManager::GetInstance().Play("Dash");
+	}
+	
 }
 
 void Player::JumpUpdate()

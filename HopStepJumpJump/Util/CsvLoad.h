@@ -20,6 +20,15 @@ namespace LoadData
 
 		int handle = -1;	// サウンドハンドル
 	};
+
+	// エフェクトデータ
+	struct EffectData
+	{
+		int handle = -1;			// エフェクトハンドル 
+		int playingEffectH = -1;	// 実際にエフェクトを再セするときに使うハンドル
+		float size = 0;				// エフェクトのサイズ
+		float speed = 1;			// 再生スピード
+	};
 }
 
 class CsvLoad
@@ -29,9 +38,24 @@ public:
 
 	static CsvLoad& GetInstance();
 
+	/// <summary>
+	/// アニメーションのロード
+	/// </summary>
+	/// <param name="Data">アニメーション情報</param>
+	/// <param name="charcterName">キャラクター名</param>
 	void AnimLoad(CharacterBase::AnimData& Data, const char* charcterName);
 
+	/// <summary>
+	/// サウンドのロード
+	/// </summary>
+	/// <param name="Data">サウンド情報</param>
 	void SoundLoad(std::unordered_map<std::string, LoadData::SoundData>& Data);
+
+	/// <summary>
+	/// エフェクトのロード
+	/// </summary>
+	/// <param name="Data">ファイルデータ</param>
+	void EffectLoad(std::unordered_map<std::string, LoadData::EffectData>& Data);
 
 private:
 	/// <summary>

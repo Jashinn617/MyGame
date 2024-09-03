@@ -139,6 +139,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Effect\Effect.cpp" />
+    <ClCompile Include="Effect\Effekseer3DManager.cpp" />
     <ClCompile Include="Util\SaveData.cpp" />
     <ClCompile Include="Util\Ranking.cpp" />
     <ClCompile Include="Util\CountTime.cpp" />
@@ -198,6 +200,8 @@
     <ClCompile Include="Util\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Effect\Effect.h" />
+    <ClInclude Include="Effect\Effekseer3DManager.h" />
     <ClInclude Include="Util\SaveData.h" />
     <ClInclude Include="Util\Ranking.h" />
     <ClInclude Include="Util\CountTime.h" />

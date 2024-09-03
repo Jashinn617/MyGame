@@ -136,7 +136,8 @@ void PlayerState::StateTransitionDash(Input& input)
 	if (!Pad::isPress(PAD_INPUT_LEFT) && !Pad::isPress(PAD_INPUT_RIGHT) &&
 		!Pad::isPress(PAD_INPUT_UP) && !Pad::isPress(PAD_INPUT_DOWN)) return;
 
-	if (Pad::isPress(PAD_INPUT_1))
+	// RBが押されていたらダッシュする
+	if (Pad::isPress(PAD_INPUT_6))
 	{
 		StateChange(StateKind::Dash);
 	}
@@ -147,7 +148,8 @@ void PlayerState::StateTransitionJump(Input& input)
 	// アクション中の場合は何もせずに終了する
 	if (m_isAction) return;
 
-	if (Pad::isTrigger(PAD_INPUT_2))
+	// Aボタンが押されたらジャンプ
+	if (Pad::isTrigger(PAD_INPUT_1))
 	{
 		m_isAction = true;
 		StateChange(StateKind::Jump);
