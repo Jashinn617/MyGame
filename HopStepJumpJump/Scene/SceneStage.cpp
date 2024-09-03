@@ -46,6 +46,8 @@ void SceneStage::Init()
 	// 前のシーンのサウンドが残っていた場合は停止する
 	SoundManager::GetInstance().StopSound();
 
+	m_pStageSceneManager->Init();
+
 
 }
 

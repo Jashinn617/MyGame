@@ -11,6 +11,14 @@ class CountTime;
 class StageSceneManager
 {
 public:
+
+	enum class SceneType
+	{
+		Counddown,		// 最初のカウントダウン
+		Main,			// メイン
+		Clear,			// クリア
+	};
+public:
 	StageSceneManager(Game::Stage stageKind);
 	virtual ~StageSceneManager();
 
@@ -35,11 +43,42 @@ public:
 	/// <returns></returns>
 	int GetGameClearTime() const{return m_gameClearTime; }
 
+private:	// 関数
+	/// <summary>
+	/// カウントダウン更新
+	/// </summary>
+	void CountdownUpdate(Input& input);
+	/// <summary>
+	/// メイン更新
+	/// </summary>
+	void MainUpdate(Input& input);
+	/// <summary>
+	///	クリア更新
+	/// </summary>
+	void ClearUpdate(Input& input);
+
+	/// <summary>
+	/// カウントダウン描画
+	/// </summary>
+	void CountdownDraw();
+	/// <summary>
+	/// メイン描画
+	/// </summary>
+	void MainDraw();
+	/// <summary>
+	/// クリア描画
+	/// </summary>
+	void ClearDraw();
 
 private:	// 変数
 	int m_gameClearTime ;		// クリアタイム
 	bool m_isGameClear;			// ゲームをクリアしたかどうか
+	bool m_isPlayClearSE;			// クリアSEをならしたかどうか
+	
 	Game::Stage m_stageKind;	// ステージの種類
+
+	SceneType m_sceneType;		// シーンタイプ
+
 	std::shared_ptr<ObjectManager> m_pObjectManager;	// オブジェクトマネージャークラスのポインタ
 	std::shared_ptr<CountTime> m_pCountTime;		// 秒数カウントのポインタ
 
