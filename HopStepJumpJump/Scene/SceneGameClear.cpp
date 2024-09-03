@@ -248,8 +248,6 @@ std::shared_ptr<SceneBase> SceneGameClear::Update(Input& input)
 	}
 
 
-	m_pStageSceneManager->Update(input);
-
 	return shared_from_this();
 }
 
