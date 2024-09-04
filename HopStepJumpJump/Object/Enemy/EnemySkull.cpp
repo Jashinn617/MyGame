@@ -46,20 +46,6 @@ void EnemySkull::Init()
 	m_pModel->SetRot(m_info.rot);
 	m_pModel->SetPos(m_info.pos);
 }
-//
-//void EnemySkull::Draw(std::shared_ptr<ToonShader> pToonShader)
-//{
-//	m_pModel->Draw();
-//	/*for (int i = 0; i < MV1GetTriangleListNum(m_pModel->GetModelHandle()); i++)
-//	{
-//		int shaderType = MV1GetTriangleListVertexType(m_pModel->GetModelHandle(), i);
-//
-//		pToonShader->SetShader(shaderType);
-//		MV1DrawTriangleList(m_pModel->GetModelHandle(), i);
-//	}
-//	pToonShader->ShaderEnd();*/
-//	m_pCircle->DebugDraw();
-//}
 
 void EnemySkull::MoveDirectionUpdate()
 {

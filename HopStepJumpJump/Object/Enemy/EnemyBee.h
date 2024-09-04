@@ -11,8 +11,6 @@ public:
 
 	void Init()override final;
 
-	//void Draw(std::shared_ptr<ToonShader> pToonShader) override final;
-
 	void MoveDirectionUpdate() override final;
 
 	VECTOR MoveUpdate() override final;

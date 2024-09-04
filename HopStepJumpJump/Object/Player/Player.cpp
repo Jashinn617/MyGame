@@ -51,11 +51,13 @@ namespace
 	constexpr float kNowVecNum = 0.8f;
 	constexpr float kNextVecNum = 0.2f;
 
-	constexpr int kStageClearAnim = 65;					// ステージクリアアニメーション
+	constexpr int kStageClearAnim = 16;					// ステージクリアアニメーション
 
 	constexpr float kDrawDistance = 50.0f;				// 描画可能距離
 
 	constexpr float kEnemyHeadPos = 20;					// 敵の頭の位置
+
+	constexpr VECTOR kStartPos = { 0.0f, -180.0f, 0.0f };
 
 	/*アニメーション速度*/
 	enum kAnimSpeed
@@ -85,7 +87,7 @@ Player::Player() :
 	m_dashSpeed = m_statusData.spd * kMoveSpeedDashRate;
 	m_acc = m_statusData.spd * kAccelerationRate;
 	// 情報初期化
-	m_info.pos = VGet(0.0f, 0.0f, 0.0f);
+	m_info.pos = kStartPos;
 	m_info.vec = VGet(0.0f, 0.0f, 0.0f);
 	m_info.rot = VGet(0.0f, 0.0f, 0.0f);
 	m_info.modelH = -1;
@@ -126,6 +128,10 @@ Player::Player() :
 	m_pState->AddState([=] {KnockBackInit(); },
 		[=] {KnockBackUpdate(); },
 		PlayerState::StateKind::KnockBack);
+	// ステージクリア
+	m_pState->AddState([=] {StageClearInit(); },
+		[=] {StageClearUpdate(); },
+		PlayerState::StateKind::StateClear);
 
 	// 初期状態の設定
 	// 初期は待機状態から始まる
@@ -236,6 +242,8 @@ void Player::Draw2D()
 
 void Player::StageClear()
 {
+	// 座標を初期座標に戻す
+	m_info.pos = kStartPos;
 	// 角度を変える
 	m_angle = 0.0f;
 	m_isStageClear = true;
@@ -250,6 +258,9 @@ void Player::OnDamage(VECTOR targetPos)
 
 	// 敵のY位置が自分の位置より低かった場合は何もしない
 	if (targetPos.y <= m_info.pos.y - kEnemyHeadPos)return;
+
+	// ダメージ中は何もしない
+	if (m_isDamage) return;
 
 	// ノックバックのスピードと方向を計算する
 	m_moveSpeed = kKnockBackSpeed;

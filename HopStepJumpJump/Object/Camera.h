@@ -127,7 +127,9 @@ private:	// 変数
 	VECTOR m_nextPos;	// 次の座標
 	VECTOR m_prevPos;	// 前の座標
 	VECTOR m_targetPos;	// ターゲットの座標
-	VECTOR m_stageClearTargetStartPos;	// ステージクリア時のターゲットの座標
+	VECTOR m_leftVec;	// カメラからターゲットまでのベクトルから見て左方向のベクトル
+	VECTOR m_stageClearTargetStartPos;	// ステージクリア時のターゲットの初期座標
+	VECTOR m_stageClearTargetEndPos;	// ステージクリア時のターゲットの最終座標
 
 	MATRIX m_rotX;	// 回転用行列X
 	MATRIX m_rotY;	// 回転用行列Y

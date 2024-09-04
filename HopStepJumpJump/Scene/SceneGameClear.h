@@ -48,7 +48,6 @@ private:	// 関数
 	void ChangeTitleScene();
 
 private:	// 変数
-	int m_backgroundH;		// 画像ハンドル
 	int m_clearTime;		// ステージのクリア時間
 	bool m_isSceneEnd;	// シーンが終了したかどうか
 	bool m_isNextScene;	// 次のシーンに移動可能かどうか
@@ -72,5 +71,6 @@ private:	// 変数
 
 	std::shared_ptr<StageSceneManager> m_pStageSceneManager;
 	std::shared_ptr<Time> m_pImageDrawTime;
+	std::shared_ptr<Time> m_pStageClearSETime;	// ステージクリア時のサウンドの開始時間
 };
 

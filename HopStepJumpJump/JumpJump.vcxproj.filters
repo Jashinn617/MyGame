@@ -79,6 +79,12 @@
     <Filter Include="ヘッダー ファイル\Shader">
       <UniqueIdentifier>{fef1f69a-3b43-4fe0-9915-6809e6cc14fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Effect">
+      <UniqueIdentifier>{ebb5dacd-3c59-489b-997c-416febbe69b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Effect">
+      <UniqueIdentifier>{3ed68a17-2a37-4a51-8d0f-bf0aa4b775ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -225,38 +231,38 @@
     <ClCompile Include="Object\Item\SpownItem.cpp">
       <Filter>ソース ファイル\Object\Item</Filter>
     </ClCompile>
-    <ClCompile Include="Object\Enemy\SpownEnemy.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\Enemy\EnemyBee.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\Enemy\EnemySkull.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Image\ExpansionImage.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Util\ActionTime.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Util\TutorialUI.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Util</Filter>
     </ClCompile>
     <ClCompile Include="Util\CountTime.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Util\Ranking.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Util\SaveData.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Util</Filter>
     </ClCompile>
     <ClCompile Include="Effect\Effect.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Effect</Filter>
     </ClCompile>
     <ClCompile Include="Effect\Effekseer3DManager.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Enemy\EnemyBee.cpp">
+      <Filter>ソース ファイル\Object\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Enemy\EnemySkull.cpp">
+      <Filter>ソース ファイル\Object\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Image\ExpansionImage.cpp">
+      <Filter>ソース ファイル\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\Ranking.cpp">
+      <Filter>ソース ファイル\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\SaveData.cpp">
+      <Filter>ソース ファイル\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Enemy\SpownEnemy.cpp">
+      <Filter>ソース ファイル\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\TutorialUI.cpp">
+      <Filter>ソース ファイル\Util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -410,38 +416,38 @@
     <ClInclude Include="Object\Item\SpownItem.h">
       <Filter>ヘッダー ファイル\Object\Item</Filter>
     </ClInclude>
-    <ClInclude Include="Object\Enemy\SpownEnemy.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\Enemy\EnemyBee.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\Enemy\EnemySkull.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Image\ExpansionImage.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Util\ActionTime.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Util\TutorialUI.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Util\CountTime.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Util\Ranking.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Util\SaveData.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Util</Filter>
     </ClInclude>
     <ClInclude Include="Effect\Effect.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Effect</Filter>
     </ClInclude>
     <ClInclude Include="Effect\Effekseer3DManager.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\CountTime.h">
+      <Filter>ヘッダー ファイル\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Ranking.h">
+      <Filter>ヘッダー ファイル\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\SaveData.h">
+      <Filter>ヘッダー ファイル\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Image\ExpansionImage.h">
+      <Filter>ヘッダー ファイル\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\TutorialUI.h">
+      <Filter>ヘッダー ファイル\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Enemy\EnemyBee.h">
+      <Filter>ヘッダー ファイル\Object\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Enemy\EnemySkull.h">
+      <Filter>ヘッダー ファイル\Object\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Enemy\SpownEnemy.h">
+      <Filter>ヘッダー ファイル\Object\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

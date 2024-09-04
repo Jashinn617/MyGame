@@ -178,10 +178,74 @@ void Camera::ColUpdate(ObjectBase* pField)
 
 void Camera::StageClearUpdate()
 {
+	// ステージのクリア時間が一定以上経過したらイージング処理をする
+	if (m_pClearTargetStartMoveTime->Update())
+	{
+		// イージング値を足す
+		m_stageClearTargetEasingTime = min(m_stageClearTargetEasingTime + 1.0f, kStageClearTargetMoveTime);
+
+		// イージングを利用して計算する
+		m_targetPos.x = Easing::easeOutCubic(m_stageClearTargetEasingTime, m_stageClearTargetStartPos.x,
+			m_stageClearTargetEndPos.x, kStageClearTargetMoveTime);
+		m_targetPos.y = Easing::easeOutCubic(m_stageClearTargetEasingTime, m_stageClearTargetStartPos.y,
+			m_stageClearTargetEndPos.y, kStageClearTargetMoveTime);
+		m_targetPos.z = Easing::easeOutCubic(m_stageClearTargetEasingTime, m_stageClearTargetStartPos.z,
+			m_stageClearTargetEndPos.z, kStageClearTargetMoveTime);
+	}
+	m_stageClearEasingTime = min(m_stageClearEasingTime + 1.0f, kStageClearEasingTime);
+
+	// ステージクリア時のカメラ角度の更新
+	m_angleH = Easing::easeOutCubic(m_stageClearEasingTime, kStageClearStartAngleH,
+		kStageClearEndAngleH, kStageClearEasingTime);
+	m_angleV = Easing::easeOutCubic(m_stageClearEasingTime, kStageClearStartAngleV,
+		kStageClearEndAngleV, kStageClearEasingTime);
+
+	// ステージクリア時のカメラからターゲットまでの距離の更新
+	m_cameraToTargetLenght = Easing::easeOutCubic(m_stageClearEasingTime, kCameraToPlayerLenghtMax,
+		m_clearCameraToTargetLength, kStageClearEasingTime);
+
+	// カメラ座標の更新
+	NormalUpdate(m_targetPos);
+	UpdatePos();
+
+	// 更新する前の座標を前フレーム座標に代入
+	m_pos = m_nextPos;
 }
 
 void Camera::StageClear(float angle, VECTOR targetPos)
 {
+	// クリアフラグをtrueにする
+	m_isStageClear = true;
+
+	/*注視点の設定*/
+	m_targetPos = targetPos;
+	// ターゲットより少し高い位置に注視点を置く
+	m_targetPos.y += kStageClearCameraTargtHeight;
+
+	// 角度の初期化
+	m_angleH = kStageClearStartAngleH;
+	m_angleV = kStageClearStartAngleV;
+
+	NormalUpdate(m_targetPos);
+
+	// カメラの座標の更新
+	UpdatePos();
+
+	// 左方向ベクトルの算出
+	m_leftVec = VNorm(VCross(VGet(0.0f, 1.0f, 0.0f),
+		VNorm(VSub(VGet(m_targetPos.x, 0.0f, m_targetPos.z),
+			VGet(m_nextPos.x, 0.0f, m_nextPos.z)))));
+
+	// ステージクリア時のカメラの座標の設定
+	m_stageClearTargetStartPos = m_targetPos;
+	// カメラの最終座標の設定
+	m_stageClearTargetEndPos = VAdd(m_targetPos, VScale(m_leftVec, kStageClearTargetLength));
+	// 向いている方向の傾きに最終座標を合わせる
+	MATRIX RotY = MGetRotY(kStageClearEndAngleH);
+	m_stageClearTargetEndPos = VTransform(m_stageClearTargetEndPos, RotY);
+	// 反転させる
+	m_stageClearTargetEndPos.x *= -1.0f;
+	m_stageClearTargetEndPos.z *= -1.0f;
 }
 
 void Camera::UpdateAngle()

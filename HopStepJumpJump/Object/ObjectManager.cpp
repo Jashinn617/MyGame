@@ -72,20 +72,11 @@ void ObjectManager::Update(Input& input)
 		// オブジェクトが存在していない場合
 		if (!obj->GetInfo().isExist)
 		{
-			// 存在が消えてからの時間をカウントする
-			if (!obj->IsExistCount())
-			{
-				it++;
-				continue;
-			}
-
 			// オブジェクトがアイテムだった場合
 			if (obj->GetColType() == ObjectBase::ColType::Item)
 			{
 				// ゲット数を増やす
 				m_pItemManager->AddGetNum();
-
-				// ゲットエフェクトを出す
 			}
 
 			// オブジェクトがプレイヤー以外だった場合
@@ -113,7 +104,13 @@ void ObjectManager::Update(Input& input)
 	{
 		// クリアフラグをtrueにする
 		m_isGameClear = true;
+
+		// クリア時の処理をする
+		GameClearUpdate();
 	}
+
+	// スカイドームの更新
+	m_pSkyDome->Update(GetPlayer()->GetInfo().pos);
 
 	// クリアしている場合は更新処理を行わない
 	if (m_isGameClear) return;
@@ -129,15 +126,6 @@ void ObjectManager::Update(Input& input)
 			m_pCollision->Update(myObj, targetObj);
 		}
 	}
-
-	// アイテムマネージャーの更新
-	m_pItemManager->Update();
-
-	// エネミーマネージャーの更新
-	m_pEnemyManager->Update();
-
-	// スカイドームの更新
-	m_pSkyDome->Update(GetPlayer()->GetInfo().pos);
 }
 
 void ObjectManager::Draw()
@@ -197,12 +185,8 @@ void ObjectManager::Draw()
 		{
 			obj->Draw2D();
 		}
-
-		// アイテムマネージャーの描画
-		m_pItemManager->Draw();
-		// エネミーマネージャーの描画
-		m_pEnemyManager->Draw();
-		
+		// 残りアイテム数描画
+		m_pItemManager->Draw();		
 	}
 	 //カメラの位置のリセット
 	GetPlayer()->GetCamera()->ResetCamera();
@@ -210,8 +194,7 @@ void ObjectManager::Draw()
 
 bool ObjectManager::IsPlayerExist()
 {
-	if (GetPlayer()->GetInfo().isExist) return true;
-	return false;
+	return GetPlayer()->GetInfo().isExist;
 }
 
 bool ObjectManager::IsEnemyExist()

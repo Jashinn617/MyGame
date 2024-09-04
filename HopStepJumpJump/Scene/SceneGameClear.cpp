@@ -13,6 +13,8 @@
 
 namespace
 {
+	
+
 	// ステージごとのクリア時間の基準
 	constexpr double kResultDataTable[static_cast<int>(Game::Stage::StageNum)] =
 	{
@@ -21,8 +23,6 @@ namespace
 		0,
 		0
 	};
-
-	const char* const kBackgroundFikeName = "Data/Img/Result/Background.png";	// 背景画像ファイル
 
 	// 自身のクリアタイムの画像ファイル
 	const char* const kMyTimeNumFileName[11] =
@@ -133,14 +133,16 @@ namespace
 	constexpr int kRankingTimeColonPosX = 1550;
 	constexpr float krankingTimeSize = 0.4f;
 
-	constexpr int kColonNum = 10;
-	constexpr int kRankingNum = 3;
-	constexpr int kImageDrawTime = 120;	// 画像が表示されるまでの時間
-	constexpr int kFallSpeed = 20;		// 画像の落下速度
+	constexpr int kColonArrayNum = 10;			// タイムの間に表示するコロンの配列番号
+
+	constexpr int kRankingNum = 3;			// ランキングの表示数
+	constexpr int kClearAnim = 63;			// クリアアニメーション
+	constexpr int kStageClearSETime = 20;	// クリアSEが流れるまでの時間
+	constexpr int kImageDrawTime = 120;		// 画像が表示されるまでの時間
+	constexpr int kFallSpeed = 20;			// 画像の落下速度
 }
 
 SceneGameClear::SceneGameClear(std::shared_ptr<StageSceneManager> pStageSceneManager, Game::Stage stageKind) :
-	m_backgroundH(-1),
 	m_clearTime(0),
 	m_isSceneEnd(false),
 	m_isNextScene(false),
@@ -150,13 +152,12 @@ SceneGameClear::SceneGameClear(std::shared_ptr<StageSceneManager> pStageSceneMan
 	m_pStageSceneManager(pStageSceneManager)
 {
 	m_pImageDrawTime = std::make_shared<Time>(kImageDrawTime);
+	m_pStageClearSETime = std::make_shared<Time>(kStageClearSETime);
 
 	// クリアタイム
 	m_clearTime = m_pStageSceneManager->GetGameClearTime();
 
 	/*画像ハンドルのロード*/
-	m_backgroundH = LoadGraph(kBackgroundFikeName);
-	assert(m_backgroundH != -1);
 	for (int i = 0; i < m_myTimeNumH.size(); i++)
 	{
 		m_myTimeNumH[i] = LoadGraph(kMyTimeNumFileName[i]);
@@ -197,7 +198,6 @@ SceneGameClear::SceneGameClear(std::shared_ptr<StageSceneManager> pStageSceneMan
 SceneGameClear::~SceneGameClear()
 {
 	/*画像のデリート*/
-	DeleteGraph(m_backgroundH);
 	for (int i = 0; i < m_myTimeNumH.size(); i++)
 	{
 		DeleteGraph(m_myTimeNumH[i]);
@@ -240,12 +240,27 @@ void SceneGameClear::Init()
 
 std::shared_ptr<SceneBase> SceneGameClear::Update(Input& input)
 {
-	m_plusPosY -= kFallSpeed;
+	// クリアSEを流す
+	if (m_pStageClearSETime->Update())
+	{
+		
+	}
+
+
+	/*m_plusPosY -= kFallSpeed;
 	if (m_plusPosY <= 0)
 	{
 		m_plusPosY = 0;
 		m_isFall = false;
-	}
+	}*/
+
+	// シーン終了
+	
+
+	// ステージシーンマネージャー更新
+	m_pStageSceneManager->Update(input);
+
+
 
 
 	// BGMを流す
@@ -266,19 +281,21 @@ void SceneGameClear::Draw()
 		m_ranking[0] / 60, m_ranking[1] / 60, m_ranking[2] / 60);
 #endif // _DEBUG
 
-	// 背景描画
-	DrawGraph(0, 0, m_backgroundH, false);
+	m_pStageSceneManager->Draw();
 
-	// テキスト描画
-	TextDraw();
-	// タイム描画
-	TimeDraw();
-	// ランキング描画
-	RankingDraw();
-	// ランク描画
-	RankDraw();
-	// ボタン描画
-	ButtonDraw();
+	//// テキスト描画
+	//TextDraw();
+	//// タイム描画
+	//TimeDraw();
+	//// ランキング描画
+	//RankingDraw();
+	//// ランク描画
+	//RankDraw();
+	//// ボタン描画
+	//ButtonDraw();
+
+	// フェード処理
+	//DrawFade();
 }
 
 void SceneGameClear::End()
@@ -331,7 +348,7 @@ void SceneGameClear::TimeDraw()
 		m_myTimeNumH[minutesTimeSecond], true);
 	DrawRotaGraph(kClearTimeColonPosX, kClearTimePosY,
 		kClearTimeSize, 0.0f,
-		m_myTimeNumH[kColonNum], true);
+		m_myTimeNumH[kColonArrayNum], true);
 	DrawRotaGraph(kClearSecondFirstPosX, kClearTimePosY,
 		kClearTimeSize, 0.0f,
 		m_myTimeNumH[secondTimeFirst], true);
@@ -428,7 +445,7 @@ void SceneGameClear::RankTimeDraw(int ranking)
 		m_rankingTimeNumH[minutesTimeSecond], true);
 	DrawRotaGraph(kRankingTimeColonPosX, kRankingTimePosY[ranking],
 		krankingTimeSize, 0.0f,
-		m_rankingTimeNumH[kColonNum], true);
+		m_rankingTimeNumH[kColonArrayNum], true);
 	DrawRotaGraph(kRankingSecondFirstPosX, kRankingTimePosY[ranking],
 		krankingTimeSize, 0.0f,
 		m_rankingTimeNumH[secondTimeFirst], true);
@@ -459,7 +476,7 @@ void SceneGameClear::MyRankTimeDraw(int ranking)
 		m_myTimeNumH[minutesTimeSecond], true);
 	DrawRotaGraph(kRankingTimeColonPosX, kRankingTimePosY[ranking],
 		krankingTimeSize, 0.0f,
-		m_myTimeNumH[kColonNum], true);
+		m_myTimeNumH[kColonArrayNum], true);
 	DrawRotaGraph(kRankingSecondFirstPosX, kRankingTimePosY[ranking],
 		krankingTimeSize, 0.0f,
 		m_myTimeNumH[secondTimeFirst], true);

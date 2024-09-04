@@ -30,7 +30,6 @@ SceneStage::SceneStage(Game::Stage stage):
 	m_stageKind(stage)
 {
 	m_pStageSceneManager = std::make_shared<StageSceneManager>(stage);
-	m_pStageSceneManager->AttachGameClear([=] {GameClear(); });
 
 	// カメラの設定
 	SetCameraNearFar(kCameraNear, kCameraFar);
@@ -76,8 +75,10 @@ std::shared_ptr<SceneBase> SceneStage::Update(Input& input)
 
 	m_pStageSceneManager->Update(input);
 
-	UpdateFade();
-
+	if (m_pStageSceneManager->IsGameClear())
+	{
+		GameClear();
+	}
 
 	return shared_from_this();
 }
@@ -97,7 +98,6 @@ void SceneStage::End()
 void SceneStage::GameClear()
 {
 	m_isSceneEnd = true;
-	
 	// クリアシーンに飛ぶ
 	m_nextScene = make_shared<SceneGameClear>(m_pStageSceneManager, m_stageKind);
 }

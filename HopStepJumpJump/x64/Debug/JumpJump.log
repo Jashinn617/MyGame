@@ -1,2 +1,7 @@
-﻿  StageSceneManager.cpp
-  JumpJump.vcxproj -> C:\Users\中山　七草\Documents\GitHub\MyGame\HopStepJumpJump\x64\Debug\JumpJump.exe
+﻿  SceneDebug.cpp
+  SceneGameClear.cpp
+  SceneStage.cpp
+  SceneTitle.cpp
+  StageSceneManager.cpp
+  コードを生成中...
+  JumpJump.vcxproj -> C:\Users\fko2347024\Desktop\GitHub\MyGame\HopStepJumpJump\x64\Debug\JumpJump.exe
