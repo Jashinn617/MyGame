@@ -61,3 +61,8 @@ void Field::StageClear()
 {
 	/*ˆ—–³‚µ*/
 }
+
+void Field::GameEnd()
+{
+	m_isGameEnd = true;
+}

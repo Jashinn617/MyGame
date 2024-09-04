@@ -21,10 +21,14 @@ namespace
 	constexpr int kDeadExistTime = 60;		// 死んでから完全に消えるまでの時間
 	constexpr float kColHeight = -10.0f;	// 当たり判定の高さ
 	constexpr float kHeadPos = 20;			// 敵の頭の位置
+	constexpr float kEndTime = 80;			// ゲーム終了してからの時間
+	constexpr float kEndDeadTime = 200;		// ゲーム終了後に消えてからの時間
 }
 
 EnemyBase::EnemyBase():
 	m_colHeight(0),
+	m_isEnd(false),
+	m_isEndDead(false),
 	m_moveDirectionVec{0,0,0},
 	m_enemyToPlayerVec{0,0,0},
 	m_deadTime(0)
@@ -39,12 +43,17 @@ EnemyBase::EnemyBase():
 
 	// 死んでからの時間
 	m_deadTime = std::make_shared<Time>(kDeadExistTime);
+	// ゲーム終了してからの時間
+	m_endTime = std::make_shared<Time>(kEndTime);
+	m_endDeadTime = std::make_shared<Time>(kEndDeadTime);
 
 	// 死亡時シェーダ
 }
 
 EnemyBase::EnemyBase(VECTOR pos, float speed) :
 	m_colHeight(0),
+	m_isEnd(false),
+	m_isEndDead(false),
 	m_moveDirectionVec{ 0,0,0 },
 	m_enemyToPlayerVec{ 0,0,0 },
 	m_deadTime(0)
@@ -60,12 +69,17 @@ EnemyBase::EnemyBase(VECTOR pos, float speed) :
 
 	// 死んでからの時間
 	m_deadTime = std::make_shared<Time>(kDeadExistTime);
+	// ゲーム終了してからの時間
+	m_endTime = std::make_shared<Time>(kEndTime);
+	m_endDeadTime = std::make_shared<Time>(kEndDeadTime);
 
 	// 死亡時シェーダ
 }
 
 EnemyBase::EnemyBase(VECTOR pos, VECTOR direction, int turnTime, float speed) :
 	m_colHeight(0),
+	m_isEnd(false),
+	m_isEndDead(false),
 	m_moveDirectionVec{ 0,0,0 },
 	m_enemyToPlayerVec{ 0,0,0 },
 	m_deadTime(0)
@@ -81,6 +95,9 @@ EnemyBase::EnemyBase(VECTOR pos, VECTOR direction, int turnTime, float speed) :
 
 	// 死んでからの時間
 	m_deadTime = std::make_shared<Time>(kDeadExistTime);
+	// ゲーム終了してからの時間
+	m_endTime = std::make_shared<Time>(kEndTime);
+	m_endDeadTime = std::make_shared<Time>(kEndDeadTime);
 
 	// 死亡時シェーダ
 }
@@ -98,6 +115,7 @@ void EnemyBase::Init()
 
 void EnemyBase::Update(Input& input)
 {
+	if (m_isEnd) return;
 	// 移動ベクトルの計算
 	m_info.vec = MoveUpdate();
 
@@ -133,11 +151,24 @@ void EnemyBase::Draw(std::shared_ptr<ToonShader> pToonShader)
 
 void EnemyBase::StageClear()
 {
-	OnDead();
+	/*処理無し*/
+}
+
+void EnemyBase::GameEnd()
+{
+	m_isEnd = true;
+
+	// 一定時間たったら消える
+	if (m_endTime->Update())
+	{
+		OnDead();
+		m_isGameEnd = true;
+	}	
 }
 
 void EnemyBase::OnDamage(VECTOR targetPos)
 {
+	if (m_isEnd) return;
 	// プレイヤーのY位置が自分の位置より低かった場合
 	if (targetPos.y <= m_info.pos.y + kHeadPos) return;
 

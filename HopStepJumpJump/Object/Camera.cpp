@@ -46,8 +46,8 @@ namespace
 	/*ステージクリア時*/
 	constexpr float kStageClearStartAngleH = 0.0f;	// ステージクリア時の最初のカメラの角度H
 	constexpr float kStageClearStartAngleV = 0.15f;	// ステージクリア時の最初のカメラの角度V
-	constexpr float kStageClearEndAngleH = DX_TWO_PI_F + DX_PI_F + DX_PI_F * 1.85f;	// ステージクリア時の最後のカメラの角度H
-	constexpr float kStageClearEndAngleV = -0.35f;	// ステージクリア時の最後のカメラの角度V
+	constexpr float kStageClearEndAngleH = DX_TWO_PI_F + DX_PI_F + DX_PI_F * 2.0f;	// ステージクリア時の最後のカメラの角度H
+	constexpr float kStageClearEndAngleV = -0.35;	// ステージクリア時の最後のカメラの角度V
 	constexpr float kEasingTime = 80.0f;	// イージングにかかる時間
 	constexpr float kStageClearCameraTargtHeight = kCameraPlayerTargetHeight * 0.5f;	// ステージクリア時の注視点の高さ
 	constexpr float kStageClearTargetMoveLength = 43.0f;	// ステージクリア時のターゲットの移動量
@@ -55,8 +55,8 @@ namespace
 	constexpr float kStageClearTargetLength = 80.0f;		// ステージクリア時のカメラからターゲットまでの距離
 	
 	/*ステージクリア時のイージングにかかる時間*/
-	constexpr float kStageClearEasingTime = 150.0f;
-	constexpr float kStageClearTargetMoveTime = 100.0f;
+	constexpr float kStageClearEasingTime =  1050.0f;
+	constexpr float kStageClearTargetMoveTime = 1000.0f;
 }
 
 Camera::Camera() :
@@ -181,27 +181,24 @@ void Camera::StageClearUpdate()
 	// ステージのクリア時間が一定以上経過したらイージング処理をする
 	if (m_pClearTargetStartMoveTime->Update())
 	{
-		// イージング値を足す
-		m_stageClearTargetEasingTime = min(m_stageClearTargetEasingTime + 1.0f, kStageClearTargetMoveTime);
-
 		// イージングを利用して計算する
-		m_targetPos.x = Easing::easeOutCubic(m_stageClearTargetEasingTime, m_stageClearTargetStartPos.x,
+		m_targetPos.x = Easing::EaseOutCubic(m_stageClearTargetEasingTime, m_stageClearTargetStartPos.x,
 			m_stageClearTargetEndPos.x, kStageClearTargetMoveTime);
-		m_targetPos.y = Easing::easeOutCubic(m_stageClearTargetEasingTime, m_stageClearTargetStartPos.y,
+		m_targetPos.y = Easing::EaseOutCubic(m_stageClearTargetEasingTime, m_stageClearTargetStartPos.y,
 			m_stageClearTargetEndPos.y, kStageClearTargetMoveTime);
-		m_targetPos.z = Easing::easeOutCubic(m_stageClearTargetEasingTime, m_stageClearTargetStartPos.z,
+		m_targetPos.z = Easing::EaseOutCubic(m_stageClearTargetEasingTime, m_stageClearTargetStartPos.z,
 			m_stageClearTargetEndPos.z, kStageClearTargetMoveTime);
 	}
 	m_stageClearEasingTime = min(m_stageClearEasingTime + 1.0f, kStageClearEasingTime);
 
 	// ステージクリア時のカメラ角度の更新
-	m_angleH = Easing::easeOutCubic(m_stageClearEasingTime, kStageClearStartAngleH,
+	m_angleH = Easing::EaseOutCubic(m_stageClearEasingTime, kStageClearStartAngleH,
 		kStageClearEndAngleH, kStageClearEasingTime);
-	m_angleV = Easing::easeOutCubic(m_stageClearEasingTime, kStageClearStartAngleV,
+	m_angleV = Easing::EaseOutCubic(m_stageClearEasingTime, kStageClearStartAngleV,
 		kStageClearEndAngleV, kStageClearEasingTime);
 
 	// ステージクリア時のカメラからターゲットまでの距離の更新
-	m_cameraToTargetLenght = Easing::easeOutCubic(m_stageClearEasingTime, kCameraToPlayerLenghtMax,
+	m_cameraToTargetLenght = Easing::EaseOutCubic(m_stageClearEasingTime, kCameraToPlayerLenghtMax,
 		m_clearCameraToTargetLength, kStageClearEasingTime);
 
 	// カメラ座標の更新

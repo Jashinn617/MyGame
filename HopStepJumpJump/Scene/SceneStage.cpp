@@ -97,7 +97,7 @@ void SceneStage::End()
 
 void SceneStage::GameClear()
 {
-	m_isSceneEnd = true;
-	// クリアシーンに飛ぶ
-	m_nextScene = make_shared<SceneGameClear>(m_pStageSceneManager, m_stageKind);
+	//m_isSceneEnd = true;
+	//// クリアシーンに飛ぶ
+	//m_nextScene = make_shared<SceneGameClear>(m_pStageSceneManager, m_stageKind);
 }

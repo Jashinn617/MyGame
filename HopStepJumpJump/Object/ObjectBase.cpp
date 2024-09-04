@@ -93,6 +93,11 @@ void ObjectBase::StageClear()
 	/*ˆ—–³‚µ*/
 }
 
+void ObjectBase::GameEnd()
+{
+	/*ˆ—–³‚µ*/
+}
+
 void ObjectBase::OnAttack()
 {
 	/*ˆ—–³‚µ*/

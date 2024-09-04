@@ -65,6 +65,11 @@ public:	// 関数
 	virtual void StageClear();
 
 	/// <summary>
+	///	ゲーム終了時
+	/// </summary>
+	virtual void GameEnd();
+
+	/// <summary>
 	/// 攻撃が当たった時
 	/// </summary>
 	virtual void OnAttack();
@@ -111,6 +116,10 @@ public:	// 関数
 	/// <returns>当たり判定情報</returns>
 	virtual ColType GetColType() const { return ColType::None; }
 
+
+	bool IsGameEnd()const { return m_isGameEnd; }
+
+
 	/// <summary>
 	/// 移動アップデート
 	/// </summary>
@@ -125,6 +134,7 @@ protected:	// 変数
 	float m_moveSpeed;	// 移動スピード
 	int m_modelH;		// モデルハンドル
 	bool m_isDamage;	// 攻撃を受けたか
+	bool m_isGameEnd;	// ゲーム終了したかどうか
 
 	ObjectManager* m_pObjectManager = nullptr;
 

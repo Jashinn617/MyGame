@@ -31,16 +31,31 @@ void StageSceneManager::Update(Input& input)
 {
 	m_pObjectManager->Update(input);
 
-	// ゲームクリア時間の更新
-	m_gameClearTime++;
-
-	m_pCountTime->Update(m_gameClearTime);
-
-	// クリア条件を達成した時
-	if (m_pObjectManager->IsGameClear() && !m_isGameClear)
+	if (!m_isGameClear)
 	{
-		m_isGameClear = true;
+		// ゲームクリア時間の更新
+		m_gameClearTime++;
+
+		m_pCountTime->Update(m_gameClearTime);
+
+		// クリア条件を達成した時
+		if (m_pObjectManager->IsGameEnd() && !m_isGameClear)
+		{
+			m_isGameClear = true;
+			SoundManager::GetInstance().DesignationStopSound("MainScene");
+		}
 	}
+	else
+	{
+		if (m_pObjectManager->IsGameClear())
+		{
+			// BGMを流す
+			SoundManager::GetInstance().Play("ClearScene");
+		}
+
+	
+	}
+
 }
 
 void StageSceneManager::Draw()

@@ -83,7 +83,7 @@ namespace Easing
 	}
 
 	template<typename T>
-	inline T easeOutCubic(T t, T b, T c, T d)
+	inline T EaseOutCubic(T t, T b, T c, T d)
 	{
 		t /= d;
 		t--;

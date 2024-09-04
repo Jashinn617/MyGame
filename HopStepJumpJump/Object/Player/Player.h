@@ -33,6 +33,8 @@ public:
 
 	void StageClear() override final;
 
+	void GameEnd() override final;
+
 	/// <summary>
 	/// UŒ‚‚ğó‚¯‚½
 	/// </summary>

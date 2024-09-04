@@ -22,11 +22,12 @@
 namespace
 {	
 	constexpr float kRotSpeed = 0.4f;	// 回転速度
-	constexpr int kGameClearTime = 40;	// ゴールについてから次のシーンに移行するまでの時間
+	constexpr int kGameEndTime = 120;	// ゴールについてから次のシーンに移行するまでの時間
 }
 
 ObjectManager::ObjectManager(Game::Stage stage):
 	m_isGameClear(false),
+	m_isGameEnd(false),
 	m_isGoal(false),
 	m_isTutorial(false)
 {
@@ -37,6 +38,7 @@ ObjectManager::ObjectManager(Game::Stage stage):
 	m_pItemManager = std::make_shared<ItemManager>(stage, this);
 	m_pToonShader = std::make_shared<ToonShader>();
 	m_pShadowMapShader = std::make_shared<ShadowMapShader>();
+	m_gameEndTime = std::make_shared<Time>(kGameEndTime);
 
 	AddObject(new Player);
 	AddObject(new Field(stage));
@@ -103,8 +105,25 @@ void ObjectManager::Update(Input& input)
 	if (m_pItemManager->IsClear())
 	{
 		// クリアフラグをtrueにする
-		m_isGameClear = true;
+		m_isGameEnd = true;
+	}
 
+	if (m_isGameEnd)
+	{
+		// 一定時間たったらクリアフラグを立てる
+		if (IsObjGameEnd())
+		{
+			m_isGameEnd = false;
+			m_isGameClear = true;
+		}
+		else
+		{
+			GameEndUpdate();
+		}
+	}
+
+	if (m_isGameClear)
+	{
 		// クリア時の処理をする
 		GameClearUpdate();
 	}
@@ -233,6 +252,29 @@ int ObjectManager::GetItemNum() const
 	return itemNum;
 }
 
+bool ObjectManager::IsObjGameEnd()
+{
+	
+	for (auto& obj : m_pObject)
+	{
+		// 何か一つでも終了処理を終えていないオブジェクトがあったら
+		// falseで返す
+		if (!obj->IsGameEnd())
+		{
+			return false;
+		}
+	}
+
+	// すべてのオブジェクトの終了処理が終えてから
+	// 一定時間たったら次のシーンに飛ぶ
+	if (m_gameEndTime->Update())
+	{
+		return true;
+	}
+	
+	return false;
+}
+
 Player* const ObjectManager::GetPlayer()
 {
 	// 全オブジェクトを検索する
@@ -260,5 +302,14 @@ void ObjectManager::GameClearUpdate()
 	{
 		// ステージクリア処理
 		obj->StageClear();
+	}
+}
+
+void ObjectManager::GameEndUpdate()
+{
+	for (auto& obj : m_pObject)
+	{
+		// 終了処理
+		obj->GameEnd();
 	}
 }

@@ -114,6 +114,11 @@ void ItemBase::OnGet()
 	m_info.isExist = false;
 }
 
+void ItemBase::GameEnd()
+{
+	m_isGameEnd = true;
+}
+
 void ItemBase::InitMoveSpeed(float moveSpeed)
 {
 	// ˆÚ“®‘¬“x‚Ì‰Šú‰»

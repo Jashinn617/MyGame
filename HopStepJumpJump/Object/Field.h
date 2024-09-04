@@ -24,6 +24,11 @@ public:
 	virtual void StageClear() override final;
 
 	/// <summary>
+	/// ƒQ[ƒ€I—¹ˆ—
+	/// </summary>
+	void GameEnd() override final;
+
+	/// <summary>
 	/// ©g‚Ì“–‚½‚è”»’èî•ñ
 	/// </summary>
 	/// <returns></returns>

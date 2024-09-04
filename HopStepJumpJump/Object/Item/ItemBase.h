@@ -31,6 +31,11 @@ public:
 	// 自身の当たり判定の情報
 	virtual ColType GetColType()const { return ColType::Item; }
 
+	/// <summary>
+	/// ゲーム終了時処理
+	/// </summary>
+	void GameEnd() override final;
+
 protected:
 	// 移動速度の初期化
 	void InitMoveSpeed(float moveSpeed);

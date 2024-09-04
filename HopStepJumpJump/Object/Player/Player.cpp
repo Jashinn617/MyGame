@@ -242,19 +242,41 @@ void Player::Draw2D()
 
 void Player::StageClear()
 {
-	// 座標を初期座標に戻す
-	m_info.pos = kStartPos;
-	// 角度を変える
 	m_angle = 0.0f;
+
 	m_isStageClear = true;
 	m_pCamera->StageClear(m_angle, m_info.pos);
 	m_pState->StageClear();
+}
+
+void Player::GameEnd()
+{
+	m_isGameEnd = true;
+
+	// 重力を考慮した更新
+	GravityUpdate();
+
+	// アニメーションの更新
+	m_pModel->Update();
+
+	// モデルの座標を設定する
+	m_pModel->SetPos(m_info.pos);
+
+	// モデルの角度を設定する
+	m_pModel->SetRot(VGet(0.0f, m_angle, 0.0f));
+
+	// カメラの更新
+	m_pCamera->Update(m_info.pos);
+
+	// プレイヤーからカメラまでの距離の更新
+	m_cameraToPlayerVec = VSub(m_info.pos, m_pCamera->GetPos());
 }
 
 void Player::OnDamage(VECTOR targetPos)
 {
 	// ゲームクリア状態だったら何もせずに終了する
 	if (m_pObjectManager->IsGameClear())return;
+	if (m_pObjectManager->IsGameEnd())return;
 
 	// 敵のY位置が自分の位置より低かった場合は何もしない
 	if (targetPos.y <= m_info.pos.y - kEnemyHeadPos)return;

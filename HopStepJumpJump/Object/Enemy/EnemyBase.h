@@ -31,6 +31,11 @@ public:
 	/// </summary>
 	void StageClear() override final;
 
+	/// <summary>
+	/// ゲーム終了時処理
+	/// </summary>
+	void GameEnd() override final;
+
 	void OnDamage(VECTOR targetPos) override;
 
 	void  OnDead();
@@ -78,8 +83,12 @@ protected:	// 関数
 
 protected:	// 変数
 	float m_colHeight;			// 当たり判定の高さをモデルの中心にする
+	bool m_isEnd;				// ゲーム終了したかどうか
+	bool m_isEndDead;			// ゲーム終了後に消えたかどうか
 	VECTOR m_moveDirectionVec;	// 移動方向ベクトル
 	VECTOR m_enemyToPlayerVec;	// 敵からプレイヤーまでのベクトル
 	std::shared_ptr<Time> m_turnTime;	// ターンするまでの時間
 	std::shared_ptr<Time> m_deadTime;	// 死んでからの時間
+	std::shared_ptr<Time> m_endTime;	// ゲーム終了してからの時間
+	std::shared_ptr<Time> m_endDeadTime;	// ゲーム終了後に消えてからの時間
 };

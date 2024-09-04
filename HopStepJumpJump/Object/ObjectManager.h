@@ -72,6 +72,14 @@ public:
 	/// <returns></returns>
 	bool IsGameClear()const { return m_isGameClear; }
 
+	bool IsGameEnd()const { return m_isGameEnd; }
+
+	/// <summary>
+	/// ゲームが終了したかどうか
+	/// </summary>
+	/// <returns></returns>
+	bool IsObjGameEnd();
+
 	/// <summary>
 	/// プレイヤーポインタの取得
 	/// </summary>
@@ -97,9 +105,15 @@ private:	// 関数
 	/// </summary>
 	void GameClearUpdate();
 
+	/// <summary>
+	/// ゲーム終了時の更新処理
+	/// </summary>
+	void GameEndUpdate();
+
 private:	// 変数
 	int m_H;
 	bool m_isGameClear;		// ゲームをクリアしたか
+	bool m_isGameEnd;		// ゲームが終わったかどうか
 	bool m_isGoal;			// ゴールしたかどうか
 	bool m_isTutorial;		// チュートリアルかどうか
 
@@ -110,5 +124,6 @@ private:	// 変数
 	std::shared_ptr<ToonShader> m_pToonShader;		// トゥーンシェーダ
 	std::shared_ptr<ShadowMapShader> m_pShadowMapShader;	// シャドウマップ
 	std::list<ObjectBase*> m_pObject;		// オブジェクト
+	std::shared_ptr<Time> m_gameEndTime;	// ゲーム終了してからの時間
 
 };
