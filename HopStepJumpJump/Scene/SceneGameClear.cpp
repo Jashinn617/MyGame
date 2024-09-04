@@ -13,8 +13,6 @@
 
 namespace
 {
-	
-
 	// ステージごとのクリア時間の基準
 	constexpr double kResultDataTable[static_cast<int>(Game::Stage::StageNum)] =
 	{
@@ -157,75 +155,12 @@ SceneGameClear::SceneGameClear(std::shared_ptr<StageSceneManager> pStageSceneMan
 	// クリアタイム
 	m_clearTime = m_pStageSceneManager->GetGameClearTime();
 
-	/*画像ハンドルのロード*/
-	for (int i = 0; i < m_myTimeNumH.size(); i++)
-	{
-		m_myTimeNumH[i] = LoadGraph(kMyTimeNumFileName[i]);
-		assert(m_myTimeNumH[i] != -1);
-	}
-	for (int i = 0; i < m_rankingTimeNumH.size(); i++)
-	{
-		m_rankingTimeNumH[i] = LoadGraph(kRankingTimeNumFileName[i]);
-		assert(m_rankingTimeNumH[i] != -1);
-	}
-	for (int i = 0; i < m_rankH.size(); i++)
-	{
-		m_rankH[i] = LoadGraph(kRankFileName[i]);
-		assert(m_rankH[i] != -1);
-	}
-	for (int i = 0; i < m_textH.size(); i++)
-	{
-		m_textH[i] = LoadGraph(kTextFileName[i]);
-		assert(m_textH[i] != -1);
-	}
-	for (int i = 0; i < m_rankingH.size(); i++)
-	{
-		m_rankingH[i] = LoadGraph(kRankingFileName[i]);
-		assert(m_rankingH[i] != -1);
-	}
-	for (int i = 0; i < m_textBoxH.size(); i++)
-	{
-		m_textBoxH[i] = LoadGraph(kTextBoxFileName[i]);
-		assert(m_textBoxH[i] != -1);
-	}
-	for (int i = 0; i < m_buttonH.size(); i++)
-	{
-		m_buttonH[i] = LoadGraph(kButtonFileName[i]);
-		assert(m_buttonH[i] != -1);
-	}
+	
 }
 
 SceneGameClear::~SceneGameClear()
 {
-	/*画像のデリート*/
-	for (int i = 0; i < m_myTimeNumH.size(); i++)
-	{
-		DeleteGraph(m_myTimeNumH[i]);
-	}
-	for (int i = 0; i < m_rankingTimeNumH.size(); i++)
-	{
-		DeleteGraph(m_rankingTimeNumH[i]);
-	}
-	for (int i = 0; i < m_rankH.size(); i++)
-	{
-		DeleteGraph(m_rankH[i]);
-	}
-	for (int i = 0; i < m_textH.size(); i++)
-	{
-		DeleteGraph(m_textH[i]);
-	}
-	for (int i = 0; i < m_rankingH.size(); i++)
-	{
-		DeleteGraph(m_rankingH[i]);
-	}
-	for (int i = 0; i < m_textBoxH.size(); i++)
-	{
-		DeleteGraph(m_textBoxH[i]);
-	}
-	for (int i = 0; i < m_buttonH.size(); i++)
-	{
-		DeleteGraph(m_buttonH[i]);
-	}
+	
 }
 
 void SceneGameClear::Init()
@@ -247,12 +182,7 @@ std::shared_ptr<SceneBase> SceneGameClear::Update(Input& input)
 	}
 
 
-	/*m_plusPosY -= kFallSpeed;
-	if (m_plusPosY <= 0)
-	{
-		m_plusPosY = 0;
-		m_isFall = false;
-	}*/
+	
 
 	// シーン終了
 	
@@ -275,27 +205,7 @@ std::shared_ptr<SceneBase> SceneGameClear::Update(Input& input)
 
 void SceneGameClear::Draw()
 {
-#ifdef _DEBUG
-	DrawString(0, 0, "GameClear", 0xffffff);
-	DrawFormatString(0, 80, 0xffffff, "1位：%d 2位：%d 3位:%d",
-		m_ranking[0] / 60, m_ranking[1] / 60, m_ranking[2] / 60);
-#endif // _DEBUG
-
 	m_pStageSceneManager->Draw();
-
-	//// テキスト描画
-	//TextDraw();
-	//// タイム描画
-	//TimeDraw();
-	//// ランキング描画
-	//RankingDraw();
-	//// ランク描画
-	//RankDraw();
-	//// ボタン描画
-	//ButtonDraw();
-
-	// フェード処理
-	//DrawFade();
 }
 
 void SceneGameClear::End()
@@ -305,190 +215,37 @@ void SceneGameClear::End()
 
 void SceneGameClear::TextDraw()
 {
-	/*テキストボックスの描画*/
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kTextBoxAlpha);
-	DrawRotaGraph(kTextBoxPosX1, kTextBoxPosY,
-		1.0f, 0.0f,
-		m_textBoxH[0], true);
-	DrawRotaGraph(kTextBoxPosX2, kTextBoxPosY,
-		1.0f, 0.0f,
-		m_textBoxH[1], true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	/*テキストの描画*/
-	DrawRotaGraph(kTextPosX1, kTextPosY1,
-		1.0f, 0.0f,
-		m_textH[0], true);
-	DrawRotaGraph(kTextPosX1, kTextPosY2,
-		1.0f, 0.0f,
-		m_textH[1], true);
-	DrawRotaGraph(kTextPosX2, kTextPosY1,
-		1.0f, 0.0f,
-		m_textH[2], true);
+	
 }
 
 void SceneGameClear::TimeDraw()
 {
-	/*タイム計算*/
-	int clearTime = m_clearTime / 60;
-	// 分数
-	int clearMinutesTime = clearTime / 60;
-	int minutesTimeFirst = clearMinutesTime / 10;	// 一の位
-	int minutesTimeSecond = clearMinutesTime % 10;	// 十の位
-	// 秒数
-	int clearSecondTime = clearTime % 60;
-	int secondTimeFirst = clearSecondTime / 10;		// 一の位
-	int secondTimeSecond = clearSecondTime % 10;	// 十の位
-
-	/*クリアタイムの描画*/
-	DrawRotaGraph(kClearMinutesFirstPosX, kClearTimePosY,
-		kClearTimeSize, 0.0f,
-		m_myTimeNumH[minutesTimeFirst], true);
-	DrawRotaGraph(kClearMinutesSecondPosX, kClearTimePosY,
-		kClearTimeSize, 0.0f,
-		m_myTimeNumH[minutesTimeSecond], true);
-	DrawRotaGraph(kClearTimeColonPosX, kClearTimePosY,
-		kClearTimeSize, 0.0f,
-		m_myTimeNumH[kColonArrayNum], true);
-	DrawRotaGraph(kClearSecondFirstPosX, kClearTimePosY,
-		kClearTimeSize, 0.0f,
-		m_myTimeNumH[secondTimeFirst], true);
-	DrawRotaGraph(kClearSecondSecondPosX, kClearTimePosY,
-		kClearTimeSize, 0.0f,
-		m_myTimeNumH[secondTimeSecond], true);
+	
 }
 
 void SceneGameClear::RankingDraw()
 {
-	/*ランキングの描画*/
-	DrawRotaGraph(kRankingPosX, kRnakingPosY1,
-		kRankingSize, 0.0f,
-		m_rankingH[0], true);
-	DrawRotaGraph(kRankingPosX, kRnakingPosY2,
-		kRankingSize, 0.0f,
-		m_rankingH[1], true);
-	DrawRotaGraph(kRankingPosX, kRnakingPosY3,
-		kRankingSize, 0.0f,
-		m_rankingH[2], true);
-
-	m_isMyRank = false;
-	/*ランキングタイムの描画*/
-	for (int i = 0; i < kRankingNum; i++)
-	{
-		// ランキングのタイムが自分と同じタイムだった場合は
-		// 文字色を変える
-		// 同じタイムが二つ以上だった場合は上の順位の色だけ変える
-		if (m_ranking[i] == m_clearTime && !m_isMyRank)
-		{
-			MyRankTimeDraw(i);
-			m_isMyRank = true;
-		}
-		else
-		{
-			RankTimeDraw(i);
-		}
-	}
+	
 }
 
 void SceneGameClear::RankDraw()
 {
-	/*ランク計算*/
-	// それぞれのタイムの基準
-	float BRankTime = static_cast<float>(kResultDataTable[static_cast<int>(m_stageKind)]);
-	float ARankTime = BRankTime * 0.8f;
-	float SRankTime = ARankTime * 0.8f;
-
-	if (BRankTime <= m_clearTime)
-	{
-		m_rank = Rank::C;
-	}
-	else if (BRankTime > m_clearTime && ARankTime <= m_clearTime)
-	{
-		m_rank = Rank::B;
-	}
-	else if (ARankTime > m_clearTime && SRankTime <= m_clearTime)
-	{
-		m_rank = Rank::A;
-	}
-	else if (SRankTime > m_clearTime)
-	{
-		m_rank = Rank::S;
-	}
-	else
-	{
-		m_rank = Rank::S;
-	}
-	// 描画
-	DrawRotaGraph(kRankPosX, kRankPosY,
-		kRankSize, 0.0f,
-		m_rankH[static_cast<int>(m_rank)], true);
+	
 }
 
 void SceneGameClear::RankTimeDraw(int ranking)
 {
-	/*タイム計算*/
-	int rankingTime = m_ranking[ranking] / 60;
-	// 分数
-	int clearMinutesTime = rankingTime / 60;
-	int minutesTimeFirst = clearMinutesTime / 10;	// 一の位
-	int minutesTimeSecond = clearMinutesTime % 10;	// 十の位
-	// 秒数
-	int clearSecondTime = rankingTime % 60;
-	int secondTimeFirst = clearSecondTime / 10;		// 一の位
-	int secondTimeSecond = clearSecondTime % 10;	// 十の位
-
-	/*タイムの描画*/
-	DrawRotaGraph(kRankingMinutesFirstPosX, kRankingTimePosY[ranking],
-		krankingTimeSize, 0.0f,
-		m_rankingTimeNumH[minutesTimeFirst], true);
-	DrawRotaGraph(kRankingMinutesSecondPosX, kRankingTimePosY[ranking],
-		krankingTimeSize, 0.0f,
-		m_rankingTimeNumH[minutesTimeSecond], true);
-	DrawRotaGraph(kRankingTimeColonPosX, kRankingTimePosY[ranking],
-		krankingTimeSize, 0.0f,
-		m_rankingTimeNumH[kColonArrayNum], true);
-	DrawRotaGraph(kRankingSecondFirstPosX, kRankingTimePosY[ranking],
-		krankingTimeSize, 0.0f,
-		m_rankingTimeNumH[secondTimeFirst], true);
-	DrawRotaGraph(kRankingSecondSecondPosX, kRankingTimePosY[ranking],
-		krankingTimeSize, 0.0f,
-		m_rankingTimeNumH[secondTimeSecond], true);
+	
 }
 
 void SceneGameClear::MyRankTimeDraw(int ranking)
 {
-	/*タイム計算*/
-	int rankingTime = m_ranking[ranking] / 60;
-	// 分数
-	int clearMinutesTime = rankingTime / 60;
-	int minutesTimeFirst = clearMinutesTime / 10;	// 一の位
-	int minutesTimeSecond = clearMinutesTime % 10;	// 十の位
-	// 秒数
-	int clearSecondTime = rankingTime % 60;
-	int secondTimeFirst = clearSecondTime / 10;		// 一の位
-	int secondTimeSecond = clearSecondTime % 10;	// 十の位
-
-	/*タイムの描画*/
-	DrawRotaGraph(kRankingMinutesFirstPosX, kRankingTimePosY[ranking],
-		krankingTimeSize, 0.0f,
-		m_myTimeNumH[minutesTimeFirst], true);
-	DrawRotaGraph(kRankingMinutesSecondPosX, kRankingTimePosY[ranking],
-		krankingTimeSize, 0.0f,
-		m_myTimeNumH[minutesTimeSecond], true);
-	DrawRotaGraph(kRankingTimeColonPosX, kRankingTimePosY[ranking],
-		krankingTimeSize, 0.0f,
-		m_myTimeNumH[kColonArrayNum], true);
-	DrawRotaGraph(kRankingSecondFirstPosX, kRankingTimePosY[ranking],
-		krankingTimeSize, 0.0f,
-		m_myTimeNumH[secondTimeFirst], true);
-	DrawRotaGraph(kRankingSecondSecondPosX, kRankingTimePosY[ranking],
-		krankingTimeSize, 0.0f,
-		m_myTimeNumH[secondTimeSecond], true);
+	
 }
 
 void SceneGameClear::ButtonDraw()
 {
-	// 画像の落下中は表示をしない
-	if (m_isFall) return;
+	
 }
 
 void SceneGameClear::ChangeMainScene()

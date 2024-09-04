@@ -1,12 +1,7 @@
-﻿  Camera.cpp
-C:\Users\fko2347024\Desktop\GitHub\MyGame\HopStepJumpJump\Object\Camera.cpp(50,46): warning C4305: '初期化中': 'double' から 'const float' へ切り詰めます。
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\xutility(231,77): warning C4244: '引数': 'const float' から 'int' への変換です。データが失われる可能性があります。
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\memory(2023,1): message : コンパイル対象の関数 テンプレート インスタンス化 'void std::_Construct_in_place<_Ty,const float&>(_Ty &,const float &) noexcept(false)' のリファレンスを確認してください
-          with
-          [
-              _Ty=Time
-          ]
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\memory(2703,36): message : コンパイル対象の関数 テンプレート インスタンス化 'std::_Ref_count_obj2<Time>::_Ref_count_obj2<const float&>(const float &)' のリファレンスを確認してください
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\include\memory(2704,20): message : コンパイル対象の関数 テンプレート インスタンス化 'std::_Ref_count_obj2<Time>::_Ref_count_obj2<const float&>(const float &)' のリファレンスを確認してください
-C:\Users\fko2347024\Desktop\GitHub\MyGame\HopStepJumpJump\Object\Camera.cpp(84,85): message : コンパイル対象の関数 テンプレート インスタンス化 'std::shared_ptr<Time> std::make_shared<Time,const float&>(const float &)' のリファレンスを確認してください
+﻿  SceneDebug.cpp
+  SceneGameClear.cpp
+  SceneStage.cpp
+  SceneTitle.cpp
+  StageSceneManager.cpp
+  コードを生成中...
   JumpJump.vcxproj -> C:\Users\fko2347024\Desktop\GitHub\MyGame\HopStepJumpJump\x64\Debug\JumpJump.exe
