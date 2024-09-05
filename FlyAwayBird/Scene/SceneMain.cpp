@@ -449,7 +449,7 @@ void SceneMain::BackDraw(HandleManager& handle)
 
 	// ”wŒi‰æ‘œ‚ğƒXƒNƒ[ƒ‹‚³‚¹‚é
 	int scrollBack = static_cast<int>(m_scrollX) % bgSize.width;
-	for (int index = 0; index < kIndexBack; ++index)
+	for (int index = 0; index < kIndexBack; index++)
 	{
 		DrawGraph(-scrollBack + index * bgSize.width,
 			Game::kScreenHeight - bgSize.height,

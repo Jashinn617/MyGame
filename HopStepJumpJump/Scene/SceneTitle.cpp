@@ -49,8 +49,7 @@ SceneTitle::~SceneTitle()
 
 void SceneTitle::Init()
 {
-	// 前のシーンのサウンドを止める
-	SoundManager::GetInstance().StopSound();
+	/*処理無し*/
 }
 
 std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
@@ -85,11 +84,16 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 	// タイトルが落ちた後に何かしらのボタンが押されていたら次のシーンに遷移する
 	if (CheckHitKeyAll() && m_TitlePosY >= kTitleLogoPosY)
 	{
+		// BGMを消す
+		SoundManager::GetInstance().DesignationStopSound("TitleScene");
+
 		// 決定SEを流す
 		SoundManager::GetInstance().Play("TitleButtonPush");
 
 		return make_shared<SceneStage>(Game::Stage::Stage1);
 	}
+
+	
 
 	return shared_from_this();
 }

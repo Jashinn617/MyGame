@@ -39,21 +39,17 @@ SceneStage::SceneStage(Game::Stage stage):
 
 SceneStage::~SceneStage()
 {
+	/*処理無し*/
 }
 
 void SceneStage::Init()
 {
-	// 前のシーンのサウンドが残っていた場合は停止する
-	SoundManager::GetInstance().StopSound();
-
 	m_pStageSceneManager->Init();
-
-
 }
 
 std::shared_ptr<SceneBase> SceneStage::Update(Input& input)
 {
-	UpdateFade();
+	
 
 #ifdef _DEBUG
 	// デバッグに飛ぶ
@@ -80,6 +76,8 @@ std::shared_ptr<SceneBase> SceneStage::Update(Input& input)
 	{
 		GameClear();
 	}
+
+	UpdateFade();
 
 	if (m_pStageSceneManager->GetNextScene() == StageSceneManager::NextScene::GameScene)
 	{
@@ -111,7 +109,5 @@ void SceneStage::End()
 
 void SceneStage::GameClear()
 {
-	//m_isSceneEnd = true;
-	//// クリアシーンに飛ぶ
-	//m_nextScene = make_shared<SceneGameClear>(m_pStageSceneManager, m_stageKind);
+	/*処理無し*/
 }

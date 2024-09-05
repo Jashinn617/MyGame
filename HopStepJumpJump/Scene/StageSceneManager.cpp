@@ -392,10 +392,13 @@ void StageSceneManager::ClearUpdate()
 
 		// ボタンが下から現れてから
 		if (m_isButtonFall)
-		{
+		{			
 			// カーソル移動
 			if (Pad::isTrigger(PAD_INPUT_UP))
 			{
+				// SEを鳴らす
+				SoundManager::GetInstance().Play("Select");
+
 				m_buttonCount--;
 				if (m_buttonCount < 0)
 				{
@@ -404,6 +407,9 @@ void StageSceneManager::ClearUpdate()
 			}
 			if (Pad::isTrigger(PAD_INPUT_DOWN))
 			{
+				// SEを鳴らす
+				SoundManager::GetInstance().Play("Select");
+
 				m_buttonCount++;
 				if (m_buttonCount >= static_cast<int>(NextSelect::Num))
 				{
@@ -415,8 +421,15 @@ void StageSceneManager::ClearUpdate()
 			// 押されたボタンによってシーンを遷移する
 			if (Pad::isTrigger(PAD_INPUT_1) || Pad::isTrigger(PAD_INPUT_2))
 			{
+				// BGMを消す
+				SoundManager::GetInstance().DesignationStopSound("ClearScene");
+
+				
 				if (m_buttonCount == static_cast<int>(NextSelect::GameScene))
 				{
+					// SEを鳴らす
+					SoundManager::GetInstance().Play("SceneChange");
+
 					m_nextScene = NextScene::GameScene;
 				}
 				else if (m_buttonCount == static_cast<int>(NextSelect::Title))
