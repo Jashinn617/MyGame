@@ -162,6 +162,13 @@ void EnemyBase::GameEnd()
 	if (m_endTime->Update())
 	{
 		OnDead();
+		// “¯‚¶SE‚ª–Â‚Á‚Ä‚È‚©‚Á‚½ê‡
+		if(!SoundManager::GetInstance().IsDesignationCheckPlaySound("EnemyEndDead"))
+		{
+			// ƒ{ƒ“‚Á‚ÄŠ´‚¶‚ÌSE‚ğ–Â‚ç‚·
+			SoundManager::GetInstance().Play("EnemyEndDead");
+		}
+		
 		m_isGameEnd = true;
 	}	
 }

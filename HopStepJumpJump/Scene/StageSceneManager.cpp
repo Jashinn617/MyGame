@@ -6,6 +6,7 @@
 #include "../Util/Time.h"
 #include "../Util/Ranking.h"
 #include "../Util/Input.h"
+#include "../Util/Pad.h"
 #include "../Util/SoundManager.h"
 
 #include <cassert>
@@ -86,10 +87,11 @@ namespace
 	};
 
 	// ボタン画像ファイル
-	const char* const kButtonFileName[2] =
+	const char* const kButtonFileName[3] =
 	{
-		"Data/Img/Result/StageBackButton.png",
-		"Data/Img/Result/TitleBackButton.png"
+		"Data/Img/Result/SceneChangeText1.png",
+		"Data/Img/Result/SceneChangeText2.png",
+		"Data/Img/Result/SceneChangeText3.png",
 	};
 
 	/*テキスト座標*/
@@ -111,7 +113,6 @@ namespace
 	/*ランク座標*/
 	constexpr int kRankPosX = 500;
 	constexpr int kRankPosY = 750;
-	constexpr float kRankSize = 0.8f;	// ランクサイズ
 	/*クリアタイム座標*/
 	constexpr int kClearMinutesFirstPosX = 200;
 	constexpr int kClearMinutesSecondPosX = 350;
@@ -130,24 +131,63 @@ namespace
 	constexpr int kRankingTimeColonPosX = 1550;
 	constexpr float krankingTimeSize = 0.4f;
 
+	/*ボタン座標*/
+	constexpr int kButtonPosX = Game::kScreenWidth / 2;
+	constexpr int kButtonPosY1 = 200;
+	constexpr int kButtonPosY2 = 500;
+	constexpr int kButtonPosY3 = 750;
+	constexpr float kButtonSize = 1.0f;
+	constexpr float kSelectButtonSize = 1.7f;	// 選ばれているボタンのサイズ
+
 	constexpr int kColonArrayNum = 10;			// タイムの間に表示するコロンの配列番号
 
 	constexpr int kRankingNum = 3;			// ランキングの表示数
 	constexpr int kClearAnim = 63;			// クリアアニメーション
 	constexpr int kStageClearSETime = 20;	// クリアSEが流れるまでの時間
-	constexpr int kImageDrawTime = 500;		// 画像が表示されるまでの時間
+	constexpr int kImageDrawTime = 500;		// 左画像が表示されるまでの時間
+	constexpr int kRightImgDrawTime = 100;	// 右画像が表示されるまでの時間
 	constexpr int kFallSpeed = 50;			// 画像の落下速度
-	constexpr int kStartPosY = 2000;		// 画像の初期位置Y
+	constexpr int kStartLeftPosY = 2000;		// 左画像の初期位置Y
+	constexpr int kStartRightPosX = -1000;	// 右画像の初期位置X
+
+	constexpr int kTimePlusSpeed = 80;		// 表示用のタイムが増えていくスピード
+
+	constexpr float kRankMaxSize = 1.5f;	// ランク画像の最大サイズ
+	constexpr float kRankEndSize = 0.8f;	// 最終ランクサイズ
+	constexpr float kRankScaleUpSpeed = 0.07f;	// ランク画像が拡大するスピード
+	constexpr int kRankDrawTime = 40;			// ランクが表示されるまでの時間
+
+	constexpr int kSceneChangeAlpha = 200;	// シーン遷移時の画面の暗さ
+
+
 }
 
 StageSceneManager::StageSceneManager(Game::Stage stageKind):
 	m_clearTime(0),
+	m_drawClearTime(0),
+	m_rankSize(0.0f),
 	m_isGameClear(false),
+	m_isMyRank(false),
+	m_isPlayClearSE(false),
+	m_isExpasionRnak(true),
+	m_isButtonDraw(false),
+	m_isPlayRankingSE(false),
 	m_stageKind(stageKind),
-	m_minusPosY(kStartPosY)
+	m_minusLeftPosY(kStartLeftPosY),
+	m_minusRightPosX(kStartRightPosX),
+	m_clearSceneType(ClearSceneType::LeftImgDraw),
+	m_alpha(0),
+	m_buttonCount(0),
+	m_nextScene(NextScene::Title),
+	m_titleChangeTextSize(kButtonSize),
+	m_gameSceneChangeTextSize(kButtonSize)
 {
 	m_pStageClearSETime = std::make_shared<Time>(kStageClearSETime);
 	m_pImageDrawTime = std::make_shared<Time>(kImageDrawTime);
+	m_pLeftImgDrawTime = std::make_shared<Time>(kImageDrawTime);
+	m_pRightImgDrawTime = std::make_shared<Time>(kRightImgDrawTime);
+	m_pRankDrawTime = std::make_shared<Time>(kRankDrawTime);
+
 	m_pObjectManager = std::make_shared<ObjectManager>(stageKind);
 	m_pCountTime = std::make_shared<CountTime>();
 	m_pRanking = std::make_shared<Ranking>();
@@ -191,9 +231,6 @@ void StageSceneManager::Update(Input& input)
 	{
 		if (m_pObjectManager->IsGameClear())
 		{
-			// BGMを流す
-			SoundManager::GetInstance().Play("ClearScene");
-
 			ClearUpdate();
 		}
 
@@ -227,14 +264,154 @@ void StageSceneManager::SetGameClear()
 
 void StageSceneManager::ClearUpdate()
 {
-
-	if (!m_pImageDrawTime->Update()) return;
-	m_minusPosY -= kFallSpeed;
-	if (m_minusPosY <= 0)
+	// ループ防止
+	if (!m_isPlayClearSE)
 	{
-		m_minusPosY = 0;
-		m_isFall = false;
+		// SEを流す
+		SoundManager::GetInstance().Play("GameClear");
+		m_isPlayClearSE = true;
 	}
+	// クリアSEが流れ終わったらBGMを流す
+	if (m_isPlayClearSE &&
+		!SoundManager::GetInstance().IsDesignationCheckPlaySound("GameClear"))
+	{
+		// BGMを流す
+		SoundManager::GetInstance().Play("ClearScene");
+	}
+	
+	switch (m_clearSceneType)
+	{
+	case ClearSceneType::LeftImgDraw:
+		// 一定時間たったら左側の画像を落とす
+		if (!m_pImageDrawTime->Update()) return;
+		m_minusLeftPosY -= kFallSpeed;
+		if (m_minusLeftPosY <= 0)
+		{
+			m_minusLeftPosY = 0;
+			m_clearSceneType = ClearSceneType::ClearTimeMeasure;
+		}
+		break;
+
+	case ClearSceneType::ClearTimeMeasure:
+		// 画像が落ちきったらクリアタイムを増やす
+		m_drawClearTime += kTimePlusSpeed;
+
+		if (!SoundManager::GetInstance().IsDesignationCheckPlaySound("TimeCount"))
+		{
+			// カウント用のSEを鳴らす
+			SoundManager::GetInstance().Play("TimeCount");
+		}
+		
+
+		if (m_drawClearTime >= m_clearTime)
+		{
+			// SEを止める
+			SoundManager::GetInstance().DesignationStopSound("TimeCount");
+
+			m_drawClearTime == m_clearTime;
+			m_clearSceneType = ClearSceneType::RankDraw;
+
+			
+		}
+		break;
+
+	case ClearSceneType::RankDraw:
+		// クリアタイムが増えきって一定時間たったらランクを表示する
+		if (!m_pRankDrawTime->Update()) return;
+		// ランクを拡大する
+		if (m_isExpasionRnak)
+		{
+			m_rankSize += kRankScaleUpSpeed;
+			// ランクが拡大しきったら
+			if (m_rankSize >= kRankMaxSize)
+			{
+				// ランキング表示用のSEを鳴らす
+				SoundManager::GetInstance().Play("RankDraw");
+
+				m_rankSize = kRankMaxSize;
+				// 縮小を始める
+				m_isExpasionRnak = false;
+			}
+		}
+		else
+		{
+			m_rankSize -= kRankScaleUpSpeed;
+			// ランクが既定の大きさになったらランキングを描画する
+			if (m_rankSize <= kRankEndSize)
+			{
+				m_rankSize = kRankEndSize;
+				m_clearSceneType = ClearSceneType::RankingDraw;
+			}
+		}
+		break;
+
+	case ClearSceneType::RankingDraw:
+		// ランクを表示してから一定時間たったらランキングを表示する
+		if (m_pRightImgDrawTime->Update())
+		{
+			m_minusRightPosX -= -kFallSpeed;
+		}
+		if (m_minusRightPosX >= 0)
+		{
+			// SEを鳴らす
+			if (!m_isPlayRankingSE)
+			{
+				SoundManager::GetInstance().Play("RankingDraw");
+				m_isPlayRankingSE = true;
+			}
+			
+			m_minusRightPosX = 0;
+			// 何かしらのボタンが押されたら次に行く
+			if (CheckHitKeyAll())
+			{
+				// 画面を暗くする
+				m_alpha = kSceneChangeAlpha;
+
+				// 仮
+				m_isButtonDraw = true;
+
+				m_clearSceneType = ClearSceneType::SceneChange;
+			}
+		}
+		break;
+
+	case ClearSceneType::SceneChange:
+		// 真ん中にボタンを表示する
+		// ボタンは下から現れる
+
+		// ボタンが下から現れてから
+
+		// カーソル移動
+		if (Pad::isTrigger(PAD_INPUT_UP))
+		{
+			m_buttonCount--;
+			if (m_buttonCount < 0)
+			{
+				m_buttonCount = static_cast<int>(NextScene::Num) - 1;
+			}
+		}
+		if (Pad::isTrigger(PAD_INPUT_DOWN))
+		{
+			m_buttonCount++;
+			if (m_buttonCount >= static_cast<int>(NextScene::Num))
+			{
+				m_buttonCount = 0;
+			}
+		}
+		
+		// ボタンが押されたら
+		// 押されたボタンによってシーンを遷移する
+		break;
+
+	default:
+		break;
+	}
+}
+
+void StageSceneManager::ClearSoundUpdate()
+{
+	
+
 }
 
 void StageSceneManager::ClearDraw()
@@ -247,6 +424,11 @@ void StageSceneManager::ClearDraw()
 	RankingDraw();
 	// ランク描画
 	RankDraw();
+	
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_alpha);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
 	// ボタン描画
 	ButtonDraw();
 
@@ -334,21 +516,21 @@ void StageSceneManager::TextDraw()
 {
 	/*テキストボックスの描画*/
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kTextBoxAlpha);
-	DrawRotaGraph(kTextBoxPosX1, kTextBoxPosY - m_minusPosY,
+	DrawRotaGraph(kTextBoxPosX1, kTextBoxPosY - m_minusLeftPosY,
 		1.0f, 0.0f,
 		m_textBoxH[0], true);
-	DrawRotaGraph(kTextBoxPosX2, kTextBoxPosY - m_minusPosY,
+	DrawRotaGraph(kTextBoxPosX2 - m_minusRightPosX, kTextBoxPosY,
 		1.0f, 0.0f,
 		m_textBoxH[1], true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	/*テキストの描画*/
-	DrawRotaGraph(kTextPosX1, kTextPosY1 - m_minusPosY,
+	DrawRotaGraph(kTextPosX1, kTextPosY1 - m_minusLeftPosY,
 		1.0f, 0.0f,
 		m_textH[0], true);
-	DrawRotaGraph(kTextPosX1, kTextPosY2 - m_minusPosY,
+	DrawRotaGraph(kTextPosX1, kTextPosY2 - m_minusLeftPosY,
 		1.0f, 0.0f,
 		m_textH[1], true);
-	DrawRotaGraph(kTextPosX2, kTextPosY1 - m_minusPosY,
+	DrawRotaGraph(kTextPosX2 - m_minusRightPosX, kTextPosY1,
 		1.0f, 0.0f,
 		m_textH[2], true);
 }
@@ -356,7 +538,7 @@ void StageSceneManager::TextDraw()
 void StageSceneManager::TimeDraw()
 {
 	/*タイム計算*/
-	int clearTime = m_clearTime / 60;
+	int clearTime = m_drawClearTime / 60;
 	// 分数
 	int clearMinutesTime = clearTime / 60;
 	int minutesTimeFirst = clearMinutesTime / 10;	// 一の位
@@ -367,19 +549,19 @@ void StageSceneManager::TimeDraw()
 	int secondTimeSecond = clearSecondTime % 10;	// 十の位
 
 	/*クリアタイムの描画*/
-	DrawRotaGraph(kClearMinutesFirstPosX, kClearTimePosY - m_minusPosY,
+	DrawRotaGraph(kClearMinutesFirstPosX, kClearTimePosY - m_minusLeftPosY,
 		kClearTimeSize, 0.0f,
 		m_myTimeNumH[minutesTimeFirst], true);
-	DrawRotaGraph(kClearMinutesSecondPosX, kClearTimePosY - m_minusPosY,
+	DrawRotaGraph(kClearMinutesSecondPosX, kClearTimePosY - m_minusLeftPosY,
 		kClearTimeSize, 0.0f,
 		m_myTimeNumH[minutesTimeSecond], true);
-	DrawRotaGraph(kClearTimeColonPosX, kClearTimePosY - m_minusPosY,
+	DrawRotaGraph(kClearTimeColonPosX, kClearTimePosY - m_minusLeftPosY,
 		kClearTimeSize, 0.0f,
 		m_myTimeNumH[kColonArrayNum], true);
-	DrawRotaGraph(kClearSecondFirstPosX, kClearTimePosY - m_minusPosY,
+	DrawRotaGraph(kClearSecondFirstPosX, kClearTimePosY - m_minusLeftPosY,
 		kClearTimeSize, 0.0f,
 		m_myTimeNumH[secondTimeFirst], true);
-	DrawRotaGraph(kClearSecondSecondPosX, kClearTimePosY - m_minusPosY,
+	DrawRotaGraph(kClearSecondSecondPosX, kClearTimePosY - m_minusLeftPosY,
 		kClearTimeSize, 0.0f,
 		m_myTimeNumH[secondTimeSecond], true);
 }
@@ -387,13 +569,13 @@ void StageSceneManager::TimeDraw()
 void StageSceneManager::RankingDraw()
 {
 	/*ランキングの描画*/
-	DrawRotaGraph(kRankingPosX, kRnakingPosY1 - m_minusPosY,
+	DrawRotaGraph(kRankingPosX - m_minusRightPosX, kRnakingPosY1,
 		kRankingSize, 0.0f,
 		m_rankingH[0], true);
-	DrawRotaGraph(kRankingPosX, kRnakingPosY2 - m_minusPosY,
+	DrawRotaGraph(kRankingPosX - m_minusRightPosX, kRnakingPosY2,
 		kRankingSize, 0.0f,
 		m_rankingH[1], true);
-	DrawRotaGraph(kRankingPosX, kRnakingPosY3 - m_minusPosY,
+	DrawRotaGraph(kRankingPosX - m_minusRightPosX, kRnakingPosY3,
 		kRankingSize, 0.0f,
 		m_rankingH[2], true);
 
@@ -445,8 +627,8 @@ void StageSceneManager::RankDraw()
 		m_rank = Rank::S;
 	}
 	// 描画
-	DrawRotaGraph(kRankPosX, kRankPosY - m_minusPosY,
-		kRankSize, 0.0f,
+	DrawRotaGraph(kRankPosX, kRankPosY - m_minusLeftPosY,
+		m_rankSize, 0.0f,
 		m_rankH[static_cast<int>(m_rank)], true);
 }
 
@@ -464,19 +646,19 @@ void StageSceneManager::RankTimeDraw(int ranking)
 	int secondTimeSecond = clearSecondTime % 10;	// 十の位
 
 	/*タイムの描画*/
-	DrawRotaGraph(kRankingMinutesFirstPosX, kRankingTimePosY[ranking] - m_minusPosY,
+	DrawRotaGraph(kRankingMinutesFirstPosX - m_minusRightPosX, kRankingTimePosY[ranking],
 		krankingTimeSize, 0.0f,
 		m_rankingTimeNumH[minutesTimeFirst], true);
-	DrawRotaGraph(kRankingMinutesSecondPosX, kRankingTimePosY[ranking] - m_minusPosY,
+	DrawRotaGraph(kRankingMinutesSecondPosX - m_minusRightPosX, kRankingTimePosY[ranking],
 		krankingTimeSize, 0.0f,
 		m_rankingTimeNumH[minutesTimeSecond], true);
-	DrawRotaGraph(kRankingTimeColonPosX, kRankingTimePosY[ranking] - m_minusPosY,
+	DrawRotaGraph(kRankingTimeColonPosX - m_minusRightPosX, kRankingTimePosY[ranking],
 		krankingTimeSize, 0.0f,
 		m_rankingTimeNumH[kColonArrayNum], true);
-	DrawRotaGraph(kRankingSecondFirstPosX, kRankingTimePosY[ranking] - m_minusPosY,
+	DrawRotaGraph(kRankingSecondFirstPosX - m_minusRightPosX, kRankingTimePosY[ranking],
 		krankingTimeSize, 0.0f,
 		m_rankingTimeNumH[secondTimeFirst], true);
-	DrawRotaGraph(kRankingSecondSecondPosX, kRankingTimePosY[ranking] - m_minusPosY,
+	DrawRotaGraph(kRankingSecondSecondPosX - m_minusRightPosX, kRankingTimePosY[ranking],
 		krankingTimeSize, 0.0f,
 		m_rankingTimeNumH[secondTimeSecond], true);
 }
@@ -495,25 +677,44 @@ void StageSceneManager::MyRankTimeDraw(int ranking)
 	int secondTimeSecond = clearSecondTime % 10;	// 十の位
 
 	/*タイムの描画*/
-	DrawRotaGraph(kRankingMinutesFirstPosX, kRankingTimePosY[ranking] - m_minusPosY,
+	DrawRotaGraph(kRankingMinutesFirstPosX - m_minusRightPosX, kRankingTimePosY[ranking],
 		krankingTimeSize, 0.0f,
 		m_myTimeNumH[minutesTimeFirst], true);
-	DrawRotaGraph(kRankingMinutesSecondPosX, kRankingTimePosY[ranking] - m_minusPosY,
+	DrawRotaGraph(kRankingMinutesSecondPosX - m_minusRightPosX, kRankingTimePosY[ranking],
 		krankingTimeSize, 0.0f,
 		m_myTimeNumH[minutesTimeSecond], true);
-	DrawRotaGraph(kRankingTimeColonPosX, kRankingTimePosY[ranking] - m_minusPosY,
+	DrawRotaGraph(kRankingTimeColonPosX - m_minusRightPosX, kRankingTimePosY[ranking],
 		krankingTimeSize, 0.0f,
 		m_myTimeNumH[kColonArrayNum], true);
-	DrawRotaGraph(kRankingSecondFirstPosX, kRankingTimePosY[ranking] - m_minusPosY,
+	DrawRotaGraph(kRankingSecondFirstPosX - m_minusRightPosX, kRankingTimePosY[ranking],
 		krankingTimeSize, 0.0f,
 		m_myTimeNumH[secondTimeFirst], true);
-	DrawRotaGraph(kRankingSecondSecondPosX, kRankingTimePosY[ranking] - m_minusPosY,
+	DrawRotaGraph(kRankingSecondSecondPosX - m_minusRightPosX, kRankingTimePosY[ranking],
 		krankingTimeSize, 0.0f,
 		m_myTimeNumH[secondTimeSecond], true);
 }
 
 void StageSceneManager::ButtonDraw()
 {
-	// 画像の落下中は表示をしない
-	if (m_isFall) return;
+	if (!m_isButtonDraw) return;
+
+	if (m_buttonCount == static_cast<int>(NextScene::Title))
+	{
+		m_titleChangeTextSize = kSelectButtonSize;
+		m_gameSceneChangeTextSize = kButtonSize;
+	}
+	else if (m_buttonCount == static_cast<int>(NextScene::GameScene))
+	{
+		m_titleChangeTextSize = kButtonSize;
+		m_gameSceneChangeTextSize = kSelectButtonSize;
+	}
+
+
+	DrawRotaGraph(kButtonPosX, kButtonPosY1, 
+		kButtonSize, 0.0, m_buttonH[0], true);
+
+	DrawRotaGraph(kButtonPosX, kButtonPosY2,
+		m_titleChangeTextSize, 0.0, m_buttonH[1], true);
+	DrawRotaGraph(kButtonPosX, kButtonPosY3,
+		m_gameSceneChangeTextSize, 0.0, m_buttonH[2], true);
 }

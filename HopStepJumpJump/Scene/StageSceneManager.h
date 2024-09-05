@@ -24,6 +24,23 @@ public:
 		C,
 		RankNum,
 	};
+	// クリア後のシーンのタイプ
+	enum class ClearSceneType
+	{
+		LeftImgDraw,		// 左画像の描画
+		ClearTimeMeasure,	// タイム計測
+		RankDraw,			// ランク描画
+		RankingDraw,		// ランキング描画
+		SceneChange,		// シーン遷移
+	};
+
+	enum class NextScene
+	{
+		Title,		// タイトル
+		GameScene,	// ゲームシーン
+		Num,
+	};
+
 public:
 	StageSceneManager(Game::Stage stageKind);
 	virtual ~StageSceneManager();
@@ -55,6 +72,7 @@ public:
 
 private:	// 関数
 	void ClearUpdate();
+	void ClearSoundUpdate();
 	void ClearDraw();
 
 	void ImageLoad();
@@ -70,12 +88,33 @@ private:	// 関数
 
 private:	// 変数
 	int m_clearTime;			// クリア時間
+	int m_drawClearTime;		// 表示用のクリア時間
+	float m_rankSize;			// ランクのサイズ
 	bool m_isGameClear;			// ゲームをクリアしたかどうか
 
-	bool m_isFall;				// 落下中か
 	bool m_isMyRank;			// 自分のタイムが反映されているか
 
-	int m_minusPosY;				// 引くY座標
+	bool m_isPlayClearSE;		// クリアのSEを流したかどうか
+
+	bool m_isExpasionRnak;	// ランクが拡大中か
+
+	bool m_isButtonDraw;	// ボタンが表示されたかどうか
+
+	int m_minusLeftPosY;		// 引く左側の画像のY座標
+
+	int m_minusRightPosX;		// 引く右側の画像のX座標
+
+	int m_alpha;			// 画面の暗さ
+
+	bool m_isPlayRankingSE;		// ランキング用SEを流したかどうか
+
+	int m_buttonCount;		// カーソルのカウント
+
+	NextScene m_nextScene;	// 次のシーン
+
+	float m_titleChangeTextSize;
+	float m_gameSceneChangeTextSize;
+
 
 	std::array<int, 11> m_myTimeNumH{};	// 自身のクリアタイムの画像ハンドル
 	std::array<int, 11> m_rankingTimeNumH{};	// ランキングのタイムの画像ハンドル
@@ -83,10 +122,11 @@ private:	// 変数
 	std::array<int, 3> m_textH{};	// テキスト画像ハンドル
 	std::array<int, 3> m_rankingH{};	// ランキング画像ハンドル
 	std::array<int, 2> m_textBoxH{};	// テキストボックス画像ハンドル
-	std::array<int, 2> m_buttonH{};		// ボタンの画像ハンドル
+	std::array<int, 3> m_buttonH{};		// ボタンの画像ハンドル
 
 	Rank m_rank;			// ランク
-	
+	ClearSceneType m_clearSceneType;	// クリア後のシーンのタイプ
+		
 	std::vector<int> m_ranking{};	// ランキング
 	Game::Stage m_stageKind;	// ステージの種類
 
@@ -94,6 +134,10 @@ private:	// 変数
 	std::shared_ptr<CountTime> m_pCountTime;		// 秒数カウントのポインタ
 	std::shared_ptr<Time> m_pImageDrawTime;		// 画像が表示されるまでの時間
 	std::shared_ptr<Time> m_pStageClearSETime;	// ステージクリア時のサウンドの開始時間
+	std::shared_ptr <Time> m_pRankDrawTime;		// ランクが表示されるまでの時間
+	std::shared_ptr<Time> m_pLeftImgDrawTime;	// 左側の画像が表示されるまでの時間
+	std::shared_ptr<Time> m_pRightImgDrawTime;	// 右側の画像が表示されるまでの時間
+	std::shared_ptr<Time> m_pButtonDrawTime;	// ボタンが表示されるまでの時間
 	std::shared_ptr<Ranking> m_pRanking;	// ランキング
 
 };

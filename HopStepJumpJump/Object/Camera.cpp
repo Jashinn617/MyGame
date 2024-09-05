@@ -55,8 +55,8 @@ namespace
 	constexpr float kStageClearTargetLength = 80.0f;		// ステージクリア時のカメラからターゲットまでの距離
 	
 	/*ステージクリア時のイージングにかかる時間*/
-	constexpr float kStageClearEasingTime =  1050.0f;
-	constexpr float kStageClearTargetMoveTime = 1000.0f;
+	constexpr float kStageClearEasingTime =  650.0f;
+	constexpr float kStageClearTargetMoveTime = 600.0f;
 }
 
 Camera::Camera() :
