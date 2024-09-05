@@ -2,6 +2,7 @@
 #include "StageSceneManager.h"
 #include "SceneDebug.h"
 #include "SceneGameClear.h"
+#include "SceneTitle.h"
 
 #include "../Object/ObjectBase.h"
 #include "../Object/Player/Player.h"
@@ -78,6 +79,19 @@ std::shared_ptr<SceneBase> SceneStage::Update(Input& input)
 	if (m_pStageSceneManager->IsGameClear())
 	{
 		GameClear();
+	}
+
+	if (m_pStageSceneManager->GetNextScene() == StageSceneManager::NextScene::GameScene)
+	{
+		return make_shared<SceneStage>(m_stageKind);
+	}
+	else if (m_pStageSceneManager->GetNextScene() == StageSceneManager::NextScene::Title)
+	{
+		return make_shared<SceneTitle>();
+	}
+	else if (m_pStageSceneManager->GetNextScene() == StageSceneManager::NextScene::My)
+	{
+		return shared_from_this();
 	}
 
 	return shared_from_this();

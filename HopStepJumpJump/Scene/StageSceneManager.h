@@ -34,11 +34,18 @@ public:
 		SceneChange,		// シーン遷移
 	};
 
+	enum class NextSelect
+	{
+		GameScene,	// ゲームシーン
+		Title,		// タイトル
+		Num,
+	};
+
 	enum class NextScene
 	{
-		Title,		// タイトル
+		My,		// 自分のシーン
 		GameScene,	// ゲームシーン
-		Num,
+		Title,		// タイトルシーン
 	};
 
 public:
@@ -69,6 +76,8 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	bool IsGameClear()const { return m_isGameClear; }
+
+	NextScene GetNextScene()const { return m_nextScene; }
 
 private:	// 関数
 	void ClearUpdate();
@@ -104,13 +113,18 @@ private:	// 変数
 
 	int m_minusRightPosX;		// 引く右側の画像のX座標
 
+	int m_minusButtonPosY;		// 引くボタンの画像のY座標
+
 	int m_alpha;			// 画面の暗さ
+
+	bool m_isButtonFall;		// ボタンが落ちきったかどうか
 
 	bool m_isPlayRankingSE;		// ランキング用SEを流したかどうか
 
 	int m_buttonCount;		// カーソルのカウント
 
-	NextScene m_nextScene;	// 次のシーン
+	NextSelect m_nextSelect;	// セレクト
+	NextScene m_nextScene;		// 次のシーン
 
 	float m_titleChangeTextSize;
 	float m_gameSceneChangeTextSize;

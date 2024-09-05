@@ -1,3 +1,4 @@
-﻿  StageSceneManager.cpp
-C:\Users\fko2347024\Desktop\GitHub\MyGame\HopStepJumpJump\Scene\StageSceneManager.cpp(311,20): warning C4553: '==': 式の結果が使用されていません。'=' を意図していますか?
+﻿  SceneStage.cpp
+  StageSceneManager.cpp
+  コードを生成中...
   JumpJump.vcxproj -> C:\Users\fko2347024\Desktop\GitHub\MyGame\HopStepJumpJump\x64\Debug\JumpJump.exe

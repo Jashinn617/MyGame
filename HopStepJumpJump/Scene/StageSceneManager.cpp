@@ -138,6 +138,8 @@ namespace
 	constexpr int kButtonPosY3 = 750;
 	constexpr float kButtonSize = 1.0f;
 	constexpr float kSelectButtonSize = 1.7f;	// 選ばれているボタンのサイズ
+	constexpr int kStartButtonPosY = 2000;		// ボタンの初期位置
+	constexpr int kButtonUpSpeed = 40;			// ボタンの上昇速度
 
 	constexpr int kColonArrayNum = 10;			// タイムの間に表示するコロンの配列番号
 
@@ -172,13 +174,16 @@ StageSceneManager::StageSceneManager(Game::Stage stageKind):
 	m_isExpasionRnak(true),
 	m_isButtonDraw(false),
 	m_isPlayRankingSE(false),
+	m_isButtonFall(false),
 	m_stageKind(stageKind),
 	m_minusLeftPosY(kStartLeftPosY),
 	m_minusRightPosX(kStartRightPosX),
+	m_minusButtonPosY(kStartButtonPosY),
 	m_clearSceneType(ClearSceneType::LeftImgDraw),
 	m_alpha(0),
 	m_buttonCount(0),
-	m_nextScene(NextScene::Title),
+	m_nextSelect(NextSelect::Title),
+	m_nextScene(NextScene::My),
 	m_titleChangeTextSize(kButtonSize),
 	m_gameSceneChangeTextSize(kButtonSize)
 {
@@ -308,7 +313,7 @@ void StageSceneManager::ClearUpdate()
 			// SEを止める
 			SoundManager::GetInstance().DesignationStopSound("TimeCount");
 
-			m_drawClearTime == m_clearTime;
+			m_drawClearTime = m_clearTime;
 			m_clearSceneType = ClearSceneType::RankDraw;
 
 			
@@ -378,29 +383,52 @@ void StageSceneManager::ClearUpdate()
 	case ClearSceneType::SceneChange:
 		// 真ん中にボタンを表示する
 		// ボタンは下から現れる
+		m_minusButtonPosY -= kButtonUpSpeed;
+		if (m_minusButtonPosY <= 0)
+		{
+			m_minusButtonPosY = 0;
+			m_isButtonFall = true;
+		}
 
 		// ボタンが下から現れてから
+		if (m_isButtonFall)
+		{
+			// カーソル移動
+			if (Pad::isTrigger(PAD_INPUT_UP))
+			{
+				m_buttonCount--;
+				if (m_buttonCount < 0)
+				{
+					m_buttonCount = static_cast<int>(NextSelect::Num) - 1;
+				}
+			}
+			if (Pad::isTrigger(PAD_INPUT_DOWN))
+			{
+				m_buttonCount++;
+				if (m_buttonCount >= static_cast<int>(NextSelect::Num))
+				{
+					m_buttonCount = 0;
+				}
+			}
 
-		// カーソル移動
-		if (Pad::isTrigger(PAD_INPUT_UP))
-		{
-			m_buttonCount--;
-			if (m_buttonCount < 0)
+			// AボタンかBボタンが押されたら
+			// 押されたボタンによってシーンを遷移する
+			if (Pad::isTrigger(PAD_INPUT_1) || Pad::isTrigger(PAD_INPUT_2))
 			{
-				m_buttonCount = static_cast<int>(NextScene::Num) - 1;
+				if (m_buttonCount == static_cast<int>(NextSelect::GameScene))
+				{
+					m_nextScene = NextScene::GameScene;
+				}
+				else if (m_buttonCount == static_cast<int>(NextSelect::Title))
+				{
+					m_nextScene = NextScene::Title;
+				}
+				else
+				{
+					m_nextScene = NextScene::My;
+				}
 			}
 		}
-		if (Pad::isTrigger(PAD_INPUT_DOWN))
-		{
-			m_buttonCount++;
-			if (m_buttonCount >= static_cast<int>(NextScene::Num))
-			{
-				m_buttonCount = 0;
-			}
-		}
-		
-		// ボタンが押されたら
-		// 押されたボタンによってシーンを遷移する
 		break;
 
 	default:
@@ -436,6 +464,8 @@ void StageSceneManager::ClearDraw()
 	DrawString(0, 0, "GameClear", 0xffffff);
 	DrawFormatString(0, 80, 0xffffff, "1位：%d 2位：%d 3位:%d",
 		m_ranking[0] / 60, m_ranking[1] / 60, m_ranking[2] / 60);
+
+	DrawFormatString(0, 140, 0xffffff, "カウント：%d", m_buttonCount);
 #endif // _DEBUG
 }
 
@@ -698,23 +728,23 @@ void StageSceneManager::ButtonDraw()
 {
 	if (!m_isButtonDraw) return;
 
-	if (m_buttonCount == static_cast<int>(NextScene::Title))
+	if (m_buttonCount == static_cast<int>(NextSelect::GameScene))
 	{
 		m_titleChangeTextSize = kSelectButtonSize;
 		m_gameSceneChangeTextSize = kButtonSize;
 	}
-	else if (m_buttonCount == static_cast<int>(NextScene::GameScene))
+	else if (m_buttonCount == static_cast<int>(NextSelect::Title))
 	{
 		m_titleChangeTextSize = kButtonSize;
 		m_gameSceneChangeTextSize = kSelectButtonSize;
 	}
 
 
-	DrawRotaGraph(kButtonPosX, kButtonPosY1, 
+	DrawRotaGraph(kButtonPosX, kButtonPosY1 - m_minusButtonPosY, 
 		kButtonSize, 0.0, m_buttonH[0], true);
 
-	DrawRotaGraph(kButtonPosX, kButtonPosY2,
+	DrawRotaGraph(kButtonPosX, kButtonPosY2 - m_minusButtonPosY,
 		m_titleChangeTextSize, 0.0, m_buttonH[1], true);
-	DrawRotaGraph(kButtonPosX, kButtonPosY3,
+	DrawRotaGraph(kButtonPosX, kButtonPosY3 - m_minusButtonPosY,
 		m_gameSceneChangeTextSize, 0.0, m_buttonH[2], true);
 }
