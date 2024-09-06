@@ -18,6 +18,8 @@
 #include "../../Shader/ToonShader.h"
 #include "../../Shader/DamageShader.h"
 
+#include "../../Effect/Effekseer3DManager.h"
+
 #include <math.h>
 #include <cassert>
 
@@ -298,6 +300,9 @@ void Player::OnDamage(VECTOR targetPos)
 
 	// ダメージ音を鳴らす
 	SoundManager::GetInstance().Play("Damage");
+
+	// エフェクトを流す
+	Effekseer3DManager::GetInstance().Add("Damage", Effekseer3DManager::PlayType::Normal, this, m_info.pos);
 
 }
 

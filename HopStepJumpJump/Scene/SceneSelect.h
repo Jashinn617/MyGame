@@ -34,6 +34,11 @@ private:	// 関数
 	void  SelectUpdate();
 
 	/// <summary>
+	/// セレクトボックスの更新
+	/// </summary>
+	void SelectBoxUpdate();
+
+	/// <summary>
 	/// 背景の描画
 	/// </summary>
 	void BackDraw();
@@ -51,6 +56,16 @@ private:	// 変数
 	int m_backHeight;					// 画像の縦幅
 	bool m_isUp;						// 上が選択されているかどうか
 	bool m_isLeft;						// 左が選択されているかどうか
+
+	float m_upBoxSize1;
+	float m_upBoxSize2;
+	float m_downBoxSize1;
+	float m_downBoxSize2;
+
+	float m_expansionBoxSize;
+
+	float m_boxSinCount;	// ボックスを拡縮するためのカウント
+	float m_boxSinSize;		// ボックスのサイズ計算に使うSin
 
 	NextScene m_next;					// 次のシーン
 };

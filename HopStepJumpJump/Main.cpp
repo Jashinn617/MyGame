@@ -1,10 +1,13 @@
 #include "DxLib.h"
+#include "EffekseerForDXLib.h"
 
 #include "Util/Game.h"
 #include "Util/Input.h"
 #include "Util//Pad.h"
 
 #include "Scene/SceneManager.h"
+#include "Effect/Effekseer3DManager.h"
+#include "Util/SoundManager.h"
 
 #include <memory>
 
@@ -29,14 +32,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		return -1;			// エラーが起きたら直ちに終了
 	}
 
+	// Effekseerの初期化
+	Effekseer_Init(8000);
+
 	// フルスクリーンウインドウの切り替えでリソースが消えるのを防ぐ。
 	// Effekseerを使用する場合は必ず設定する。
 	SetChangeScreenModeGraphicsSystemResetFlag(false);
-
 	// DXライブラリのデバイスロストした時のコールバックを設定する。
 	// ウインドウとフルスクリーンの切り替えが発生する場合は必ず実行する。
 	// ただし、2DirectX11を使用する場合は実行する必要はない。
-	//Effekseer_SetGraphicsDeviceLostCallbackFunctions();
+	Effekseer_SetGraphicsDeviceLostCallbackFunctions();
 
 	// Zバッファを使用する
 	SetUseZBuffer3D(true);
@@ -45,6 +50,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// ポリゴンの裏側は描画しない
 	SetUseBackCulling(true);
+
+	//// エフェクトのロード
+	Effekseer3DManager::GetInstance();
+	//// サウンドのロード
+	//SoundManager::GetInstance();
 
 	// ライトの設定
 	SetLightPosition(Game::kLightPos);
@@ -77,6 +87,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		pScene->Update(input);
 		pScene->Draw();
 
+		// エフェクトの更新、描画
+		Effekseer3DManager::GetInstance().Update();
+		Effekseer3DManager::GetInstance().Draw();
+
 		// 画面が切り替わるのを待つ
 		ScreenFlip();
 
@@ -90,6 +104,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 
 	pScene->End();
+
+	Effkseer_End();	 // Effekseerの終了処理
 
 	DxLib_End();				// ＤＸライブラリ使用の終了処理
 

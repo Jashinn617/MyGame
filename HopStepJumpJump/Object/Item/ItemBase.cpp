@@ -12,6 +12,8 @@
 
 #include "../../Shader/ToonShader.h"
 
+#include "../../Effect/Effekseer3DManager.h"
+
 #include <assert.h>
 
 using namespace CharacterData;
@@ -107,6 +109,9 @@ void ItemBase::Draw(std::shared_ptr<ToonShader> pToonShader)
 
 void ItemBase::OnGet()
 {
+	// エフェクトを流す
+	Effekseer3DManager::GetInstance().Add("ItemGet",
+		Effekseer3DManager::PlayType::Normal, this, m_info.pos);
 	// アイテムの取得音を鳴らす
 	SoundManager::GetInstance().Play("ItemGet");
 	m_isDead = true;

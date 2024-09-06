@@ -35,6 +35,7 @@ public:		// ƒNƒ‰ƒX
 
 		void SetData(const char* FileName)
 		{
+			m_data = GetInstance().m_dataTable[FileName];
 		}
 
 	protected:	// ŠÖ”

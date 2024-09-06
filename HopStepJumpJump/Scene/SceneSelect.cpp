@@ -1,5 +1,7 @@
 #include "DxLib.h"
 #include "SceneSelect.h"
+#include "SceneRanking.h"
+#include "SceneStage.h"
 
 #include "../Util/SoundManager.h"
 #include "../Util/Input.h"
@@ -34,10 +36,11 @@ namespace
 	constexpr int kUpSelectBoxPosY = 400;		// 上のセレクトボックスのY位置
 	constexpr int kDownSelectBoxPosY = 820;		// 下のセレクトボックスのY位置
 
-	constexpr float kMinUpBoxSize = 0.7f;
-	constexpr float kMaxUpBoxSize = 0.7f;
-	constexpr float kMinDownBoxSize = 0.6f;
-	constexpr float kMaxDownBoxSize = 0.6f;
+	constexpr float kUpBoxSize = 0.7f;
+	constexpr float kDownBoxSize = 0.6f;
+
+	constexpr float kBoxSinSpeed = 0.07f;	// ボックスが拡縮するスピード
+	constexpr float kBoxAnimSwing = 0.03f;	// ボックスの拡縮幅
 }
 
 SceneSelect::SceneSelect() :
@@ -47,6 +50,13 @@ SceneSelect::SceneSelect() :
 	m_backHeight(0),
 	m_isUp(true),
 	m_isLeft(true),
+	m_upBoxSize1(0.0f),
+	m_upBoxSize2(0.0f),
+	m_downBoxSize1(0.0f),
+	m_downBoxSize2(0.0f),
+	m_expansionBoxSize(0.0f),
+	m_boxSinCount(0.0f),
+	m_boxSinSize(0.0f),
 	m_next(NextScene::My)
 {
 	/*画像ハンドルのロード*/
@@ -88,15 +98,46 @@ std::shared_ptr<SceneBase> SceneSelect::Update(Input& input)
 	// 上下の選択の入れ替え
 	if (Pad::isTrigger(PAD_INPUT_UP) || Pad::isTrigger(PAD_INPUT_DOWN))
 	{
+		SoundManager::GetInstance().Play("Select");
 		m_isUp = !m_isUp;
 	}
 	// 左右の入れ替え
 	if (Pad::isTrigger(PAD_INPUT_LEFT) || Pad::isTrigger(PAD_INPUT_RIGHT))
 	{
+		SoundManager::GetInstance().Play("Select");
 		m_isLeft = !m_isLeft;
 	}
 
+	SelectBoxUpdate();
 
+
+	SelectUpdate();
+
+	switch (m_next)
+	{
+	case SceneSelect::NextScene::My:
+		return shared_from_this();
+		break;
+
+	case SceneSelect::NextScene::Stage1:
+		return std::make_shared<SceneStage>(Game::Stage::Stage1);
+		break;
+
+	case SceneSelect::NextScene::Stage2:
+		return std::make_shared<SceneStage>(Game::Stage::Stage2);
+		break;
+
+	case SceneSelect::NextScene::Ranking:
+		return std::make_shared<SceneRanking>();
+		break;
+
+	case SceneSelect::NextScene::End:
+		DxLib_End();
+		break;
+
+	default:
+		break;
+	}
 
 	return shared_from_this();
 }
@@ -129,6 +170,9 @@ void SceneSelect::SelectUpdate()
 	// AボタンかBボタンが押されたら次のシーンに遷移する
 	if (Pad::isTrigger(PAD_INPUT_1) || Pad::isTrigger(PAD_INPUT_2))
 	{
+		// SEを鳴らす
+		SoundManager::GetInstance().Play("Decide");
+
 		if (m_isUp)	// 上の選択している
 		{
 			if (m_isLeft)	// 左を選択している
@@ -159,6 +203,52 @@ void SceneSelect::SelectUpdate()
 	}
 }
 
+void SceneSelect::SelectBoxUpdate()
+{
+	// 現在選ばれているボックスを拡縮する
+
+	// 拡縮処理
+	m_boxSinCount += kBoxSinSpeed;
+	m_expansionBoxSize = sinf(m_boxSinCount) * kBoxAnimSwing;
+
+	if (m_isUp)	// 上の選択している
+	{
+		if (m_isLeft)	// 左を選択している
+		{
+			m_upBoxSize1 = m_expansionBoxSize + kUpBoxSize;
+			m_upBoxSize2 = kUpBoxSize;
+			m_downBoxSize1 = kDownBoxSize;
+			m_downBoxSize2 = kDownBoxSize;
+		}
+		else
+		{
+			m_upBoxSize1 = kUpBoxSize;
+			m_upBoxSize2 = m_expansionBoxSize + kUpBoxSize;
+			m_downBoxSize1 = kDownBoxSize;
+			m_downBoxSize2 = kDownBoxSize;
+		}
+
+	}
+	else	// 下の選択をしている
+	{
+		if (m_isLeft)	// 左を選択している
+		{
+			m_upBoxSize1 = kUpBoxSize;
+			m_upBoxSize2 = kUpBoxSize;
+			m_downBoxSize1 = m_expansionBoxSize + kDownBoxSize;
+			m_downBoxSize2 = kDownBoxSize;
+		}
+		else
+		{
+			m_upBoxSize1 = kUpBoxSize;
+			m_upBoxSize2 = kUpBoxSize;
+			m_downBoxSize1 = kDownBoxSize;
+			m_downBoxSize2 = m_expansionBoxSize + kDownBoxSize;
+		}
+	}
+
+}
+
 void SceneSelect::BackDraw()
 {
 	// 背景をスクロールさせる
@@ -173,12 +263,12 @@ void SceneSelect::BackDraw()
 void SceneSelect::SelectBoxDraw()
 {
 	DrawRotaGraph(kSelectBoxPosX1, kUpSelectBoxPosY,
-		kMinUpBoxSize, 0.0f, m_SelectBoxH[0], true);
+		m_upBoxSize1, 0.0f, m_SelectBoxH[0], true);
 	DrawRotaGraph(kSelectBoxPosX2, kUpSelectBoxPosY,
-		kMinUpBoxSize, 0.0f, m_SelectBoxH[1], true);
+		m_upBoxSize2, 0.0f, m_SelectBoxH[1], true);
 
 	DrawRotaGraph(kSelectBoxPosX1, kDownSelectBoxPosY,
-		kMinDownBoxSize, 0.0f, m_SelectBoxH[2], true);
+		m_downBoxSize1, 0.0f, m_SelectBoxH[2], true);
 	DrawRotaGraph(kSelectBoxPosX2, kDownSelectBoxPosY,
-		kMinDownBoxSize, 0.0f, m_SelectBoxH[3], true);
+		m_downBoxSize2, 0.0f, m_SelectBoxH[3], true);
 }

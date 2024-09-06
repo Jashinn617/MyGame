@@ -1,8 +1,13 @@
-﻿  SceneSelect.cpp
+﻿  Effekseer3DManager.cpp
+  SceneDebug.cpp
+  SceneGameClear.cpp
+  SceneStage.cpp
+  SceneTitle.cpp
+  StageSceneManager.cpp
   コード生成しています。
-  0 of 2874 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+  33 of 3177 functions ( 1.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+    12 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
 EffekseerForDXLib_vs2019_x64.lib(EffekseerForDXLib.obj) : warning LNK4099: PDB '' が 'EffekseerForDXLib_vs2019_x64.lib(EffekseerForDXLib.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
   JumpJump.vcxproj -> C:\Users\fko2347024\Desktop\GitHub\MyGame\HopStepJumpJump\x64\Release\JumpJump.exe

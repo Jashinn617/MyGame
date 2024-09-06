@@ -22,6 +22,9 @@ namespace
 		0
 	};
 
+	// クリア時に出す画像のハンドル
+	const char* const kClearTextFileName = "Data/Img/Result/GameClearLogo.png";
+
 	// 自身のクリアタイムの画像ファイル
 	const char* const kMyTimeNumFileName[11] =
 	{
@@ -97,8 +100,8 @@ namespace
 	/*テキスト座標*/
 	constexpr int kTextPosX1 = static_cast<int>(Game::kScreenWidth * 0.28f);
 	constexpr int kTextPosX2 = static_cast<int>(Game::kScreenWidth * 0.75f);
-	constexpr int kTextPosY1 = static_cast<int>(Game::kScreenHeight * 0.13f);
-	constexpr int kTextPosY2 = static_cast<int>(Game::kScreenHeight * 0.42f);
+	constexpr int kTextPosY1 = static_cast<int>(Game::kScreenHeight * 0.14f);
+	constexpr int kTextPosY2 = static_cast<int>(Game::kScreenHeight * 0.43f);
 	/*ランキング座標*/
 	constexpr int kRankingPosX = 1209;
 	constexpr int kRnakingPosY1 = 350;
@@ -161,10 +164,15 @@ namespace
 
 	constexpr int kSceneChangeAlpha = 200;	// シーン遷移時の画面の暗さ
 
+	constexpr int kClearTextPosX = 1000;
+	constexpr int kClearTextPosY = 200;
+	constexpr float kClearTextSize = 1.2f;
+
 
 }
 
 StageSceneManager::StageSceneManager(Game::Stage stageKind):
+	m_clearTextH(-1),
 	m_clearTime(0),
 	m_drawClearTime(0),
 	m_rankSize(0.0f),
@@ -457,6 +465,14 @@ void StageSceneManager::ClearSoundUpdate()
 
 void StageSceneManager::ClearDraw()
 {
+	// ゲームクリアの画像の描画
+	// ランキングが出たら消す
+	if (!m_pImageDrawTime->Update())
+	{
+		DrawRotaGraph(kClearTextPosX, kClearTextPosY, kClearTextSize,
+			0.0f, m_clearTextH, true);
+	}
+
 	// テキスト描画
 	TextDraw();
 	// タイム描画
@@ -485,6 +501,8 @@ void StageSceneManager::ClearDraw()
 void StageSceneManager::ImageLoad()
 {
 	/*画像ハンドルのロード*/
+	m_clearTextH = LoadGraph(kClearTextFileName);
+	assert(m_clearTextH);
 	for (int i = 0; i < m_myTimeNumH.size(); i++)
 	{
 		m_myTimeNumH[i] = LoadGraph(kMyTimeNumFileName[i]);
@@ -525,6 +543,7 @@ void StageSceneManager::ImageLoad()
 void StageSceneManager::ImageDelete()
 {
 	/*画像のデリート*/
+	DeleteGraph(m_clearTextH);
 	for (int i = 0; i < m_myTimeNumH.size(); i++)
 	{
 		DeleteGraph(m_myTimeNumH[i]);

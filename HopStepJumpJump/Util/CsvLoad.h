@@ -24,7 +24,7 @@ namespace LoadData
 	// エフェクトデータ
 	struct EffectData
 	{
-		int handle = -1;			// エフェクトハンドル 
+		int resouceH = -1;			// エフェクトハンドル 
 		int playingEffectH = -1;	// 実際にエフェクトを再セするときに使うハンドル
 		float size = 0;				// エフェクトのサイズ
 		float speed = 1;			// 再生スピード

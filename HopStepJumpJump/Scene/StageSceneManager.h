@@ -96,6 +96,7 @@ private:	// 関数
 	void ButtonDraw();
 
 private:	// 変数
+	int m_clearTextH;			// クリア時に出す画像のハンドル
 	int m_clearTime;			// クリア時間
 	int m_drawClearTime;		// 表示用のクリア時間
 	float m_rankSize;			// ランクのサイズ

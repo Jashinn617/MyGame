@@ -12,7 +12,7 @@ GameClear,0,255
 ItemGet,0,160
 Jump,0,200
 Walk,0,255
-Select,0,255
+Select,0,180
 Fall,0,255
 TitleLanding,0,255
 TitleButtonPush,0,255

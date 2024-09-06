@@ -54,6 +54,8 @@ void SceneTitle::Init()
 
 std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 {
+	UpdateFade();
+
 	m_TitlePosY += kTitleFallSpeed;
 	m_TitlePosY = min(m_TitlePosY, kTitleLogoPosY);
 
@@ -90,7 +92,7 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 		// Œˆ’èSE‚ð—¬‚·
 		SoundManager::GetInstance().Play("TitleButtonPush");
 
-		return make_shared<SceneStage>(Game::Stage::Stage1);
+		return make_shared<SceneSelect>();
 	}
 
 	
@@ -115,6 +117,8 @@ void SceneTitle::Draw()
 	DrawRotaGraph(kPressAnyButtonPosX, kPressAnyButtonPosY,
 		1.0f, 0.0f,
 		m_H2, true);
+
+	DrawFade();
 }
 
 void SceneTitle::End()

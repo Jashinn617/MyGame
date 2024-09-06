@@ -10,6 +10,8 @@
 #include "../../Util/Input.h"
 #include "../../Util/SoundManager.h"
 
+#include "../../Effect/Effekseer3DManager.h"
+
 #include "../../Shader/ToonShader.h"
 
 #include <assert.h>
@@ -157,16 +159,23 @@ void EnemyBase::StageClear()
 void EnemyBase::GameEnd()
 {
 	m_isEnd = true;
+	
 
 	// 一定時間たったら消える
 	if (m_endTime->Update())
 	{
+		// エフェクトを流す
+		Effekseer3DManager::GetInstance().Add("GameEndDead", 
+			Effekseer3DManager::PlayType::Normal, this, m_info.pos);
+
+
 		OnDead();
 		// 同じSEが鳴ってなかった場合
 		if(!SoundManager::GetInstance().IsDesignationCheckPlaySound("EnemyEndDead"))
 		{
 			// ボンって感じのSEを鳴らす
 			SoundManager::GetInstance().Play("EnemyEndDead");
+			
 		}
 		
 		m_isGameEnd = true;
@@ -182,6 +191,12 @@ void EnemyBase::OnDamage(VECTOR targetPos)
 	// 攻撃音を鳴らす
 	SoundManager::GetInstance().Play("Attack");
 
+	// エフェクトを流す
+	Effekseer3DManager::GetInstance().Add("EnemyDead"
+		, Effekseer3DManager::PlayType::Normal, this, m_info.pos);
+
+
+	
 	OnDead();
 }
 
