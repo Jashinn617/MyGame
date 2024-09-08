@@ -13,7 +13,7 @@ namespace
 	{
 		"Data/Model/Stage/TestStage.mv1",
 		"Data/Model/Stage/Stage1.mv1",
-		"Data/Model/Stage/TestStage.mv1",
+		"Data/Model/Stage/Stage2.mv1",
 	};
 }
 

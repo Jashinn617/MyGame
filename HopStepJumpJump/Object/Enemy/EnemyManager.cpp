@@ -14,7 +14,7 @@ namespace
 	{
 		"Data/File/Enemy/TestEnemySpown.csv",
 		"Data/File/Enemy/Stage1EnemySpown.csv",
-		"Data/File/Enemy/TestEnemySpown.csv",
+		"Data/File/Enemy/Stage2EnemySpown.csv",
 		"Data/File/Enemy/TestEnemySpown.csv"
 	};
 }

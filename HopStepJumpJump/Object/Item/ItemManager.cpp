@@ -15,7 +15,7 @@ namespace
 	{
 		"Data/File/Item/TestItemSpown.csv",
 		"Data/File/Item/Stage1ItemSpown.csv",
-		"Data/File/Item/TestItemSpown.csv",
+		"Data/File/Item/Stage2ItemSpown.csv",
 		"Data/File/Item/TestItemSpown.csv"
 	};
 }

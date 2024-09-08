@@ -236,7 +236,7 @@ void Player::Draw2D()
 	m_pCamera->Draw();
 
 #ifdef _DEBUG
-	DrawFormatString(0, 20, 0xffffff, "プレイヤー座標：%f,%f,%f"
+	DrawFormatString(0, 20, 0x000000, "プレイヤー座標：%f,%f,%f"
 		, m_info.pos.x, m_info.pos.y, m_info.pos.z);
 	DrawFormatString(0, 100, 0x000000, "ジャンプ力：%f", m_jumpPower);
 #endif // _DEBUG

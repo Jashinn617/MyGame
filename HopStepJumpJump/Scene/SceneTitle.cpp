@@ -12,10 +12,13 @@
 #include "../Object/SkyDome.h"
 #include "../Object/Camera.h"
 
+#include <assert.h>
+
 namespace
 {
 	const char* const kTitleLogoImg = "Data/Img/Title/Logo.png";
 	const char* const kPressAnyButtonImg = "Data/Img/Title/PressAnyButton.png";
+	const char* const kMovieFileName = "Data/Movie/DemoMovie.mp4";
 
 	/*タイトルロゴ画像の初期座標*/
 	constexpr int kStartTitleLogoPosY = -1200;
@@ -32,12 +35,16 @@ namespace
 SceneTitle::SceneTitle():
 	m_H1(-1),
 	m_H2(-1),
+	m_movieH(-1),
 	m_TitlePosY(kStartTitleLogoPosY),
 	m_IsPlayFallSE(false)
 {
 	/*画像のロード*/
 	m_H1 = LoadGraph(kTitleLogoImg);
 	m_H2 = LoadGraph(kPressAnyButtonImg);
+	/*動画のロード*/
+	m_movieH = LoadGraph(kMovieFileName);
+	assert(m_movieH != -1);
 }
 
 SceneTitle::~SceneTitle()
@@ -45,11 +52,14 @@ SceneTitle::~SceneTitle()
 	/*画像のデリート*/
 	DeleteGraph(m_H1);
 	DeleteGraph(m_H2);
+	/*動画のデリート*/
+	DeleteGraph(m_movieH);
 }
 
 void SceneTitle::Init()
 {
 	/*処理無し*/
+
 }
 
 std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
@@ -73,6 +83,8 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 	// タイトルが着地したら着地音を流す
 	if (m_TitlePosY >= kTitleLogoPosY && !m_IsPlayFallSE)
 	{
+		// 動画の再生
+		PlayMovieToGraph(m_movieH);
 		SoundManager::GetInstance().Play("TitleLanding");
 		m_IsPlayFallSE = true;
 	}
@@ -80,6 +92,16 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 	if (m_TitlePosY >= kTitleLogoPosY && m_IsPlayFallSE)
 	{
 		SoundManager::GetInstance().Play("TitleScene");
+
+		// 動画が停止していたら再生位置を最初に戻す
+		if (GetMovieStateToGraph(m_movieH) == 0)
+		{
+			SeekMovieToGraph(m_movieH, 0);
+		}
+
+		// 動画の再生
+		PlayMovieToGraph(m_movieH);
+		
 	}
 
 
@@ -105,6 +127,10 @@ void SceneTitle::Draw()
 #ifdef _DEBUG
 	DrawFormatString(0, 0, 0xffffff, "Title");
 #endif // _DEBUG   
+
+	// 動画の描画
+	DrawGraph(0, 0, m_movieH, true);
+
 
 	// タイトル画像の描画
 	DrawRotaGraph(kTitleLogoPosX, m_TitlePosY,
