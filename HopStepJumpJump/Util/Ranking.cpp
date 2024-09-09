@@ -16,9 +16,9 @@ namespace
 	const char* kStage1UpdateUri = "/HopRank/Stage1/updateRanking.php?clearTime=";  // 更新
 	const char* kStage1GetUri = "/HopRank/Stage1/getRanking.php";					// 取得
 	// ステージ2URI
-	const char* kStage2CreateUri = "/HopRank/Stage2/createRanking_stage2.php";					// 作成
-	const char* kStage2UpdateUri = "/HopRank/Stage2/updateRanking_stage2.php?clearTime=";		// 更新
-	const char* kStage2GetUri = "/HopRank/Stage2/getRanking_stage2.php";						// 取得
+	const char* kStage2CreateUri = "/HopRank/Stage2/createRanking.php";					// 作成
+	const char* kStage2UpdateUri = "/HopRank/Stage2/updateRanking.php?clearTime=";		// 更新
+	const char* kStage2GetUri = "/HopRank/Stage2/getRanking.php";						// 取得
 	constexpr int kPortNum = 80;		// ポート番号
 	constexpr int kMaxRankNum = 10;		// 表示するランキング数
 

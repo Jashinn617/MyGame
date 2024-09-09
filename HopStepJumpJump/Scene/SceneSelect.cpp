@@ -128,7 +128,7 @@ std::shared_ptr<SceneBase> SceneSelect::Update(Input& input)
 		break;
 
 	case SceneSelect::NextScene::Ranking:
-		//return std::make_shared<SceneRanking>();
+		return std::make_shared<SceneRanking>();
 		break;
 
 	case SceneSelect::NextScene::End:

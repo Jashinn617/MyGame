@@ -200,11 +200,15 @@ void Player::Update(Input& input)
 	// 落ちたら初期位置に戻る
 	if (m_info.pos.y <= kFallSEPosY)
 	{
-		// 落下SEを流す
-		if (!SoundManager::GetInstance().IsDesignationCheckPlaySound("Fall"))
+		if (!m_isStageClear)
 		{
-			SoundManager::GetInstance().Play("Fall");
+			// 落下SEを流す
+			if (!SoundManager::GetInstance().IsDesignationCheckPlaySound("Fall"))
+			{
+				SoundManager::GetInstance().Play("Fall");
+			}
 		}
+		
 
 		if (m_info.pos.y <= kFallBackPosY)
 		{
@@ -296,8 +300,6 @@ void Player::OnDamage(VECTOR targetPos)
 		VGet(m_info.pos.x, 0.0f, m_info.pos.z),
 		VGet(targetPos.x, 0.0f, targetPos.z)));
 
-	// シェーダをONにする
-
 	// ダメージ音を鳴らす
 	SoundManager::GetInstance().Play("Damage");
 
@@ -338,6 +340,8 @@ void Player::AngleUpdate()
 
 void Player::MoveDirectionUpdate(Input& input)
 {
+	if (m_isGameEnd) return;
+
 	// ノックバック中は処理をせずに終了する
 	if (m_pState->GetState() == PlayerState::StateKind::KnockBack) return;
 
@@ -357,6 +361,9 @@ void Player::MoveDirectionUpdate(Input& input)
 
 VECTOR Player::MoveUpdate(Input& input)
 {
+	if (m_isGameEnd) return VGet(0.0f, 0.0f, 0.0f);
+
+
 	// 移動スピードが0の場合は移動しない
 	if (m_moveSpeed == 0.0f)return VGet(0.0f, 0.0f, 0.0f);
 
@@ -393,6 +400,8 @@ VECTOR Player::MoveUpdate(Input& input)
 
 void Player::JumpInit()
 {
+	if (m_isGameEnd) return;
+
 	m_isJump = true;
 	m_jumpPower = kJumpMaxSpeed;
 	// ジャンプ音を鳴らす
@@ -409,6 +418,8 @@ void Player::IdleUpdate()
 
 void Player::WalkUpdate()
 {
+	if (m_isGameEnd) return;
+
 	// X軸方向の移動ベクトルに歩きスピードを代入する
 	m_moveSpeed = min(m_moveSpeed + m_acc, m_walkSpeed);
 
@@ -427,6 +438,8 @@ void Player::WalkUpdate()
 
 void Player::DashUpdate()
 {
+	if (m_isGameEnd) return;
+
 	m_moveSpeed = m_dashSpeed;
 
 	// アニメーションをダッシュモーションに変更する
@@ -443,6 +456,7 @@ void Player::DashUpdate()
 
 void Player::JumpUpdate()
 {
+	if (m_isGameEnd) return;
 	// 上昇中
 	if (m_jumpPower > kJumpRise)
 	{

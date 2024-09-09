@@ -1,0 +1,9 @@
+﻿  Ranking.cpp
+C:\Users\中山七草\Desktop\GitHub\MyGame\HopStepJumpJump\Util\Ranking.cpp(157,41): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+  コード生成しています。
+  5 of 3114 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    2 functions had inline decision re-evaluated but remain unchanged
+  コード生成が終了しました。
+EffekseerForDXLib_vs2019_x64.lib(EffekseerForDXLib.obj) : warning LNK4099: PDB '' が 'EffekseerForDXLib_vs2019_x64.lib(EffekseerForDXLib.obj)' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+  JumpJump.vcxproj -> C:\Users\中山七草\Desktop\GitHub\MyGame\HopStepJumpJump\x64\Release\JumpJump.exe

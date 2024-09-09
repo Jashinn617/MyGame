@@ -6,7 +6,7 @@
 
 namespace
 {
-	constexpr int kVoluRateOne = 55;	// 音量の基本値
+	constexpr int kVoluRateOne = 80;	// 音量の基本値
 }
 
 SoundManager::SoundManager()
