@@ -316,5 +316,5 @@ void SceneRanking::ButtonDraw()
 	DrawRotaGraph(kButtonPosX, kButtonPosY, m_backButtonSize, 0.0f, m_buttonH, true);
 
 	// ‚â‚¶‚é‚µ•`‰æ
-	DrawRotaGraph(kArrowPosX, kArrowPosY, m_arrowSize, kArrowAngle, m_arrowH, true);
+	DrawRotaGraph(kArrowPosX, kArrowPosY, m_arrowSize, 0.0f, m_arrowH, true);
 }

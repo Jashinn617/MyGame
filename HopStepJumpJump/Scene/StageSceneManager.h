@@ -97,6 +97,7 @@ private:	// 関数
 
 private:	// 変数
 	int m_clearTextH;			// クリア時に出す画像のハンドル
+	int m_operationH;			// 操作説明画像ハンドル
 	int m_clearTime;			// クリア時間
 	int m_drawClearTime;		// 表示用のクリア時間
 	float m_rankSize;			// ランクのサイズ

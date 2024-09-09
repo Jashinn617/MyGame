@@ -25,6 +25,9 @@ namespace
 	// クリア時に出す画像のハンドル
 	const char* const kClearTextFileName = "Data/Img/Result/GameClearLogo.png";
 
+	// 操作説明の画像ハンドル
+	const char* const kOperationFileName = "Data/Img/Operation.png";
+
 	// 自身のクリアタイムの画像ファイル
 	const char* const kMyTimeNumFileName[11] =
 	{
@@ -144,6 +147,11 @@ namespace
 	constexpr int kStartButtonPosY = 2000;		// ボタンの初期位置
 	constexpr int kButtonUpSpeed = 40;			// ボタンの上昇速度
 
+	/*操作説明座標*/
+	constexpr int kOperationPosX = 1750;
+	constexpr int kOperationPosY = 200;
+	constexpr float kOperationSize = 0.5f;
+
 	constexpr int kColonArrayNum = 10;			// タイムの間に表示するコロンの配列番号
 
 	constexpr int kRankingNum = 3;			// ランキングの表示数
@@ -257,7 +265,12 @@ void StageSceneManager::Draw()
 	m_pObjectManager->Draw();
 	if (!m_isGameClear)
 	{
+		// 現在時間の描画
 		m_pCountTime->Draw();
+
+		// 操作説明の描画
+		DrawRotaGraph(kOperationPosX, kOperationPosY, kOperationSize,
+			0.0f, m_operationH, true);
 	}
 	else
 	{
@@ -502,7 +515,9 @@ void StageSceneManager::ImageLoad()
 {
 	/*画像ハンドルのロード*/
 	m_clearTextH = LoadGraph(kClearTextFileName);
-	assert(m_clearTextH);
+	assert(m_clearTextH != -1);
+	m_operationH = LoadGraph(kOperationFileName);
+	assert(m_operationH != -1);
 	for (int i = 0; i < m_myTimeNumH.size(); i++)
 	{
 		m_myTimeNumH[i] = LoadGraph(kMyTimeNumFileName[i]);
@@ -544,6 +559,7 @@ void StageSceneManager::ImageDelete()
 {
 	/*画像のデリート*/
 	DeleteGraph(m_clearTextH);
+	DeleteGraph(m_operationH);
 	for (int i = 0; i < m_myTimeNumH.size(); i++)
 	{
 		DeleteGraph(m_myTimeNumH[i]);

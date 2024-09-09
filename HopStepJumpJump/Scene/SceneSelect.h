@@ -43,6 +43,8 @@ private:	// 関数
 	/// </summary>
 	void BackDraw();
 
+	void InfoDraw();
+
 	/// <summary>
 	/// セレクトボックスの描画
 	/// </summary>
@@ -50,8 +52,13 @@ private:	// 関数
 
 private:	// 変数
 	int m_backgroundH;					// 背景画像のハンドル
+	int m_backSideH;					// 左右の背景画像ハンドル
 	std::array<int, 4> m_SelectBoxH{};	// セレクトボックスのハンドル
+	std::array<int, 4> m_textH{};
 	int m_scrollX;						// 背景のスクロール値
+	int m_scrollY;						// 文字のスクロール値
+	int m_textWidth;
+	int m_textHeight;
 	int m_backWidth;					// 画像の横幅
 	int m_backHeight;					// 画像の縦幅
 	bool m_isUp;						// 上が選択されているかどうか

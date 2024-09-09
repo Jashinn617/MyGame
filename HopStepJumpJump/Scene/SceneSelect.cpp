@@ -13,20 +13,35 @@
 namespace
 {
 	// 画像のファイルパス
-	const char* const kBackGroundFineName = "Data/Img/Select/Background.png";
+	const char* const kBackGroundFileName = "Data/Img/Select/Background.png";
+
+	const char* const kBackSideFileName = "Data/Img/Select/BackSide.png";
 
 	// セレクトボックスファイルパス
 	const char* const kSelectBoxFileName[4] =
 	{
 		"Data/Img/Select/Stage1Box.png",
-		"Data/Img/Select/Stage1Box.png",
+		"Data/Img/Select/Stage2Box.png",
 		"Data/Img/Select/OnlineRankingBox.png",
 		"Data/Img/Select/GameEndBox.png"
+	};
+
+	// テキストファイルパス
+	const char* const kTextFileName[4] =
+	{
+		"Data/Img/Select/Text1.png",
+		"Data/Img/Select/Text2.png",
+		"Data/Img/Select/Text3.png",
+		"Data/Img/Select/Text4.png",
 	};
 
 	constexpr int kIndexBackNum = 2;	// スクロールに必要な背景の数
 
 	constexpr int kScrollSpeed = 1;		// スクロールのスピード
+	constexpr int kTextScrollSpeed = 2;		// スクロールのスピード
+
+	constexpr int kBackSideRightPosX = Game::kScreenWidth - 220;
+	constexpr int kBackSideLeftPosX = -80;
 
 	/*セレクトボックスの座標*/
 	constexpr int kSelectBoxPosX1 = 600;
@@ -41,11 +56,16 @@ namespace
 
 	constexpr float kBoxSinSpeed = 0.07f;	// ボックスが拡縮するスピード
 	constexpr float kBoxAnimSwing = 0.03f;	// ボックスの拡縮幅
+
+	constexpr int kInfoBackAlpha = 200;
 }
 
 SceneSelect::SceneSelect() :
 	m_backgroundH(-1),
 	m_scrollX(0),
+	m_scrollY(0),
+	m_textWidth(0),
+	m_textHeight(0),
 	m_backWidth(0),
 	m_backHeight(0),
 	m_isUp(true),
@@ -60,25 +80,37 @@ SceneSelect::SceneSelect() :
 	m_next(NextScene::My)
 {
 	/*画像ハンドルのロード*/
-	m_backgroundH = LoadGraph(kBackGroundFineName);
+	m_backgroundH = LoadGraph(kBackGroundFileName);
 	assert(m_backgroundH != -1);
+	m_backSideH = LoadGraph(kBackSideFileName);
+	assert(m_backSideH != -1);
 	for (int i = 0; i < m_SelectBoxH.size(); i++)
 	{
 		m_SelectBoxH[i] = LoadGraph(kSelectBoxFileName[i]);
 		assert(m_SelectBoxH[i] != -1);
 	}
+	for (int i = 0; i < m_textH.size(); i++)
+	{
+		m_textH[i] = LoadGraph(kTextFileName[i]);
+	}
 
 	// 背景画像のサイズの取得
 	GetGraphSize(m_backgroundH, &m_backWidth, &m_backHeight);
+	GetGraphSize(m_textH[0], &m_textWidth, &m_textHeight);
 }
 
 SceneSelect::~SceneSelect()
 {
 	/*画像ハンドルのデリート*/
 	DeleteGraph(m_backgroundH);
+	DeleteGraph(m_backSideH);
 	for (int i = 0; i < m_SelectBoxH.size(); i++)
 	{
 		DeleteGraph(m_SelectBoxH[i]);
+	}
+	for (int i = 0; i < m_textH.size(); i++)
+	{
+		DeleteGraph(m_textH[i]);
 	}
 }
 
@@ -94,17 +126,21 @@ std::shared_ptr<SceneBase> SceneSelect::Update(Input& input)
 
 	// 背景のスクロール
 	m_scrollX += kScrollSpeed;
+	// 文字のスクロール
+	m_scrollY += kTextScrollSpeed;
 
 	// 上下の選択の入れ替え
 	if (Pad::isTrigger(PAD_INPUT_UP) || Pad::isTrigger(PAD_INPUT_DOWN))
 	{
 		SoundManager::GetInstance().Play("Select");
+		m_scrollY = 0;
 		m_isUp = !m_isUp;
 	}
 	// 左右の入れ替え
 	if (Pad::isTrigger(PAD_INPUT_LEFT) || Pad::isTrigger(PAD_INPUT_RIGHT))
 	{
 		SoundManager::GetInstance().Play("Select");
+		m_scrollY = 0;
 		m_isLeft = !m_isLeft;
 	}
 
@@ -145,6 +181,8 @@ std::shared_ptr<SceneBase> SceneSelect::Update(Input& input)
 void SceneSelect::Draw()
 {
 	BackDraw();
+
+	InfoDraw();
 
 	SelectBoxDraw();
 
@@ -258,6 +296,64 @@ void SceneSelect::BackDraw()
 		DrawGraph(-scrollBack + index * m_backWidth,
 			0, m_backgroundH, true);
 	}
+}
+
+void SceneSelect::InfoDraw()
+{
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kInfoBackAlpha);
+	DrawGraph(kBackSideRightPosX, 0, m_backSideH, false);
+	DrawGraph(kBackSideLeftPosX, 0, m_backSideH, false);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+	// 文字をスクロールをさせる
+	int scroll = m_scrollY % m_textHeight;
+	for (int index = 0; index < kIndexBackNum; index++)
+	{
+		if (m_isUp)	// 上の選択している
+		{
+			if (m_isLeft)	// 左を選択している
+			{
+				DrawGraph(kBackSideRightPosX,
+					-scroll + index * m_textHeight,
+					m_textH[0], true);
+				DrawGraph(0,
+					-scroll + index * m_textHeight,
+					m_textH[0], true);
+			}
+			else
+			{
+				DrawGraph(kBackSideRightPosX,
+					-scroll + index * m_textHeight,
+					m_textH[1], true);
+				DrawGraph(0,
+					-scroll + index * m_textHeight,
+					m_textH[1], true);
+			}
+
+		}
+		else	// 下の選択をしている
+		{
+			if (m_isLeft)	// 左を選択している
+			{
+				DrawGraph(kBackSideRightPosX,
+					-scroll + index * m_textHeight,
+					m_textH[2], true);
+				DrawGraph(0,
+					-scroll + index * m_textHeight,
+					m_textH[2], true);
+			}
+			else
+			{
+				DrawGraph(kBackSideRightPosX,
+					-scroll + index * m_textHeight,
+					m_textH[3], true);
+				DrawGraph(0,
+					-scroll + index * m_textHeight,
+					m_textH[3], true);
+			}
+		}
+	}
+
 }
 
 void SceneSelect::SelectBoxDraw()
