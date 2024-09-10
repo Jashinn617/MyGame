@@ -139,13 +139,13 @@ std::string Ranking::HttpGet(const char* domain, const char* uri)
 	SetUseDXNetWorkProtocol(false);
 
 	// DNSからドメイン名でIPアドレスを取得
-	GetHostIPbyName(domain, &Ip);
+	GetHostIPbyName(domain, &m_ip);
 
 	// 通信を確立
-	NetHandle = ConnectNetWork(Ip, kPortNum);
+	m_netH = ConnectNetWork(m_ip, kPortNum);
 
 	// 確立が成功した場合のみ中の処理をする
-	if (NetHandle != -1)
+	if (m_netH != -1)
 	{
 		//Http命令の作成
 		sprintf_s(HttpCmd, "GET %s HTTP/1.1\nHost: %s\n\n", uri, domain);
@@ -154,27 +154,27 @@ std::string Ranking::HttpGet(const char* domain, const char* uri)
 #endif // _DEBUG
 
 		// データ送信(http命令を送る)
-		NetWorkSend(NetHandle, HttpCmd, strlen(HttpCmd));
+		NetWorkSend(m_netH, HttpCmd, strlen(HttpCmd));
 
 		// データがくるのを待つ
 		while (!ProcessMessage())
 		{
 			// 取得していない受信データ量を得る
-			DataLength = GetNetWorkDataLength(NetHandle);
+			m_dataLength = GetNetWorkDataLength(m_netH);
 
 			// 取得してない受信データ量が-1じゃない場合はループを抜ける
-			if (DataLength != -1)
+			if (m_dataLength != -1)
 			{
 				break;
 			}
 		}
 
 		// データ受信
-		NetWorkRecv(NetHandle, StrBuf, kDataSize);    // データをバッファに取得
+		NetWorkRecv(m_netH, m_strBuf, kDataSize);    // データをバッファに取得
 
 		// 接続を断つ
-		CloseNetWork(NetHandle);
+		CloseNetWork(m_netH);
 	}
 
-	return StrBuf;
+	return m_strBuf;
 }

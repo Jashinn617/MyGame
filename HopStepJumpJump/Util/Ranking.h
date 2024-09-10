@@ -18,20 +18,22 @@ public:
 private:
 	std::string HttpGet(const char* domain, const char* url); // Http通信でGet命令を送る
 
-private:
+private:	// 定数
+	static const int kDataSize = 2560;	// データサイズ
+
+private:	// 変数
+	int m_netH;						// ネットワークハンドル
+	int m_dataLength;						// 受信データ量保存用変数
+	int m_lineCount;					// 表示する行数をカウントする
+	char m_strBuf[kDataSize] = "";		// データバッファ
+
+	std::vector<int> m_rankingList;		// クリアタイムを保存する
 	std::string uri;
 	std::string createRank;
 	std::string getRank;
 
-	// ネットワーク用の変数
-	static const int kDataSize = 2560;	// データサイズ
-	char StrBuf[kDataSize] = "";		// データバッファ
-	IPDATA Ip;							// 接続用ＩＰアドレスデータ
-	int NetHandle;						// ネットワークハンドル
-	int DataLength;						// 受信データ量保存用変数
+	IPDATA m_ip;							// 接続用ＩＰアドレスデータ
 	size_t m_pos;						// 文字の長さを取得する
-	int m_lineCount;					// 表示する行数をカウントする
-	std::vector<int> m_rankingList;		// クリアタイムを保存する
 
 
 };
