@@ -46,8 +46,17 @@ void Collision::Update(ObjectBase* my, ObjectBase* target)
 		// ターゲットのオブジェクトタイプがエネミーの場合
 		if (target->GetColType() == ObjectBase::ColType::Enemy)
 		{
+			// プレイヤーがダメージを受けている状態でなければ
+			if (!my->IsDamage())
+			{
 				dynamic_cast<CharacterBase*>(my)->AttackPlayerCollEnemy(dynamic_cast<CharacterBase*>(target));
-				return;			
+				return;		
+			}
+			else
+			{
+				dynamic_cast<CharacterBase*>(my)->MoveCollCharacterUpdate(dynamic_cast<CharacterBase*>(target));
+				return;
+			}
 		}
 
 		// ターゲットのオブジェクトタイプがアイテムの場合
@@ -73,8 +82,17 @@ void Collision::Update(ObjectBase* my, ObjectBase* target)
 			// ターゲットのオブジェクトタイプがプレイヤーの場合
 			if (target->GetColType() == ObjectBase::ColType::Player)
 			{
-				dynamic_cast<CharacterBase*>(my)->AttackEnemyCollPlayer(dynamic_cast<CharacterBase*>(target));
-				return;
+				if (!target->IsDamage())
+				{
+					dynamic_cast<CharacterBase*>(my)->AttackEnemyCollPlayer(dynamic_cast<CharacterBase*>(target));
+					return;
+				}
+				else
+				{
+					dynamic_cast<CharacterBase*>(my)->MoveCollCharacterUpdate(dynamic_cast<CharacterBase*>(target));
+					return;
+				}
+				
 			}
 	}
 

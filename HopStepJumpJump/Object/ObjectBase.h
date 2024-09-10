@@ -119,6 +119,8 @@ public:	// 関数
 
 	bool IsGameEnd()const { return m_isGameEnd; }
 
+	bool IsDamage() const { return m_isDamage; }
+
 
 	/// <summary>
 	/// 移動アップデート
