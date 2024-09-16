@@ -455,6 +455,8 @@ void StageSceneManager::ClearUpdate()
 				}
 				else if (m_buttonCount == static_cast<int>(NextSelect::Title))
 				{
+					// SE‚ð–Â‚ç‚·
+					SoundManager::GetInstance().Play("SceneChange");
 					m_nextScene = NextScene::Title;
 				}
 				else

@@ -16,5 +16,14 @@ public:
 	virtual void End() override final;
 
 	virtual SceneKind GetSceneKind() { return SceneKind::Option; }
+
+private:
+	bool m_isSceneEnd;
+
+	// 前のシーン
+	std::shared_ptr<SceneBase> m_pPrevScene;
+
+	// 次のシーンポインタ
+	std::shared_ptr<SceneBase> m_pNextScene;
 };
 

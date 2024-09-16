@@ -1,7 +1,14 @@
 #include "SceneOption.h"
 #include "../Util/Input.h"
 
-SceneOption::SceneOption(std::shared_ptr<SceneBase> prevScene)
+namespace
+{
+
+}
+
+SceneOption::SceneOption(std::shared_ptr<SceneBase> prevScene):
+	m_isSceneEnd(false),
+	m_pPrevScene(prevScene)
 {
 }
 
@@ -15,7 +22,12 @@ void SceneOption::Init()
 
 std::shared_ptr<SceneBase> SceneOption::Update(Input& input)
 {
-	return std::shared_ptr<SceneBase>();
+	if (m_isSceneEnd)
+	{
+		return m_pPrevScene;
+	}
+
+	return shared_from_this();
 }
 
 void SceneOption::Draw()
