@@ -207,9 +207,6 @@
     <ClCompile Include="Image\ImageBase.cpp">
       <Filter>ソース ファイル\Image</Filter>
     </ClCompile>
-    <ClCompile Include="Shader\DamageShader.cpp">
-      <Filter>ソース ファイル\Shader</Filter>
-    </ClCompile>
     <ClCompile Include="Shader\ShadowMapShader.cpp">
       <Filter>ソース ファイル\Shader</Filter>
     </ClCompile>
@@ -392,9 +389,6 @@
     <ClInclude Include="Image\ImageBase.h">
       <Filter>ヘッダー ファイル\Image</Filter>
     </ClInclude>
-    <ClInclude Include="Shader\DamageShader.h">
-      <Filter>ヘッダー ファイル\Shader</Filter>
-    </ClInclude>
     <ClInclude Include="Shader\ShadowMapShader.h">
       <Filter>ヘッダー ファイル\Shader</Filter>
     </ClInclude>
@@ -451,14 +445,32 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="VertexShader3D.hlsl" />
-    <FxCompile Include="VertexShader3D4Frame.hlsl" />
-    <FxCompile Include="VertexShader3DNormal4Frame.hlsl" />
-    <FxCompile Include="VertexShader3DNormal8Frame.hlsl" />
-    <FxCompile Include="VertexShaderShadowMap.hlsl" />
-    <FxCompile Include="PixelShaderShadowMap.hlsl" />
-    <FxCompile Include="ToonPixelShaderField.hlsl" />
-    <FxCompile Include="ToonPixelShader.hlsl" />
-    <FxCompile Include="VertexShader3D8Frame.hlsl" />
+    <FxCompile Include="PixelShader\PixelShaderShadowMap.hlsl">
+      <Filter>PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="PixelShader\ToonPixelShader.hlsl">
+      <Filter>PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="PixelShader\ToonPixelShaderField.hlsl">
+      <Filter>PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="VertexShader\VertexShader3D.hlsl">
+      <Filter>VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="VertexShader\VertexShader3D4Frame.hlsl">
+      <Filter>VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="VertexShader\VertexShader3D8Frame.hlsl">
+      <Filter>VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="VertexShader\VertexShader3DNormal4Frame.hlsl">
+      <Filter>VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="VertexShader\VertexShader3DNormal8Frame.hlsl">
+      <Filter>VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="VertexShader\VertexShaderShadowMap.hlsl">
+      <Filter>VertexShader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

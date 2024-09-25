@@ -16,22 +16,22 @@ namespace
 ShadowMapShader::ShadowMapShader()
 {
 	/*頂点シェーダ*/
-	m_vertexShader1FrameH = LoadVertexShader("VertexShader3D.vso");
+	m_vertexShader1FrameH = LoadVertexShader("Data/Shader/Vertex/VertexShader3D.vso");
 	assert(m_vertexShader1FrameH != -1);
-	m_vertexShader4FrameH = LoadVertexShader("VertexShader3D4Frame.vso");
+	m_vertexShader4FrameH = LoadVertexShader("Data/Shader/Vertex/VertexShader3D4Frame.vso");
 	assert(m_vertexShader4FrameH != -1);
-	m_vertexShader8FrameH = LoadVertexShader("VertexShader3D8Frame.vso");
+	m_vertexShader8FrameH = LoadVertexShader("Data/Shader/Vertex/VertexShader3D8Frame.vso");
 	assert(m_vertexShader8FrameH != -1);
-	m_vertexShaderNormal4FrameH = LoadVertexShader("VertexShader3DNormal4Frame.vso");
+	m_vertexShaderNormal4FrameH = LoadVertexShader("Data/Shader/Vertex/VertexShader3DNormal4Frame.vso");
 	assert(m_vertexShaderNormal4FrameH != -1);
-	m_vertexShaderNormal8FrameH = LoadVertexShader("VertexShader3DNormal8Frame.vso");
+	m_vertexShaderNormal8FrameH = LoadVertexShader("Data/Shader/Vertex/VertexShader3DNormal8Frame.vso");
 	assert(m_vertexShaderNormal8FrameH != -1);
-	m_vertexShaderShadowMapFieldH = LoadVertexShader("VertexShaderShadowMap.vso");
+	m_vertexShaderShadowMapFieldH = LoadVertexShader("Data/Shader/Vertex/VertexShaderShadowMap.vso");
 	assert(m_vertexShaderShadowMapFieldH != -1);
 	/*ピクセルシェーダ*/
-	m_pixelShaderH = LoadPixelShader("PixelShaderShadowMap.pso");
+	m_pixelShaderH = LoadPixelShader("Data/Shader/Pixel/PixelShaderShadowMap.pso");
 	assert(m_pixelShaderH != -1);
-	m_pixelShaderFieldH = LoadPixelShader("ToonPixelShaderField.pso");
+	m_pixelShaderFieldH = LoadPixelShader("Data/Shader/Pixel/ToonPixelShaderField.pso");
 	assert(m_pixelShaderFieldH != -1);
 
 	/*ライトの定数バッファの作成*/

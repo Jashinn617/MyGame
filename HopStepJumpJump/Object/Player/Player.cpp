@@ -16,7 +16,6 @@
 #include "../../Util/SoundManager.h"
 
 #include "../../Shader/ToonShader.h"
-#include "../../Shader/DamageShader.h"
 
 #include "../../Effect/Effekseer3DManager.h"
 
@@ -102,7 +101,7 @@ Player::Player() :
 	m_pInvincibleTime = std::make_shared<Time>(kInvinvibleTime);
 	m_pCamera = std::make_shared<Camera>();
 	m_pCircle = std::make_shared<Circle>(m_info.pos, kSize, kHeight * 0.5f);
-	m_pDamageShader = std::make_shared<DamageShader>();
+	//m_pDamageShader = std::make_shared<DamageShader>();
 
 	m_pModel = std::make_shared<Model>(kPlayerFileName);
 	m_pModel->SetAnim(m_animData.idle, false, true);
@@ -168,8 +167,8 @@ void Player::Update(Input& input)
 	// 重力を考慮した更新
 	GravityUpdate();
 
-	// 攻撃を受けた時のシェーダの更新
-	m_pDamageShader->Update();
+	//// 攻撃を受けた時のシェーダの更新
+	//m_pDamageShader->Update();
 
 	// 攻撃を受けた時
 	if (m_isDamage)

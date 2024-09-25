@@ -124,6 +124,6 @@ private:	// 変数
 	std::shared_ptr<PlayerState> m_pState;		// 状態のポインタ
 	std::shared_ptr<Time> m_pInvincibleTime;	// 攻撃を食らった後の無敵時間
 	std::shared_ptr<Camera> m_pCamera;			// カメラポインタの取得
-	std::shared_ptr<DamageShader> m_pDamageShader;	// ダメージシェーダ
+	//std::shared_ptr<DamageShader> m_pDamageShader;	// ダメージシェーダ
 };
 
