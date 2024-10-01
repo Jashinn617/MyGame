@@ -2,7 +2,6 @@
 #include "SceneDebug.h"
 #include "SceneTitle.h"
 
-#include "../Util/Input.h"
 #include "../Util/Pad.h"
 #include "../Util/Game.h"
 
@@ -10,8 +9,8 @@
 
 namespace
 {
-	constexpr float kBarPosX = 0;								// 処理バーの座標X
-	constexpr float kBarPosY = Game::kScreenHeight - 48;		// 処理バーの座標Y
+	constexpr int kBarPosX = 0;								// 処理バーの座標X
+	constexpr int kBarPosY = Game::kScreenHeight - 48;		// 処理バーの座標Y
 	constexpr int kUpdateBarColor = 0x0000ff;					// 更新の処理バーの色
 	constexpr int kDrawBarColor = 0xff0000;						// 描画の処理バーの色
 }
@@ -31,16 +30,16 @@ void SceneManager::Init()
 {
 #ifdef _DEBUG
 	// 最初のシーンのメモリを確保する
-	m_pScene = make_shared<SceneDebug>();
+	m_pScene = std::make_shared<SceneDebug>();
 #else
 	// 最初のシーンのメモリを確保する
-	m_pScene = make_shared<SceneTitle>();
+	m_pScene = std::make_shared<SceneTitle>();
 #endif // _DEBUG
 
 	m_pScene->Init();
 }
 
-bool SceneManager::Update(Input& input)
+bool SceneManager::Update()
 {
 	// 更新前のローディング時間の取得
 	LONGLONG start = GetNowHiPerformanceCount();
@@ -50,7 +49,7 @@ bool SceneManager::Update(Input& input)
 	// パッド情報の更新
 	Pad::Update();
 
-	shared_ptr<SceneBase> pNext = m_pScene->Update(input);
+	std::shared_ptr<SceneBase> pNext = m_pScene->Update();
 
 	if (!pNext)
 	{
@@ -89,11 +88,11 @@ void SceneManager::Draw()
 	// 処理バーの表示
 	float rate = (m_updateTime + m_drawTime) / 16666.6f;
 	float width = Game::kScreenWidth * rate;
-	DrawBox(kBarPosX, kBarPosY, width, Game::kScreenHeight, kDrawBarColor, true);
+	DrawBox(kBarPosX, kBarPosY, static_cast<int>(width), Game::kScreenHeight, kDrawBarColor, true);
 
 	rate = m_updateTime / 16666.6f;
 	width = Game::kScreenWidth * rate;
-	DrawBox(kBarPosX, kBarPosY, width, Game::kScreenHeight, kUpdateBarColor, true);
+	DrawBox(kBarPosX, kBarPosY, static_cast<int>(width), Game::kScreenHeight, kUpdateBarColor, true);
 
 #endif // _DEBUG
 }

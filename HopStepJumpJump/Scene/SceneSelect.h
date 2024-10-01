@@ -21,7 +21,7 @@ public:
 
 	virtual void Init();
 
-	virtual std::shared_ptr<SceneBase> Update(Input& input);
+	virtual std::shared_ptr<SceneBase> Update();
 	virtual void Draw();
 	virtual void End();
 

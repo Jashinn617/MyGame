@@ -16,7 +16,7 @@ public:
 	virtual ~SceneStage();
 
 	virtual void Init() override final;
-	virtual std::shared_ptr<SceneBase> Update(Input& input) override final;
+	virtual std::shared_ptr<SceneBase> Update() override final;
 	virtual void Draw() override final;
 	virtual void End() override final;
 

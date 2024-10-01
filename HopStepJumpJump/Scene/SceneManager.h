@@ -2,7 +2,6 @@
 #include <memory>
 
 class SceneBase;
-class Input;
 
 /// <summary>
 /// シーン遷移等、各シーンを管理するためのクラス
@@ -23,7 +22,7 @@ public:
 	/// </summary>
 	/// <param name="input">入力</param>
 	/// <param name="handle">ハンドル</param>
-	bool Update(Input& input);
+	bool Update();
 	/// <summary>
 	///	描画
 	/// </summary>

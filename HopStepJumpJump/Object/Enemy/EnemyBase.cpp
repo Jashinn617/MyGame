@@ -7,7 +7,6 @@
 #include "../Circle.h"
 
 #include "../../Util/Time.h"
-#include "../../Util/Input.h"
 #include "../../Util/SoundManager.h"
 
 #include "../../Effect/Effekseer3DManager.h"
@@ -115,7 +114,7 @@ void EnemyBase::Init()
 	/*処理無し*/
 }
 
-void EnemyBase::Update(Input& input)
+void EnemyBase::Update()
 {
 	if (m_isEnd) return;
 	// 移動ベクトルの計算

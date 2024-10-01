@@ -5,7 +5,6 @@
 #include "../Util/CountTime.h"
 #include "../Util/Time.h"
 #include "../Util/Ranking.h"
-#include "../Util/Input.h"
 #include "../Util/Pad.h"
 #include "../Util/SoundManager.h"
 
@@ -226,9 +225,9 @@ void StageSceneManager::Init()
 	SoundManager::GetInstance().Play("MainScene");
 }
 
-void StageSceneManager::Update(Input& input)
+void StageSceneManager::Update()
 {
-	m_pObjectManager->Update(input);
+	m_pObjectManager->Update();
 
 	if (!m_isGameClear)
 	{

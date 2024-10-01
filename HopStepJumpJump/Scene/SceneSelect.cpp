@@ -4,7 +4,6 @@
 #include "SceneStage.h"
 
 #include "../Util/SoundManager.h"
-#include "../Util/Input.h"
 #include "../Util/Pad.h"
 #include "../Util/Game.h"
 
@@ -120,7 +119,7 @@ void SceneSelect::Init()
 	SoundManager::GetInstance().Play("SelectScene");
 }
 
-std::shared_ptr<SceneBase> SceneSelect::Update(Input& input)
+std::shared_ptr<SceneBase> SceneSelect::Update()
 {
 	UpdateFade();
 

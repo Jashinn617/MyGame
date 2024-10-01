@@ -2,7 +2,6 @@
 #include "SceneRanking.h"
 #include "SceneSelect.h"
 
-#include "../Util/Input.h"
 #include "../Util/Pad.h"
 #include "../Util/Ranking.h"
 #include "../Util/Game.h"
@@ -162,7 +161,7 @@ void SceneRanking::Init()
 	SoundManager::GetInstance().Play("RankingScene");
 }
 
-std::shared_ptr<SceneBase> SceneRanking::Update(Input& input)
+std::shared_ptr<SceneBase> SceneRanking::Update()
 {
 	UpdateFade();
 
@@ -186,7 +185,7 @@ std::shared_ptr<SceneBase> SceneRanking::Update(Input& input)
 	{
 		// SE‚ð–Â‚ç‚·
 		SoundManager::GetInstance().Play("DoorClose");
-		return make_shared<SceneSelect>();
+		return std::make_shared<SceneSelect>();
 	}
 
 

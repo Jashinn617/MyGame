@@ -2,7 +2,6 @@
 #include "EffekseerForDXLib.h"
 
 #include "Util/Game.h"
-#include "Util/Input.h"
 #include "Util//Pad.h"
 
 #include "Scene/SceneManager.h"
@@ -38,9 +37,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// フルスクリーンウインドウの切り替えでリソースが消えるのを防ぐ。
 	// Effekseerを使用する場合は必ず設定する。
 	SetChangeScreenModeGraphicsSystemResetFlag(false);
+
 	// DXライブラリのデバイスロストした時のコールバックを設定する。
 	// ウインドウとフルスクリーンの切り替えが発生する場合は必ず実行する。
-	// ただし、2DirectX11を使用する場合は実行する必要はない。
 	Effekseer_SetGraphicsDeviceLostCallbackFunctions();
 
 	// Zバッファを使用する
@@ -53,8 +52,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	//// エフェクトのロード
 	Effekseer3DManager::GetInstance();
-	//// サウンドのロード
-	//SoundManager::GetInstance();
+	// サウンドのロード
+	SoundManager::GetInstance();
 
 	// ライトの設定
 	SetLightPosition(Game::kLightPos);
@@ -66,12 +65,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetupCamera_Perspective(Game::kFov);
 
 	// シーン管理
-	shared_ptr<SceneManager> pScene = make_shared<SceneManager>();
+	std::shared_ptr<SceneManager> pScene = std::make_shared<SceneManager>();
 	pScene->Init();
 
-	// 入力
-	Input input;
-
+	
 	while (ProcessMessage() == 0)
 	{
 		// このフレームの開始時刻を覚えておく
@@ -80,11 +77,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		// 描画を行う前に画面をクリアする
 		ClearDrawScreen();
 
-		// 入力の更新
-		input.Update();
-
 		// ゲームの処理
-		pScene->Update(input);
+		pScene->Update();
 		pScene->Draw();
 
 		// エフェクトの更新、描画
@@ -103,11 +97,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 	}
 
+	// シーンの終了処理
 	pScene->End();
 
-	Effkseer_End();	 // Effekseerの終了処理
+	// Effekseerの終了処理
+	Effkseer_End();	
+	// ＤＸライブラリ使用の終了処理
+	DxLib_End();
 
-	DxLib_End();				// ＤＸライブラリ使用の終了処理
-
-	return 0;				// ソフトの終了 
+	// ソフトの終了 
+	return 0;				
 }

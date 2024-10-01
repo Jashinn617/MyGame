@@ -54,7 +54,7 @@ public:
 
 	void Init();
 
-	void Update(Input& input);
+	void Update();
 	void Draw();
 
 	void SetGameClear();

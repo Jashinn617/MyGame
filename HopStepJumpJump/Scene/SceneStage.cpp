@@ -2,8 +2,6 @@
 #include "StageSceneManager.h"
 #include "SceneSelect.h"
 #include "SceneDebug.h"
-#include "SceneGameClear.h"
-#include "SceneOption.h"
 #include "SceneTitle.h"
 
 #include "../Object/ObjectBase.h"
@@ -15,7 +13,6 @@
 #include "../Object/SkyDome.h"
 
 #include "../Util/Collision.h"
-#include "../Util/Input.h"
 #include "../Util/Pad.h"
 #include "../Util/SoundManager.h"
 
@@ -84,13 +81,13 @@ void SceneStage::Init()
 	m_pStageSceneManager->Init();
 }
 
-std::shared_ptr<SceneBase> SceneStage::Update(Input& input)
+std::shared_ptr<SceneBase> SceneStage::Update()
 {
 #ifdef _DEBUG
 	// デバッグに飛ぶ
 	if (Pad::isTrigger(PAD_INPUT_5))
 	{
-		return make_shared<SceneDebug>();
+		return std::make_shared<SceneDebug>();
 	}
 #endif // _DEBUG
 
@@ -116,7 +113,7 @@ std::shared_ptr<SceneBase> SceneStage::Update(Input& input)
 	{
 
 
-		m_pStageSceneManager->Update(input);
+		m_pStageSceneManager->Update();
 
 		if (m_pStageSceneManager->IsGameClear())
 		{
@@ -127,11 +124,11 @@ std::shared_ptr<SceneBase> SceneStage::Update(Input& input)
 
 		if (m_pStageSceneManager->GetNextScene() == StageSceneManager::NextScene::GameScene)
 		{
-			return make_shared<SceneStage>(m_stageKind);
+			return std::make_shared<SceneStage>(m_stageKind);
 		}
 		else if (m_pStageSceneManager->GetNextScene() == StageSceneManager::NextScene::Title)
 		{
-			return make_shared<SceneSelect>();
+			return std::make_shared<SceneSelect>();
 		}
 		else if (m_pStageSceneManager->GetNextScene() == StageSceneManager::NextScene::My)
 		{

@@ -5,7 +5,6 @@
 #include "SceneStage.h"
 
 #include "../Util/Game.h"
-#include "../Util/Input.h"
 #include "../Util/Pad.h"
 #include "../Util/SoundManager.h"
 
@@ -62,7 +61,7 @@ void SceneTitle::Init()
 
 }
 
-std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
+std::shared_ptr<SceneBase> SceneTitle::Update()
 {
 	UpdateFade();
 
@@ -114,7 +113,7 @@ std::shared_ptr<SceneBase> SceneTitle::Update(Input& input)
 		// Œˆ’èSE‚ð—¬‚·
 		SoundManager::GetInstance().Play("TitleButtonPush");
 
-		return make_shared<SceneSelect>();
+		return std::make_shared<SceneSelect>();
 	}
 
 	

@@ -12,11 +12,8 @@ public:
 		Debug,			// デバッグ
 		Stage1,			// ステージ1
 		Stage2,			// ステージ2
-		Option,			// オプション
-		GameClear,		// ゲームクリア
 		Title,			// タイトル
 		StageSelect,	// ステージセレクト
-		Tutorial,		// チュートリアル
 		Ranking,		// ランキング
 		Test,			// テスト
 
@@ -29,7 +26,7 @@ public:
 
 	virtual void Init() override final;
 
-	virtual std::shared_ptr<SceneBase> Update(Input& input) override final;
+	virtual std::shared_ptr<SceneBase> Update() override final;
 	virtual void Draw() override final;
 	virtual void End() override final;
 
@@ -43,7 +40,7 @@ private:	// 関数
 	/// <summary>
 	/// カーソルのアップデート
 	/// </summary>
-	void UpdateCursor(Input& input);
+	void UpdateCursor();
 
 	/// <summary>
 	/// 次のシーンのアップデート

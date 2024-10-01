@@ -3,17 +3,12 @@
 #include "SceneDebug.h"
 #include "StageSceneManager.h"
 #include "SceneStage.h"
-#include "SceneOption.h"
-#include "SceneGameClear.h"
 #include "SceneTitle.h"
 #include "SceneSelect.h"
-#include "SceneTutorial.h"
 #include "SceneRanking.h"
-#include "SceneResult.h"
 
 #include "../Object/ObjectManager.h"
 
-#include "../Util/Input.h"
 #include "../Util/Vec2.h"
 #include "../Util/Pad.h"
 
@@ -31,24 +26,23 @@ SceneDebug::SceneDebug():
 	m_sceneString[static_cast<int>(SceneType::Debug)] = "Debug";
 	m_sceneString[static_cast<int>(SceneType::Stage1)] = "Stage1";
 	m_sceneString[static_cast<int>(SceneType::Stage2)] = "Stage2";
-	m_sceneString[static_cast<int>(SceneType::Option)] = "Option";
-	m_sceneString[static_cast<int>(SceneType::GameClear)] = "GameClear";
 	m_sceneString[static_cast<int>(SceneType::Title)] = "Title";
 	m_sceneString[static_cast<int>(SceneType::StageSelect)] = "StageSelect";
-	m_sceneString[static_cast<int>(SceneType::Tutorial)] = "Tutorial";
 	m_sceneString[static_cast<int>(SceneType::Ranking)] = "Ranking";
 	m_sceneString[static_cast<int>(SceneType::Test)] = "Test";
 }
 
 SceneDebug::~SceneDebug()
 {
+	/*処理無し*/
 }
 
 void SceneDebug::Init()
 {
+	/*処理無し*/
 }
 
-std::shared_ptr<SceneBase> SceneDebug::Update(Input& input)
+std::shared_ptr<SceneBase> SceneDebug::Update()
 {
 	// ボタンが押されたら選択されたシーンに遷移する
 	if (Pad::isTrigger(PAD_INPUT_1))
@@ -56,7 +50,7 @@ std::shared_ptr<SceneBase> SceneDebug::Update(Input& input)
 		return UpdateNextScene();
 	}
 
-	UpdateCursor(input);
+	UpdateCursor();
 
 	UpdateFade();
 	
@@ -90,11 +84,12 @@ void SceneDebug::Draw()
 
 void SceneDebug::End()
 {
+	/*処理無し*/
 }
 
-void SceneDebug::UpdateCursor(Input& input)
+void SceneDebug::UpdateCursor()
 {
-	if (input.IsTriggered("up"))
+	if (Pad::isTrigger(PAD_INPUT_UP))
 	{
 		m_count--;
 		if (m_count < 0)
@@ -103,7 +98,7 @@ void SceneDebug::UpdateCursor(Input& input)
 		}
 	}
 
-	if (input.IsTriggered("down"))
+	if (Pad::isTrigger(PAD_INPUT_DOWN))
 	{
 		m_count++;
 		if (m_count >= static_cast<int>(m_sceneString.size()))
@@ -122,36 +117,25 @@ std::shared_ptr<SceneBase> SceneDebug::UpdateNextScene()
 	switch (m_count)
 	{
 	case static_cast<int>(SceneType::Debug):
-		nextScene = make_shared<SceneDebug>();
+		nextScene = std::make_shared<SceneDebug>();
 		break;
 	case static_cast<int>(SceneType::Stage1):
-		nextScene = make_shared<SceneStage>(Game::Stage::Stage1);
+		nextScene = std::make_shared<SceneStage>(Game::Stage::Stage1);
 		break;
 	case static_cast<int>(SceneType::Stage2):
-		nextScene = make_shared<SceneStage>(Game::Stage::Stage2);
-		break;
-	case static_cast<int>(SceneType::Option):
-		nextScene = make_shared<SceneOption>(make_shared<SceneDebug>());
-		break;
-	case static_cast<int>(SceneType::GameClear):
-		mainSceneManager = std::make_shared<StageSceneManager>(Game::Stage::Stage1);
-		mainSceneManager->GetObjectManager()->SetGameClear();
-		nextScene = make_shared<SceneGameClear>(mainSceneManager, Game::Stage::Test);
+		nextScene = std::make_shared<SceneStage>(Game::Stage::Stage2);
 		break;
 	case static_cast<int>(SceneType::Title):
-		nextScene = make_shared<SceneTitle>();
+		nextScene = std::make_shared<SceneTitle>();
 		break;
 	case static_cast<int>(SceneType::StageSelect):
-		nextScene = make_shared<SceneSelect>();
-		break;
-	case static_cast<int>(SceneType::Tutorial):
-		nextScene = make_shared<SceneTutorial>();
+		nextScene = std::make_shared<SceneSelect>();
 		break;
 	case static_cast<int>(SceneType::Ranking):
-		nextScene = make_shared<SceneRanking>();
+		nextScene = std::make_shared<SceneRanking>();
 		break;
 	case static_cast<int>(SceneType::Test):
-		nextScene = make_shared<SceneStage>(Game::Stage::Test);
+		nextScene = std::make_shared<SceneStage>(Game::Stage::Test);
 		break;
 	default:
 		break;

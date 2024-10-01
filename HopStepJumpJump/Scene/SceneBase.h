@@ -2,7 +2,6 @@
 #include "DxLib.h"
 #include <memory>
 
-class Input;
 class Ranking;
 
 /// <summary>
@@ -36,7 +35,7 @@ public:
 	~SceneBase();
 
 	virtual void Init();
-	virtual std::shared_ptr<SceneBase> Update(Input& input);
+	virtual std::shared_ptr<SceneBase> Update();
 	virtual void Draw();
 	virtual void End();
 

@@ -5,8 +5,6 @@
 
 #include <memory>
 
-class Input;
-
 class Player;
 class ObjectBase;
 class Model;
@@ -22,7 +20,7 @@ public:
 	virtual ~EnemyBase();
 
 	virtual void Init();
-	virtual void Update(Input& input) override;
+	virtual void Update() override;
 
 	virtual void Draw(std::shared_ptr<ToonShader> pToonShader);
 
