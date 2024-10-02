@@ -20,44 +20,56 @@ SceneManager::SceneManager() :
 	m_updateTime(0),
 	m_drawTime(0)
 {
+	/*処理無し*/
 }
 
 SceneManager::~SceneManager()
 {
+	/*処理無し*/
 }
 
 void SceneManager::Init()
 {
 #ifdef _DEBUG
 	// 最初のシーンのメモリを確保する
+	// デバッグ用シーンに飛ぶ
 	m_pScene = std::make_shared<SceneDebug>();
 #else
 	// 最初のシーンのメモリを確保する
+	// タイトルシーンに飛ぶ
 	m_pScene = std::make_shared<SceneTitle>();
 #endif // _DEBUG
 
+	// シーンの初期化
 	m_pScene->Init();
 }
 
 bool SceneManager::Update()
 {
-	// 更新前のローディング時間の取得
+#ifdef _DEBUG
+	// 更新前ローディング時間の取得
 	LONGLONG start = GetNowHiPerformanceCount();
+#endif // _DEBUG
 
+	// シーンがnullだった場合は止まる
 	assert(m_pScene);
 
 	// パッド情報の更新
 	Pad::Update();
 
+	// 次のシーンの取得
 	std::shared_ptr<SceneBase> pNext = m_pScene->Update();
 
+	// 次のシーンが存在していなかった場合
 	if (!pNext)
 	{
+		// 現在処理中のシーンの終了処理
 		m_pScene->End();
 		// nullで終了
 		return false;
 	}
 
+	// 次のシーンが現在のシーンでは無かった場合
 	if (pNext != m_pScene)
 	{
 		// 現在処理中のシーンの終了処理
@@ -68,28 +80,36 @@ bool SceneManager::Update()
 		m_pScene->Init();
 	}
 
+#ifdef _DEBUG
+	// 更新時の処理速度を測る
 	m_updateTime = static_cast<float>(GetNowHiPerformanceCount() - start);
+#endif // _DEBUG
 
 	return true;
 }
 
 void SceneManager::Draw()
 {
-	assert(m_pScene);
-
+#ifdef _DEBUG
+	// 描画前ローディング時間の取得	
 	LONGLONG start = GetNowHiPerformanceCount();
+#endif // _DEBUG
 
+	// シーンがnullだった場合は止まる
+	assert(m_pScene);
+	// 描画
 	m_pScene->Draw();
 
 #ifdef _DEBUG
-	// 更新、描画時の処理速度を測る
+	// 描画時の処理速度を測る
 	m_drawTime = static_cast<float>(GetNowHiPerformanceCount() - start);
 
-	// 処理バーの表示
+	/*処理バーの表示*/
+	// 描画処理バー
 	float rate = (m_updateTime + m_drawTime) / 16666.6f;
 	float width = Game::kScreenWidth * rate;
 	DrawBox(kBarPosX, kBarPosY, static_cast<int>(width), Game::kScreenHeight, kDrawBarColor, true);
-
+	// 更新処理バー
 	rate = m_updateTime / 16666.6f;
 	width = Game::kScreenWidth * rate;
 	DrawBox(kBarPosX, kBarPosY, static_cast<int>(width), Game::kScreenHeight, kUpdateBarColor, true);
@@ -99,7 +119,8 @@ void SceneManager::Draw()
 
 void SceneManager::End()
 {
+	// シーンがnullだった場合は止まる
 	assert(m_pScene);
-
+	// 終了処理
 	m_pScene->End();
 }

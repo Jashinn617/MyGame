@@ -1,7 +1,6 @@
 #include "DxLib.h"
 
 #include "SceneDebug.h"
-#include "StageSceneManager.h"
 #include "SceneStage.h"
 #include "SceneTitle.h"
 #include "SceneSelect.h"
@@ -23,6 +22,7 @@ namespace
 SceneDebug::SceneDebug():
 	m_count(0)
 {
+	// 移動用文字の設定
 	m_sceneString[static_cast<int>(SceneType::Debug)] = "Debug";
 	m_sceneString[static_cast<int>(SceneType::Stage1)] = "Stage1";
 	m_sceneString[static_cast<int>(SceneType::Stage2)] = "Stage2";
@@ -50,8 +50,10 @@ std::shared_ptr<SceneBase> SceneDebug::Update()
 		return UpdateNextScene();
 	}
 
+	// カーソル更新
 	UpdateCursor();
 
+	// フェード更新
 	UpdateFade();
 	
 	return shared_from_this();
@@ -59,13 +61,9 @@ std::shared_ptr<SceneBase> SceneDebug::Update()
 
 void SceneDebug::Draw()
 {
+	// 文字列の描画
 	for (int i = 0; i < static_cast<int>(m_sceneString.size()); i++)
 	{
-		DrawString(static_cast<int>(kCursorPosX), 
-			static_cast<int>(kCursorPosY + (i * kCursorMove)), 
-			m_sceneString[i].c_str(), 
-			0xffffff);
-
 		if (m_count == i)
 		{
 			// 選ばれている文字は赤くする
@@ -73,6 +71,14 @@ void SceneDebug::Draw()
 				static_cast<int>(kCursorPosY + (i * kCursorMove)),
 				m_sceneString[i].c_str(),
 				0xff0000);
+		}
+		else
+		{
+			// その他の文字は白
+			DrawString(static_cast<int>(kCursorPosX),
+				static_cast<int>(kCursorPosY + (i * kCursorMove)),
+				m_sceneString[i].c_str(),
+				0xffffff);
 		}
 	}
 
@@ -89,29 +95,25 @@ void SceneDebug::End()
 
 void SceneDebug::UpdateCursor()
 {
+	// カーソルの移動
 	if (Pad::isTrigger(PAD_INPUT_UP))
 	{
 		m_count--;
-		if (m_count < 0)
-		{
-			m_count = static_cast<int>(m_sceneString.size() - 1);
-		}
+		// カーソルがループするようにする
+		if (m_count < 0) m_count = static_cast<int>(m_sceneString.size() - 1);
 	}
-
-	if (Pad::isTrigger(PAD_INPUT_DOWN))
+	else if (Pad::isTrigger(PAD_INPUT_DOWN))
 	{
 		m_count++;
-		if (m_count >= static_cast<int>(m_sceneString.size()))
-		{
-			m_count = 0;
-		}
+		// カーソルがループするようにする
+		if (m_count >= static_cast<int>(m_sceneString.size())) m_count = 0;
 	}
 }
 
 std::shared_ptr<SceneBase> SceneDebug::UpdateNextScene()
 {
+	// 次のシーンの設定
 	std::shared_ptr<SceneBase> nextScene = nullptr;
-	std::shared_ptr<StageSceneManager> mainSceneManager = nullptr;
 
 	// 選択されたシーンに遷移する
 	switch (m_count)
@@ -138,6 +140,8 @@ std::shared_ptr<SceneBase> SceneDebug::UpdateNextScene()
 		nextScene = std::make_shared<SceneStage>(Game::Stage::Test);
 		break;
 	default:
+		// 何も選択されていなかった場合はシーン遷移を行わないようにする
+		return shared_from_this();
 		break;
 	}
 	return nextScene;

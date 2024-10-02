@@ -21,35 +21,59 @@ public:
 	};
 
 public:
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	SceneDebug();
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	virtual ~SceneDebug();
 
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	virtual void Init() override final;
 
+	/// <summary>
+	/// 更新
+	/// </summary>
+	/// <returns>現在のシーン</returns>
 	virtual std::shared_ptr<SceneBase> Update() override final;
+
+	/// <summary>
+	/// 描画
+	/// </summary>
 	virtual void Draw() override final;
+
+	/// <summary>
+	/// 終了処理
+	/// </summary>
 	virtual void End() override final;
 
 	/// <summary>
 	/// シーン種類の取得
 	/// </summary>
 	/// <returns></returns>
-	virtual SceneKind GetSceneKind() { return SceneKind::Debug; }
+	virtual SceneKind GetSceneKind()  override final { return SceneKind::Debug; }
 
 private:	// 関数
 	/// <summary>
-	/// カーソルのアップデート
+	/// カーソル更新
 	/// </summary>
 	void UpdateCursor();
 
 	/// <summary>
-	/// 次のシーンのアップデート
+	/// 次のシーンの更新
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>次のシーン</returns>
 	std::shared_ptr<SceneBase> UpdateNextScene();
 
 
 private:	// 変数
 	int m_count;		// カーソルのカウント
-	std::array<std::string, static_cast<int>(SceneType::SceneNum)> m_sceneString;	// シーン移動用の文字
+
+	// シーン移動用の文字
+	std::array<std::string, static_cast<int>(SceneType::SceneNum)> m_sceneString;
 };

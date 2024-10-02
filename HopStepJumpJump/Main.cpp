@@ -34,12 +34,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// Effekseerの初期化
 	Effekseer_Init(8000);
 
-	// フルスクリーンウインドウの切り替えでリソースが消えるのを防ぐ。
-	// Effekseerを使用する場合は必ず設定する。
+	// フルスクリーンウインドウの切り替えでリソースが消えるのを防ぐ
 	SetChangeScreenModeGraphicsSystemResetFlag(false);
 
-	// DXライブラリのデバイスロストした時のコールバックを設定する。
-	// ウインドウとフルスクリーンの切り替えが発生する場合は必ず実行する。
+	// DXライブラリのデバイスロストした時のコールバックを設定する
 	Effekseer_SetGraphicsDeviceLostCallbackFunctions();
 
 	// Zバッファを使用する
@@ -66,6 +64,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// シーン管理
 	std::shared_ptr<SceneManager> pScene = std::make_shared<SceneManager>();
+
+	// 初期化
 	pScene->Init();
 
 	
@@ -78,7 +78,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		ClearDrawScreen();
 
 		// ゲームの処理
-		pScene->Update();
+		// シーンが存在していなかったら強制終了する
+		if(!pScene->Update()) break;
+		// 描画
 		pScene->Draw();
 
 		// エフェクトの更新、描画

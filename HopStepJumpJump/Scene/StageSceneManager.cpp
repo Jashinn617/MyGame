@@ -456,7 +456,7 @@ void StageSceneManager::ClearUpdate()
 				{
 					// SE‚ð–Â‚ç‚·
 					SoundManager::GetInstance().Play("SceneChange");
-					m_nextScene = NextScene::Title;
+					m_nextScene = NextScene::Select;
 				}
 				else
 				{

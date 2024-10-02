@@ -43,9 +43,9 @@ public:
 
 	enum class NextScene
 	{
-		My,		// 自分のシーン
+		My,			// 自分のシーン
 		GameScene,	// ゲームシーン
-		Title,		// タイトルシーン
+		Select,		// セレクトシーン
 	};
 
 public:
