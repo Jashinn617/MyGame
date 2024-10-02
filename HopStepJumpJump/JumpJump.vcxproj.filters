@@ -49,9 +49,6 @@
     <Filter Include="ソース ファイル\Object\Player">
       <UniqueIdentifier>{2fe52b94-f45b-4921-8421-0d344a456312}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Object\Stage">
-      <UniqueIdentifier>{be493294-9aa8-42cc-bf43-6b32e51d078f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ヘッダー ファイル\Object">
       <UniqueIdentifier>{73277ce5-1efa-4657-ac47-111899dfa732}</UniqueIdentifier>
     </Filter>
@@ -63,9 +60,6 @@
     </Filter>
     <Filter Include="ヘッダー ファイル\Object\Item">
       <UniqueIdentifier>{67f59da8-14d5-43fe-b12f-c7487596e335}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\Object\Stage">
-      <UniqueIdentifier>{07b6859f-5130-4a0b-aadc-f3de3074d608}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\Image">
       <UniqueIdentifier>{235a6968-1af5-4a4b-a094-da27f7399b6f}</UniqueIdentifier>

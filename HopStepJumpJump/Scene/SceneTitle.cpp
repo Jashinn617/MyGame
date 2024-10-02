@@ -18,17 +18,16 @@ namespace
 	/*画像ファイルパス*/
 	const char* const kTitleLogoImg = "Data/Img/Title/Logo.png";				// タイトルロゴ
 	const char* const kPressAnyButtonImg = "Data/Img/Title/PressAnyButton.png";	// テキスト
-
 	const char* const kMovieFileName = "Data/Movie/DemoMovie.mp4";				// 動画ファイルパス
 
 	/*タイトルロゴ画像の初期座標*/
 	constexpr int kStartTitleLogoPosY = -1200;
 	/*タイトルロゴ画像の座標*/
-	constexpr int kTitleLogoPosX = static_cast<int>(Game::kScreenWidth * 0.5f);		// X
-	constexpr int kTitleLogoPosY = static_cast<int>(Game::kScreenHeight * 0.5f);	// Y
+	constexpr int kTitleLogoPosX = static_cast<int>(Game::kScreenWidth * 0.5f);
+	constexpr int kTitleLogoPosY = static_cast<int>(Game::kScreenHeight * 0.5f);
 	/*プレスボタンの画像の座標*/
-	constexpr int kPressAnyButtonPosX = static_cast<int>(Game::kScreenWidth * 0.5f);	// X
-	constexpr int kPressAnyButtonPosY = static_cast<int>(Game::kScreenHeight * 0.5f);	// Y
+	constexpr int kPressAnyButtonPosX = static_cast<int>(Game::kScreenWidth * 0.5f);
+	constexpr int kPressAnyButtonPosY = static_cast<int>(Game::kScreenHeight * 0.5f);
 
 	constexpr int kTitleFallSpeed = 30;	// タイトルが落ちてくる速度
 }
@@ -108,33 +107,22 @@ std::shared_ptr<SceneBase> SceneTitle::Update()
 		
 	}
 
-
 	// タイトルが落ちた後に何かしらのボタンが押されていたら次のシーンに遷移する
 	if (CheckHitKeyAll() && m_titlePosY >= kTitleLogoPosY)
 	{
-		// BGMを消す
-		SoundManager::GetInstance().DesignationStopSound("TitleScene");
-
 		// 決定SEを流す
 		SoundManager::GetInstance().Play("TitleButtonPush");
 
 		return std::make_shared<SceneSelect>();
 	}
 
-	
-
 	return shared_from_this();
 }
 
 void SceneTitle::Draw()
 {
-#ifdef _DEBUG
-	DrawFormatString(0, 0, 0xffffff, "Title");
-#endif // _DEBUG   
-
 	// 動画の描画
 	DrawGraph(0, 0, m_movieH, true);
-
 
 	// タイトル画像の描画
 	DrawRotaGraph(kTitleLogoPosX, m_titlePosY,
@@ -143,15 +131,22 @@ void SceneTitle::Draw()
 
 	// タイトルがおりきってなかった場合は表示しない
 	if (m_titlePosY < kTitleLogoPosY) return;
-
+	// テキストの描画
 	DrawRotaGraph(kPressAnyButtonPosX, kPressAnyButtonPosY,
 		1.0f, 0.0f,
 		m_textH, true);
 
+#ifdef _DEBUG
+	// シーン名の描画
+	DrawFormatString(0, 0, 0xffffff, "Title");
+#endif // _DEBUG   
+
+	// フェードの描画
 	DrawFade();
 }
 
 void SceneTitle::End()
 {
-	/*処理無し*/
+	// BGMを消す
+	SoundManager::GetInstance().DesignationStopSound("TitleScene");
 }

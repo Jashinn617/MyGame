@@ -157,7 +157,11 @@ void ObjectManager::Draw()
 	// オブジェクトの描画
 	for (auto& obj : m_pObject)
 	{
-		obj->Draw(m_pToonShader);
+		// カメラ外にいるときは描画をしない
+		if (!CheckCameraViewClip(obj->GetInfo().pos))
+		{
+			obj->Draw(m_pToonShader);
+		}
 	}
 
 	// シャドウマップの書き込み開始
