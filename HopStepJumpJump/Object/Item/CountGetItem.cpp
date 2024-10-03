@@ -1,11 +1,17 @@
-#include "DxLib.h"
+ï»¿#include "DxLib.h"
 #include "CountGetItem.h"
 #include "../../Util/Game.h"
 
 namespace
 {
-	const char* const kFileName1 = "Data/Img/ItemNum/ItemNumImg1.png";
-	const char* const kFileName2 = "Data/Img/ItemNum/ItemNumImg2.png";
+	/*ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹*/
+	// ãƒ†ã‚­ã‚¹ãƒˆ
+	const char* const kTextFileName[2] =
+	{
+		"Data/Img/ItemNum/ItemNumImg1.png",
+		"Data/Img/ItemNum/ItemNumImg2.png",
+	};
+	// æ•°å­—
 	const char* const kNumberFileName[10] =
 	{
 		"Data/Img/ItemNum/ItemNum0.png",
@@ -20,34 +26,29 @@ namespace
 		"Data/Img/ItemNum/ItemNum9.png",
 	};
 
-	constexpr int kAlpha = 170;	// ‰æ‘œ‚Ì“§–¾“x
-	/*‰æ‘œ‚ÌÀ•W1*/
-	constexpr int kImagePosX1 = static_cast<int>(Game::kScreenWidth * 0.42f);	// X
-	constexpr int kImagePosY1 = 100;	// Y
-	/*‰æ‘œ‚ÌÀ•W2*/
-	constexpr int kImagePosX2 = static_cast<int>(Game::kScreenWidth * 0.62f);	// X
-	constexpr int kImagePosY2 = 100;	// Y
-	/*”š‚ÌÀ•W*/
-	constexpr int kNumberPosX = static_cast<int>(Game::kScreenWidth * 0.525f);	// X
-	constexpr int kNumberPosY = 100;	// Y
-	/*”š‚ÌÀ•W(ˆê‚ÌˆÊ)*/
-	constexpr int kNumberFirstPosX = static_cast<int>(Game::kScreenWidth * 0.55f);	// X
-	constexpr int kNumberFirstPosY = 100;	// Y
-	/*”š‚ÌÀ•W(\‚ÌˆÊ)*/
-	constexpr int kNumberSecondPosX = static_cast<int>(Game::kScreenWidth * 0.5f);	// X
-	constexpr int kNumberSecondPosY = 100;	// Y
+	/*åº§æ¨™*/
+	constexpr int kImagePosX1 = 820;		// ãƒ†ã‚­ã‚¹ãƒˆç”»åƒ1X
+	constexpr int kImagePosX2 = 1150;		// ãƒ†ã‚­ã‚¹ãƒˆç”»åƒ2X
+	constexpr int kNumberPosX = 1007;		// æ•°å­—(ä¸€æ¡æ™‚)
+	constexpr int kNumberFirstPosX = 1056;	// æ•°å­—(äºŒæ¡æ™‚ä¸€ã®ä½)X
+	constexpr int kNumberSecondPosX = 960;	// æ•°å­—(äºŒæ¡æ™‚åã®ä½)X
+	constexpr int kImgPosY = 100;			// ç”»åƒY(å…¨ç”»åƒYä½ç½®ã¯çµ±ä¸€)
 
-	constexpr float kFontSize = 0.5f;	// •¶š‚ÌƒTƒCƒY
+	constexpr float kImgSize = 0.5f;	// ç”»åƒã‚µã‚¤ã‚º
+	constexpr int kImgAlpha = 170;	// ç”»åƒã®ä¸é€æ˜åº¦
 }
 
-CountGetItem::CountGetItem(int maxCount):
-	m_count(0),
-	m_maxCount(maxCount)
+CountGetItem::CountGetItem(int maxCount) :
+	m_getItemCount(0),
+	m_maxItemNum(maxCount)
 {
-	m_H1 = LoadGraph(kFileName1);
-	m_H2 = LoadGraph(kFileName2);
-
-	// ”š‰æ‘œƒnƒ“ƒhƒ‹ƒ[ƒh
+	/*ç”»åƒãƒ­ãƒ¼ãƒ‰*/
+	// ãƒ†ã‚­ã‚¹ãƒˆ
+	for (int i = 0; i < m_textH.size(); i++)
+	{
+		m_textH[i] = LoadGraph(kTextFileName[i]);
+	}
+	// æ•°å­—
 	for (int i = 0; i < m_numberH.size(); i++)
 	{
 		m_numberH[i] = LoadGraph(kNumberFileName[i]);
@@ -56,9 +57,11 @@ CountGetItem::CountGetItem(int maxCount):
 
 CountGetItem::~CountGetItem()
 {
-	DeleteGraph(m_H1);
-	DeleteGraph(m_H2);
-
+	/*ç”»åƒãƒ‡ãƒªãƒ¼ãƒˆ*/
+	for (int i = 0; i < m_textH.size(); i++)
+	{
+		DeleteGraph(m_textH[i]);
+	}
 	for (int i = 0; i < m_numberH.size(); i++)
 	{
 		DeleteGraph(m_numberH[i]);
@@ -67,55 +70,61 @@ CountGetItem::~CountGetItem()
 
 void CountGetItem::Draw()
 {
-	// c‚èƒAƒCƒeƒ€‚Ì”
-	int remainingItem = m_maxCount - m_count;
+	// æ®‹ã‚Šã‚¢ã‚¤ãƒ†ãƒ ã®æ•°
+	int remainingItem = m_maxItemNum - m_getItemCount;
 
-	// c‚è‚ÌƒAƒCƒeƒ€‚Ì”‚ª0‚Ìê‡‚Í‰½‚à•`‰æ‚µ‚È‚¢
+	// æ®‹ã‚Šã®ã‚¢ã‚¤ãƒ†ãƒ ã®æ•°ãŒ0ã®å ´åˆã¯ä½•ã‚‚æç”»ã—ãªã„
 	if (remainingItem <= 0)return;
 
-	// c‚è‚ÌƒAƒCƒeƒ€”‚Ì‰æ‘œ‚Ì•`‰æ
-	DrawRotaGraph(kImagePosX1, kImagePosY1,
-		0.5f, 0.0f,
-		m_H1, true);
+	// ãƒ†ã‚­ã‚¹ãƒˆç”»åƒã®æç”»
+	DrawRotaGraph(kImagePosX1, kImgPosY,
+		kImgSize, 0.0f,
+		m_textH[0], true);
 
-	DrawRotaGraph(kImagePosX2, kImagePosY2,
-		0.55f, 0.0f,
-		m_H2, true);
+	DrawRotaGraph(kImagePosX2, kImgPosY,
+		kImgSize, 0.0f,
+		m_textH[1], true);
 
-	// c‚è‚ÌƒAƒCƒeƒ€”‚ªˆêŒ…‚Ì
+	// æ®‹ã‚Šã®ã‚¢ã‚¤ãƒ†ãƒ æ•°ãŒä¸€æ¡ã®æ™‚
 	if (remainingItem < 10)
 	{
-		DrawRotaGraph(kNumberPosX, kNumberPosY, 
-			kFontSize, 0.0f,
+		DrawRotaGraph(kNumberPosX, kImgPosY,
+			kImgSize, 0.0f,
 			m_numberH[remainingItem], true);
 	}
-	else // c‚è‚ÌƒAƒCƒeƒ€”‚ª“ñŒ…‚Ì
+	else // æ®‹ã‚Šã®ã‚¢ã‚¤ãƒ†ãƒ æ•°ãŒäºŒæ¡ã®æ™‚
 	{
-		int numFirst = remainingItem % 10;	// ˆê‚ÌˆÊ
-		int numSecond = remainingItem / 10;	// \‚ÌˆÊ
+		int numFirst = remainingItem % 10;	// ä¸€ã®ä½
+		int numSecond = remainingItem / 10;	// åã®ä½
 
-		DrawRotaGraph(kNumberFirstPosX, kNumberFirstPosY, 
-			kFontSize, 0.0f, 
+		DrawRotaGraph(kNumberFirstPosX, kImgPosY,
+			kImgSize, 0.0f,
 			m_numberH[numFirst], true);
-		DrawRotaGraph(kNumberSecondPosX, kNumberSecondPosY, 
-			kFontSize, 0.0f,
+		DrawRotaGraph(kNumberSecondPosX, kImgPosY,
+			kImgSize, 0.0f,
 			m_numberH[numSecond], true);
 	}
 
 #ifdef _DEBUG
-	DrawFormatString(0, 80, 0xffffff, "c‚è‚ÌƒAƒCƒeƒ€”F%d", remainingItem);
+	// æ®‹ã‚Šã‚¢ã‚¤ãƒ†ãƒ æ•°ãƒ‡ãƒãƒƒã‚°è¡¨ç¤º
+	DrawFormatString(0, 80, 0xffffff, "æ®‹ã‚Šã®ã‚¢ã‚¤ãƒ†ãƒ æ•°ï¼š%d", remainingItem);
 #endif // _DEBUG
 }
 
 void CountGetItem::Add()
 {
-	m_count = min(m_count++, m_maxCount);
+	/// <summary>
+	/// ã‚«ã‚¦ãƒ³ãƒˆã®è¿½åŠ 
+	/// ã‚«ã‚¦ãƒ³ãƒˆã®æœ€å¤§å€¤ä»¥ä¸Šã«ã¯ãªã‚‰ãªã„ã‚ˆã†ã«ã™ã‚‹
+	/// </summary>
+	m_getItemCount = min(m_getItemCount++, m_maxItemNum);
 }
 
 bool CountGetItem::IsCountMax()
 {
-	// ƒJƒEƒ“ƒg‚ªÅ‘å’lˆÈã‚É‚È‚Á‚Ä‚¢‚½ê‡
-	if (m_count >= m_maxCount) return true;
+	// ã‚«ã‚¦ãƒ³ãƒˆãŒæœ€å¤§å€¤ä»¥ä¸Šã«ãªã£ã¦ã„ãŸå ´åˆtrueã‚’è¿”ã™
+	if (m_getItemCount >= m_maxItemNum) return true;
 
+	// ãã†ã§ãªã‘ã‚Œã°falseã‚’è¿”ã™
 	return false;
 }

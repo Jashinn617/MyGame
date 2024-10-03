@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "../../Util/Game.h"
 
 #include <vector>
@@ -12,33 +12,33 @@ class EnemyManager
 {
 public:
 	/// <summary>
-	/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
-	/// <param name="stage">ƒXƒe[ƒW‚Ìí—Ş</param>
-	/// <param name="pObjectManager">ƒIƒuƒWƒFƒNƒgƒ}ƒl[ƒWƒƒ[</param>
-	EnemyManager(Game::Stage stage, ObjectManager* pObjectManager);
+	/// <param name="stageKind">ã‚¹ãƒ†ãƒ¼ã‚¸ã®ç¨®é¡</param>
+	/// <param name="pObjectManager">ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼</param>
+	EnemyManager(Game::Stage stageKind, ObjectManager* pObjectManager);
 
 	/// <summary>
-	/// ƒfƒXƒgƒ‰ƒNƒ^
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
 	~EnemyManager();
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	void Init();
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
 	void Draw();
 
 private:
-	ObjectManager* m_pObjectManager;		// ƒIƒuƒWƒFƒNƒgƒ}ƒl[ƒWƒƒ[ƒ|ƒCƒ“ƒ^
-	std::shared_ptr<SpownEnemy> m_pSpown;	// ƒXƒ|[ƒ“ƒGƒlƒ~[ƒ|ƒCƒ“ƒ^
+	ObjectManager* m_pObjectManager;		// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ãƒã‚¤ãƒ³ã‚¿
+	std::shared_ptr<SpownEnemy> m_pSpown;	// ã‚¹ãƒãƒ¼ãƒ³ã‚¨ãƒãƒŸãƒ¼ãƒã‚¤ãƒ³ã‚¿
 };

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "DxLib.h"
 
 #include <list>
@@ -13,55 +13,70 @@ class ObjectManager;
 class SpownItem
 {
 public:
-	SpownItem(const char* fileName, ObjectManager* pObjectManager);
+	/// <summary>
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// </summary>
+	/// <param name="fileName">csvãƒ•ã‚¡ã‚¤ãƒ«å</param>
+	/// <param name="pObjectManager">ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼</param>
+	SpownItem(const char* csvFileName, ObjectManager* pObjectManager);
+
+	/// <summary>
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// </summary>
 	virtual ~SpownItem();
 
+	/// <summary>
+	/// åˆæœŸåŒ–
+	/// </summary>
 	void Init();
 
+	/// <summary>
+	/// å‡ºç¾
+	/// </summary>
 	void Spown();
 
 	/// <summary>
-	/// ‘¶İ‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
+	/// å­˜åœ¨ã—ã¦ã„ã‚‹ã‹ã©ã†ã‹
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>å­˜åœ¨ãƒ•ãƒ©ã‚°</returns>
 	bool IsExist();
 
 	/// <summary>
-	/// ƒAƒCƒeƒ€”‚Ìæ“¾
+	/// ã‚¢ã‚¤ãƒ†ãƒ æ•°ã®å–å¾—
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>ã‚¢ã‚¤ãƒ†ãƒ æ•°</returns>
 	int GetItemNum()const { return static_cast<int>(m_pData.size()); }
 
-private:	// \‘¢‘Ì
+private:	// æ§‹é€ ä½“
 	struct Data
 	{
-		ObjectBase* pItem = nullptr;
-		int index = 0;
-		std::string name{};
+		ObjectBase* pItem = nullptr;	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ™ãƒ¼ã‚¹ãƒã‚¤ãƒ³ã‚¿
+		int index = 0;					// ã‚¢ã‚¤ãƒ†ãƒ ç•ªå·
+		std::string kind{};				// ç¨®é¡
 	};
 
-private:	// ŠÖ”
+private:	// é–¢æ•°
 
 	/// <summary>
-	/// ƒAƒCƒeƒ€‚Ì¶¬
+	/// ã‚¢ã‚¤ãƒ†ãƒ ã®ç”Ÿæˆ
 	/// </summary>
 	void Create();
 
 	/// <summary>
-	/// ƒAƒCƒeƒ€‚ÌoŒ»
+	/// ã‚¢ã‚¤ãƒ†ãƒ ã®å‡ºç¾
 	/// </summary>
 	void Appearance();
 
 	/// <summary>
-	/// ƒAƒCƒeƒ€‚Ì’Ç‰Á
+	/// ã‚¢ã‚¤ãƒ†ãƒ ã®è¿½åŠ 
 	/// </summary>
-	/// <param name="createNum"></param>
-	/// <param name="fileName"></param>
-	/// <param name="pos"></param>
-	void Add(int createNum, std::string fileName, VECTOR pos);
+	/// <param name="createNum">ã‚¢ã‚¤ãƒ†ãƒ ç•ªå·</param>
+	/// <param name="itenKind">ã‚¢ã‚¤ãƒ†ãƒ ã®ç¨®é¡</param>
+	/// <param name="pos">åˆæœŸåº§æ¨™</param>
+	void Add(int createNum, std::string itemKind, VECTOR pos);
 
 	/// <summary>
-	/// “Á’è‚Ì•¶š‚ªŒŸo‚³‚ê‚é‚Ü‚Å•¶š‚ğƒvƒbƒVƒ…ƒoƒbƒN‚·‚é
+	/// ç‰¹å®šã®æ–‡å­—ãŒæ¤œå‡ºã•ã‚Œã‚‹ã¾ã§æ–‡å­—ã‚’ãƒ—ãƒƒã‚·ãƒ¥ãƒãƒƒã‚¯ã™ã‚‹
 	/// </summary>
 	/// <param name="input"></param>
 	/// <param name="delimiter"></param>
@@ -69,10 +84,10 @@ private:	// ŠÖ”
 	std::vector<std::string> Split(std::string& input, char delimiter);
 
 private:
-	int m_createNum;					// oŒ»”Ô†
-	const char* m_fileName;				// ƒtƒ@ƒCƒ‹–¼
-	std::list<Data*> m_pData;			// ƒAƒCƒeƒ€î•ñ
-	std::string m_line;					// ƒtƒ@ƒCƒ‹“à‚Ì•¶š—ñ
-	ObjectManager* m_pObjectManager;	// ƒIƒuƒWƒFƒNƒgƒ}ƒl[ƒWƒƒ[ƒ|ƒCƒ“ƒ^
+	int m_createNum;					// å‡ºç¾ç•ªå·
+	const char* m_fileName;				// ãƒ•ã‚¡ã‚¤ãƒ«å
+	std::list<Data*> m_pData;			// ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±
+	std::string m_line;					// ãƒ•ã‚¡ã‚¤ãƒ«å†…ã®æ–‡å­—åˆ—
+	ObjectManager* m_pObjectManager;	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ãƒã‚¤ãƒ³ã‚¿
 };
 

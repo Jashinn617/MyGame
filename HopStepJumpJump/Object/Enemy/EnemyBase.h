@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "DxLib.h"
 #include "../CharacterBase.h"
 
@@ -10,119 +10,119 @@ class EnemyBase :public CharacterBase
 {
 public:
 	/// <summary>
-	/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
 	EnemyBase();
 
 	/// <summary>
-	/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
-	/// <param name="pos">‰ŠúÀ•W</param>
-	/// <param name="speed">ƒXƒs[ƒh</param>
+	/// <param name="pos">åˆæœŸåº§æ¨™</param>
+	/// <param name="speed">ç§»å‹•é€Ÿåº¦</param>
 	EnemyBase(VECTOR pos, float speed);
 
 	/// <summary>
-	/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
-	/// <param name="pos">‰ŠúÀ•W</param>
-	/// <param name="direction">‰Šú•ûŒü</param>
-	/// <param name="turnTime">”½“]‚·‚é‚Ü‚Å‚ÌŠÔ</param>
-	/// <param name="speed">ˆÚ“®ƒXƒs[ƒh</param>
+	/// <param name="pos">åˆæœŸåº§æ¨™</param>
+	/// <param name="direction">åˆæœŸæ–¹å‘</param>
+	/// <param name="turnTime">åè»¢ã™ã‚‹ã¾ã§ã®æ™‚é–“</param>
+	/// <param name="speed">ç§»å‹•é€Ÿåº¦</param>
 	EnemyBase(VECTOR pos, VECTOR direction, int turnTime, float speed);
 
 	/// <summary>
-	/// ƒfƒXƒgƒ‰ƒNƒ^
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
 	virtual ~EnemyBase();
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	virtual void Init() = 0;
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
 	virtual void Update() override;
 
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
 	/// <param name="pToonShader"></param>
 	virtual void Draw(std::shared_ptr<ToonShader> pToonShader);
 
 	/// <summary>
-	/// ƒXƒe[ƒWƒNƒŠƒAˆ—
+	/// ã‚¹ãƒ†ãƒ¼ã‚¸ã‚¯ãƒªã‚¢å‡¦ç†
 	/// </summary>
 	void StageClear() override final;
 
 	/// <summary>
-	/// ƒQ[ƒ€I—¹ˆ—
+	/// ã‚²ãƒ¼ãƒ çµ‚äº†æ™‚å‡¦ç†
 	/// </summary>
 	void GameEnd() override final;
 
 	/// <summary>
-	/// ƒ_ƒ[ƒWˆ—
+	/// ãƒ€ãƒ¡ãƒ¼ã‚¸å‡¦ç†
 	/// </summary>
-	/// <param name="targetPos">UŒ‚‘Šè‚ÌÀ•W</param>
-	void OnDamage(VECTOR targetPos) override;
+	/// <param name="targetPos">æ”»æ’ƒç›¸æ‰‹ã®åº§æ¨™</param>
+	void OnDamage(VECTOR targetPos) override final;
 
 	/// <summary>
-	/// €–Sˆ—
+	/// æ­»äº¡å‡¦ç†
 	/// </summary>
 	void  OnDead();
 
 	/// <summary>
-	/// ‘¶İ‚·‚é‚©‚Ç‚¤‚©
+	/// å­˜åœ¨ã™ã‚‹ã‹ã©ã†ã‹
 	/// </summary>
-	/// <returns>‘¶İƒtƒ‰ƒO</returns>
+	/// <returns>å­˜åœ¨ãƒ•ãƒ©ã‚°</returns>
 	bool IsExist()const { return m_info.isExist; }
 
 	/// <summary>
-	/// “G‚©‚çƒvƒŒƒCƒ„[‚Ü‚Å‚ÌƒxƒNƒgƒ‹‚Ìæ“¾
+	/// æ•µã‹ã‚‰ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¾ã§ã®ãƒ™ã‚¯ãƒˆãƒ«ã®å–å¾—
 	/// </summary>
-	/// <returns>ƒvƒŒƒCƒ„[‚Ü‚Å‚ÌƒxƒNƒgƒ‹</returns>
+	/// <returns>ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¾ã§ã®ãƒ™ã‚¯ãƒˆãƒ«</returns>
 	VECTOR GetEnemyToPlayerVec()const { return m_enemyToPlayerVec; }
 
 	/// <summary>
-	/// ©g‚Ì“–‚½‚è”»’è‚Ìî•ñ‚Ìæ“¾
+	/// è‡ªèº«ã®å½“ãŸã‚Šåˆ¤å®šã®æƒ…å ±ã®å–å¾—
 	/// </summary>
-	/// <returns>“–‚½‚è”»’èî•ñ</returns>
+	/// <returns>å½“ãŸã‚Šåˆ¤å®šæƒ…å ±</returns>
 	virtual ColType GetColType()const { return ColType::Enemy; }
 
-protected:	// ŠÖ”
+protected:	// é–¢æ•°
 	/// <summary>
-	/// ˆÚ“®‘¬“x‚Ì‰Šú‰»
+	/// ç§»å‹•é€Ÿåº¦ã®åˆæœŸåŒ–
 	/// </summary>
 	/// <param name="moveSpeed"></param>
 	void InitMoveSpeed(float moveSpeed);
 
 	/// <summary>
-	/// Šp“x‚ÌXV
+	/// è§’åº¦ã®æ›´æ–°
 	/// </summary>
 	void AngleUpdate();
 
 	/// <summary>
-	/// ˆÚ“®•ûŒü‚ÌXV
+	/// ç§»å‹•æ–¹å‘ã®æ›´æ–°
 	/// </summary>
 	virtual void MoveDirectionUpdate();
 
 	/// <summary>
-	/// ˆÚ“®ˆ—
+	/// ç§»å‹•å‡¦ç†
 	/// </summary>
 	/// <returns></returns>
 	virtual VECTOR MoveUpdate();
 
-protected:	// •Ï”
-	VECTOR m_moveDirectionVec;				// ˆÚ“®•ûŒüƒxƒNƒgƒ‹
-	VECTOR m_enemyToPlayerVec;				// “G‚©‚çƒvƒŒƒCƒ„[‚Ü‚Å‚ÌƒxƒNƒgƒ‹
-	std::shared_ptr<Time> m_turnTime;		// ƒ^[ƒ“‚·‚é‚Ü‚Å‚ÌŠÔ
-	std::shared_ptr<Time> m_deadTime;		// €‚ñ‚Å‚©‚ç‚ÌŠÔ
-	std::shared_ptr<Time> m_endTime;		// ƒQ[ƒ€I—¹‚µ‚Ä‚©‚ç‚ÌŠÔ
-	std::shared_ptr<Time> m_endDeadTime;	// ƒQ[ƒ€I—¹Œã‚ÉÁ‚¦‚Ä‚©‚ç‚ÌŠÔ
+protected:	// å¤‰æ•°
+	VECTOR m_moveDirectionVec;				// ç§»å‹•æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«
+	VECTOR m_enemyToPlayerVec;				// æ•µã‹ã‚‰ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¾ã§ã®ãƒ™ã‚¯ãƒˆãƒ«
+	std::shared_ptr<Time> m_turnTime;		// ã‚¿ãƒ¼ãƒ³ã™ã‚‹ã¾ã§ã®æ™‚é–“
+	std::shared_ptr<Time> m_deadTime;		// æ­»ã‚“ã§ã‹ã‚‰ã®æ™‚é–“
+	std::shared_ptr<Time> m_endTime;		// ã‚²ãƒ¼ãƒ çµ‚äº†ã—ã¦ã‹ã‚‰ã®æ™‚é–“
+	std::shared_ptr<Time> m_endDeadTime;	// ã‚²ãƒ¼ãƒ çµ‚äº†å¾Œã«æ¶ˆãˆã¦ã‹ã‚‰ã®æ™‚é–“
 
-private:	// •Ï”
-	float m_colHeight;						// “–‚½‚è”»’è‚Ì‚‚³‚ğƒ‚ƒfƒ‹‚Ì’†S‚É‚·‚é
-	bool m_isEndDead;						// ƒQ[ƒ€I—¹Œã‚ÉÁ‚¦‚½‚©‚Ç‚¤‚©
-	bool m_isEnd;							// ƒQ[ƒ€I—¹‚µ‚½‚©‚Ç‚¤‚©
+private:	// å¤‰æ•°
+	float m_colHeight;						// å½“ãŸã‚Šåˆ¤å®šã®é«˜ã•ã‚’ãƒ¢ãƒ‡ãƒ«ã®ä¸­å¿ƒã«ã™ã‚‹
+	bool m_isEndDead;						// ã‚²ãƒ¼ãƒ çµ‚äº†å¾Œã«æ¶ˆãˆãŸã‹ã©ã†ã‹
+	bool m_isEnd;							// ã‚²ãƒ¼ãƒ çµ‚äº†ã—ãŸã‹ã©ã†ã‹
 };

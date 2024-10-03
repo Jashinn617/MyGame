@@ -112,11 +112,17 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../DxLib</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <TreatSpecificWarningsAsErrors>
+      </TreatSpecificWarningsAsErrors>
+      <DisableSpecificWarnings>4099</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../DxLib</AdditionalLibraryDirectories>
+      <TreatLinkerWarningAsErrors>
+      </TreatLinkerWarningAsErrors>
+      <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -129,6 +135,9 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../DxLib</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <TreatSpecificWarningsAsErrors>
+      </TreatSpecificWarningsAsErrors>
+      <DisableSpecificWarnings>4099</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -136,6 +145,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../DxLib</AdditionalLibraryDirectories>
+      <TreatLinkerWarningAsErrors>
+      </TreatLinkerWarningAsErrors>
+      <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -146,18 +158,13 @@
     <ClCompile Include="Util\CountTime.cpp" />
     <ClCompile Include="Util\TutorialUI.cpp" />
     <ClCompile Include="Util\ActionTime.cpp" />
-    <ClCompile Include="Image\ExpansionImage.cpp" />
     <ClCompile Include="Object\Enemy\EnemySkull.cpp" />
     <ClCompile Include="Object\Enemy\EnemyBee.cpp" />
-    <ClCompile Include="Object\Item\ItemRotate.cpp" />
     <ClCompile Include="Object\Item\ItemStop.cpp" />
     <ClCompile Include="Object\Item\CountGetItem.cpp" />
     <ClCompile Include="Object\Item\SpownItem.cpp" />
     <ClCompile Include="Object\Enemy\SpownEnemy.cpp" />
     <ClCompile Include="Util\Pad.cpp" />
-    <ClCompile Include="Image\FadeImage.cpp" />
-    <ClCompile Include="Image\Image.cpp" />
-    <ClCompile Include="Image\ImageBase.cpp" />
     <ClCompile Include="Scene\SceneStage.cpp" />
     <ClCompile Include="Scene\StageSceneManager.cpp" />
     <ClCompile Include="Object\Field.cpp" />
@@ -201,18 +208,13 @@
     <ClInclude Include="Util\CountTime.h" />
     <ClInclude Include="Util\TutorialUI.h" />
     <ClInclude Include="Util\ActionTime.h" />
-    <ClInclude Include="Image\ExpansionImage.h" />
     <ClInclude Include="Object\Enemy\EnemySkull.h" />
     <ClInclude Include="Object\Enemy\EnemyBee.h" />
-    <ClInclude Include="Object\Item\ItemRotate.h" />
     <ClInclude Include="Object\Item\ItemStop.h" />
     <ClInclude Include="Object\Item\CountGetItem.h" />
     <ClInclude Include="Object\Item\SpownItem.h" />
     <ClInclude Include="Object\Enemy\SpownEnemy.h" />
     <ClInclude Include="Util\Pad.h" />
-    <ClInclude Include="Image\FadeImage.h" />
-    <ClInclude Include="Image\Image.h" />
-    <ClInclude Include="Image\ImageBase.h" />
     <ClInclude Include="Scene\SceneStage.h" />
     <ClInclude Include="Scene\StageSceneManager.h" />
     <ClInclude Include="Object\Field.h" />

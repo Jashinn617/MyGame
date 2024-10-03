@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "EnemyBase.h"
 
 #include <memory>
@@ -7,31 +7,31 @@ class EnemyBee : public EnemyBase
 {
 public:
 	/// <summary>
-	/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
-	/// <param name="pos">‰ŠúˆÊ’u</param>
-	/// <param name="direction">‰Šú•ûŒü</param>
-	/// <param name="turnTime">”½“]‚·‚é‚Ü‚Å‚ÌŠÔ</param>
-	/// <param name="speed">ˆÚ“®ƒXƒs[ƒh</param>
+	/// <param name="pos">åˆæœŸä½ç½®</param>
+	/// <param name="direction">åˆæœŸæ–¹å‘</param>
+	/// <param name="turnTime">åè»¢ã™ã‚‹ã¾ã§ã®æ™‚é–“</param>
+	/// <param name="speed">ç§»å‹•é€Ÿåº¦</param>
 	EnemyBee(VECTOR pos, VECTOR direction, int turnTime, float speed);
 
 	/// <summary>
-	/// ƒfƒXƒgƒ‰ƒNƒ^
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
 	~EnemyBee();
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	void Init()override final;
 
 	/// <summary>
-	/// ˆÚ“®•ûŒüXV
+	/// ç§»å‹•æ–¹å‘æ›´æ–°
 	/// </summary>
 	void MoveDirectionUpdate() override final;
 
 	/// <summary>
-	/// ˆÚ“®XV
+	/// ç§»å‹•æ›´æ–°
 	/// </summary>
 	/// <returns></returns>
 	VECTOR MoveUpdate() override final;

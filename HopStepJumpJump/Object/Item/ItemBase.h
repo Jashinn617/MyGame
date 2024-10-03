@@ -1,54 +1,85 @@
-#pragma once
+ï»¿#pragma once
 #include "DxLib.h"
-#include "../../Util/CharacterData.h"
 #include "../CharacterBase.h"
-
-class Player;
-class ObjectBase;
-class Model;
-class Circle;
-class Time;
 
 class ItemBase : public CharacterBase
 {
 public:
+	/// <summary>
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// </summary>
 	ItemBase();
+
+	/// <summary>
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// </summary>
+	/// <param name="pos">åˆæœŸåº§æ¨™</param>
 	ItemBase(VECTOR pos);
+
+	/// <summary>
+	///	ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// </summary>
 	virtual ~ItemBase();
 
+	/// <summary>
+	/// åˆæœŸåŒ–
+	/// </summary>
 	virtual void Init();
+	
+	/// <summary>
+	/// æ›´æ–°
+	/// </summary>
 	virtual void Update() override;
 
+	/// <summary>
+	/// æç”»
+	/// </summary>
+	/// <param name="pToonShader">ãƒˆã‚¥ãƒ¼ãƒ³ã‚·ã‚§ãƒ¼ãƒ€</param>
 	virtual void Draw(std::shared_ptr<ToonShader> pToonShader);
 
-	// ‘¶İ‚·‚é‚©‚Ç‚¤‚©
+	/// <summary>
+	/// å­˜åœ¨ã™ã‚‹ã‹ã©ã†ã‹
+	/// </summary>
+	/// <returns>å­˜åœ¨ãƒ•ãƒ©ã‚°</returns>
 	bool GetExist()const { return m_info.isExist; }
 
-	// ƒQƒbƒg‚³‚ê‚½‚Æ‚«
+	/// <summary>
+	/// å–å¾—å‡¦ç†
+	/// </summary>
 	void OnGet();
 
-	// ©g‚Ì“–‚½‚è”»’è‚Ìî•ñ
+	/// <summary>
+	/// è‡ªèº«ã®å½“ãŸã‚Šåˆ¤å®šæƒ…å ±
+	/// </summary>
+	/// <returns>å½“ãŸã‚Šåˆ¤å®šæƒ…å ±</returns>
 	virtual ColType GetColType()const { return ColType::Item; }
 
 	/// <summary>
-	/// ƒQ[ƒ€I—¹ˆ—
+	/// ã‚²ãƒ¼ãƒ çµ‚äº†æ™‚å‡¦ç†
 	/// </summary>
 	void GameEnd() override final;
 
 protected:
-	// ˆÚ“®‘¬“x‚Ì‰Šú‰»
+	/// <summary>
+	/// ç§»å‹•é€Ÿåº¦ã®åˆæœŸåŒ–
+	/// </summary>
+	/// <param name="moveSpeed">ç§»å‹•é€Ÿåº¦</param>
 	void InitMoveSpeed(float moveSpeed);
 
-	// ˆÚ“®•ûŒü‚ÌXV
+	/// <summary>
+	/// ç§»å‹•æ–¹å‘ã®æ›´æ–°
+	/// </summary>
 	virtual void MoveDirectionUpdate();
-	// ˆÚ“®•ûŒü‚ÆŠp“x‚ğl—¶‚µ‚½ˆÚ“®‚ÌXV
+
+	/// <summary>
+	/// ç§»å‹•æ›´æ–°
+	/// </summary>
+	/// <returns>ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«</returns>
 	virtual VECTOR MoveUpdate();
 
 
 
-protected:	// •Ï”
-	float m_colHeight;					// “–‚½‚è”»’è‚Ì‚‚³‚ğƒ‚ƒfƒ‹‚Ì’†S‚É‚·‚é
-	VECTOR m_moveDirectionVec;			// ˆÚ“®•ûŒüƒxƒNƒgƒ‹
-	int m_createTime;					// ¶¬‚³‚ê‚Ä‚©‚ç—§‚Á‚½ŠÔ
-	std::shared_ptr<Time> m_deadTime;	// €‚ñ‚Å‚©‚ç‚ÌŠÔ
+protected:	// å¤‰æ•°
+	float m_colHeight;					// å½“ãŸã‚Šåˆ¤å®šã®é«˜ã•ã‚’ãƒ¢ãƒ‡ãƒ«ã®ä¸­å¿ƒã«ã™ã‚‹
+	VECTOR m_moveDirectionVec;			// ç§»å‹•æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«
 };

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "DxLib.h"
 
 #include <list>
@@ -13,65 +13,83 @@ class ObjectManager;
 class SpownEnemy
 {
 public:
-	SpownEnemy(const char* fileName, ObjectManager* pObjectManager);
+	/// <summary>
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// </summary>
+	/// <param name="fileName">csvãƒ•ã‚¡ã‚¤ãƒ«å</param>
+	/// <param name="pObjectManager">ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼</param>
+	SpownEnemy(const char* csvFileName, ObjectManager* pObjectManager);
+
+	/// <summary>
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// </summary>
 	virtual ~SpownEnemy();
 
+	/// <summary>
+	/// åˆæœŸåŒ–
+	/// </summary>
 	void Init();
 
+	/// <summary>
+	/// å‡ºç¾
+	/// </summary>
 	void Spown();
 
 	/// <summary>
-	/// ‘¶İ‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
+	/// å­˜åœ¨ã—ã¦ã„ã‚‹ã‹ã©ã†ã‹
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>å­˜åœ¨ãƒ•ãƒ©ã‚°</returns>
 	bool IsExist();
 
 	/// <summary>
-	/// ƒAƒCƒeƒ€”‚Ìæ“¾
+	/// ã‚¨ãƒãƒŸãƒ¼æ•°ã®å–å¾—
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>ã‚¨ãƒãƒŸãƒ¼æ•°</returns>
 	int GetEnemyNum()const { return static_cast<int>(m_pData.size()); }
 
-private:	// \‘¢‘Ì
+private:	// æ§‹é€ ä½“
 	struct Data
 	{
-		ObjectBase* pEnemy = nullptr;
-		int index = 0;
-		std::string name{};
+		ObjectBase* pEnemy = nullptr;	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ™ãƒ¼ã‚¹ãƒã‚¤ãƒ³ã‚¿
+		int index = 0;					// ã‚¨ãƒãƒŸãƒ¼ç•ªå·
+		std::string kind{};				// ç¨®é¡
 	};
 
-private:	// ŠÖ”
+private:	// é–¢æ•°
 	/// <summary>
-	/// “G‚Ì¶¬
+	/// æ•µã®ç”Ÿæˆ
 	/// </summary>
 	void Create();
 
 	/// <summary>
-	/// “G‚ÌoŒ»
+	/// æ•µã®å‡ºç¾
 	/// </summary>
 	void Appearance();
 
 	/// <summary>
-	/// “G‚Ì’Ç‰Á
+	/// æ•µã®è¿½åŠ 
 	/// </summary>
-	/// <param name="createNum"></param>
-	/// <param name="fileName"></param>
-	/// <param name="pos"></param>
-	void Add(int createNum, std::string enemyName, VECTOR pos, VECTOR direction, int turnTime, float speed);
+	/// <param name="createNum">æ•µç•ªå·</param>
+	/// <param name="enemyKind">æ•µã®ç¨®é¡</param>
+	/// <param name="pos">åˆæœŸåº§æ¨™</param>
+	/// <param name="direction">åˆæœŸç§»å‹•æ–¹å‘</param>
+	/// <param name="turnTime">åè»¢ã¾ã§ã®æ™‚é–“</param>
+	/// <param name="speed">ç§»å‹•é€Ÿåº¦</param>
+	void Add(int createNum, std::string enemyKind, VECTOR pos, VECTOR direction, int turnTime, float speed);
 
 	/// <summary>
-	/// “Á’è‚Ì•¶š‚ªŒŸo‚³‚ê‚é‚Ü‚Å•¶š‚ğƒvƒbƒVƒ…ƒoƒbƒN‚·‚é
+	/// ç‰¹å®šã®æ–‡å­—ãŒæ¤œå‡ºã•ã‚Œã‚‹ã¾ã§æ–‡å­—ã‚’ãƒ—ãƒƒã‚·ãƒ¥ãƒãƒƒã‚¯ã™ã‚‹
 	/// </summary>
-	/// <param name="input"></param>
-	/// <param name="delimiter"></param>
-	/// <returns></returns>
+	/// <param name="input">ç‰¹å®šã®æ–‡å­—</param>
+	/// <param name="delimiter">åŒºåˆ‡ã‚Šæ–‡å­—(ã‚³ãƒ³ãƒ)</param>
+	/// <returns>æ¤œå‡ºã•ã‚ŒãŸæ–‡å­—</returns>
 	std::vector<std::string> Split(std::string& input, char delimiter);
 
-private:	// •Ï”
-	int m_createNum;	// oŒ»”Ô†
-	const char* m_fileName;	// ƒtƒ@ƒCƒ‹–¼
-	std::list<Data*> m_pData;	// “Gî•ñ
-	std::string m_line;			// ƒtƒ@ƒCƒ‹“à‚Ì•¶š—ñ
-	ObjectManager* m_pObjectManager;	// ƒIƒuƒWƒFƒNƒgƒ}ƒl[ƒWƒƒ[ƒ|ƒCƒ“ƒ^
+private:	// å¤‰æ•°
+	int m_createNum;					// å‡ºç¾ç•ªå·
+	const char* m_fileName;				// ãƒ•ã‚¡ã‚¤ãƒ«å
+	std::list<Data*> m_pData;			// æ•µæƒ…å ±
+	std::string m_line;					// ãƒ•ã‚¡ã‚¤ãƒ«å†…ã®æ–‡å­—åˆ—
+	ObjectManager* m_pObjectManager;	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ãƒã‚¤ãƒ³ã‚¿
 };
 

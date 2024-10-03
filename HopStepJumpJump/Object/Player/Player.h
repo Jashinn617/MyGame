@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "DxLib.h"
 #include "../../Util/CharacterData.h"
 #include "../CharacterBase.h"
@@ -7,7 +7,6 @@
 #include <memory>
 #include <vector>
 
-class Input;
 class Camera;
 class StageTest;
 
@@ -17,7 +16,7 @@ class PlayerState;
 class DamageShader;
 
 /// <summary>
-/// ƒvƒŒƒCƒ„[ƒNƒ‰ƒX
+/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¯ãƒ©ã‚¹
 /// </summary>
 class Player : public CharacterBase
 {
@@ -36,65 +35,65 @@ public:
 	void GameEnd() override final;
 
 	/// <summary>
-	/// UŒ‚‚ğó‚¯‚½
+	/// æ”»æ’ƒã‚’å—ã‘ãŸ
 	/// </summary>
 	/// <param name="targetPos"></param>
 	void OnDamage(VECTOR targetPos) override final;
 
 	/// <summary>
-	/// UŒ‚‚ğ‚µ‚½
+	/// æ”»æ’ƒã‚’ã—ãŸ
 	/// </summary>
 	void OnAttack() override final;
 
 	/// <summary>
-	/// ƒWƒƒƒ“ƒvó‘Ô‚ÌI—¹
+	/// ã‚¸ãƒ£ãƒ³ãƒ—çŠ¶æ…‹ã®çµ‚äº†
 	/// </summary>
 	void EndJump() override final;	
 
 	/// <summary>
-	/// ƒWƒƒƒ“ƒv—Í‚Ìİ’è
+	/// ã‚¸ãƒ£ãƒ³ãƒ—åŠ›ã®è¨­å®š
 	/// </summary>
 	/// <param name="jumpPower"></param>
 	void SetJumpPower(float jumpPower) { m_jumpPower = jumpPower; }
 
 	/// <summary>
-	/// À•W‚Ìæ“¾
+	/// åº§æ¨™ã®å–å¾—
 	/// </summary>
 	/// <returns></returns>
 	const VECTOR& GetPos()const { return m_info.pos; }
 
 	/// <summary>
-	/// “–‚½‚è”»’è‚Ìí—Ş‚Ìæ“¾
+	/// å½“ãŸã‚Šåˆ¤å®šã®ç¨®é¡ã®å–å¾—
 	/// </summary>
 	/// <returns></returns>
 	ColType GetColType()const { return ColType::Player; }
 
 	/// <summary>
-	/// ƒJƒƒ‰‚Ìæ“¾
+	/// ã‚«ãƒ¡ãƒ©ã®å–å¾—
 	/// </summary>
 	/// <returns></returns>
 	const std::shared_ptr<Camera> GetCamera() const { return m_pCamera; }
 
-private:	// ŠÖ”
+private:	// é–¢æ•°
 	/// <summary>
-	/// Šp“x‚ÌXV
+	/// è§’åº¦ã®æ›´æ–°
 	/// </summary>
 	void AngleUpdate();
 
 	/// <summary>
-	/// ˆÚ“®•ûŒü‚ÌXV
+	/// ç§»å‹•æ–¹å‘ã®æ›´æ–°
 	/// </summary>
 	void MoveDirectionUpdate();
 
 	/// <summary>
-	/// ˆÚ“®
+	/// ç§»å‹•
 	/// </summary>
 	/// <returns></returns>
 	VECTOR MoveUpdate();
 
-private:	// ƒƒ“ƒoŠÖ”—pŠÖ”
+private:	// ãƒ¡ãƒ³ãƒé–¢æ•°ç”¨é–¢æ•°
 
-	/*Šeó‘Ô‚Ì‰Šú‰»*/
+	/*å„çŠ¶æ…‹ã®åˆæœŸåŒ–*/
 	void IdleInit() {};
 	void WalkInit() {};
 	void DashInit() {};
@@ -102,7 +101,7 @@ private:	// ƒƒ“ƒoŠÖ”—pŠÖ”
 	void KnockBackInit() {};
 	void StageClearInit() {};
 
-	/*Šeó‘Ô‚ÌXV*/
+	/*å„çŠ¶æ…‹ã®æ›´æ–°*/
 	void IdleUpdate();
 	void WalkUpdate();
 	void DashUpdate();
@@ -110,19 +109,19 @@ private:	// ƒƒ“ƒoŠÖ”—pŠÖ”
 	void KnockBackUpdate();
 	void StageClearUpdate();
 
-private:	// •Ï”
-	float m_walkSpeed;	// ˆÚ“®‘¬“x
-	float m_dashSpeed;	// ƒ_ƒbƒVƒ…‚Ì‘¬“x
-	float m_acc;	// ‰Á‘¬“x
+private:	// å¤‰æ•°
+	float m_walkSpeed;	// ç§»å‹•é€Ÿåº¦
+	float m_dashSpeed;	// ãƒ€ãƒƒã‚·ãƒ¥æ™‚ã®é€Ÿåº¦
+	float m_acc;	// åŠ é€Ÿåº¦
 
-	bool m_isStageClear;	// ƒXƒe[ƒW‚ğƒNƒŠƒA‚µ‚½‚©‚Ç‚¤‚©
+	bool m_isStageClear;	// ã‚¹ãƒ†ãƒ¼ã‚¸ã‚’ã‚¯ãƒªã‚¢ã—ãŸã‹ã©ã†ã‹
 
-	VECTOR m_moveDirectVec;	// ˆÚ“®•ûŒüƒxƒNƒgƒ‹
-	VECTOR m_cameraToPlayerVec;	// ƒvƒŒƒCƒ„[‚©‚çƒJƒƒ‰‚Ü‚Å‚Ì‹——£
+	VECTOR m_moveDirectVec;	// ç§»å‹•æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«
+	VECTOR m_cameraToPlayerVec;	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‹ã‚‰ã‚«ãƒ¡ãƒ©ã¾ã§ã®è·é›¢
 
 
-	std::shared_ptr<PlayerState> m_pState;		// ó‘Ô‚Ìƒ|ƒCƒ“ƒ^
-	std::shared_ptr<Time> m_pInvincibleTime;	// UŒ‚‚ğH‚ç‚Á‚½Œã‚Ì–³“GŠÔ
-	std::shared_ptr<Camera> m_pCamera;			// ƒJƒƒ‰ƒ|ƒCƒ“ƒ^‚Ìæ“¾
+	std::shared_ptr<PlayerState> m_pState;		// çŠ¶æ…‹ã®ãƒã‚¤ãƒ³ã‚¿
+	std::shared_ptr<Time> m_pInvincibleTime;	// æ”»æ’ƒã‚’é£Ÿã‚‰ã£ãŸå¾Œã®ç„¡æ•µæ™‚é–“
+	std::shared_ptr<Camera> m_pCamera;			// ã‚«ãƒ¡ãƒ©ãƒã‚¤ãƒ³ã‚¿ã®å–å¾—
 };
 

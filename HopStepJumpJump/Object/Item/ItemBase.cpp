@@ -1,4 +1,4 @@
-#include "ItemBase.h"
+ï»¿#include "ItemBase.h"
 
 #include "../Player/Player.h"
 
@@ -19,113 +19,104 @@ using namespace CharacterData;
 
 namespace
 {
-	constexpr int kDeadExistTime = 60;	// €‚ñ‚Å‚©‚çŠ®‘S‚ÉÁ‚¦‚é‚Ü‚Å‚ÌŠÔ
-	constexpr float kColHeight = -10.0f;	// “–‚½‚è”»’è‚Ì‚‚³
+	constexpr int kDeadExistTime = 60;		// æ­»ã‚“ã§ã‹ã‚‰å®Œå…¨ã«æ¶ˆãˆã‚‹ã¾ã§ã®æ™‚é–“
+	constexpr float kColHeight = -10.0f;	// å½“ãŸã‚Šåˆ¤å®šã®é«˜ã•
 }
 
 ItemBase::ItemBase():
 	m_moveDirectionVec{0,0,0},
-	m_createTime(0),
 	m_colHeight(kColHeight)
 {
+	// æƒ…å ±ã®åˆæœŸåŒ–
 	m_info.vec = VGet(0.0f, 0.0f, 0.0f);
 	m_info.rot = VGet(0.0f, 0.0f, 0.0f);
 	m_info.modelH = -1;
 	m_info.isExist = true;
-
-	m_statusData.spd = 10;
-
+	m_statusData.spd = 0.0f;
 	m_objSize = 0.0f;
-
-	// €‚ñ‚Å‚©‚ç‚ÌŠÔ
-	m_deadTime = std::make_shared<Time>(kDeadExistTime);
-
-	// €–SƒVƒF[ƒ_
 }
 
 ItemBase::ItemBase(VECTOR pos):
 	m_moveDirectionVec{ 0,0,0 },
-	m_createTime(0),
 	m_colHeight(kColHeight)
 {
+	// æƒ…å ±ã®åˆæœŸåŒ–
 	m_info.pos = pos;
 	m_info.vec = VGet(0.0f, 0.0f, 0.0f);
 	m_info.rot = VGet(0.0f, 0.0f, 0.0f);
 	m_info.modelH = -1;
 	m_info.isExist = true;
-
-	m_statusData.spd = 10;
-
+	m_statusData.spd = 0.0f;
 	m_objSize = 0.0f;
-
-	// €‚ñ‚Å‚©‚ç‚ÌŠÔ
-	m_deadTime = std::make_shared<Time>(kDeadExistTime);
-
-	// €–SƒVƒF[ƒ_
 }
 
 ItemBase::~ItemBase()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void ItemBase::Init()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void ItemBase::Update()
 {
-	// ˆÚ“®ƒxƒNƒgƒ‹‚ÌŒvZ
+	// ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«ã®è¨ˆç®—
 	m_info.vec = MoveUpdate();
 
-	// ƒ‚ƒfƒ‹XV
+	// ãƒ¢ãƒ‡ãƒ«æ›´æ–°
 	m_pModel->Update();
 
-	// ˆÚ“®ƒxƒNƒgƒ‹‚ğŒ»İÀ•W‚É‘«‚·
+	// ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç¾åœ¨åº§æ¨™ã«è¶³ã™
 	m_info.pos = VAdd(m_info.pos, m_info.vec);
 
-	// À•W‚Ìİ’è
+	// åº§æ¨™ã®è¨­å®š
 	m_pModel->SetPos(m_info.pos);
-
-	// ƒVƒF[ƒ_XV
 }
 
 void ItemBase::Draw(std::shared_ptr<ToonShader> pToonShader)
 {
-	// ’¸“_‚²‚Æ‚É•`‰æ‚·‚é
+	// ãƒ¢ãƒ‡ãƒ«ã®æç”»
 	for (int i = 0; i < MV1GetTriangleListNum(m_pModel->GetModelHandle()); i++)
 	{
+		// é ‚ç‚¹ã‚¿ã‚¤ãƒ—å–å¾—
 		int shaderType = MV1GetTriangleListVertexType(m_pModel->GetModelHandle(), i);
 
+		// ã‚·ã‚§ãƒ¼ãƒ€ã®è¨­å®š
 		pToonShader->SetShader(shaderType);
+		// æç”»
 		MV1DrawTriangleList(m_pModel->GetModelHandle(), i);
 	}
+	// ã‚·ã‚§ãƒ¼ãƒ€ã‚’ä½¿ã‚ãªã„è¨­å®šã«æˆ»ã™
 	pToonShader->ShaderEnd();
 
+	// å½“ãŸã‚Šåˆ¤å®šã®æç”»
 	m_pCircle->DebugDraw();
 }
 
 void ItemBase::OnGet()
 {
-	// ƒGƒtƒFƒNƒg‚ğ—¬‚·
+	// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’æµã™
 	Effekseer3DManager::GetInstance().Add("ItemGet",
 		Effekseer3DManager::PlayType::Normal, this, m_info.pos);
-	// ƒAƒCƒeƒ€‚Ìæ“¾‰¹‚ğ–Â‚ç‚·
+	// ã‚¢ã‚¤ãƒ†ãƒ ã®å–å¾—éŸ³ã‚’é³´ã‚‰ã™
 	SoundManager::GetInstance().Play("ItemGet");
+	// æ­»äº¡ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
 	m_isDead = true;
-	// ‘¶İ‚ğÁ‚·
+	// å­˜åœ¨ã‚’æ¶ˆã™
 	m_info.isExist = false;
 }
 
 void ItemBase::GameEnd()
 {
+	// ã‚²ãƒ¼ãƒ ã®çµ‚äº†ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
 	m_isGameEnd = true;
 }
 
 void ItemBase::InitMoveSpeed(float moveSpeed)
 {
-	// ˆÚ“®‘¬“x‚Ì‰Šú‰»
+	// ç§»å‹•é€Ÿåº¦ã®åˆæœŸåŒ–
 	m_moveData.walkSpeed = moveSpeed;
 	m_moveData.runSpeed = 0.0f;
 	m_moveData.acceleration = 0.0f;
@@ -133,10 +124,11 @@ void ItemBase::InitMoveSpeed(float moveSpeed)
 
 void ItemBase::MoveDirectionUpdate()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 VECTOR ItemBase::MoveUpdate()
 {
+	/*å‡¦ç†ç„¡ã—*/
 	return VGet(0.0f,0.0f,0.0f);
 }

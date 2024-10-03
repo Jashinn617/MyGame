@@ -1,8 +1,7 @@
-#include "SpownItem.h"
+ï»¿#include "SpownItem.h"
 
 #include "ItemBase.h"
 #include "ItemStop.h"
-#include "ItemRotate.h"
 
 #include "../ObjectBase.h"
 #include "../ObjectManager.h"
@@ -11,21 +10,21 @@
 
 namespace
 {
-	constexpr float kHeightPos = 30.0f;	// ‚‚³’²®
-	constexpr int kFirstCreateNum = 1;	// Å‰‚ÌoŒ»”Ô†
+	constexpr float kHeightPos = 30.0f;	// é«˜ã•èª¿æ•´
 }
 
-SpownItem::SpownItem(const char* fileName, ObjectManager* pObjectManager) :
-	m_createNum(kFirstCreateNum),
-	m_fileName(fileName),
+SpownItem::SpownItem(const char* csvFileName, ObjectManager* pObjectManager) :
+	m_createNum(0),
+	m_fileName(csvFileName),
 	m_pObjectManager(pObjectManager)
 {
-	// ƒAƒCƒeƒ€‚Ì¶¬
+	// ã‚¢ã‚¤ãƒ†ãƒ ã®ç”Ÿæˆ
 	Create();
 }
 
 SpownItem::~SpownItem()
 {
+	// ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ãƒã‚¤ãƒ³ã‚¿ã®è§£æ”¾
 	std::list<Data*>::iterator it = m_pData.begin();
 	while (it != m_pData.end())
 	{
@@ -39,55 +38,58 @@ SpownItem::~SpownItem()
 
 void SpownItem::Init()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void SpownItem::Spown()
 {
+	// å‡ºç¾
 	Appearance();
 }
 
 bool SpownItem::IsExist()
 {
-	// ƒAƒCƒeƒ€‚Ìƒf[ƒ^‚ª‚È‚©‚Á‚½ê‡
+	// ã‚¢ã‚¤ãƒ†ãƒ ã®ãƒ‡ãƒ¼ã‚¿ãŒãªã‹ã£ãŸå ´åˆ
 	if (m_pData.size() == 0) return false;
 
-	// ƒAƒCƒeƒ€‚Ì‘Sƒf[ƒ^‚ğ’²‚×‚é
+	// ã‚¢ã‚¤ãƒ†ãƒ ã®å…¨ãƒ‡ãƒ¼ã‚¿ã‚’èª¿ã¹ã‚‹
 	for (auto& data : m_pData)
 	{
-		// ƒAƒCƒeƒ€‚ª‘¶İ‚µ‚Ä‚¢‚½ê‡
+		// ã‚¢ã‚¤ãƒ†ãƒ ãŒå­˜åœ¨ã—ã¦ã„ãŸå ´åˆ
 		if (data->pItem->GetInfo().isExist)
 		{
+			// å­˜åœ¨ãƒ•ãƒ©ã‚°ã‚’trueã«ã™ã‚‹
 			return true;
 		}
 	}
 
+	// ã“ã“ã¾ã§æ¥ã¦ã„ãŸã‚‰å­˜åœ¨ã—ãªã„
 	return false;
 }
 
 void SpownItem::Create()
 {
-	// ƒtƒ@ƒCƒ‹–¼
+	// ãƒ•ã‚¡ã‚¤ãƒ«å
 	std::ifstream ifs(m_fileName);
 
 	while (getline(ifs, m_line))
 	{
-		// csvƒf[ƒ^‚Ì1s‚ğ','‚Å•¡”‚Ì•¶š—ñ‚É•ªŠ„‚·‚é
+		// csvãƒ‡ãƒ¼ã‚¿ã®1è¡Œã‚’','ã§è¤‡æ•°ã®æ–‡å­—åˆ—ã«åˆ†å‰²ã™ã‚‹
 		std::vector<std::string> strvec = Split(m_line, ',');
 
-		// strvec[0]	: oŒ»”Ô†			int
-		// strvec[1]	: ƒAƒCƒeƒ€‚Ìí—Ş	string
-		// strvec[2]	: ƒAƒCƒeƒ€‚ÌXÀ•W	float
-		// strvec[3]	: ƒAƒCƒeƒ€‚ÌYÀ•W	float
-		// strvec[4]	: ƒAƒCƒeƒ€‚ÌZÀ•W	float
+		// strvec[0]	: å‡ºç¾ç•ªå·			int
+		// strvec[1]	: ã‚¢ã‚¤ãƒ†ãƒ ã®ç¨®é¡	string
+		// strvec[2]	: ã‚¢ã‚¤ãƒ†ãƒ ã®Xåº§æ¨™	float
+		// strvec[3]	: ã‚¢ã‚¤ãƒ†ãƒ ã®Yåº§æ¨™	float
+		// strvec[4]	: ã‚¢ã‚¤ãƒ†ãƒ ã®Zåº§æ¨™	float
 
-		// “Ç‚İæ‚Á‚½ƒf[ƒ^‚ğÀ•W‚É•ÏŠ·‚·‚é
+		// èª­ã¿å–ã£ãŸãƒ‡ãƒ¼ã‚¿ã‚’åº§æ¨™ã«å¤‰æ›ã™ã‚‹
 		VECTOR pos = VGet(stof(strvec[2]), stof(strvec[3]), stof(strvec[4]));
 
-		// ‚‚³’²®
+		// é«˜ã•èª¿æ•´
 		pos.y += kHeightPos;
 
-		// ƒf[ƒ^‚É‡‚¤“G‚Ì’Ç‰Á
+		// ã‚¢ã‚¤ãƒ†ãƒ ã®è¿½åŠ 
 		Add(stoi(strvec[0]), strvec[1], pos);
 	}
 }
@@ -96,42 +98,52 @@ void SpownItem::Appearance()
 {
 	for (auto& data : m_pData)
 	{
+		// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®è¿½åŠ 
 		m_pObjectManager->AddObject(data->pItem);
+		// åˆæœŸåŒ–
 		data->pItem->Init();
 	}
 }
 
-void SpownItem::Add(int createNum, std::string itemName, VECTOR pos)
+void SpownItem::Add(int createNum, std::string itemKind, VECTOR pos)
 {
-	// ƒ‚ƒfƒ‹ƒtƒ@ƒCƒ‹–¼
+	// ãƒ¢ãƒ‡ãƒ«ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹
 	const char* const modelFile = "Data/Model/Item/Key.mv1";
-	// ƒ‚ƒfƒ‹ƒnƒ“ƒhƒ‹‚Ìæ“¾
+	// ãƒ¢ãƒ‡ãƒ«ãƒãƒ³ãƒ‰ãƒ«ã®å–å¾—
 	int modelH = MV1LoadModel(modelFile);
+	// å–å¾—ã«å¤±æ•—ã—ãŸã‚‰æ­¢ã‚ã‚‹
 	assert(modelH != -1);
-	// itemName‚É‡‚¤“G‚Ì’Ç‰Á
-	if (itemName == "Stop")
+
+	// itemKindã¨åŒã˜ç¨®é¡ã®ã‚¢ã‚¤ãƒ†ãƒ ã®è¿½åŠ 
+	if (itemKind == "Stop")		// å‹•ã‹ãªã„ã‚¢ã‚¤ãƒ†ãƒ 
 	{
 		m_pData.push_back(new Data);
 		m_pData.back()->pItem = new ItemStop(pos);
 	}
 	else
 	{
+		// åˆã†ã‚¢ã‚¤ãƒ†ãƒ ãŒç„¡ã‹ã£ãŸå ´åˆã¯ä½•ã‚‚ã—ãªã„
 		return;
 	}
 
+	// ãƒ¢ãƒ‡ãƒ«ãƒãƒ³ãƒ‰ãƒ«ã®è¨­å®š
 	m_pData.back()->pItem->SetModelHandle(modelH);
+	// ã‚¢ã‚¤ãƒ†ãƒ ç•ªå·ã®è¨­å®š
 	m_pData.back()->index = createNum;
-	m_pData.back()->name = itemName;
+	// ç¨®é¡ã®è¨­å®š
+	m_pData.back()->kind = itemKind;
 }
 
 std::vector<std::string> SpownItem::Split(std::string& input, char delimiter)
 {
-	std::istringstream stream(input);
-	std::string filed;
-	std::vector<std::string> result;
+	std::istringstream stream(input);	// æ–‡å­—åˆ—ã‚¹ãƒˆãƒªãƒ¼ãƒ 
+	std::string filed;					// ä¸€æ™‚æ ¼ç´ç”¨æ–‡å­—åˆ— 
+	std::vector<std::string> result;	// åˆ†å‰²çµæœ
 
+	// æ–‡å­—åˆ—ã‚’åŒºåˆ‡ã‚Šæ–‡å­—(ã‚³ãƒ³ãƒ)ã§åˆ†å‰²ã™ã‚‹
 	while (getline(stream, filed, delimiter))
 	{
+		// åˆ†å‰²ã—ãŸæ–‡å­—ã®è¿½åŠ 
 		result.push_back(filed);
 	}
 

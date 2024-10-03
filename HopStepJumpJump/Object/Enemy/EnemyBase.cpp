@@ -1,4 +1,4 @@
-#include "EnemyBase.h"
+ï»¿#include "EnemyBase.h"
 
 #include "../Player/Player.h"
 
@@ -19,11 +19,11 @@ using namespace CharacterData;
 
 namespace
 {
-	constexpr int kDeadExistTime = 60;		// €‚ñ‚Å‚©‚çŠ®‘S‚ÉÁ‚¦‚é‚Ü‚Å‚ÌŠÔ
-	constexpr float kColHeight = -10.0f;	// “–‚½‚è”»’è‚Ì‚‚³
-	constexpr float kHeadPos = 20;			// “G‚Ì“ª‚ÌˆÊ’u
-	constexpr float kEndTime = 80;			// ƒQ[ƒ€I—¹‚µ‚Ä‚©‚ç‚ÌŠÔ
-	constexpr float kEndDeadTime = 200;		// ƒQ[ƒ€I—¹Œã‚ÉÁ‚¦‚Ä‚©‚ç‚ÌŠÔ
+	constexpr int kDeadExistTime = 60;		// æ­»ã‚“ã§ã‹ã‚‰å®Œå…¨ã«æ¶ˆãˆã‚‹ã¾ã§ã®æ™‚é–“
+	constexpr float kColHeight = -10.0f;	// å½“ãŸã‚Šåˆ¤å®šã®é«˜ã•
+	constexpr float kHeadPos = 20;			// æ•µã®é ­ã®ä½ç½®
+	constexpr float kEndTime = 80;			// ã‚²ãƒ¼ãƒ çµ‚äº†ã—ã¦ã‹ã‚‰ã®æ™‚é–“
+	constexpr float kEndDeadTime = 200;		// ã‚²ãƒ¼ãƒ çµ‚äº†å¾Œã«æ¶ˆãˆã¦ã‹ã‚‰ã®æ™‚é–“
 }
 
 EnemyBase::EnemyBase() :
@@ -36,11 +36,11 @@ EnemyBase::EnemyBase() :
 	m_endTime(std::make_shared<Time>(kEndTime)),
 	m_endDeadTime(std::make_shared<Time>(kEndDeadTime))
 {
+	// æƒ…å ±ã®åˆæœŸåŒ–
 	m_info.vec = VGet(0.0f, 0.0f, 0.0f);
 	m_info.rot = VGet(0.0f, 0.0f, 0.0f);
 	m_info.modelH = -1;
 	m_info.isExist = true;
-
 	m_statusData.spd = 0.0f;
 	m_objSize = 0.0f;
 }
@@ -55,12 +55,12 @@ EnemyBase::EnemyBase(VECTOR pos, float speed) :
 	m_endTime(std::make_shared<Time>(kEndTime)),
 	m_endDeadTime(std::make_shared<Time>(kEndDeadTime))
 {
+	// æƒ…å ±ã®åˆæœŸåŒ–
 	m_info.pos = pos;
 	m_info.vec = VGet(0.0f, 0.0f, 0.0f);
 	m_info.rot = VGet(0.0f, 0.0f, 0.0f);
 	m_info.modelH = -1;
 	m_info.isExist = true;
-
 	m_statusData.spd = 0.0f;
 	m_objSize = 0.0f;
 }
@@ -75,12 +75,12 @@ EnemyBase::EnemyBase(VECTOR pos, VECTOR direction, int turnTime, float speed) :
 	m_endTime(std::make_shared<Time>(kEndTime)),
 	m_endDeadTime(std::make_shared<Time>(kEndDeadTime))
 {
+	// æƒ…å ±ã®åˆæœŸåŒ–
 	m_info.pos = pos;
 	m_info.vec = VGet(0.0f, 0.0f, 0.0f);
 	m_info.rot = VGet(0.0f, 0.0f, 0.0f);
 	m_info.modelH = -1;
 	m_info.isExist = true;
-
 	m_statusData.spd = 0.0f;
 	m_objSize = 0.0f;
 }
@@ -88,118 +88,122 @@ EnemyBase::EnemyBase(VECTOR pos, VECTOR direction, int turnTime, float speed) :
 
 EnemyBase::~EnemyBase()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void EnemyBase::Init()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void EnemyBase::Update()
 {
 	if (m_isEnd)
 	{
-		// ˆÚ“®’l‚ğ0‚É‚·‚é
+		// ç§»å‹•å€¤ã‚’0ã«ã™ã‚‹
 		m_info.vec = VGet(0.0f, 0.0f, 0.0f);
 	}
 	else
 	{
-		// ˆÚ“®ƒxƒNƒgƒ‹‚ÌŒvZ
+		// ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«ã®è¨ˆç®—
 		m_info.vec = MoveUpdate();
 
-		// ƒ‚ƒfƒ‹XV
+		// ãƒ¢ãƒ‡ãƒ«æ›´æ–°
 		m_pModel->Update();
 
-		// ˆÚ“®ƒxƒNƒgƒ‹‚ğŒ»İÀ•W‚É‘«‚·
+		// ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç¾åœ¨åº§æ¨™ã«è¶³ã™
 		m_info.pos = VAdd(m_info.pos, m_info.vec);
 
-		// À•W‚Ìİ’è
+		// åº§æ¨™ã®è¨­å®š
 		m_pModel->SetPos(m_info.pos);
 
-		// Šp“xXV
+		// è§’åº¦æ›´æ–°
 		m_pModel->SetRot(VGet(0.0f, m_angle * DX_PI_F, 0.0f));
 	}
 }
 
 void EnemyBase::Draw(std::shared_ptr<ToonShader> pToonShader)
 {
-	// ƒ‚ƒfƒ‹‚Ì•`‰æ
+	// ãƒ¢ãƒ‡ãƒ«ã®æç”»
 	for (int i = 0; i < MV1GetTriangleListNum(m_pModel->GetModelHandle()); i++)
 	{
-		// ƒVƒF[ƒ_‚Ì’¸“_ƒ^ƒCƒv‚Ìæ“¾
+		// é ‚ç‚¹ã‚¿ã‚¤ãƒ—å–å¾—
 		int shaderType = MV1GetTriangleListVertexType(m_pModel->GetModelHandle(), i);
 
+		// ã‚·ã‚§ãƒ¼ãƒ€ã®è¨­å®š
 		pToonShader->SetShader(shaderType);
+		// æç”»
 		MV1DrawTriangleList(m_pModel->GetModelHandle(), i);
 	}
+	// ã‚·ã‚§ãƒ¼ãƒ€ã®ã‚’ä½¿ã‚ãªã„è¨­å®šã«æˆ»ã™
 	pToonShader->ShaderEnd();
 
-	// “–‚½‚è”»’è‚Ì•`‰æ
+	// å½“ãŸã‚Šåˆ¤å®šã®æç”»
 	m_pCircle->DebugDraw();
 }
 
 void EnemyBase::StageClear()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void EnemyBase::GameEnd()
 {
-	// ƒQ[ƒ€‚ÌI—¹ƒtƒ‰ƒO‚ğ—§‚Ä‚é
+	// ã‚²ãƒ¼ãƒ ã®çµ‚äº†ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
 	m_isEnd = true;
 
-	// ˆê’èŠÔ‚½‚Á‚½‚çÁ‚¦‚é
+	// ä¸€å®šæ™‚é–“ãŸã£ãŸã‚‰æ¶ˆãˆã‚‹
 	if (m_endTime->Update())
 	{
-		// ƒGƒtƒFƒNƒg‚ğ—¬‚·
+		// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’æµã™
 		Effekseer3DManager::GetInstance().Add("GameEndDead", 
 			Effekseer3DManager::PlayType::Normal, this, m_info.pos);
 
-		// €–Sˆ—
+		// æ­»äº¡å‡¦ç†
 		OnDead();
 
-		// “¯‚¶SE‚ª–Â‚Á‚Ä‚È‚©‚Á‚½ê‡
+		// åŒã˜SEãŒé³´ã£ã¦ãªã‹ã£ãŸå ´åˆ
 		if(!SoundManager::GetInstance().IsDesignationCheckPlaySound("EnemyEndDead"))
 		{
-			// SE‚ğ–Â‚ç‚·
+			// SEã‚’é³´ã‚‰ã™
 			SoundManager::GetInstance().Play("EnemyEndDead");
 			
 		}
 		
-		// ƒQ[ƒ€I—¹‚Ìˆ—‚ğI‚¦‚é
+		// ã‚²ãƒ¼ãƒ çµ‚äº†æ™‚ã®å‡¦ç†ã‚’çµ‚ãˆã‚‹
 		m_isGameEnd = true;
 	}	
 }
 
 void EnemyBase::OnDamage(VECTOR targetPos)
 {
+	// ã‚²ãƒ¼ãƒ çµ‚äº†æ™‚ã¯å‡¦ç†ã‚’ã—ãªã„
 	if (m_isEnd) return;
-	// ƒvƒŒƒCƒ„[‚ÌYˆÊ’u‚ª©•ª‚ÌˆÊ’u‚æ‚è’á‚©‚Á‚½ê‡
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®Yä½ç½®ãŒè‡ªåˆ†ã®ä½ç½®ã‚ˆã‚Šä½ã‹ã£ãŸå ´åˆ
 	if (targetPos.y <= m_info.pos.y + kHeadPos) return;
 
-	// UŒ‚‰¹‚ğ–Â‚ç‚·
+	// æ”»æ’ƒéŸ³ã‚’é³´ã‚‰ã™
 	SoundManager::GetInstance().Play("Attack");
 
-	// ƒGƒtƒFƒNƒg‚ğ—¬‚·
+	// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’æµã™
 	Effekseer3DManager::GetInstance().Add("EnemyDead"
 		, Effekseer3DManager::PlayType::Normal, this, m_info.pos);
 	
-	// €–Sˆ—
+	// æ­»äº¡å‡¦ç†
 	OnDead();
 }
 
 void EnemyBase::OnDead()
 {
-	// €–S‚µ‚½ƒtƒ‰ƒO‚ğ—§‚Ä‚é
+	// æ­»äº¡ã—ãŸãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
 	m_isDead = true;
-	// ‘¶İ‚ğÁ‚·
+	// å­˜åœ¨ã‚’æ¶ˆã™
 	m_info.isExist = false;
 }
 
 void EnemyBase::InitMoveSpeed(float moveSpeed)
 {
-	// ˆÚ“®‘¬“x‚Ì‰Šú‰»
+	// ç§»å‹•é€Ÿåº¦ã®åˆæœŸåŒ–
 	m_moveData.walkSpeed = moveSpeed;
 	m_moveData.runSpeed = 0.0f;
 	m_moveData.acceleration = 0.0f;
@@ -207,22 +211,22 @@ void EnemyBase::InitMoveSpeed(float moveSpeed)
 
 void EnemyBase::AngleUpdate()
 {
-	// atan2‚ÅŠp“x‚ÌŒvZ‚ğ‚·‚éˆ×Z²‚ğ”½“]‚·‚é
+	// atan2ã§è§’åº¦ã®è¨ˆç®—ã‚’ã™ã‚‹ç‚ºZè»¸ã‚’åè»¢ã™ã‚‹
 	float angleZ = m_moveDirectionVec.z * -1;
-	//Œü‚«‚½‚¢•ûŒü‚Ìİ’è
+	//å‘ããŸã„æ–¹å‘ã®è¨­å®š
 	float nextAngle = atan2(m_moveDirectionVec.x, angleZ);
 
-	//ŠŠ‚ç‚©‚Éw’è‚µ‚½•ûŒü‚ÉŒü‚­
+	//æ»‘ã‚‰ã‹ã«æŒ‡å®šã—ãŸæ–¹å‘ã«å‘ã
 	SmoothAngle(m_angle, nextAngle);
 }
 
 void EnemyBase::MoveDirectionUpdate()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 VECTOR EnemyBase::MoveUpdate()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 	return VGet(0.0f, 0.0f, 0.0f);
 }

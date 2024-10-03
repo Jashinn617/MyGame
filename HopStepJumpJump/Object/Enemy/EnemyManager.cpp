@@ -1,4 +1,4 @@
-#include "EnemyManager.h"
+ï»¿#include "EnemyManager.h"
 #include "EnemyBase.h"
 #include "SpownEnemy.h"
 
@@ -9,8 +9,8 @@
 
 namespace
 {
-	// ƒXƒ|[ƒ“ƒtƒ@ƒCƒ‹–¼
-	const char* const kSpownFile[static_cast<int>(Game::Stage::StageNum)] =
+	// æ•µãƒ‡ãƒ¼ã‚¿csvãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹
+	const char* const kCsvDataFile[static_cast<int>(Game::Stage::StageNum)] =
 	{
 		"Data/File/Enemy/TestEnemySpown.csv",
 		"Data/File/Enemy/Stage1EnemySpown.csv",
@@ -20,29 +20,30 @@ namespace
 }
 
 
-EnemyManager::EnemyManager(Game::Stage stage, ObjectManager* pObjectManager):
+EnemyManager::EnemyManager(Game::Stage stageKind, ObjectManager* pObjectManager):
 	m_pObjectManager(pObjectManager)
 {
-	// ƒŒƒxƒ‹‚É‚æ‚Á‚ÄoŒ»‚·‚é“G‚ğ•Ï‚¦‚é
-	m_pSpown = std::make_shared<SpownEnemy>(kSpownFile[static_cast<int>(stage)], m_pObjectManager);
+	// ã‚¹ãƒ†ãƒ¼ã‚¸ã«ã‚ˆã£ã¦å‡ºç¾ã™ã‚‹æ•µã‚’å¤‰ãˆã‚‹
+	m_pSpown = std::make_shared<SpownEnemy>(kCsvDataFile[static_cast<int>(stageKind)], m_pObjectManager);
 }
 
 EnemyManager::~EnemyManager()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void EnemyManager::Init()
 {
+	// æ•µã‚’å‡ºç¾ã•ã›ã‚‹
 	m_pSpown->Spown();
 }
 
 void EnemyManager::Update()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void EnemyManager::Draw()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }

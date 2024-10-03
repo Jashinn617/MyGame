@@ -1,4 +1,4 @@
-#include "EnemyBee.h"
+ï»¿#include "EnemyBee.h"
 
 #include "../Circle.h"
 #include "../Model.h"
@@ -10,67 +10,73 @@
 
 namespace
 {
-	constexpr float kModelScalse = 0.3f;	// ƒ‚ƒfƒ‹ƒXƒP[ƒ‹
-	constexpr float kEnemySize = 20;		// ƒTƒCƒY
-	constexpr float kHeight = 20.0f;		// ‚‚³
+	constexpr float kModelScalse = 0.3f;	// ãƒ¢ãƒ‡ãƒ«ã‚¹ã‚±ãƒ¼ãƒ«
+	constexpr float kEnemySize = 20;		// ã‚µã‚¤ã‚º
+	constexpr float kHeight = 20.0f;		// é«˜ã•
 }
 
 EnemyBee::EnemyBee(VECTOR pos, VECTOR direction, int turnTime, float speed)
 {
-	// ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì‰Šú‰»
+	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®åˆæœŸåŒ–
 	CsvLoad::GetInstance().AnimLoad(m_animData, "Bee");
 
+	// åˆæœŸåº§æ¨™è¨­å®š
 	m_info.pos = pos;
-	// ƒTƒCƒY
-	m_objSize = kEnemySize;
-	m_pCircle = std::make_shared<Circle>(m_info.pos, kEnemySize, kHeight);
+	// åˆæœŸè§’åº¦è¨­å®š
 	m_info.rot = VGet(0.0f, 0.0f, 0.0f);
+	// ã‚µã‚¤ã‚ºè¨­å®š
+	m_objSize = kEnemySize;
+	// å½“ãŸã‚Šåˆ¤å®šã®å††ã®ä½œæˆ
+	m_pCircle = std::make_shared<Circle>(m_info.pos, kEnemySize, kHeight);
 
-	// ƒ^[ƒ“‚·‚é‚Ü‚Å‚ÌŠÔ
+	// åè»¢ã™ã‚‹ã¾ã§ã®æ™‚é–“
 	m_turnTime = std::make_shared<Time>(turnTime);
 
+	// é€Ÿåº¦ã®åˆæœŸåŒ–
 	InitMoveSpeed(m_statusData.spd);
 	m_moveSpeed = speed;
+	// ç§»å‹•æ–¹å‘ã®åˆæœŸåŒ–
 	m_moveDirectionVec = direction;
 	m_moveDirectionVec = VScale(direction, m_moveSpeed);
 }
 
 EnemyBee::~EnemyBee()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void EnemyBee::Init()
 {
-	// ƒ‚ƒfƒ‹ƒ|ƒCƒ“ƒ^‚Ìì¬
+	// ãƒ¢ãƒ‡ãƒ«ãƒã‚¤ãƒ³ã‚¿ä½œæˆ
 	m_pModel = std::make_shared<Model>(m_modelH);
-	// ƒAƒjƒ[ƒVƒ‡ƒ“‚Ìİ’è
+	// ãƒ¢ãƒ‡ãƒ«ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³è¨­å®š
 	m_pModel->SetAnim(m_animData.idle, true, true);
-	// ƒXƒP[ƒ‹‚Ìİ’è
+	// ãƒ¢ãƒ‡ãƒ«ã‚¹ã‚±ãƒ¼ãƒ«è¨­å®š
 	m_pModel->SetScale(VGet(kModelScalse, kModelScalse, kModelScalse));
-	// Šp“x‚Ì‰Šú‰»
+	// ãƒ¢ãƒ‡ãƒ«è§’åº¦åˆæœŸåŒ–
 	m_pModel->SetRot(m_info.rot);
-	// À•W‚Ì‰Šú‰»
+	// ãƒ¢ãƒ‡ãƒ«åº§æ¨™åˆæœŸåŒ–
 	m_pModel->SetPos(m_info.pos);
 }
 
 void EnemyBee::MoveDirectionUpdate()
 {
-	// w’èŠÔŒo‰ß‚µ‚½‚ç•ûŒü‚ğ”½“]‚·‚é
+	// æŒ‡å®šæ™‚é–“çµŒéã—ãŸã‚‰æ–¹å‘ã‚’åè»¢ã™ã‚‹
 	if (m_turnTime->Update())
 	{
 		m_moveDirectionVec = VScale(m_moveDirectionVec, -1);
+		// ã‚¿ã‚¤ãƒ ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹
 		m_turnTime->Reset();
 	}
-	// Y²‚ğÈ‚­
+	// Yè»¸ã‚’çœã
 	m_moveDirectionVec.y = 0.0f;
 }
 
 VECTOR EnemyBee::MoveUpdate()
 {
-	// ˆÚ“®•ûŒü‚ÌXV
+	// ç§»å‹•æ–¹å‘ã®æ›´æ–°
 	MoveDirectionUpdate();
-	// Šp“xXV
+	// è§’åº¦æ›´æ–°
 	AngleUpdate();
 
 	return m_moveDirectionVec;

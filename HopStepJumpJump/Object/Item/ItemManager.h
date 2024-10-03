@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "DxLib.h"
 #include "../../Util/Game.h"
 
@@ -6,45 +6,56 @@
 #include <memory>
 #include <array>
 
-class ItemBase;
 class SpownItem;
-class ObjectBase;
-class Player;
 class ObjectManager;
 class CountGetItem;
-class Time;
 
 class ItemManager
 {
 public:
-	ItemManager(Game::Stage stage, ObjectManager* pObjectManager);
+	/// <summary>
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// </summary>
+	/// <param name="stageKind">ã‚¹ãƒ†ãƒ¼ã‚¸ã®ç¨®é¡</param>
+	/// <param name="pObjectManager"></param>
+	ItemManager(Game::Stage stageKind, ObjectManager* pObjectManager);
 
+	/// <summary>
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// </summary>
 	~ItemManager();
 
+	/// <summary>
+	/// åˆæœŸåŒ–
+	/// </summary>
 	void Init();
+
+	/// <summary>
+	/// æ›´æ–°
+	/// </summary>
 	void Update();
+
+	/// <summary>
+	/// æç”»
+	/// </summary>
 	void Draw();
 
 	/// <summary>
-	/// ƒAƒCƒeƒ€‚Ìæ“¾”‚Ì’Ç‰Á
+	/// ã‚¢ã‚¤ãƒ†ãƒ ã®å–å¾—æ•°ã®è¿½åŠ 
 	/// </summary>
 	void AddGetNum();
 
-	// ƒAƒCƒeƒ€‚Ìæ“¾”—p‚Ìƒ|ƒCƒ“ƒ^‚Ìæ“¾
-	const std::shared_ptr<CountGetItem> GetCountItem()const { return m_pCountGetItem; }
-
 	/// <summary>
-	/// ƒNƒŠƒAó‘Ô‚©‚Ç‚¤‚©
+	/// ã‚¯ãƒªã‚¢çŠ¶æ…‹ã‹ã©ã†ã‹
 	/// </summary>
 	/// <returns></returns>
 	bool IsClear()const { return m_isClear; }
 
 private:
-	bool m_isSpown;		// ƒAƒCƒeƒ€‚ğoŒ»‚³‚¹‚é‚©‚Ç‚¤‚©
-	bool m_isClear;		// ƒNƒŠƒA‚µ‚½‚©‚Ç‚¤‚©
-	ObjectManager* m_pObjectManager;	// ƒIƒuƒWƒFƒNƒgƒ}ƒl[ƒWƒƒ[‚Ìƒ|ƒCƒ“ƒ^
-	std::shared_ptr<CountGetItem> m_pCountGetItem;	// ƒAƒCƒeƒ€‚Ìæ“¾”
-	std::shared_ptr<SpownItem> m_pSpown;	// ƒAƒCƒeƒ€‚ÌoŒ»
-
+	bool m_isSpown;									// ã‚¢ã‚¤ãƒ†ãƒ ã‚’å‡ºç¾ã•ã›ã‚‹ã‹ã©ã†ã‹
+	bool m_isClear;									// ã‚¯ãƒªã‚¢ã—ãŸã‹ã©ã†ã‹
+	ObjectManager* m_pObjectManager;				// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã®ãƒã‚¤ãƒ³ã‚¿
+	std::shared_ptr<CountGetItem> m_pCountGetItem;	// ã‚¢ã‚¤ãƒ†ãƒ ã®å–å¾—æ•°
+	std::shared_ptr<SpownItem> m_pSpown;			// ã‚¢ã‚¤ãƒ†ãƒ ã®å‡ºç¾
 };
 

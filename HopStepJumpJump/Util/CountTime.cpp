@@ -38,7 +38,7 @@ namespace
 	constexpr int kSecondSecondPosX = static_cast<int>(Game::kScreenWidth * 0.55f);	// X
 	constexpr int kSecondSecondPosY = 230;	// Y
 
-	constexpr float kFontSize = 0.5f;	// 文字サイズ
+	constexpr float kImgSize = 0.5f;	// 文字サイズ
 }
 
 CountTime::CountTime():
@@ -72,7 +72,7 @@ void CountTime::Draw()
 {
 	// 画像の描画
 	DrawRotaGraph(kImagePosX1, kImagePosY1,
-		kFontSize, 0.0f,
+		kImgSize, 0.0f,
 		m_H, true);
 
 	// 現在の秒数計算
@@ -84,10 +84,10 @@ void CountTime::Draw()
 	int minutesTimeSecond = minutesTime / 10;	// 十の位
 
 	DrawRotaGraph(kMinutesFirstPosX, kMinutesFirstPosY,
-		kFontSize, 0.0f,
+		kImgSize, 0.0f,
 		m_numberH[minutesTimeFirst], true);
 	DrawRotaGraph(kMinutesSecondPosX, kMinutesSecondPosY,
-		kFontSize, 0.0f,
+		kImgSize, 0.0f,
 		m_numberH[minutesTimeSecond], true);
 
 	// 秒数の計算と描画
@@ -96,9 +96,9 @@ void CountTime::Draw()
 	int secondTimeSecond = secondTime / 10;	// 十の位
 
 	DrawRotaGraph(kSecondFirstPosX, kSecondFirstPosY,
-		kFontSize, 0.0f,
+		kImgSize, 0.0f,
 		m_numberH[secondTimeFirst], true);
 	DrawRotaGraph(kSecondSecondPosX, kSecondSecondPosY,
-		kFontSize, 0.0f,
+		kImgSize, 0.0f,
 		m_numberH[secondTimeSecond], true);
 }

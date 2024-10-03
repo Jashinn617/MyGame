@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="ソース ファイル\Stage">
-      <UniqueIdentifier>{598ec33a-47c7-4cc4-b682-ca833d526b31}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Util">
       <UniqueIdentifier>{5dc3560a-f048-47a4-bc65-028c4abd2ba1}</UniqueIdentifier>
     </Filter>
@@ -177,15 +174,6 @@
     <ClCompile Include="Scene\StageSceneManager.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Image\FadeImage.cpp">
-      <Filter>ソース ファイル\Image</Filter>
-    </ClCompile>
-    <ClCompile Include="Image\Image.cpp">
-      <Filter>ソース ファイル\Image</Filter>
-    </ClCompile>
-    <ClCompile Include="Image\ImageBase.cpp">
-      <Filter>ソース ファイル\Image</Filter>
-    </ClCompile>
     <ClCompile Include="Shader\ShadowMapShader.cpp">
       <Filter>ソース ファイル\Shader</Filter>
     </ClCompile>
@@ -196,9 +184,6 @@
       <Filter>ソース ファイル\Util</Filter>
     </ClCompile>
     <ClCompile Include="Object\Item\CountGetItem.cpp">
-      <Filter>ソース ファイル\Object\Item</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\Item\ItemRotate.cpp">
       <Filter>ソース ファイル\Object\Item</Filter>
     </ClCompile>
     <ClCompile Include="Object\Item\ItemStop.cpp">
@@ -225,20 +210,17 @@
     <ClCompile Include="Object\Enemy\EnemySkull.cpp">
       <Filter>ソース ファイル\Object\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Image\ExpansionImage.cpp">
-      <Filter>ソース ファイル\Util</Filter>
-    </ClCompile>
     <ClCompile Include="Util\Ranking.cpp">
       <Filter>ソース ファイル\Util</Filter>
     </ClCompile>
     <ClCompile Include="Util\SaveData.cpp">
       <Filter>ソース ファイル\Util</Filter>
     </ClCompile>
-    <ClCompile Include="Object\Enemy\SpownEnemy.cpp">
-      <Filter>ソース ファイル\Util</Filter>
-    </ClCompile>
     <ClCompile Include="Util\TutorialUI.cpp">
       <Filter>ソース ファイル\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Enemy\SpownEnemy.cpp">
+      <Filter>ソース ファイル\Object\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -344,15 +326,6 @@
     <ClInclude Include="Util\Vec2.h">
       <Filter>ヘッダー ファイル\Util</Filter>
     </ClInclude>
-    <ClInclude Include="Image\FadeImage.h">
-      <Filter>ヘッダー ファイル\Image</Filter>
-    </ClInclude>
-    <ClInclude Include="Image\Image.h">
-      <Filter>ヘッダー ファイル\Image</Filter>
-    </ClInclude>
-    <ClInclude Include="Image\ImageBase.h">
-      <Filter>ヘッダー ファイル\Image</Filter>
-    </ClInclude>
     <ClInclude Include="Shader\ShadowMapShader.h">
       <Filter>ヘッダー ファイル\Shader</Filter>
     </ClInclude>
@@ -363,9 +336,6 @@
       <Filter>ヘッダー ファイル\Util</Filter>
     </ClInclude>
     <ClInclude Include="Object\Item\CountGetItem.h">
-      <Filter>ヘッダー ファイル\Object\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\Item\ItemRotate.h">
       <Filter>ヘッダー ファイル\Object\Item</Filter>
     </ClInclude>
     <ClInclude Include="Object\Item\ItemStop.h">
@@ -390,9 +360,6 @@
       <Filter>ヘッダー ファイル\Util</Filter>
     </ClInclude>
     <ClInclude Include="Util\SaveData.h">
-      <Filter>ヘッダー ファイル\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Image\ExpansionImage.h">
       <Filter>ヘッダー ファイル\Util</Filter>
     </ClInclude>
     <ClInclude Include="Util\TutorialUI.h">

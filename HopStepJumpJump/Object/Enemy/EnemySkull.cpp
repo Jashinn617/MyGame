@@ -1,4 +1,4 @@
-#include "EnemySkull.h"
+﻿#include "EnemySkull.h"
 
 #include "../Circle.h"
 #include "../Model.h"
@@ -13,59 +13,66 @@
 
 namespace
 {
-	constexpr float kModelScalse = 0.3f;	// ���f���X�P�[��
-	constexpr float kEnemySize = 20;	// �T�C�Y
-	constexpr float kHeight = 20.0f;	// ����
+	constexpr float kModelScalse = 0.3f;	// モデルスケール
+	constexpr float kEnemySize = 20;		// サイズ
+	constexpr float kHeight = 20.0f;		// 高さ
 }
 
 EnemySkull::EnemySkull(VECTOR pos, float speed)
 {
-	// �A�j���[�V�����̏�����
+	// アニメーションの初期化
 	CsvLoad::GetInstance().AnimLoad(m_animData, "Skull");
 
+	// 情報初期化
 	m_info.pos = pos;
-	// �T�C�Y
-	m_objSize = kEnemySize;
-	m_pCircle = std::make_shared<Circle>(m_info.pos, kEnemySize, kHeight);
+	// 初期角度設定
 	m_info.rot = VGet(0.0f, 0.0f, 0.0f);
-
+	// サイズ設定
+	m_objSize = kEnemySize;
+	// 当たり判定の円の作成
+	m_pCircle = std::make_shared<Circle>(m_info.pos, kEnemySize, kHeight);
+	// 速度の初期化
 	InitMoveSpeed(m_statusData.spd);
 	m_moveSpeed = speed;
 }
 
 EnemySkull::~EnemySkull()
 {
-	/*��������*/
+	/*処理無し*/
 }
 
 void EnemySkull::Init()
 {
+	// モデルポインタ作成
 	m_pModel = std::make_shared<Model>(m_modelH);
+	// モデルアニメーション設定
 	m_pModel->SetAnim(m_animData.idle, true, true);
+	// モデルスケール設定
 	m_pModel->SetScale(VGet(kModelScalse, kModelScalse, kModelScalse));
+	// モデル角度初期化
 	m_pModel->SetRot(m_info.rot);
+	// モデル座標初期化
 	m_pModel->SetPos(m_info.pos);
 }
 
 void EnemySkull::MoveDirectionUpdate()
 {
-	// �v���C���[�̂�������ɐi��
+	/*プレイヤーのいる方向に向けて進む*/
+	// プレイヤーまでのベクトルを計算する
 	m_enemyToPlayerVec = VSub(m_pObjectManager->GetPlayer()->GetInfo().pos, m_info.pos);
+	// 正規化
 	m_moveDirectionVec = VNorm(m_enemyToPlayerVec);
 }
 
 VECTOR EnemySkull::MoveUpdate()
 {
-	// �ړ������̍X�V
+	// 移動方向の更新
 	MoveDirectionUpdate();
-	// �p�x�̍X�V
+	// 角度の更新
 	AngleUpdate();
 
-	// �ړ��x�N�g���̐���
-	VECTOR move = VNorm(m_moveDirectionVec);
+	// 移動方向に速度をかける
+	m_moveDirectionVec = VScale(m_moveDirectionVec, m_moveSpeed);
 
-	move.x *= m_moveSpeed;
-	move.z *= m_moveSpeed;
-
-	return move;
+	return m_moveDirectionVec;
 }

@@ -1,4 +1,4 @@
-#include "ItemManager.h"
+ï»¿#include "ItemManager.h"
 #include "ItemBase.h"
 #include "SpownItem.h"
 #include "CountGetItem.h"
@@ -10,8 +10,8 @@
 
 namespace
 {
-	// ƒXƒ|[ƒ“ƒtƒ@ƒCƒ‹–¼
-	const char* const kSpownFile[static_cast<int>(Game::Stage::StageNum)] =
+	// ã‚¢ã‚¤ãƒ†ãƒ ãƒ‡ãƒ¼ã‚¿csvãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹
+	const char* const kCsvDataFile[static_cast<int>(Game::Stage::StageNum)] =
 	{
 		"Data/File/Item/TestItemSpown.csv",
 		"Data/File/Item/Stage1ItemSpown.csv",
@@ -20,53 +20,49 @@ namespace
 	};
 }
 
-ItemManager::ItemManager(Game::Stage stage, ObjectManager* pObjectManager):
+ItemManager::ItemManager(Game::Stage stageKind, ObjectManager* pObjectManager):
 	m_isSpown(true),
 	m_isClear(false),
 	m_pObjectManager(pObjectManager)
 {
-	// ƒŒƒxƒ‹‚É‚æ‚Á‚ÄoŒ»‚·‚éƒAƒCƒeƒ€‚ğ•Ï‚¦‚é
-	m_pSpown = std::make_shared<SpownItem>(kSpownFile[static_cast<int>(stage)], m_pObjectManager);
+	// ã‚¹ãƒ†ãƒ¼ã‚¸ã«ã‚ˆã£ã¦å‡ºç¾ã™ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã‚’å¤‰ãˆã‚‹
+	m_pSpown = std::make_shared<SpownItem>(kCsvDataFile[static_cast<int>(stageKind)], m_pObjectManager);
 
-	// ƒ`ƒ…[ƒgƒŠƒAƒ‹‚ÍŒã‚©‚çƒAƒCƒeƒ€‚ğo‚·
-	if (stage == Game::Stage::Tutorial)
-	{
-		m_isSpown = false;
-	}
-
+	// ã‚¢ã‚¤ãƒ†ãƒ ã®å–å¾—æ•°ãƒã‚¤ãƒ³ã‚¿ã®è¨­å®š
 	m_pCountGetItem = std::make_shared<CountGetItem>(m_pSpown->GetItemNum());
 }
 
 ItemManager::~ItemManager()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void ItemManager::Init()
 {
+	// å‡ºç¾
 	m_pSpown->Spown();
 }
 
 void ItemManager::Update()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void ItemManager::Draw()
 {
+	// æç”»
 	m_pCountGetItem->Draw();
 }
 
 void ItemManager::AddGetNum()
 {
-	// æ“¾”‚Ì’Ç‰Á
+	// å–å¾—æ•°ã®è¿½åŠ 
 	m_pCountGetItem->Add();
 
-	// ‘S‚Äæ‚Á‚½ê‡
+	// å…¨ã¦å–ã£ãŸå ´åˆ
 	if (m_pCountGetItem->IsCountMax())
 	{
-		// ƒNƒŠƒA
+		// ã‚¯ãƒªã‚¢
 		m_isClear = true;
 	}
-
 }
