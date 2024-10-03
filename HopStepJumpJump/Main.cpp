@@ -1,4 +1,4 @@
-#include "DxLib.h"
+ï»¿#include "DxLib.h"
 #include "EffekseerForDXLib.h"
 
 #include "Util/Game.h"
@@ -10,103 +10,103 @@
 
 #include <memory>
 
-// ƒvƒƒOƒ‰ƒ€‚Í WinMain ‚©‚çn‚Ü‚è‚Ü‚·
+// ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã¯ WinMain ã‹ã‚‰å§‹ã¾ã‚Šã¾ã™
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	// windowƒ‚[ƒhİ’è
+	// windowãƒ¢ãƒ¼ãƒ‰è¨­å®š
 	ChangeWindowMode(true);
 
-	// ƒ_ƒuƒ‹ƒoƒbƒtƒ@ƒ‚[ƒh
+	// ãƒ€ãƒ–ãƒ«ãƒãƒƒãƒ•ã‚¡ãƒ¢ãƒ¼ãƒ‰
 	SetDrawScreen(DX_SCREEN_BACK);
 
-	// ƒQ[ƒ€ƒo[‚Ìƒ^ƒCƒgƒ‹‚Ìİ’è
+	// ã‚²ãƒ¼ãƒ ãƒãƒ¼ã®ã‚¿ã‚¤ãƒˆãƒ«ã®è¨­å®š
 	SetWindowText(Game::kTitleText);
 
-	// ƒXƒNƒŠ[ƒ“ƒTƒCƒY‚Ìİ’è
+	// ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã‚µã‚¤ã‚ºã®è¨­å®š
 	ChangeWindowMode(Game::kWindowMode);
 	SetGraphMode(Game::kScreenWidth, Game::kScreenHeight, Game::kColorDepth);	
 
-	if (DxLib_Init() == -1)		// ‚c‚wƒ‰ƒCƒuƒ‰ƒŠ‰Šú‰»ˆ—
+	if (DxLib_Init() == -1)		// ï¼¤ï¼¸ãƒ©ã‚¤ãƒ–ãƒ©ãƒªåˆæœŸåŒ–å‡¦ç†
 	{
-		return -1;			// ƒGƒ‰[‚ª‹N‚«‚½‚ç’¼‚¿‚ÉI—¹
+		return -1;			// ã‚¨ãƒ©ãƒ¼ãŒèµ·ããŸã‚‰ç›´ã¡ã«çµ‚äº†
 	}
 
-	// Effekseer‚Ì‰Šú‰»
+	// Effekseerã®åˆæœŸåŒ–
 	Effekseer_Init(8000);
 
-	// ƒtƒ‹ƒXƒNƒŠ[ƒ“ƒEƒCƒ“ƒhƒE‚ÌØ‚è‘Ö‚¦‚ÅƒŠƒ\[ƒX‚ªÁ‚¦‚é‚Ì‚ğ–h‚®
+	// ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦ã®åˆ‡ã‚Šæ›¿ãˆã§ãƒªã‚½ãƒ¼ã‚¹ãŒæ¶ˆãˆã‚‹ã®ã‚’é˜²ã
 	SetChangeScreenModeGraphicsSystemResetFlag(false);
 
-	// DXƒ‰ƒCƒuƒ‰ƒŠ‚ÌƒfƒoƒCƒXƒƒXƒg‚µ‚½‚ÌƒR[ƒ‹ƒoƒbƒN‚ğİ’è‚·‚é
+	// DXãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ãƒ‡ãƒã‚¤ã‚¹ãƒ­ã‚¹ãƒˆã—ãŸæ™‚ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’è¨­å®šã™ã‚‹
 	Effekseer_SetGraphicsDeviceLostCallbackFunctions();
 
-	// Zƒoƒbƒtƒ@‚ğg—p‚·‚é
+	// Zãƒãƒƒãƒ•ã‚¡ã‚’ä½¿ç”¨ã™ã‚‹
 	SetUseZBuffer3D(true);
-	// Zƒoƒbƒtƒ@‚Ö‚Ì‘‚«‚İ‚ğs‚¤
+	// Zãƒãƒƒãƒ•ã‚¡ã¸ã®æ›¸ãè¾¼ã¿ã‚’è¡Œã†
 	SetWriteZBuffer3D(true);
 
-	// ƒ|ƒŠƒSƒ“‚Ì— ‘¤‚Í•`‰æ‚µ‚È‚¢
+	// ãƒãƒªã‚´ãƒ³ã®è£å´ã¯æç”»ã—ãªã„
 	SetUseBackCulling(true);
 
-	//// ƒGƒtƒFƒNƒg‚Ìƒ[ƒh
+	//// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®ãƒ­ãƒ¼ãƒ‰
 	Effekseer3DManager::GetInstance();
-	// ƒTƒEƒ“ƒh‚Ìƒ[ƒh
+	// ã‚µã‚¦ãƒ³ãƒ‰ã®ãƒ­ãƒ¼ãƒ‰
 	SoundManager::GetInstance();
 
-	// ƒ‰ƒCƒg‚Ìİ’è
+	// ãƒ©ã‚¤ãƒˆã®è¨­å®š
 	SetLightPosition(Game::kLightPos);
 	SetLightDirection(Game::kLightDir);
 
-	// ƒAƒXƒyƒNƒg”ä‚Ìİ’è
+	// ã‚¢ã‚¹ãƒšã‚¯ãƒˆæ¯”ã®è¨­å®š
 	SetCameraDotAspect(Game::kAspect);
-	// ƒJƒƒ‰‚Ì‹–ìŠp‚Ìİ’è
+	// ã‚«ãƒ¡ãƒ©ã®è¦–é‡è§’ã®è¨­å®š
 	SetupCamera_Perspective(Game::kFov);
 
-	// ƒV[ƒ“ŠÇ—
+	// ã‚·ãƒ¼ãƒ³ç®¡ç†
 	std::shared_ptr<SceneManager> pScene = std::make_shared<SceneManager>();
 
-	// ‰Šú‰»
+	// åˆæœŸåŒ–
 	pScene->Init();
 
 	
 	while (ProcessMessage() == 0)
 	{
-		// ‚±‚ÌƒtƒŒ[ƒ€‚ÌŠJn‚ğŠo‚¦‚Ä‚¨‚­
+		// ã“ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã®é–‹å§‹æ™‚åˆ»ã‚’è¦šãˆã¦ãŠã
 		LONGLONG time = GetNowHiPerformanceCount();
 
-		// •`‰æ‚ğs‚¤‘O‚É‰æ–Ê‚ğƒNƒŠƒA‚·‚é
+		// æç”»ã‚’è¡Œã†å‰ã«ç”»é¢ã‚’ã‚¯ãƒªã‚¢ã™ã‚‹
 		ClearDrawScreen();
 
-		// ƒQ[ƒ€‚Ìˆ—
-		// ƒV[ƒ“‚ª‘¶İ‚µ‚Ä‚¢‚È‚©‚Á‚½‚ç‹­§I—¹‚·‚é
+		// ã‚²ãƒ¼ãƒ ã®å‡¦ç†
+		// ã‚·ãƒ¼ãƒ³ãŒå­˜åœ¨ã—ã¦ã„ãªã‹ã£ãŸã‚‰å¼·åˆ¶çµ‚äº†ã™ã‚‹
 		if(!pScene->Update()) break;
-		// •`‰æ
+		// æç”»
 		pScene->Draw();
 
-		// ƒGƒtƒFƒNƒg‚ÌXVA•`‰æ
+		// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®æ›´æ–°ã€æç”»
 		Effekseer3DManager::GetInstance().Update();
 		Effekseer3DManager::GetInstance().Draw();
 
-		// ‰æ–Ê‚ªØ‚è‘Ö‚í‚é‚Ì‚ğ‘Ò‚Â
+		// ç”»é¢ãŒåˆ‡ã‚Šæ›¿ã‚ã‚‹ã®ã‚’å¾…ã¤
 		ScreenFlip();
 
-		// escƒL[‚ğ‰Ÿ‚µ‚½‚çI—¹‚·‚é
+		// escã‚­ãƒ¼ã‚’æŠ¼ã—ãŸã‚‰çµ‚äº†ã™ã‚‹
 		if (CheckHitKey(KEY_INPUT_ESCAPE))	break;
 
-		// fps‚ğ60‚ÉŒÅ’è
+		// fpsã‚’60ã«å›ºå®š
 		while (GetNowHiPerformanceCount() - time < 16667)
 		{
 		}
 	}
 
-	// ƒV[ƒ“‚ÌI—¹ˆ—
+	// ã‚·ãƒ¼ãƒ³ã®çµ‚äº†å‡¦ç†
 	pScene->End();
 
-	// Effekseer‚ÌI—¹ˆ—
+	// Effekseerã®çµ‚äº†å‡¦ç†
 	Effkseer_End();	
-	// ‚c‚wƒ‰ƒCƒuƒ‰ƒŠg—p‚ÌI—¹ˆ—
+	// ï¼¤ï¼¸ãƒ©ã‚¤ãƒ–ãƒ©ãƒªä½¿ç”¨ã®çµ‚äº†å‡¦ç†
 	DxLib_End();
 
-	// ƒ\ƒtƒg‚ÌI—¹ 
+	// ã‚½ãƒ•ãƒˆã®çµ‚äº† 
 	return 0;				
 }
