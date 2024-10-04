@@ -78,7 +78,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		ClearDrawScreen();
 
 		// ゲームの処理
-		// シーンが存在していなかったら強制終了する
+		// シーンポインタがnullだったら強制終了する
 		if(!pScene->Update()) break;
 		// 描画
 		pScene->Draw();

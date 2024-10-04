@@ -59,7 +59,7 @@ public:
 	/// <summary>
 	/// ゲーム終了時処理
 	/// </summary>
-	void GameEnd() override final;
+	void StageEnd() override final;
 
 	/// <summary>
 	/// ダメージ処理

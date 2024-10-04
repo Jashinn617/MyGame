@@ -1,92 +1,70 @@
-#include "CharacterBase.h"
+ï»¿#include "CharacterBase.h"
 #include "Circle.h"
 
 #include "Item/ItemBase.h"
 
-
 namespace
 {
-	constexpr int kMaxColHitPolyNum = 2000;	// Å‘å“–‚½‚è”»’èƒ|ƒŠƒSƒ“”
-	constexpr int kMaxColHitTryNum = 16;	// •Ç‚É‰Ÿ‚µo‚·ˆ—‚ÌÅ‘ås‰ñ”
-	constexpr float kColHitSlideLength = 1.0f;	// •Ç‰Ÿ‚µo‚µ‚ÉƒXƒ‰ƒCƒh‚³‚¹‚é‹——£
-	constexpr float kGravity = 0.8f;	// d—Í
-	constexpr float kFallMaxSpeed = -15.0f;	// Å‘å—‰º‘¬“x
-	constexpr float kChangeAngleSpeed = 0.25f;	// ŠŠ‚ç‚©‚ÉŠp“x‚ğˆÚ“®‚³‚¹‚é‘¬“x
-	constexpr float kAngleDiffMax = DX_PI_F + 0.3f;	// Šp“x‚ÌÅ‘å·
-	constexpr float kAngleDiffMin = -DX_PI_F - 0.3f;	// Šp“x‚ÌÅ¬·
-	constexpr float kSlideLength = 10.0f;	// ‰Ÿ‚µo‚µ‚Ì‘å‚«‚³	
+	constexpr int kMaxColHitPolyNum = 2000;				// æœ€å¤§å½“ãŸã‚Šåˆ¤å®šãƒãƒªã‚´ãƒ³æ•°
+	constexpr int kMaxColHitTryNum = 16;				// å£ã«æŠ¼ã—å‡ºã™å‡¦ç†ã®æœ€å¤§è©¦è¡Œå›æ•°
+	constexpr float kColHitSlideLength = 1.0f;			// å£æŠ¼ã—å‡ºã—æ™‚ã«ã‚¹ãƒ©ã‚¤ãƒ‰ã•ã›ã‚‹è·é›¢
+	constexpr float kGravity = 0.8f;					// é‡åŠ›
+	constexpr float kFallMaxSpeed = -15.0f;				// æœ€å¤§è½ä¸‹é€Ÿåº¦
+	constexpr float kChangeAngleSpeed = 0.25f;			// æ»‘ã‚‰ã‹ã«è§’åº¦ã‚’ç§»å‹•ã•ã›ã‚‹é€Ÿåº¦
+	constexpr float kAngleDiffMax = DX_PI_F + 0.3f;		// è§’åº¦ã®æœ€å¤§å·®
+	constexpr float kAngleDiffMin = -DX_PI_F - 0.3f;	// è§’åº¦ã®æœ€å°å·®
+	constexpr float kSlideLength = 10.0f;				// æŠ¼ã—å‡ºã—ã®å¤§ãã•	
 }
 
 CharacterBase::CharacterBase():
-	m_moveData{},
-	m_animData{},
 	m_jumpPower(0.0f),
 	m_isJump(false),
-	m_isDead(false)
+	m_isDead(false),
+	m_pCircle(nullptr)
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 CharacterBase::~CharacterBase()
 {
-	/*ˆ—–³‚µ*/
-}
-
-void CharacterBase::Init()
-{
-	/*ˆ—–³‚µ*/
-}
-
-void CharacterBase::Update()
-{
-	/*ˆ—–³‚µ*/
-}
-
-void CharacterBase::Draw(std::shared_ptr<ToonShader> pToonShader)
-{
-	/*ˆ—–³‚µ*/
-}
-
-void CharacterBase::OnDamage(VECTOR targetPos)
-{
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void CharacterBase::MoveCollCharacterUpdate(CharacterBase* pTarget)
 {
-	// ©•ª‚©ƒ^[ƒQƒbƒg‚ª€‚ñ‚Å‚¢‚é‚Æ‚«‚Í”»’è‚ğ‚µ‚È‚¢
+	// è‡ªåˆ†ã‹ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒæ­»ã‚“ã§ã„ã‚‹ã¨ãã¯åˆ¤å®šã‚’ã—ãªã„
 	if (m_isDead || pTarget->IsDead())
 	{
 		return;
 	}
 
-	// ƒIƒuƒWƒFƒNƒg“¯m‚Ì“–‚½‚è”»’è
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆåŒå£«ã®å½“ãŸã‚Šåˆ¤å®š
 	if (!GetCircle()->IsCollide(pTarget->GetCircle())) return;
 
-	// ˆÚ“®‘O‚ÌÀ•W‚Ìİ’è
+	// ç§»å‹•å‰ã®åº§æ¨™ã®è¨­å®š
 	VECTOR prevPos = VSub(m_info.pos, m_info.vec);
 
-	// ˆÚ“®Œã‚ÌÀ•W
+	// ç§»å‹•å¾Œã®åº§æ¨™
 	VECTOR nextPos;
 
-	// ƒ^[ƒQƒbƒg‚ÌƒIƒuƒWƒFƒNƒg‚ğl—¶‚µ‚ÄˆÚ“®‚·‚é
+	// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è€ƒæ…®ã—ã¦ç§»å‹•ã™ã‚‹
 	VECTOR slideVec;
 
-	// is•ûŒü‚Æƒ^[ƒQƒbƒg‚ÌÀ•W‚©‚ç©•ª‚ÌÀ•W‚ğˆø‚¢‚½ƒxƒNƒgƒ‹‚É‚’¼‚ÈƒxƒNƒgƒ‹‚ğo‚·
+	// é€²è¡Œæ–¹å‘ã¨ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®åº§æ¨™ã‹ã‚‰è‡ªåˆ†ã®åº§æ¨™ã‚’å¼•ã„ãŸãƒ™ã‚¯ãƒˆãƒ«ã«å‚ç›´ãªãƒ™ã‚¯ãƒˆãƒ«ã‚’å‡ºã™
 	slideVec = VCross(m_info.vec, VNorm(VSub(m_info.pos, pTarget->GetInfo().pos)));
 
-	// ª‚Åo‚µ‚½ƒxƒNƒgƒ‹‚Æƒ^[ƒQƒbƒg‚ÌÀ•W‚©‚ç
-	// ©•ª‚ÌÀ•W‚ğˆø‚¢‚½ƒxƒNƒgƒ‹‚É‚’¼‚ÈƒxƒNƒgƒ‹‚ğo‚µ‚Ä
-	// Œ³‚ÌˆÚ“®¬•ª‚©‚çƒ^[ƒQƒbƒgƒIƒuƒWƒFƒNƒg‚Ì•ûŒü‚ÌˆÚ“®¬•ª‚ğ”²‚¢‚½ƒxƒNƒgƒ‹‚ğo‚·
+	// â†‘ã§å‡ºã—ãŸãƒ™ã‚¯ãƒˆãƒ«ã¨ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®åº§æ¨™ã‹ã‚‰
+	// è‡ªåˆ†ã®åº§æ¨™ã‚’å¼•ã„ãŸãƒ™ã‚¯ãƒˆãƒ«ã«å‚ç›´ãªãƒ™ã‚¯ãƒˆãƒ«ã‚’å‡ºã—ã¦
+	// å…ƒã®ç§»å‹•æˆåˆ†ã‹ã‚‰ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ–¹å‘ã®ç§»å‹•æˆåˆ†ã‚’æŠœã„ãŸãƒ™ã‚¯ãƒˆãƒ«ã‚’å‡ºã™
 	slideVec = VCross(VNorm(VSub(m_info.pos, pTarget->GetInfo().pos)), slideVec);
 
-	// •Ç•ûŒü‚ÌˆÚ“®¬•ª‚ğ”²‚¢‚½ƒxƒNƒgƒ‹‚ğ‘«‚·
+	// å£æ–¹å‘ã®ç§»å‹•æˆåˆ†ã‚’æŠœã„ãŸãƒ™ã‚¯ãƒˆãƒ«ã‚’è¶³ã™
 	nextPos = VAdd(prevPos, slideVec);
 
-	// ‰Ÿ‚µo‚µˆ—‚ğ‚·‚é
+	// æŠ¼ã—å‡ºã—å‡¦ç†ã‚’ã™ã‚‹
 	for (int i = 0; i < kMaxColHitTryNum; i++)
 	{
-		// ƒIƒuƒWƒFƒNƒg‚Æ“–‚½‚Á‚Ä‚¢‚È‚©‚Á‚½‚çˆ—‚ğ”²‚¯‚é
+		// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨å½“ãŸã£ã¦ã„ãªã‹ã£ãŸã‚‰å‡¦ç†ã‚’æŠœã‘ã‚‹
 		if (!GetCircle()->IsCollide(pTarget->GetCircle())) break;
 
 		VECTOR move = VSub(m_info.pos, pTarget->GetInfo().pos);
@@ -95,110 +73,115 @@ void CharacterBase::MoveCollCharacterUpdate(CharacterBase* pTarget)
 
 		move = VScale(move, (1.0f / (vecSize * kSlideLength)));
 
-		// “–‚½‚Á‚Ä‚¢‚½‚ç‹K’è‹——£•¶ƒvƒŒƒCƒ„[‚ğ“G‚Æ”½‘Î‚Ì•ûŒü‚ÉˆÚ“®‚³‚¹‚é
+		// å½“ãŸã£ã¦ã„ãŸã‚‰è¦å®šè·é›¢æ–‡ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ•µã¨åå¯¾ã®æ–¹å‘ã«ç§»å‹•ã•ã›ã‚‹
 		nextPos = VAdd(nextPos, move);
 
 		m_info.pos = nextPos;
 	}
-	// V‚µ‚¢À•W‚ğ•Û‘¶‚·‚é
+	// æ–°ã—ã„åº§æ¨™ã‚’ä¿å­˜ã™ã‚‹
 	m_info.pos = nextPos;
 }
 
 void CharacterBase::AttackPlayerCollEnemy(CharacterBase* pEnemy)
 {
-	// “G‚ª€‚ñ‚Å‚¢‚½‚ç”»’è‚ğ‚µ‚È‚¢
+	// æ•µãŒæ­»ã‚“ã§ã„ãŸã‚‰åˆ¤å®šã‚’ã—ãªã„
 	if (pEnemy->IsDead()) return;
-	// ƒIƒuƒWƒFƒNƒg“¯m‚Ì“–‚½‚è”»’è
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆåŒå£«ã®å½“ãŸã‚Šåˆ¤å®š
 	if (!GetCircle()->IsCollide(pEnemy->GetCircle())) return;
 
+	// æ”»æ’ƒå‡¦ç†
 	OnAttack();
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸å‡¦ç†
 	pEnemy->OnDamage(m_info.pos);
 }
 
 void CharacterBase::AttackEnemyCollPlayer(CharacterBase* pPlayer)
 {
-	// ƒvƒŒƒCƒ„[‚ªUŒ‚‚ğH‚ç‚Á‚Ä‚¢‚éÅ’†‚¾‚Á‚½ê‡‚Í”»’è‚ğ‚µ‚È‚¢
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒæ”»æ’ƒã‚’é£Ÿã‚‰ã£ã¦ã„ã‚‹æœ€ä¸­ã ã£ãŸå ´åˆã¯åˆ¤å®šã‚’ã—ãªã„
 	if (pPlayer->IsDamage()) return;
-	// ƒIƒuƒWƒFƒNƒg“¯m‚Ì“–‚½‚è”»’è
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆåŒå£«ã®å½“ãŸã‚Šåˆ¤å®š
 	if (!GetCircle()->IsCollide(pPlayer->GetCircle())) return;
 
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸å‡¦ç†
 	pPlayer->OnDamage(m_info.pos);
 }
 
 void CharacterBase::PlayerToItem(CharacterBase* pItem)
 {
-	// ƒIƒuƒWƒFƒNƒg“¯m‚Ì“–‚½‚è”»’è
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆåŒå£«ã®å½“ãŸã‚Šåˆ¤å®š
 	if (!GetCircle()->IsCollide(pItem->GetCircle())) return;
 
-	// ƒAƒCƒeƒ€‚ğƒQƒbƒg‚·‚é
+	// ã‚¢ã‚¤ãƒ†ãƒ ã‚’ã‚²ãƒƒãƒˆã™ã‚‹
 	dynamic_cast<ItemBase*>(pItem)->OnGet();
 }
 
 void CharacterBase::EndJump()
 {
+	// ã‚¸ãƒ£ãƒ³ãƒ—ã‚’ã—ã¦ã„ãªã„çŠ¶æ…‹ã«æˆ»ã™
 	m_isJump = false;
 	m_jumpPower = 0.0f;
 }
 
 void CharacterBase::HitGroundUpdate()
 {
+	// ã‚¸ãƒ£ãƒ³ãƒ—åŠ›ã‚’0ã«ã™ã‚‹
 	m_jumpPower = 0.0f;
 }
 
 void CharacterBase::GravityUpdate()
 {
-	// ˆÚ“®—Ê‚ÌXV
-	// —‚¿‚é‘¬“x‚ªÅ‘å—‰º‘¬“x‚ğ’´‚¦‚È‚¢‚æ‚¤‚É‚·‚é
+	// ç§»å‹•é‡ã®æ›´æ–°
+	// è½ã¡ã‚‹é€Ÿåº¦ãŒæœ€å¤§è½ä¸‹é€Ÿåº¦ã‚’è¶…ãˆãªã„ã‚ˆã†ã«ã™ã‚‹
 	m_jumpPower = max(m_jumpPower - (kGravity * 0.5f), kFallMaxSpeed);
 
-	// —‰º
+	// è½ä¸‹
 	m_info.vec.y = m_jumpPower;
 }
 
 void CharacterBase::SmoothAngle(float& nowAngle, float nextAngle)
 {
-	// -180“xˆÈ‰º‚É‚È‚Á‚½‚çŠp“x‚ª‘å‚«‚­‚È‚è‚·‚¬‚È‚¢‚æ‚¤‚É360“x‘«‚·
+	// -180åº¦ä»¥ä¸‹ã«ãªã£ãŸã‚‰è§’åº¦ãŒå¤§ãããªã‚Šã™ããªã„ã‚ˆã†ã«360åº¦è¶³ã™
 	if (nextAngle < -DX_PI_F)
 	{
 		nextAngle += DX_TWO_PI_F;
 	}
-	// 180“xˆÈã‚É‚È‚Á‚½‚çŠp“x‚ª¬‚³‚­‚È‚è‚·‚¬‚È‚¢‚æ‚¤‚É360“xˆø‚­
+	// 180åº¦ä»¥ä¸Šã«ãªã£ãŸã‚‰è§’åº¦ãŒå°ã•ããªã‚Šã™ããªã„ã‚ˆã†ã«360åº¦å¼•ã
 	if (nextAngle > DX_PI_F)
 	{
 		nextAngle -= DX_TWO_PI_F;
 	}
 
-	// Šp“x‚Ì·‚ğ‹‚ß‚é
+	// è§’åº¦ã®å·®ã‚’æ±‚ã‚ã‚‹
 	float angleDiff = nowAngle - nextAngle;
 
-	// Šp“x‚Ì·‚ª180“xˆÈã‚¾‚Á‚½ê‡
+	// è§’åº¦ã®å·®ãŒ180åº¦ä»¥ä¸Šã ã£ãŸå ´åˆ
 	if (angleDiff > kAngleDiffMax)
 	{
-		// Šp“x‚Ì·‚ª¬‚³‚­‚È‚è‚·‚¬‚È‚¢‚æ‚¤‚É360“xˆø‚­
+		// è§’åº¦ã®å·®ãŒå°ã•ããªã‚Šã™ããªã„ã‚ˆã†ã«360åº¦å¼•ã
 		nowAngle -= DX_TWO_PI_F;
 	}
-	// ˆÈ‰º‚¾‚Á‚½ê‡
+	// ä»¥ä¸‹ã ã£ãŸå ´åˆ
 	else if (angleDiff < kAngleDiffMin)
 	{
-		// Šp“x‚Ì·‚ªŠp“x‚ª‘å‚«‚­‚È‚è‚·‚¬‚È‚¢‚æ‚¤‚É360“x‘«‚·
+		// è§’åº¦ã®å·®ãŒè§’åº¦ãŒå¤§ãããªã‚Šã™ããªã„ã‚ˆã†ã«360åº¦è¶³ã™
 		nowAngle += DX_TWO_PI_F;
 	}
 
-	// Šp“x‚Ì·‚ª­‚È‚¢ê‡‚Í‰½‚à‚¹‚¸‚É‚»‚Ì‚Ü‚ÜŸ‚ÌŠp“x‚ğ•Ô‚·
+	// è§’åº¦ã®å·®ãŒå°‘ãªã„å ´åˆã¯ä½•ã‚‚ã›ãšã«ãã®ã¾ã¾æ¬¡ã®è§’åº¦ã‚’è¿”ã™
 	if (angleDiff < kChangeAngleSpeed && 
 		angleDiff > -kChangeAngleSpeed)
 	{
 		nowAngle = nextAngle;
 		return;
 	}
-	// ‚»‚êˆÈŠO‚Ìê‡‚Í­‚µ‚¸‚ÂŠp“x‚ğ•Ï‰»‚³‚¹‚é
-	// Šp“x‚Ì·‚ª‘å‚«‚¢‚ÍkChangeAngleSpeed‚ğˆø‚­
+	// ãã‚Œä»¥å¤–ã®å ´åˆã¯å°‘ã—ãšã¤è§’åº¦ã‚’å¤‰åŒ–ã•ã›ã‚‹
+	// è§’åº¦ã®å·®ãŒå¤§ãã„æ™‚ã¯kChangeAngleSpeedã‚’å¼•ã
 	else if (angleDiff > kChangeAngleSpeed)
 	{
 		nowAngle -= kChangeAngleSpeed;
 		return;
 	}
-	// Šp“x‚Ì·‚ª¬‚³‚¢‚Æ‚«‚ÍkChangeAngleSpeed‚ğ‘«‚·
+	// è§’åº¦ã®å·®ãŒå°ã•ã„ã¨ãã¯kChangeAngleSpeedã‚’è¶³ã™
 	else if (angleDiff < kChangeAngleSpeed)
 	{
 		nowAngle += kChangeAngleSpeed;

@@ -1,48 +1,42 @@
-#include "ObjectBase.h"
+﻿#include "ObjectBase.h"
 
 #include "CharacterBase.h"
 #include "ObjectManager.h"
 #include "Model.h"
 #include "Circle.h"
 
-#include "../Util/Time.h"
-
 #include"../Shader/ToonShader.h"
 #include"../Shader/ShadowMapShader.h"
 
 namespace
 {
-	constexpr int kMaxColHitPolyNum = 2000;	// �ő哖���蔻��|���S����
-	constexpr int kMaxColHitTryNum = 16;	// �ǉ����o�������̍ő厎�s��
-	constexpr float kColHitSlideLength = 1.0f;		// �ǉ����o�����ɃX���C�h�����鋗��
-	constexpr float kMove = 0.01f;			// �ړ��������𔻒f���邽�߂̕ϐ�
-	constexpr float kWallPolyBorder = 0.4f;	// �ǃ|���S�������|���S�����𔻒f���邽�߂̕ϐ�
-	constexpr float kWallPolyHeight = 20.0f;	// �ǃ|���S���Ɣ��f���邽�߂̍����ϐ�
-	constexpr int kExistTimeCount = 10;		// ����ł���̎���
-	constexpr float kHeadHeight = 40.0f;	// ���̍���
+	constexpr int kMaxColHitPolyNum = 2000;			// 最大当たり判定ポリゴン数
+	constexpr int kMaxColHitTryNum = 16;			// 壁押し出し処理の最大試行回数
+	constexpr float kColHitSlideLength = 1.0f;		// 壁押し出し時にスライドさせる距離
+	constexpr float kMove = 0.01f;					// 移動したかを判断するための変数
+	constexpr float kWallPolyBorder = 0.4f;			// 壁ポリゴンか床ポリゴン化を判断するための変数
+	constexpr float kWallPolyHeight = 20.0f;		// 壁ポリゴンと判断するための高さ変数
+	constexpr float kHeadHeight = 40.0f;			// 頭の高さ
 }
 
 
 ObjectBase::ObjectBase():
+	m_modelH(-1),
 	m_objSize(0.0f),
 	m_angle(0.0f),
 	m_moveSpeed(0.0f),
-	m_modelH(-1),
 	m_isDamage(false),
-	m_isMove(false),
-	m_isHit(false),
+	m_isStageEnd(false),
+	m_pModel(nullptr),
+	m_pObjectManager(nullptr),
 	m_wallNum(0),
 	m_floorNum(0),
-	m_hitDim{},
-	m_pWallPoly{},
-	m_pFloorPoly{},
-	m_pPoly(nullptr),
-	m_lineRes{},
+	m_isMove(false),
+	m_isHit(false),
 	m_oldPos{0,0,0},
-	m_nextPos{0,0,0}
+	m_nextPos{0,0,0},
+	m_pPoly(nullptr)
 {
-	m_pExistCountTime = std::make_shared<Time>(kExistTimeCount);
-
 	m_info.pos = VGet(0.0f, 0.0f, 0.0f);
 	m_info.vec = VGet(0.0f, 0.0f, 0.0f);
 	m_info.rot = VGet(0.0f, 0.0f, 0.0f);
@@ -51,70 +45,30 @@ ObjectBase::ObjectBase():
 
 ObjectBase::~ObjectBase()
 {
-	/*��������*/
-}
-
-void ObjectBase::Init()
-{
-	/*��������*/
-}
-
-void ObjectBase::Update()
-{
-	/*��������*/
-}
-
-void ObjectBase::Draw(std::shared_ptr<ToonShader> pToonShader)
-{
-	/*��������*/
+	/*処理無し*/
 }
 
 void ObjectBase::ShadowMapDraw(std::shared_ptr<ShadowMapShader> pShadowMapShader)
 {
-	// ���f�����Ȃ��ꍇ�͕`������Ȃ�
+	// モデルポインタがない場合は何もしない
 	if (m_pModel == nullptr) return;
 
 	for (int i = 0; i < MV1GetTriangleListNum(m_pModel->GetModelHandle()); i++)
 	{
+		// 頂点タイプの取得
 		int shaderType = MV1GetTriangleListVertexType(m_pModel->GetModelHandle(), i);
+		// シェーダの設定
 		pShadowMapShader->SetShader(shaderType);
-
+		// 描画
 		MV1DrawTriangleList(m_pModel->GetModelHandle(), i);
 	}
-}
-
-void ObjectBase::Draw2D()
-{
-	/*��������*/
-}
-
-void ObjectBase::StageClear()
-{
-	/*��������*/
-}
-
-void ObjectBase::GameEnd()
-{
-	/*��������*/
-}
-
-void ObjectBase::OnAttack()
-{
-	/*��������*/
-}
-
-bool ObjectBase::IsExistCount()
-{
-	// �K�莞�Ԃ��߂����瑶�݂�����
-	if (m_pExistCountTime->Update())
-	{
-		return true;
-	}
-	return false;
+	// シェーダを使わない設定に戻す
+	pShadowMapShader->ShaderEnd();
 }
 
 void ObjectBase::End()
 {
+	/*ポインタの解放*/
 	*m_pWallPoly = nullptr;
 	*m_pFloorPoly = nullptr;
 	m_pPoly = nullptr;
@@ -122,17 +76,17 @@ void ObjectBase::End()
 
 void ObjectBase::MoveCollFieldUpdate(ObjectBase* pField)
 {
-	// �ړ��O�̍��W��ۑ����Ă���
+	// 移動前の座標を保存しておく
 	m_oldPos = m_info.pos;
-	// �ړ���̍��W���v�Z����
+	// 移動後の座標を計算する
 	m_nextPos = VAdd(m_oldPos, GetInfo().vec);
 
-	// �v���C���[�̎��͂ɂ���X�e�[�W�|���S�����擾����
-	// �ړ��������l�����Ă��猟�o����
+	// プレイヤーの周囲にあるステージポリゴンを取得する
+	// 移動距離も考慮してから検出する
 	m_hitDim = MV1CollCheck_Sphere(pField->GetModel()->GetModelHandle(), -1, GetInfo().pos,
 		dynamic_cast<CharacterBase*>(this)->GetCircle()->GetRadius() + VSize(GetInfo().vec));
 
-	// X��Z��kMove(0.01f)�ȏ�ړ������ꍇ�͈ړ��������ɂ���
+	// XかZにkMove(0.01f)以上移動した場合は移動した事にする
 	if (fabs(dynamic_cast<CharacterBase*>(this)->GetInfo().vec.x) > kMove || fabs(GetInfo().vec.z) > kMove)
 	{
 		m_isMove = true;
@@ -142,59 +96,59 @@ void ObjectBase::MoveCollFieldUpdate(ObjectBase* pField)
 		m_isMove = false;
 	}
 
-	// �ǂƏ��̓����蔻����s��
+	// 壁と床の当たり判定を行う
 	CheckWallAndFloor();
-	// �ǂƂ̓����蔻�肩��ʒu�C������������
+	// 壁との当たり判定から位置修正処理をする
 	FixPosWithWall();
-	// �ǂƂ̓����蔻�肩��ʒu�C������������
+	// 壁との当たり判定から位置修正処理をする
 	FixPosWithFloor();
 
-	// �V�������W��ۑ�����
+	// 新しい座標を保存する
 	m_info.pos = m_nextPos;
 
-	// ���o�����v���C���[�̎��͂̃|���S�������J������(��n��)
+	// 検出したプレイヤーの周囲のポリゴン情報を開放する(後始末)
 	MV1CollResultPolyDimTerminate(m_hitDim);
 }
 
 void ObjectBase::CheckWallAndFloor()
 {
-	// �ǃ|���S���Ə��|���S���̐�������������
+	// 壁ポリゴンと床ポリゴンの数を初期化する
 	m_wallNum = 0;
 	m_floorNum = 0;
 
-	// ���o���ꂽ�|���S���̐������J��Ԃ�
+	// 検出されたポリゴンの数だけ繰り返す
 	for (int i = 0; i < m_hitDim.HitNum; i++)
 	{
-		// �|���S���̖@����Y������kWallPolyBorder�ɒB���Ă��邩
-		// �ǂ����ŕǃ|���S�������|���S�����𔻒f����
+		// ポリゴンの法線のY成分がkWallPolyBorderに達しているか
+		// どうかで壁ポリゴンか床ポリゴンかを判断する
 		if (m_hitDim.Dim[i].Normal.y < kWallPolyBorder && m_hitDim.Dim[i].Normal.y > -kWallPolyBorder)
 		{
-			// �ǃ|���S���Ɣ��f���ꂽ�ꍇ�ł��A
-			// �v���C���[��Y���W���������|���S���݂̂Ɠ����蔻����s��
+			// 壁ポリゴンと判断された場合でも、
+			// プレイヤーのY座標よりも高いポリゴンのみと当たり判定を行う
 			if (m_hitDim.Dim[i].Position[0].y > GetInfo().pos.y + kWallPolyHeight ||
 				m_hitDim.Dim[i].Position[1].y > GetInfo().pos.y + kWallPolyHeight ||
 				m_hitDim.Dim[i].Position[2].y > GetInfo().pos.y + kWallPolyHeight)
 			{
-				// �|���S���̐������E���ɒB���Ă��Ȃ������ꍇ�̓|���S����z��ɒǉ�����
+				// ポリゴンの数が限界数に達していなかった場合はポリゴンを配列に追加する
 				if (m_wallNum < ColInfo::kMaxColHitPolyNum)
 				{
-					// �|���S���̍\���̂̃A�h���X��ǃ|���S���|�C���^�z��ɕۑ�����
+					// ポリゴンの構造体のアドレスを壁ポリゴンポインタ配列に保存する
 					m_pWallPoly[m_wallNum] = &m_hitDim.Dim[i];
 
-					// �ǃ|���S���̐��𑫂�
+					// 壁ポリゴンの数を足す
 					m_wallNum++;
 				}
 			}
 		}
 		else
 		{
-			// �|���S���̐������E���ɒB���Ă��Ȃ������ꍇ�̓|���S����z��ɒǉ�����
+			// ポリゴンの数が限界数に達していなかった場合はポリゴンを配列に追加する
 			if (m_floorNum < ColInfo::kMaxColHitPolyNum)
 			{
-				// �|���S���̍\���̂̃A�h���X��ǃ|���S���|�C���^�z��ɕۑ�����
+				// ポリゴンの構造体のアドレスを壁ポリゴンポインタ配列に保存する
 				m_pFloorPoly[m_floorNum] = &m_hitDim.Dim[i];
 
-				// ���|���S���̐��𑫂�
+				// 床ポリゴンの数を足す
 				m_floorNum++;
 			}
 		}
@@ -204,72 +158,69 @@ void ObjectBase::CheckWallAndFloor()
 
 void ObjectBase::FixPosWithWall()
 {
-	// �ǃ|���S�����Ȃ������ꍇ�͉������Ȃ�
+	// 壁ポリゴンがなかった場合は何もしない
 	if (m_wallNum == 0)return;
 
-	/*�ǃ|���S���Ƃ̓����蔻��̏���*/
-	// �ǂɓ����������ǂ����̃t���O��false�ɂ��Ă���
+	/*壁ポリゴンとの当たり判定の処理*/
+	// 壁に当たったかどうかのフラグをfalseにしておく
 	m_isHit = false;
 	
-	/*�ړ��������ǂ����ŏ����𕪊򂷂�*/
-	// �ړ����Ă����ꍇ
+	/*移動したかどうかで処理を分岐する*/
+	// 移動していた場合
 	if (m_isMove)
 	{
-		// �ǃ|���S���̐������J��Ԃ�
+		// 壁ポリゴンの数だけ繰り返す
 		for (int i = 0; i < m_wallNum; i++)
 		{
-			// i�Ԗڂ̕ǂ̃|���S���̃A�h���X��ǃ|���S���|�C���^�z�񂩂�擾����
+			// i番目の壁のポリゴンのアドレスを壁ポリゴンポインタ配列から取得する
 			m_pPoly = m_pWallPoly[i];
 
-			// �|���S���ƃv���C���[���������Ă��Ȃ������玟�̃J�E���g�ɍs��
+			// ポリゴンとキャラクターが当たっていなかったら次のカウントに行く
 			if (!HitCheck_Capsule_Triangle(m_nextPos,
 				VAdd(m_nextPos, VGet(0.0f, dynamic_cast<CharacterBase*>(this)->GetCircle()->GetRadius(), 0.0f)),
 				dynamic_cast<CharacterBase*>(this)->GetCircle()->GetRadius(),
 				m_pPoly->Position[0], m_pPoly->Position[1], m_pPoly->Position[2])) continue;
 
-			// �������Ă����瓖�����Ă���t���O�𗧂Ă�
+			// 当たっていたら当たっているフラグを立てる
 			m_isHit = true;
 
-			/*�ǂ��l�������ړ��ʂ��O�ς��g���ďo��*/
-			
-			// �X���C�h�����鋗��
+			/*壁を考慮した移動量を外積を使って出す*/
+			// スライドさせる距離
 			VECTOR SlideVec;
 
-			// �i�s�����x�N�g���ƕǃ|���S���̖@���x�N�g���ɐ����ȃx�N�g�����o��
+			// 進行方向ベクトルと壁ポリゴンの法線ベクトルに垂直なベクトルを出す
 			SlideVec = VCross(dynamic_cast<CharacterBase*>(this)->GetInfo().vec, m_pPoly->Normal);
 
-			// ���ŏo�����x�N�g���ƕǃ|���S���̖@���x�N�g���ɐ����ȃx�N�g�����o���A
-			// ���̈ړ���������Ǖ����̈ړ������𔲂����x�N�g�����o��
+			// ↑で出したベクトルと壁ポリゴンの法線ベクトルに垂直なベクトルを出し、
+			// 元の移動成分から壁方向の移動成分を抜いたベクトルを出す
 			SlideVec = VCross(m_pPoly->Normal, SlideVec);
 
-			// �ړ��O�̍��W��SlideVec�𑫂������̂����̍��W�ɂ���
+			// 移動前の座標にSlideVecを足したものを次の座標にする
 			m_nextPos = VAdd(m_oldPos, SlideVec);
 
-			/*�V�����ړ����W�ŕǃ|���S���Ɠ������Ă��Ȃ����𔻒肷��*/
-
-			// �ǂƓ������Ă��邩�ǂ����̃t���O������Ă���
+			/*新しい移動座標で壁ポリゴンと当たっていないかを判定する*/
+			// 壁と当たっているかどうかのフラグを作っておく
 			bool isHitWallPoly = false;
 			for (int j = 0; j < m_wallNum; j++)
 			{
-				// j�Ԗڂ̕ǂ̃|���S���̃A�h���X��ǃ|���S���|�C���^�z�񂩂�擾����
+				// j番目の壁のポリゴンのアドレスを壁ポリゴンポインタ配列から取得する
 				m_pPoly = m_pWallPoly[j];
 
-				// �|���S���ƃv���C���[���������Ă����烋�[�v���甲����
+				// ポリゴンとキャラクターが当たっていたらループから抜ける
 				if (HitCheck_Capsule_Triangle(m_nextPos,
 					VAdd(m_nextPos, VGet(0.0f, dynamic_cast<CharacterBase*>(this)->GetCircle()->GetRadius(), 0.0f)),
 					dynamic_cast<CharacterBase*>(this)->GetCircle()->GetRadius(),
 					m_pPoly->Position[0], m_pPoly->Position[1], m_pPoly->Position[2]))
 				{
-					// �������Ă���t���O�𗧂Ă�
+					// 当たっているフラグを立てる
 					isHitWallPoly = true;
 					break;
 				}
 			}
-
-			// �S�Ẵ|���S���Ɠ������Ă��Ȃ������烋�[�v���I���
+			// 全てのポリゴンと当たっていなかったらループを終わる
 			if (!isHitWallPoly)
 			{
-				// �������Ă���t���O��false�ɂ���
+				// 当たっているフラグをfalseにする
 				m_isHit = false;
 				break;
 			}
@@ -277,64 +228,62 @@ void ObjectBase::FixPosWithWall()
 	}
 	else
 	{
-		/*�ړ����Ă��Ȃ��ꍇ�̏���*/
-
-		// �ǃ|���S���̐������J��Ԃ�
+		/*移動していない場合の処理*/
+		// 壁ポリゴンの数だけ繰り返す
 		for (int i = 0; i < m_wallNum; i++)
 		{
-			// i�Ԗڂ̕ǂ̃|���S���̃A�h���X��ǃ|���S���|�C���^�z�񂩂�擾����
+			// i番目の壁のポリゴンのアドレスを壁ポリゴンポインタ配列から取得する
 			m_pPoly = m_pWallPoly[i];
 
-			// �|���S���ƃv���C���[���������Ă��Ȃ������玟�̃J�E���g�ɍs��
+			// ポリゴンとキャラクターが当たっていなかったら次のカウントに行く
 			if (HitCheck_Capsule_Triangle(m_nextPos,
 				VAdd(m_nextPos, VGet(0.0f, dynamic_cast<CharacterBase*>(this)->GetCircle()->GetRadius(), 0.0f)),
 				dynamic_cast<CharacterBase*>(this)->GetCircle()->GetRadius(),
 				m_pPoly->Position[0], m_pPoly->Position[1], m_pPoly->Position[2]))
 			{
-				// �������Ă���t���O�𗧂Ă�
+				// 当たっているフラグを立てる
 				m_isHit = true;
 				break;
 			}
 		}
 	}
-
-	// �ǂɓ������Ă�����ǂ��牟���o������������
-	if (m_isHit)
+	
+	if (m_isHit)	// 壁に当たっていた場合
 	{
+		// 壁から押し出す処理をする
 		FixPosWithWallInternal();
 	}
 }
 
 void ObjectBase::FixPosWithWallInternal()
 {
-	// �ǂ���̉����o�����������E�܂ŌJ��Ԃ�
+	// 壁からの押し出し処理を限界まで繰り返す
 	for (int i = 0; i < ColInfo::kMaxColHitTryNum; i++)
 	{
-		/*������\���̂���ǃ|���S����S�Č���*/
-
-		// �ǂƓ������Ă��邩�ǂ���
+		/*当たる可能性のある壁ポリゴンを全て見る*/
+		// 壁と当たっているかどうか
 		bool isHitWall = false;
 
-		// �ǃ|���S���̐������J��Ԃ�
+		// 壁ポリゴンの数だけ繰り返す
 		for (int j = 0; j < m_wallNum; j++)
 		{
-			// j�Ԗڂ̕ǂ̃|���S���̃A�h���X��ǃ|���S���|�C���^�z�񂩂�擾����
+			// j番目の壁のポリゴンのアドレスを壁ポリゴンポインタ配列から取得する
 			m_pPoly = m_pWallPoly[j];
 
-			// �L�����N�^�[�Ɠ������Ă��邩�ǂ����𔻒肷��
-			// �������Ă��Ȃ������玟�̃J�E���g�ɍs��
+			// キャラクターと当たっているかどうかを判定する
+			// 当たっていなかったら次のカウントに行く
 			if (!HitCheck_Capsule_Triangle(m_nextPos,
 				VAdd(m_nextPos, VGet(0.0f, dynamic_cast<CharacterBase*>(this)->GetCircle()->GetRadius(), 0.0f)),
 				dynamic_cast<CharacterBase*>(this)->GetCircle()->GetRadius(),
 				m_pPoly->Position[0], m_pPoly->Position[1], m_pPoly->Position[2])) continue;
 
-			// �������Ă����ꍇ�͋K�苗�����v���C���[��ǂ̖@�������Ɉړ�������
+			// 当たっていた場合は規定距離分壁の法線方向に移動させる
 			m_nextPos = VAdd(m_nextPos, VScale(m_pPoly->Normal, kColHitSlideLength));
 
-			// �ړ����������ŕǃ|���S���ƐڐG���Ă��邩�ǂ����𔻒肷��
+			// 移動したうえで壁ポリゴンと接触しているかどうかを判定する
 			for (int k = 0; k < m_wallNum; k++)
 			{
-				// �������Ă����烋�[�v�𔲂���
+				// 当たっていたらループを抜ける
 				m_pPoly = m_pWallPoly[k];
 				if (HitCheck_Capsule_Triangle(m_nextPos,
 					VAdd(m_nextPos, VGet(0.0f, dynamic_cast<CharacterBase*>(this)->GetCircle()->GetRadius(), 0.0f)),
@@ -346,107 +295,106 @@ void ObjectBase::FixPosWithWallInternal()
 				}
 			}
 
-			// �S�Ẵ|���S���Ɠ������Ă��Ȃ������烋�[�v���I���
+			// 全てのポリゴンと当たっていなかったらループを終わる
 			if (!isHitWall) break;
 
 		}
-		// ���[�v�I��
+		// ループ終了
 		if (!isHitWall) break;
 	}
 }
 
 void ObjectBase::FixPosWithFloor()
 {
-	// ���|���S���������ꍇ�͉������Ȃ�
+	// 床ポリゴンが無い場合は何もしない
 	if (m_floorNum == 0) return;
 
-	/*���|���S���Ƃ̓����蔻��*/
-	// �����������ǂ����̃t���O�̏�����
+	/*床ポリゴンとの当たり判定*/
+	// 当たったかどうかのフラグの初期化
 	bool isHitFlag = false;
 
-	// �W�����v�����㏸���̏ꍇ
+	// ジャンプ中かつ上昇中の場合
 	if (dynamic_cast<CharacterBase*>(this)->IsJump()
 		&& dynamic_cast<CharacterBase*>(this)->GetJumpPower() >= 0.0f)
 	{
-		// �V��ɓ����Ԃ��鏈�����s��
-		// ��ԒႢ�V��ɂԂ��邽�߂̔���p�ϐ�������������
+		// 天井に頭をぶつける処理を行う
+		// 一番低い天井にぶつけるための判定用変数を初期化する
 		float polyMinPosY = 0.0f;
 
-		// ���|���S���̐������J��Ԃ�
+		// 床ポリゴンの数だけ繰り返す
 		for (int i = 0; i < m_floorNum; i++)
 		{
-			// i�Ԗڂ̏��|���S���̃A�h���X�����|���S���|�C���^�z�񂩂�擾����
+			// i番目の床ポリゴンのアドレスを床ポリゴンポインタ配列から取得する
 			m_pPoly = m_pFloorPoly[i];
 
-			// ���悩�瓪�̍����܂ł̊ԂŃ|���S���ƐڐG���Ă��邩�ǂ����𔻒肷��
+			// 足先から頭の高さまでの間でポリゴンと接触しているかどうかを判定する
 			m_lineRes = HitCheck_Line_Triangle(m_nextPos, VAdd(m_nextPos, VGet(0.0f, kHeadHeight, 0.0f)),
 				m_pPoly->Position[0], m_pPoly->Position[1], m_pPoly->Position[2]);
 
-			// �ڐG���Ă��Ȃ������ꍇ�͉��������Ɏ��̃J�E���g�ɍs��
+			// 接触していなかった場合は何もせずに次のカウントに行く
 			if (!m_lineRes.HitFlag) continue;
 
-			// �V��|���S�������܂Ō��o���ꂽ�|���S�����Ⴂ�ꍇ�͏�����ʂ�
+			// 天井ポリゴンが今まで検出されたポリゴンより低い場合は処理を通す
 			if (polyMinPosY < m_lineRes.Position.y)
 			{
-				// ���������t���O�𗧂Ă�
+				// 当たったフラグを立てる
 				isHitFlag = true;
 
-				// �ڐG����Y���W��ۑ�����
+				// 接触したY座標を保存する
 				polyMinPosY = m_lineRes.Position.y;
 			}
 		}
 
-		// �ڐG���Ă���|���S�����������ꍇ
+		// 接触しているポリゴンがあった場合
 		if (isHitFlag)
 		{
-			// �ڐG�����ꍇ�̓v���C���[��Y���W��ڐG���W�����ƂɍX�V����
+			// 接触した場合はプレイヤーのY座標を接触座標をもとに更新する
 			m_nextPos.y = polyMinPosY - kHeadHeight;
 
-			// �n�ʂɓ����������̏������s��
+			// 地面に当たった時の処理を行う
 			dynamic_cast<CharacterBase*>(this)->HitGroundUpdate();
 		}
 	}
 	else
 	{
-		/*���|���S���Ƃ̓����蔻��*/
-
-		// ��ԍ������|���S���ɂԂ��邽�߂̔���p�ϐ�������������
+		/*床ポリゴンとの当たり判定*/
+		// 一番高い床ポリゴンにぶつけるための判定用変数を初期化する
 		float polyMaxPosY = 0.0f;
 
-		// ���|���S���ɓ����������ǂ����̃t���O��|���Ă���
+		// 床ポリゴンに当たったかどうかのフラグを倒しておく
 		m_isHit = false;
 
-		// ���|���S���̐������J��Ԃ�
+		// 床ポリゴンの数だけ繰り返す
 		for (int i = 0; i < m_floorNum; i++)
 		{
-			// i�Ԗڂ̏��|���S���̃A�h���X�����|���S���|�C���^�z�񂩂�擾����
+			// i番目の床ポリゴンのアドレスを床ポリゴンポインタ配列から取得する
 			m_pPoly = m_pFloorPoly[i];
 
-			// ���悩�瓪�̍����܂ł̊ԂŃ|���S���ƐڐG���Ă��邩�ǂ����𔻒肷��
+			// 足先から頭の高さまでの間でポリゴンと接触しているかどうかを判定する
 			m_lineRes = HitCheck_Line_Triangle(VAdd(m_nextPos, VGet(0.0f, kHeadHeight, 0.0f)),
 				m_nextPos,m_pPoly->Position[0], m_pPoly->Position[1], m_pPoly->Position[2]);
 
-			// �������Ă��Ȃ������牽�������Ɏ��̃J�E���g�ɍs��
+			// 当たっていなかったら何もせずに次のカウントに行く
 			if (!m_lineRes.HitFlag) continue;
 
-			// ���ɓ��������|���S��������A�����܂Ō��o����
-			// ���|���S�����Ⴂ�ꍇ�͉��������Ɏ��̃J�E���g�ɍs��
+			// 既に当たったポリゴンがあり、かつ今まで検出した
+			// 床ポリゴンより低い場合は何もせずに次のカウントに行く
 			if (m_isHit && polyMaxPosY > m_lineRes.Position.y) continue;
 
-			// �|���S���ɓ��������t���O�𗧂Ă�
+			// ポリゴンに当たったフラグを立てる
 			m_isHit = true;
 
-			// �ڐG����Y���W��ۑ�����
+			// 接触したY座標を保存する
 			polyMaxPosY = m_lineRes.Position.y;
 		}
 
-		if (m_isHit)
+		if (m_isHit)	// 床に当たっていた場合
 		{
-			// �ڐG�����|���S���o��ԍ���Y���W���v���C���[��Y���W�ɂ���
+			// 接触したポリゴン出一番高いY座標をプレイヤーのY座標にする
 			m_nextPos.y = polyMaxPosY;
 			dynamic_cast<CharacterBase*>(this)->HitGroundUpdate();
 
-			// �W�����v�����A�W�����v�͂�0����������(�~����)�̏ꍇ�̓W�����v�������I������
+			// ジャンプ中かつ、ジャンプ力が0よりも小さい(降下中)の場合はジャンプ処理を終了する
 			if (dynamic_cast<CharacterBase*>(this)->GetJumpPower() <= 0.0f &&
 				dynamic_cast<CharacterBase*>(this)->IsJump())
 			{

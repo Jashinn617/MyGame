@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "DxLib.h"
 #include "ObjectBase.h"
 
@@ -12,138 +12,141 @@ class Time;
 class Camera
 {
 public:
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	Camera();
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Camera();
 
 	/// <summary>
-	/// ������
+	/// 初期化
 	/// </summary>
 	void Init();
 
 	/// <summary>
-	/// �X�V
+	/// 更新
 	/// </summary>
-	/// <param name="playerPos">�v���C���[�̍��W�̎擾</param>
+	/// <param name="playerPos">プレイヤー座標</param>
 	void Update(VECTOR playerPos);
 
 	/// <summary>
-	/// �`��
+	/// 描画
 	/// </summary>
 	void Draw();
 
 	/// <summary>
-	/// �J�����̍��W�̃��Z�b�g
+	/// カメラの座標のリセット
 	/// </summary>
 	void ResetCamera();
 
 	/// <summary>
-	/// �����蔻��̍X�V
+	/// 当たり判定の更新
 	/// </summary>
-	/// <param name="Field"></param>
+	/// <param name="Field">フィールドのポインタ</param>
 	void ColUpdate(ObjectBase* Field);
 
 	/// <summary>
-	/// �X�e�[�W�N���A���̃J�����̍X�V
+	/// ステージクリア時のカメラ更新
 	/// </summary>
 	void StageClearUpdate();
 
 	/// <summary>
-	/// �X�e�[�W���N���A��
+	/// ステージクリア時の処理
 	/// </summary>
-	/// <param name="angle"></param>
-	/// <param name="targetPos"></param>
+	/// <param name="angle">角度</param>
+	/// <param name="targetPos">ターゲット座標</param>
 	void StageClear(float angle, VECTOR targetPos);
 
 	/// <summary>
-	/// �J������X�p�x�̎擾
+	/// カメラの水平角度の取得
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>カメラ水平角度</returns>
 	float GetCameraAngleX() { return m_angleH; }
 	
 	/// <summary>
-	/// �����蔻��̃T�[�N���擾
+	/// 当たり判定のサークル取得
 	/// </summary>
-	/// <returns>�J�����̓����蔻��̃T�[�N���|�C���^</returns>
+	/// <returns>カメラの当たり判定のサークルポインタ</returns>
 	const std::shared_ptr<Circle> GetCircle() const { return m_pCircle; }
 
 	/// <summary>
-	/// ���W�̎擾
+	/// 座標の取得
 	/// </summary>
-	/// <returns>�J�������W</returns>
+	/// <returns>カメラ座標</returns>
 	const VECTOR& GetPos() const { return m_nextPos; }
 
 	/// <summary>
-	/// �J�������W�̐ݒ�
+	/// カメラ座標の設定
 	/// </summary>
-	/// <param name="pos"></param>
+	/// <param name="pos">設定する座標</param>
 	void SetPos(VECTOR pos) { m_nextPos = pos; }
 
 	/// <summary>
-	/// �O�t���[���̃J�����̍��W�̎擾
+	/// 前フレームのカメラの座標の取得
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>前フレームカメラ座標</returns>
 	const VECTOR& GetPrevPos()const { return m_prevPos; }
 
-
-private:	// �֐�
+private:	// 関数
 	/// <summary>
-	/// �p�x�̍X�V
+	/// 角度の更新
 	/// </summary>
 	void UpdateAngle();
 
 	/// <summary>
-	/// �ʏ펞�̍X�V
+	/// 通常時の更新
 	/// </summary>
 	/// <param name="targetPos"></param>
 	void NormalUpdate(VECTOR targetPos);
 
 	/// <summary>
-	/// ���W�̍X�V
+	/// 座標の更新
 	/// </summary>
 	void UpdatePos();
 
 	/// <summary>
-	/// �����蔻����l���������W�X�V
+	/// 当たり判定を考慮した座標更新
 	/// </summary>
 	void FixPos();
 
 	/// <summary>
-	/// �����o������
+	/// 押し出し処理
 	/// </summary>
 	void FixPosInternal();
 
 
-private:	// �ϐ�
-	float m_angleH;	// �����p�x
-	float m_angleV;	// �����p�x
-	float m_cameraToTargetLenght;	// �J��������^�[�Q�b�g�܂ł̋���
-	float m_clearCameraToTargetLength; // �X�e�[�W�N���A���̃J��������^�[�Q�b�g�܂ł̋���
-	float m_stageClearEasingTime;		// �Q�[���N���A���̃C�[�W���O�ɂ����鎞��
-	float m_stageClearTargetEasingTime;	// �Q�[���N���A���̃^�[�Q�b�g�̈ړ����̃C�[�W���O�ɂ����鎞��
-	bool m_isStageClear;	// �X�e�[�W���N���A������
+private:	// 変数
+	float m_angleH;						// 水平角度
+	float m_angleV;						// 垂直角度
+	float m_cameraToTargetLenght;		// カメラからターゲットまでの距離
+	float m_clearCameraToTargetLength;	// ステージクリア時のカメラからターゲットまでの距離
+	float m_stageClearEasingTime;		// ゲームクリア時のイージングにかかる時間
+	float m_stageClearTargetEasingTime;	// ゲームクリア時のターゲットの移動時のイージングにかかる時間
+	bool m_isStageClear;				// ステージをクリアしたか
+	VECTOR m_pos;						// 座標
+	VECTOR m_nextPos;					// 次の座標
+	VECTOR m_prevPos;					// 前の座標
+	VECTOR m_targetPos;					// ターゲットの座標
+	VECTOR m_leftVec;					// カメラからターゲットまでのベクトルから見て左方向のベクトル
+	VECTOR m_stageClearTargetStartPos;	// ステージクリア時のターゲットの初期座標
+	VECTOR m_stageClearTargetEndPos;	// ステージクリア時のターゲットの最終座標
+	MATRIX m_rotX;						// 回転用行列X
+	MATRIX m_rotY;						// 回転用行列Y
 
-	VECTOR m_pos;		// ���W
-	VECTOR m_nextPos;	// ���̍��W
-	VECTOR m_prevPos;	// �O�̍��W
-	VECTOR m_targetPos;	// �^�[�Q�b�g�̍��W
-	VECTOR m_leftVec;	// �J��������^�[�Q�b�g�܂ł̃x�N�g�����猩�č������̃x�N�g��
-	VECTOR m_stageClearTargetStartPos;	// �X�e�[�W�N���A���̃^�[�Q�b�g�̏������W
-	VECTOR m_stageClearTargetEndPos;	// �X�e�[�W�N���A���̃^�[�Q�b�g�̍ŏI���W
+	std::shared_ptr<Circle> m_pCircle;					// 当たり判定のポインタ
+	std::shared_ptr<Time> m_pClearTargetStartMoveTime;	// ステージクリア時のターゲットが移動するまでの移動時間
 
-	MATRIX m_rotX;	// ��]�p�s��X
-	MATRIX m_rotY;	// ��]�p�s��Y
-
-	std::shared_ptr<Circle> m_pCircle;	// �����蔻��̃|�C���^
-	std::shared_ptr<Time> m_pClearTargetStartMoveTime;	// �X�e�[�W�N���A���̃^�[�Q�b�g���ړ�����܂ł̈ړ�����
-
-
-	/*�����蔻��p�̏��*/
-	bool m_isMove;		// �ړ��������ǂ���
-	bool m_isHit;		// �|���S���ɓ���������
+	/*当たり判定用の情報*/
+	bool m_isMove;		// 移動したかどうか
+	bool m_isHit;		// ポリゴンに当たったか
 	
-	MV1_COLL_RESULT_POLY_DIM m_hitDim{};								// �����蔻��̌��ʂ�����\����
-	MV1_COLL_RESULT_POLY* m_pPolyIndex[ColInfo::kMaxColHitPolyNum]{};	// �ǃ|���S���Ɣ��f���ꂽ�|���S���̍\���̂̃A�h���X��ۑ����邽�߂̃|�C���^�z��
-	MV1_COLL_RESULT_POLY* m_pPoly;									// �|���S���̍\���̂ɃA�N�Z�X���邽�߂Ɏg�p����|�C���^
-	HITRESULT_LINE m_lineRes{};										// �����ƃ|���S���Ƃ̓����蔻��̌��ʂ�������\����
+	MV1_COLL_RESULT_POLY_DIM m_hitDim{};								// 当たり判定の結果を入れる構造体
+	MV1_COLL_RESULT_POLY* m_pPolyIndex[ColInfo::kMaxColHitPolyNum]{};	// 壁ポリゴンと判断されたポリゴンの構造体のアドレスを保存するためのポインタ配列
+	MV1_COLL_RESULT_POLY* m_pPoly;										// ポリゴンの構造体にアクセス数るために使用するポインタ
+	HITRESULT_LINE m_lineRes{};											// 線分とポリゴンとの当たり判定の結果を代入する構造体
 };
 

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "ObjectBase.h"
 #include "../Util/Game.h"
 
@@ -23,12 +23,12 @@ public:
 	virtual void StageClear() override final;
 
 	/// <summary>
-	/// ƒQ[ƒ€I—¹ˆ—
+	/// ã‚²ãƒ¼ãƒ çµ‚äº†æ™‚å‡¦ç†
 	/// </summary>
-	void GameEnd() override final;
+	void StageEnd() override final;
 
 	/// <summary>
-	/// ©g‚Ì“–‚½‚è”»’èî•ñ
+	/// è‡ªèº«ã®å½“ãŸã‚Šåˆ¤å®šæƒ…å ±
 	/// </summary>
 	/// <returns></returns>
 	virtual ColType GetColType() const override final { return ColType::Field; }

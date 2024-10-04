@@ -1,4 +1,4 @@
-#include "CsvLoad.h"
+ï»¿#include "CsvLoad.h"
 #include "EffekseerForDXLib.h"
 
 #include <vector>
@@ -6,7 +6,7 @@
 #include <string>
 #include<cassert>
 
-//“Á’è‚Ì•¶š‚ªŒŸo‚³‚ê‚é‚Ü‚Å•¶š‚ğƒvƒbƒVƒ…ƒoƒbƒN‚·‚é
+//ç‰¹å®šã®æ–‡å­—ãŒæ¤œå‡ºã•ã‚Œã‚‹ã¾ã§æ–‡å­—ã‚’ãƒ—ãƒƒã‚·ãƒ¥ãƒãƒƒã‚¯ã™ã‚‹
 std::vector<std::string> Split(std::string& input, char delimiter)
 {
 	std::istringstream stream(input);
@@ -20,12 +20,12 @@ std::vector<std::string> Split(std::string& input, char delimiter)
 
 CsvLoad::CsvLoad()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 CsvLoad::~CsvLoad()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 CsvLoad& CsvLoad::GetInstance()
@@ -37,7 +37,7 @@ CsvLoad& CsvLoad::GetInstance()
 
 void CsvLoad::AnimLoad(CharacterBase::AnimData& Data, const char* charcterName)
 {
-	// ƒtƒ@ƒCƒ‹î•ñ‚Ì“Ç‚İ‚İ
+	// ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã®èª­ã¿è¾¼ã¿
 	std::ifstream ifs("Data/File/AnimNum.csv");
 	std::string line;
 
@@ -47,38 +47,37 @@ void CsvLoad::AnimLoad(CharacterBase::AnimData& Data, const char* charcterName)
 
 	while (getline(ifs, line))
 	{
-		// csvƒf[ƒ^‚Ps‚ğA','‚Å•¡”‚Ì•¶š—ñ‚É•ªŠ„
+		// csvãƒ‡ãƒ¼ã‚¿ï¼‘è¡Œã‚’ã€','ã§è¤‡æ•°ã®æ–‡å­—åˆ—ã«åˆ†å‰²
 		strvec = Split(line, ',');
 
-		// strvec[0]	: ƒLƒƒƒ‰–¼	string
-		// strvec[1]	: ‘Ò‹@ƒ‚[ƒVƒ‡ƒ“
-		// strvec[2]	: •à‚«ƒ‚[ƒVƒ‡ƒ“
-		// strvec[3]	: ƒWƒƒƒ“ƒvƒ‚[ƒVƒ‡ƒ“
-		// strvec[4]	: ƒWƒƒƒ“ƒv’†ƒ‚[ƒVƒ‡ƒ“
-		// strvec[5]	: ‘–‚èƒ‚[ƒVƒ‡ƒ“
-		// strvec[6]	: ƒmƒbƒNƒoƒbƒNƒ‚[ƒVƒ‡ƒ“
+		// strvec[0]	: ã‚­ãƒ£ãƒ©å	string
+		// strvec[1]	: å¾…æ©Ÿãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
+		// strvec[2]	: æ­©ããƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
+		// strvec[3]	: ã‚¸ãƒ£ãƒ³ãƒ—æ™‚ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
+		// strvec[4]	: ã‚¸ãƒ£ãƒ³ãƒ—ä¸­ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
+		// strvec[5]	: èµ°ã‚Šãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
+		// strvec[6]	: ãƒãƒƒã‚¯ãƒãƒƒã‚¯ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
 
-		//QÆ‚µ‚½‚¢ƒLƒƒƒ‰‚ªŒ©‚Â‚©‚Á‚Ä‚¢‚½‚çˆ—‚ğ‚â‚ß‚é
+		//å‚ç…§ã—ãŸã„ã‚­ãƒ£ãƒ©ãŒè¦‹ã¤ã‹ã£ã¦ã„ãŸã‚‰å‡¦ç†ã‚’ã‚„ã‚ã‚‹
 		const char* str = strvec[0].c_str();
 		if (strcmp(str, charcterName) == 0)
 		{
 			for (int i = 0; i < animData.size(); i++)
 			{
-				//ƒLƒƒƒ‰ƒNƒ^[–¼î•ñ‚Í‚¢‚ç‚È‚¢‚Ì‚ÅÈ‚­
+				//ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼åæƒ…å ±ã¯ã„ã‚‰ãªã„ã®ã§çœã
 				if (i == 0)continue;
 				int animNum = stoi(strvec[i]);
 				animData[i] = static_cast<int8_t>(animNum);
 			}
 			break;
 		}
-
 		else
 		{
 			strvec.erase(strvec.begin(), strvec.end());
 		}
 	}
 
-	//ŠO•”ƒtƒ@ƒCƒ‹‚©‚ç‚Á‚Ä‚«‚½ƒXƒe[ƒ^ƒXî•ñ‚ğƒXƒe[ƒ^ƒXƒf[ƒ^‚É“ü‚ê‚é
+	//å¤–éƒ¨ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰æŒã£ã¦ããŸã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹æƒ…å ±ã‚’ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒ‡ãƒ¼ã‚¿ã«å…¥ã‚Œã‚‹
 	Data.idle = animData[1];
 	Data.walk = animData[2];
 	Data.jumpStart = animData[3];
@@ -89,73 +88,73 @@ void CsvLoad::AnimLoad(CharacterBase::AnimData& Data, const char* charcterName)
 
 void CsvLoad::SoundLoad(std::unordered_map<std::string, LoadData::SoundData>& Data)
 {
-	// ƒtƒ@ƒCƒ‹î•ñ‚Ì“Ç‚İ‚İ
+	// ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã®èª­ã¿è¾¼ã¿
 	std::ifstream ifs("Data/File/SoundData.csv");
 	std::string line;
 	while (getline(ifs, line))
 	{
-		// csvƒf[ƒ^‚Ps‚ğA','‚Å•¡”‚Ì•¶š—ñ‚É•ªŠ„
+		// csvãƒ‡ãƒ¼ã‚¿ï¼‘è¡Œã‚’ã€','ã§è¤‡æ•°ã®æ–‡å­—åˆ—ã«åˆ†å‰²
 		std::vector<std::string> strvec = Split(line, ',');
 
-		// strvec[0]	: ƒtƒ@ƒCƒ‹–¼	string
-		// strvec[1]	: BGMƒtƒ‰ƒO		int(bool ‚É•ÏŠ·‚µ‚½‚¢)
-		// strvec[2]	: ‰¹—Ê			float
+		// strvec[0]	: ãƒ•ã‚¡ã‚¤ãƒ«å	string
+		// strvec[1]	: BGMãƒ•ãƒ©ã‚°		int(bool ã«å¤‰æ›ã—ãŸã„)
+		// strvec[2]	: éŸ³é‡			float
 
-		// •¶š—ñ‚ğ“KØ‚Èƒf[ƒ^Œ^‚É•ÏŠ·‚µ‚ÄŠi”[
+		// æ–‡å­—åˆ—ã‚’é©åˆ‡ãªãƒ‡ãƒ¼ã‚¿å‹ã«å¤‰æ›ã—ã¦æ ¼ç´
 		LoadData::SoundData data{};
 
 		std::string str;
 		
-		//BGM‚©SE‚©‚ğ”»’f‚·‚é
+		//BGMã‹SEã‹ã‚’åˆ¤æ–­ã™ã‚‹
 		if (stoi(strvec[1]) == 0)	// SE
 		{
 			str = "Data/Sound/SE/" + strvec[0] + ".mp3";
-			//ƒTƒEƒ“ƒh‚ğƒ[ƒh
+			//ã‚µã‚¦ãƒ³ãƒ‰ã‚’ãƒ­ãƒ¼ãƒ‰
 			data.handle = LoadSoundMem(str.c_str());
 			data.isBgm = false;
 		}
 		else	// BGM
 		{
 			str = "Data/Sound/BGM/" + strvec[0] + ".mp3";
-			//ƒTƒEƒ“ƒh‚ğƒ[ƒh
+			//ã‚µã‚¦ãƒ³ãƒ‰ã‚’ãƒ­ãƒ¼ãƒ‰
 			data.handle = LoadSoundMem(str.c_str());
 
 			data.isBgm = true;
 		}
-		//ƒ{ƒŠƒ…[ƒ€‚Ì‘å‚«‚³‚ğİ’è
+		//ãƒœãƒªãƒ¥ãƒ¼ãƒ ã®å¤§ãã•ã‚’è¨­å®š
 		data.volRate = stof(strvec[2]);
 
-		//strvec[0]‚Æ‚¢‚¤”z—ñ–¼‚Éƒf[ƒ^‚ğ•Û‘¶
+		//strvec[0]ã¨ã„ã†é…åˆ—åã«ãƒ‡ãƒ¼ã‚¿ã‚’ä¿å­˜
 		Data[strvec[0]] = data;
 	}
 }
 
 void CsvLoad::EffectLoad(std::unordered_map<std::string, LoadData::EffectData>& Data)
 {
-	// ƒtƒ@ƒCƒ‹î•ñ‚Ì“Ç‚İ‚İ
+	// ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã®èª­ã¿è¾¼ã¿
 	std::ifstream ifs("Data/File/EffectData.csv");
 	std::string line;
 
 	while (getline(ifs, line))
 	{
-		// csvƒf[ƒ^‚Ps‚ğA','‚Å•¡”‚Ì•¶š—ñ‚É•ªŠ„
+		// csvãƒ‡ãƒ¼ã‚¿ï¼‘è¡Œã‚’ã€','ã§è¤‡æ•°ã®æ–‡å­—åˆ—ã«åˆ†å‰²
 		std::vector<std::string> strvec = Split(line, ',');
 
-		// strvec[0]	: ƒGƒtƒFƒNƒg–¼	string
-		// strvec[1]	: ƒGƒtƒFƒNƒgƒTƒCƒY
-		// strvec[2]	: ƒGƒtƒFƒNƒg‚ÌÄ¶‘¬“x
+		// strvec[0]	: ã‚¨ãƒ•ã‚§ã‚¯ãƒˆå	string
+		// strvec[1]	: ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚µã‚¤ã‚º
+		// strvec[2]	: ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®å†ç”Ÿé€Ÿåº¦
 
-		// •¶š—ñ‚ğ“KØ‚Èƒf[ƒ^Œ^‚É•ÏŠ·‚µ‚ÄŠi”[
+		// æ–‡å­—åˆ—ã‚’é©åˆ‡ãªãƒ‡ãƒ¼ã‚¿å‹ã«å¤‰æ›ã—ã¦æ ¼ç´
 		LoadData::EffectData data{};
 
-		///ƒtƒ@ƒCƒ‹–¼
+		///ãƒ•ã‚¡ã‚¤ãƒ«å
 		std::string fileName = "Data/Effect/";
 		fileName += strvec[0];
 		fileName += +".efk";
 
 		const char* file = fileName.c_str();
 
-		//ŠO•”ƒtƒ@ƒCƒ‹‚©‚ç‚Á‚Ä‚«‚½ƒGƒtƒFƒNƒgî•ñ‚ğƒGƒtƒFƒNƒgƒf[ƒ^‚É“ü‚ê‚é
+		//å¤–éƒ¨ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰æŒã£ã¦ããŸã‚¨ãƒ•ã‚§ã‚¯ãƒˆæƒ…å ±ã‚’ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã«å…¥ã‚Œã‚‹
 		Data[strvec[0]].resouceH = LoadEffekseerEffect(file);
 		Data[strvec[0]].size = stof(strvec[1]);
 		Data[strvec[0]].speed = stof(strvec[2]);

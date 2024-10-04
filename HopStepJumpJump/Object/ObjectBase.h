@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "DxLib.h"
 #include "../Util/CharacterData.h"
 
@@ -7,163 +7,180 @@
 
 class Model;
 class ObjectManager;
-class Time;
-class Player;
-class Circle;
 class ToonShader;
 class ShadowMapShader;
 
 namespace ColInfo
 {
-	// Å‘å“–‚½‚è”»’èƒ|ƒŠƒSƒ“”
-	constexpr int kMaxColHitPolyNum = 2000;
-	// •Ç‰Ÿ‚µo‚µˆ—‚ÌÅ‘ås‰ñ”
-	constexpr int kMaxColHitTryNum = 16;
-	// •Ç‰Ÿ‚µo‚µ‚ÉƒXƒ‰ƒCƒh‚³‚¹‚é‹——£
-	constexpr float kColHitSlideLength = 1.0f;
+	constexpr int kMaxColHitPolyNum = 2000;		// æœ€å¤§å½“ãŸã‚Šåˆ¤å®šãƒãƒªã‚´ãƒ³æ•°
+	constexpr int kMaxColHitTryNum = 16;		// å£æŠ¼ã—å‡ºã—å‡¦ç†ã®æœ€å¤§è©¦è¡Œå›æ•°
+	constexpr float kColHitSlideLength = 1.0f;	// å£æŠ¼ã—å‡ºã—æ™‚ã«ã‚¹ãƒ©ã‚¤ãƒ‰ã•ã›ã‚‹è·é›¢
 }
 
 class ObjectBase
 {
-public:	// —ñ‹“‘Ì
-
-	// •¨‘Ì‚Ì•ª—Ş
-	enum class ColType
-	{
-		None,		// –³‚µ
-		Player,		// ƒvƒŒƒCƒ„[
-		Enemy,		// ƒGƒlƒ~[
-		Field,		// ƒtƒB[ƒ‹ƒh
-		Item,		// ƒAƒCƒeƒ€
-	};
-
-public:	// ŠÖ”
-	ObjectBase();
-
-	virtual ~ObjectBase();
-
-	virtual void Init();
-	virtual void Update();
-
-	virtual void Draw(std::shared_ptr<ToonShader> pToonShader);
+public:	// åˆ—æŒ™ä½“
 
 	/// <summary>
-	/// ‰e‚Ì•`‰æ
+	/// å½“ãŸã‚Šåˆ¤å®šã®ç¨®é¡
 	/// </summary>
-	/// <param name="pShadoeMapShader"></param>
+	enum class ColType
+	{
+		None,		// ç„¡ã—
+		Player,		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼
+		Enemy,		// ã‚¨ãƒãƒŸãƒ¼
+		Field,		// ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰
+		Item,		// ã‚¢ã‚¤ãƒ†ãƒ 
+	};
+
+public:	// é–¢æ•°
+	/// <summary>
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// </summary>
+	ObjectBase();
+
+	/// <summary>
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// </summary>
+	virtual ~ObjectBase();
+
+	/// <summary>
+	/// åˆæœŸåŒ–
+	/// </summary>
+	virtual void Init() = 0;
+
+	/// <summary>
+	/// æ›´æ–°
+	/// </summary>
+	virtual void Update() = 0;
+
+	/// <summary>
+	/// æç”»
+	/// </summary>
+	/// <param name="pToonShader">ãƒˆã‚¥ãƒ¼ãƒ³ã‚·ã‚§ãƒ¼ãƒ€</param>
+	virtual void Draw(std::shared_ptr<ToonShader> pToonShader) = 0;
+
+	/// <summary>
+	/// å½±ã®æç”»
+	/// </summary>
+	/// <param name="pShadoeMapShader">ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—ã‚·ã‚§ãƒ¼ãƒ€ãƒã‚¤ãƒ³ã‚¿</param>
 	virtual void ShadowMapDraw(std::shared_ptr<ShadowMapShader> pShadowMapShader);
 
 	/// <summary>
-	/// 2D‚Ì•`‰æ
+	/// 2Dã®æç”»
 	/// </summary>
-	virtual void Draw2D();
+	virtual void Draw2D() {/*å‡¦ç†ç„¡ã—*/ };
 
 	/// <summary>
-	/// ƒXƒe[ƒWƒNƒŠƒA
+	/// ã‚¹ãƒ†ãƒ¼ã‚¸ã‚¯ãƒªã‚¢æ™‚
 	/// </summary>
-	virtual void StageClear();
+	virtual void StageClear() {/*å‡¦ç†ç„¡ã—*/ };
 
 	/// <summary>
-	///	ƒQ[ƒ€I—¹
+	///	ã‚¹ãƒ†ãƒ¼ã‚¸çµ‚äº†æ™‚
 	/// </summary>
-	virtual void GameEnd();
+	virtual void StageEnd() {/*å‡¦ç†ç„¡ã—*/ };
 
 	/// <summary>
-	/// UŒ‚‚ª“–‚½‚Á‚½
+	/// æ”»æ’ƒå‡¦ç†
 	/// </summary>
-	virtual void OnAttack();
+	virtual void OnAttack() {/*å‡¦ç†ç„¡ã—*/ };
 
 	/// <summary>
-	/// ƒƒCƒ“ƒ|ƒCƒ“ƒ^‚Ìİ’è
+	/// ãƒ¡ã‚¤ãƒ³ãƒã‚¤ãƒ³ã‚¿ã®è¨­å®š
 	/// </summary>
-	/// <param name="objectManager"></param>
+	/// <param name="objectManager">ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ãƒã‚¤ãƒ³ã‚¿</param>
 	void SetMain(ObjectManager* objectManager) { m_pObjectManager = objectManager; }
 
 	/// <summary>
-	/// ƒ‚ƒfƒ‹ƒnƒ“ƒhƒ‹‚Ìİ’è
+	/// ãƒ¢ãƒ‡ãƒ«ãƒãƒ³ãƒ‰ãƒ«ã®è¨­å®š
 	/// </summary>
-	/// <param name="handle"></param>
+	/// <param name="handle">ãƒ¢ãƒ‡ãƒ«ãƒãƒ³ãƒ‰ãƒ«</param>
 	void SetModelHandle(int handle) { m_modelH = handle; }
 
 	/// <summary>
-	/// ‘¶İ‚ªÁ‚¦‚Ä‚©‚ç‚ÌƒJƒEƒ“ƒg
-	/// (‘¶İ‚ªÁ‚¦‚Ä‚©‚ç‚à“|‚ê‚é‰‰o‚Å­‚µ‚ÌŠÔ‚¾‚¯ƒ‚ƒfƒ‹‚ğ•`‰æ‚³‚¹‚é‚½‚ß)
-	/// </summary>
-	/// <returns></returns>
-	bool IsExistCount();
-
-	/// <summary>
-	/// I—¹ˆ—
+	/// çµ‚äº†å‡¦ç†
 	/// </summary>
 	void End();
 
 	/// <summary>
-	/// ƒ‚ƒfƒ‹ƒNƒ‰ƒX‚Ìæ“¾
+	/// ãƒ¢ãƒ‡ãƒ«ã‚¯ãƒ©ã‚¹ã®å–å¾—
 	/// </summary>
-	/// <returns>ƒ‚ƒfƒ‹ƒNƒ‰ƒX</returns>
+	/// <returns>ãƒ¢ãƒ‡ãƒ«ã‚¯ãƒ©ã‚¹</returns>
 	const std::shared_ptr<Model> GetModel() const { return m_pModel;}
 
 	/// <summary>
-	/// ƒLƒƒƒ‰ƒNƒ^[î•ñ‚Ìæ“¾
+	/// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼æƒ…å ±ã®å–å¾—
 	/// </summary>
-	/// <returns>ƒLƒƒƒ‰ƒNƒ^[î•ñ</returns>
+	/// <returns>ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼æƒ…å ±</returns>
 	const CharacterData::CharacterInfo GetInfo() const { return m_info; }
 
 	/// <summary>
-	/// ©M‚Ì“–‚½‚è”»’è‚Ìî•ñ
+	/// è‡ªä¿¡ã®å½“ãŸã‚Šåˆ¤å®šã®æƒ…å ±
 	/// </summary>
-	/// <returns>“–‚½‚è”»’èî•ñ</returns>
+	/// <returns>å½“ãŸã‚Šåˆ¤å®šæƒ…å ±</returns>
 	virtual ColType GetColType() const { return ColType::None; }
 
-
-	bool IsGameEnd()const { return m_isGameEnd; }
-
-	bool IsDamage() const { return m_isDamage; }
-
+	/// <summary>
+	/// ã‚¹ãƒ†ãƒ¼ã‚¸çµ‚äº†æ™‚ã®å‡¦ç†ãŒçµ‚ã‚ã£ã¦ã„ã‚‹ã‹
+	/// </summary>
+	/// <returns>ã‚¹ãƒ†ãƒ¼ã‚¸çµ‚äº†æ™‚ã®å‡¦ç†ãŒçµ‚ã‚ã£ã¦ã„ã‚‹ã‹</returns>
+	bool IsStageEnd()const { return m_isStageEnd; }
 
 	/// <summary>
-	/// ˆÚ“®ƒAƒbƒvƒf[ƒg
+	/// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã¦ã„ã‚‹ã‹
 	/// </summary>
-	/// <param name="pField"></param>
+	/// <returns>ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã¦ã„ã‚‹ã‹</returns>
+	bool IsDamage() const { return m_isDamage; }
+
+	/// <summary>
+	/// å½“ãŸã‚Šåˆ¤å®šã‚’è€ƒæ…®ã—ã¦ã®ç§»å‹•æ›´æ–°
+	/// </summary>
+	/// <param name="pField">ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒã‚¤ãƒ³ã‚¿</param>
 	void MoveCollFieldUpdate(ObjectBase* pField);
 
-protected:	// •Ï”
-	std::shared_ptr<Model> m_pModel;	// ƒ‚ƒfƒ‹ƒNƒ‰ƒX
-	CharacterData::CharacterInfo m_info;	// ƒLƒƒƒ‰ƒNƒ^[î•ñ	
-	float m_objSize;	// ƒIƒuƒWƒFƒNƒgƒTƒCƒY
-	float m_angle;		// ƒLƒƒƒ‰ƒNƒ^[‚ÌŒü‚«
-	float m_moveSpeed;	// ˆÚ“®ƒXƒs[ƒh
-	int m_modelH;		// ƒ‚ƒfƒ‹ƒnƒ“ƒhƒ‹
-	bool m_isDamage;	// UŒ‚‚ğó‚¯‚½‚©
-	bool m_isGameEnd;	// ƒQ[ƒ€I—¹‚µ‚½‚©‚Ç‚¤‚©
+protected:	// å¤‰æ•°
+	int m_modelH;								// ãƒ¢ãƒ‡ãƒ«ãƒãƒ³ãƒ‰ãƒ«
+	float m_objSize;							// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚µã‚¤ã‚º
+	float m_angle;								// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®å‘ã
+	float m_moveSpeed;							// ç§»å‹•ã‚¹ãƒ”ãƒ¼ãƒ‰
+	bool m_isDamage;							// æ”»æ’ƒã‚’å—ã‘ãŸã‹
+	bool m_isStageEnd;							// ã‚¹ãƒ†ãƒ¼ã‚¸çµ‚äº†æ™‚ã®å‡¦ç†ãŒçµ‚ã‚ã£ã¦ã‚‹ã‹ã©ã†ã‹
+	std::shared_ptr<Model> m_pModel;			// ãƒ¢ãƒ‡ãƒ«ã‚¯ãƒ©ã‚¹ãƒã‚¤ãƒ³ã‚¿
+	ObjectManager* m_pObjectManager;			// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ãƒã‚¤ãƒ³ã‚¿
+	CharacterData::CharacterInfo m_info;		// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼æƒ…å ±	
 
-	ObjectManager* m_pObjectManager = nullptr;
-
-private:	// ŠÖ”
-	// ƒ`ƒFƒbƒN‚µ‚½ƒ|ƒŠƒSƒ“‚ª•Çƒ|ƒŠƒSƒ“‚©°ƒ|ƒŠƒSƒ“‰»‚ğ”»’f‚µ•Û‘¶‚·‚é
+private:	// é–¢æ•°
+	/// <summary>
+	/// ãƒã‚§ãƒƒã‚¯ã—ãŸãƒãƒªã‚´ãƒ³ãŒå£ãƒãƒªã‚´ãƒ³ã‹åºŠãƒãƒªã‚´ãƒ³ã‹
+	/// åˆ¤æ–­ã—ã¦ä¿å­˜ã™ã‚‹
+	/// </summary>
 	void CheckWallAndFloor();
-	// •Çƒ|ƒŠƒSƒ“‚Æ‚Ì“–‚½‚è”»’è‚ğƒ`ƒFƒbƒN‚µAˆÚ“®‚³‚¹‚é
+
+	/// <summary>
+	/// å£ãƒãƒªã‚´ãƒ³ã¨ã®å½“ãŸã‚Šåˆ¤å®šã‚’ãƒã‚§ãƒƒã‚¯ã—ã¦ç§»å‹•ã•ã›ã‚‹
+	/// </summary>
 	void FixPosWithWall();
+
 	void FixPosWithWallInternal();
-	// °ƒ|ƒŠƒSƒ“‚Æ‚Ì“–‚½‚è”»’è‚ğƒ`ƒFƒbƒN‚µAˆÚ“®‚³‚¹‚é
+
+	/// <summary>
+	/// åºŠãƒãƒªã‚´ãƒ³ã¨ã®å½“ãŸã‚Šåˆ¤å®šã‚’ãƒã‚§ãƒƒã‚¯ã—ã¦ç§»å‹•ã•ã›ã‚‹
+	/// </summary>
 	void FixPosWithFloor();
 
-private:	// •Ï”
-	bool m_isMove;	// ˆÚ“®‚µ‚½‚©‚Ç‚¤‚©
-	bool m_isHit;	// ƒ|ƒŠƒSƒ“‚É“–‚½‚Á‚½‚©‚Ç‚¤‚©
-	int m_wallNum;	// •Ç‚Æ”»’f‚³‚ê‚½ƒ|ƒŠƒSƒ“”
-	int m_floorNum;	// °‚Æ”»’f‚³‚ê‚½ƒ|ƒŠƒSƒ“”
+private:	// å¤‰æ•°
+	int m_wallNum;			// å£ã¨åˆ¤æ–­ã•ã‚ŒãŸãƒãƒªã‚´ãƒ³æ•°
+	int m_floorNum;			// åºŠã¨åˆ¤æ–­ã•ã‚ŒãŸãƒãƒªã‚´ãƒ³æ•°
+	bool m_isMove;			// ç§»å‹•ã—ãŸã‹ã©ã†ã‹
+	bool m_isHit;			// ãƒãƒªã‚´ãƒ³ã«å½“ãŸã£ãŸã‹ã©ã†ã‹
+	VECTOR m_oldPos;		// ç§»å‹•å‰ã®åº§æ¨™
+	VECTOR m_nextPos;		// ç§»å‹•å¾Œã®åº§æ¨™
 
-	MV1_COLL_RESULT_POLY_DIM m_hitDim;		// “–‚½‚è”»’èŒ‹‰Ê\‘¢‘Ì
-	MV1_COLL_RESULT_POLY* m_pWallPoly[ColInfo::kMaxColHitPolyNum];	// •Çƒ|ƒŠƒSƒ“‚Æ”»’f‚³‚ê‚½ƒ|ƒŠƒSƒ“‚ÌƒAƒhƒŒƒX‚ğ•Û‘¶‚µ‚Ä‚¨‚­‚½‚ß‚Ìƒ|ƒCƒ“ƒ^”z—ñ
-	MV1_COLL_RESULT_POLY* m_pFloorPoly[ColInfo::kMaxColHitPolyNum];	// •Çƒ|ƒŠƒSƒ“‚Æ”»’f‚³‚ê‚½ƒ|ƒŠƒSƒ“‚ÌƒAƒhƒŒƒX‚ğ•Û‘¶‚µ‚Ä‚¨‚­‚½‚ß‚Ìƒ|ƒCƒ“ƒ^”z—ñ
-	MV1_COLL_RESULT_POLY* m_pPoly;	// ƒ|ƒŠƒSƒ“‚Ì\‘¢‘Ì‚ÉƒAƒNƒZƒX‚·‚é‚½‚ß‚Ég—p‚·‚éƒ|ƒCƒ“ƒ^
-	HITRESULT_LINE m_lineRes;					// ü•ª‚Æƒ|ƒŠƒSƒ“‚Æ‚Ì“–‚½‚è”»’è‚ÌŒ‹‰Ê‚ğ‘ã“ü‚·‚é\‘¢‘Ì
-
-	VECTOR m_oldPos;		// ˆÚ“®‘O‚ÌÀ•W
-	VECTOR m_nextPos;		// ˆÚ“®Œã‚ÌÀ•W
-
-	// ‘¶İ‚ªÁ‚¦‚Ä‚©‚ç‚ÌŠÔ
-	std::shared_ptr<Time> m_pExistCountTime;
+	MV1_COLL_RESULT_POLY_DIM m_hitDim{};								// å½“ãŸã‚Šåˆ¤å®šçµæœæ§‹é€ ä½“
+	MV1_COLL_RESULT_POLY* m_pWallPoly[ColInfo::kMaxColHitPolyNum]{};	// å£ãƒãƒªã‚´ãƒ³ã¨åˆ¤æ–­ã•ã‚ŒãŸãƒãƒªã‚´ãƒ³ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’ä¿å­˜ã—ã¦ãŠããŸã‚ã®ãƒã‚¤ãƒ³ã‚¿é…åˆ—
+	MV1_COLL_RESULT_POLY* m_pFloorPoly[ColInfo::kMaxColHitPolyNum]{};	// å£ãƒãƒªã‚´ãƒ³ã¨åˆ¤æ–­ã•ã‚ŒãŸãƒãƒªã‚´ãƒ³ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’ä¿å­˜ã—ã¦ãŠããŸã‚ã®ãƒã‚¤ãƒ³ã‚¿é…åˆ—
+	MV1_COLL_RESULT_POLY* m_pPoly;										// ãƒãƒªã‚´ãƒ³ã®æ§‹é€ ä½“ã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ãŸã‚ã«ä½¿ç”¨ã™ã‚‹ãƒã‚¤ãƒ³ã‚¿
+	HITRESULT_LINE m_lineRes{};											// ç·šåˆ†ã¨ãƒãƒªã‚´ãƒ³ã¨ã®å½“ãŸã‚Šåˆ¤å®šã®çµæœã‚’ä»£å…¥ã™ã‚‹æ§‹é€ ä½“
 };
 

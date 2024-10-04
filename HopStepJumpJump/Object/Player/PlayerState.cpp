@@ -1,4 +1,4 @@
-#include "PlayerState.h"
+ï»¿#include "PlayerState.h"
 
 #include "../../Util/Pad.h"
 #include "../../Util/SoundManager.h"
@@ -6,16 +6,23 @@
 PlayerState::PlayerState():
 	m_isAction(false)
 {
+	/*å‡¦ç†ç„¡ã—*/
+}
+
+PlayerState::~PlayerState()
+{
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void PlayerState::Update()
 {
-	// ó‘Ô‘JˆÚ
+	// çŠ¶æ…‹é·ç§»
 	StateTransition();
 
+	// ã‚¹ãƒ†ã‚¤ãƒˆæ›´æ–°
 	m_pNowState.stateUpdate();
 
-	// •à‚«A‘–‚èó‘Ô‚Å‚Í‚È‚¢‚Æ‚«‚ÍƒTƒEƒ“ƒh‚ğ~‚ß‚é
+	// æ­©ãã€èµ°ã‚ŠçŠ¶æ…‹ã§ã¯ãªã„ã¨ãã¯ã‚µã‚¦ãƒ³ãƒ‰ã‚’æ­¢ã‚ã‚‹
 	if (m_pNowState.stateKind != StateKind::Walk)
 	{
 		SoundManager::GetInstance().DesignationStopSound("Walk");
@@ -28,19 +35,19 @@ void PlayerState::Update()
 
 void PlayerState::OnDamage()
 {
-	// Œ»İ‚Ìó‘Ô‚ªƒmƒbƒNƒoƒbƒN‚Ì‚Í‰½‚à‚¹‚¸‚ÉI—¹‚·‚é
+	// ç¾åœ¨ã®çŠ¶æ…‹ãŒãƒãƒƒã‚¯ãƒãƒƒã‚¯ã®æ™‚ã¯ä½•ã‚‚ã›ãšã«çµ‚äº†ã™ã‚‹
 	if (m_pNowState.stateKind == StateKind::KnockBack) return;
 
-	// ƒmƒbƒNƒoƒbƒNó‘Ô‚É‘JˆÚ‚·‚é
+	// ãƒãƒƒã‚¯ãƒãƒƒã‚¯çŠ¶æ…‹ã«é·ç§»ã™ã‚‹
 	for (auto& changeState : m_pState)
 	{
-		// ó‘Ô‚ªƒmƒbƒNƒoƒbƒN‚Ì
+		// çŠ¶æ…‹ãŒãƒãƒƒã‚¯ãƒãƒƒã‚¯ã®æ™‚
 		if (changeState.stateKind == StateKind::KnockBack)
 		{
 			m_isAction = true;
-			// ó‘Ô•ÏX
+			// çŠ¶æ…‹å¤‰æ›´
 			m_pNowState = changeState;
-			// ó‘Ô‚Ì‰Šú‰»
+			// çŠ¶æ…‹ã®åˆæœŸåŒ–
 			m_pNowState.stateInit();
 			return;
 		}
@@ -49,19 +56,19 @@ void PlayerState::OnDamage()
 
 void PlayerState::StageClear()
 {
-	// Œ»İ‚Ìó‘Ô‚ªƒXƒe[ƒWƒNƒŠƒA‚Ì‚Í‰½‚à‚¹‚¸‚ÉI—¹‚·‚é
+	// ç¾åœ¨ã®çŠ¶æ…‹ãŒã‚¹ãƒ†ãƒ¼ã‚¸ã‚¯ãƒªã‚¢ã®æ™‚ã¯ä½•ã‚‚ã›ãšã«çµ‚äº†ã™ã‚‹
 	if (m_pNowState.stateKind == StateKind::StateClear) return;
 
-	// ƒXƒe[ƒWƒNƒŠƒAó‘Ô‚É‘JˆÚ‚·‚é
+	// ã‚¹ãƒ†ãƒ¼ã‚¸ã‚¯ãƒªã‚¢çŠ¶æ…‹ã«é·ç§»ã™ã‚‹
 	for (auto& changeState : m_pState)
 	{
-		// ó‘Ô‚ªƒXƒe[ƒWƒNƒŠƒA‚Ì
+		// çŠ¶æ…‹ãŒã‚¹ãƒ†ãƒ¼ã‚¸ã‚¯ãƒªã‚¢ã®æ™‚
 		if (changeState.stateKind == StateKind::StateClear)
 		{
 			m_isAction = true;
-			// ó‘Ô•ÏX
+			// çŠ¶æ…‹å¤‰æ›´
 			m_pNowState = changeState;
-			// ó‘Ô‚Ì‰Šú‰»
+			// çŠ¶æ…‹ã®åˆæœŸåŒ–
 			m_pNowState.stateInit();
 			return;
 		}
@@ -70,13 +77,13 @@ void PlayerState::StageClear()
 
 void PlayerState::AddState(std::function<void(void)> stateInit, std::function<void(void)> stateUpdate, StateKind stateKind)
 {
-	// ó‘Ô’Ç‰Á—p‚Ì•Ï”‚Ìİ’è
+	// çŠ¶æ…‹è¿½åŠ ç”¨ã®å¤‰æ•°ã®è¨­å®š
 	StateData state;
 	state.stateInit = stateInit;
 	state.stateUpdate = stateUpdate;
 	state.stateKind = stateKind;
 
-	// ó‘Ô’Ç‰Á
+	// çŠ¶æ…‹è¿½åŠ 
 	m_pState.push_back(state);
 }
 
@@ -84,10 +91,10 @@ void PlayerState::SetState(StateKind stateKind)
 {
 	for (auto& changeState : m_pState)
 	{
-		// ó‘Ô‚Ìí—Ş‚ªˆø”‚Ìó‘Ô‚Ì
+		// çŠ¶æ…‹ã®ç¨®é¡ãŒå¼•æ•°ã®çŠ¶æ…‹ã®æ™‚
 		if (changeState.stateKind == stateKind)
 		{
-			// ó‘Ô‚Ì•ÏX
+			// çŠ¶æ…‹ã®å¤‰æ›´
 			m_pNowState = changeState;
 			return;
 		}
@@ -96,68 +103,73 @@ void PlayerState::SetState(StateKind stateKind)
 
 void PlayerState::EndState()
 {
-	// ƒAƒNƒVƒ‡ƒ“‚ÌI—¹
+	// ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®çµ‚äº†
 	m_isAction = false;
 }
 
 void PlayerState::StateTransitionIdle()
 {
-	// ƒAƒNƒVƒ‡ƒ“’†‚Ìê‡‚Í‰½‚à‚¹‚¸‚ÉI—¹‚·‚é
+	// ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ä¸­ã®å ´åˆã¯ä½•ã‚‚ã—ãªã„
 	if (m_isAction) return;
 
-	// ˆÚ“®ƒ{ƒ^ƒ“‚ª‰½‚à‰Ÿ‚³‚ê‚Ä‚¢‚È‚©‚Á‚½ê‡
+	// ç§»å‹•ãƒœã‚¿ãƒ³ãŒä½•ã‚‚æŠ¼ã•ã‚Œã¦ã„ãªã‹ã£ãŸå ´åˆ
 	if (!Pad::isPress(PAD_INPUT_LEFT) && !Pad::isPress(PAD_INPUT_RIGHT) &&
 		!Pad::isPress(PAD_INPUT_UP) && !Pad::isPress(PAD_INPUT_DOWN))
 	{
+		// ã‚¹ãƒ†ã‚¤ãƒˆã‚’å¾…æ©ŸçŠ¶æ…‹ã«ã™ã‚‹
 		StateChange(StateKind::Idle);
 	}
 }
 
 void PlayerState::StateTransitionWalk()
 {
-	// ƒAƒNƒVƒ‡ƒ“’†‚Ìê‡‚Í‰½‚à‚¹‚¸‚ÉI—¹‚·‚é
+	// ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ä¸­ã®å ´åˆã¯ä½•ã‚‚ã—ãªã„
 	if (m_isAction) return;
 
-	// ˆÚ“®ƒ{ƒ^ƒ“‚ª‰½‚©‚µ‚ç‰Ÿ‚³‚ê‚Ä‚¢‚½ê‡
+	// ç§»å‹•ãƒœã‚¿ãƒ³ãŒä½•ã‹ã—ã‚‰æŠ¼ã•ã‚Œã¦ã„ãŸå ´åˆ
 	if (Pad::isPress(PAD_INPUT_LEFT) || Pad::isPress(PAD_INPUT_RIGHT) ||
 		Pad::isPress(PAD_INPUT_UP) || Pad::isPress(PAD_INPUT_DOWN))
 	{
+		// ã‚¹ãƒ†ã‚¤ãƒˆã‚’æ­©ãçŠ¶æ…‹ã«ã™ã‚‹
 		StateChange(StateKind::Walk);
 	}
 }
 
 void PlayerState::StateTransitionDash()
 {
-	// ƒAƒNƒVƒ‡ƒ“’†‚Ìê‡‚Í‰½‚à‚¹‚¸‚ÉI—¹‚·‚é
+	// ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ä¸­ã®å ´åˆã¯ä½•ã‚‚ã—ãªã„
 	if (m_isAction) return;
 
-	//ˆÚ“®ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚Ä‚¢‚È‚©‚Á‚½‚çˆ—‚ğ•Ô‚·
+	//ç§»å‹•ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚Œã¦ã„ãªã‹ã£ãŸã‚‰ä½•ã‚‚ã—ãªã„
 	if (!Pad::isPress(PAD_INPUT_LEFT) && !Pad::isPress(PAD_INPUT_RIGHT) &&
 		!Pad::isPress(PAD_INPUT_UP) && !Pad::isPress(PAD_INPUT_DOWN)) return;
 
-	// RB‚ª‰Ÿ‚³‚ê‚Ä‚¢‚½‚çƒ_ƒbƒVƒ…‚·‚é
+	// RBãŒæŠ¼ã•ã‚Œã¦ã„ãŸå ´åˆ
 	if (Pad::isPress(PAD_INPUT_6))
 	{
+		// ã‚¹ãƒ†ã‚¤ãƒˆã‚’ãƒ€ãƒƒã‚·ãƒ¥çŠ¶æ…‹ã«ã™ã‚‹
 		StateChange(StateKind::Dash);
 	}
 }
 
 void PlayerState::StateTransitionJump()
 {
-	// ƒAƒNƒVƒ‡ƒ“’†‚Ìê‡‚Í‰½‚à‚¹‚¸‚ÉI—¹‚·‚é
+	// ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ä¸­ã®å ´åˆã¯ä½•ã‚‚ã—ãªã„
 	if (m_isAction) return;
 
-	// Aƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚çƒWƒƒƒ“ƒv
+	// Aãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸå ´åˆ
 	if (Pad::isTrigger(PAD_INPUT_1))
 	{
+		// ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
 		m_isAction = true;
+		// ã‚¹ãƒ†ã‚¤ãƒˆã‚’ã‚¸ãƒ£ãƒ³ãƒ—çŠ¶æ…‹ã«ã™ã‚‹
 		StateChange(StateKind::Jump);
 	}
 }
 
 void PlayerState::StateTransition()
 {
-	// ó‘Ô‘JˆÚ
+	// çŠ¶æ…‹é·ç§»
 	StateTransitionIdle();
 	StateTransitionWalk();
 	StateTransitionDash();
@@ -168,12 +180,12 @@ void PlayerState::StateChange(StateKind stateKind)
 {
 	for (auto& changeState : m_pState)
 	{
-		// ó‘Ô‚Ìí—Ş‚ªˆø”‚Ìó‘Ô‚Ì
+		// ã‚¹ãƒ†ã‚¤ãƒˆã®ç¨®é¡ãŒå¼•æ•°ã®ã‚¹ãƒ†ã‚¤ãƒˆã®æ™‚
 		if (changeState.stateKind == stateKind)
 		{
-			// ó‘Ô•ÏX
+			// ç¾åœ¨ã®ã‚¹ãƒ†ã‚¤ãƒˆã‚’è©²å½“ã‚¹ãƒ†ã‚¤ãƒˆã«å¤‰æ›´
 			m_pNowState = changeState;
-			// ó‘Ô‚Ì‰Šú‰»ˆ—
+			// è©²å½“ã‚¹ãƒ†ã‚¤ãƒˆã®åˆæœŸåŒ–å‡¦ç†
 			m_pNowState.stateInit();
 			return;
 		}

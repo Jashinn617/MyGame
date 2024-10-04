@@ -1,4 +1,4 @@
-#include "ShadowMapShader.h"
+ï»¿#include "ShadowMapShader.h"
 #include "../Util/Game.h"
 
 #include <cassert>
@@ -8,14 +8,14 @@ namespace
 	constexpr int kShadowMapSizeX = 15360;
 	constexpr int kShadowMapSizeY = 8640;
 
-	// ƒJƒƒ‰‚Ì‹–ìŠp
+	// ã‚«ãƒ¡ãƒ©ã®è¦–é‡è§’
 	constexpr float kShadowMapFov = 45.0f * DX_PI_F / 180.0f;
 	constexpr float kNormalFov = 60.0f * DX_PI_F / 180.0f;
 }
 
 ShadowMapShader::ShadowMapShader()
 {
-	/*’¸“_ƒVƒF[ƒ_*/
+	/*é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€*/
 	m_vertexShader1FrameH = LoadVertexShader("Data/Shader/Vertex/VertexShader3D.vso");
 	assert(m_vertexShader1FrameH != -1);
 	m_vertexShader4FrameH = LoadVertexShader("Data/Shader/Vertex/VertexShader3D4Frame.vso");
@@ -28,44 +28,44 @@ ShadowMapShader::ShadowMapShader()
 	assert(m_vertexShaderNormal8FrameH != -1);
 	m_vertexShaderShadowMapFieldH = LoadVertexShader("Data/Shader/Vertex/VertexShaderShadowMap.vso");
 	assert(m_vertexShaderShadowMapFieldH != -1);
-	/*ƒsƒNƒZƒ‹ƒVƒF[ƒ_*/
+	/*ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€*/
 	m_pixelShaderH = LoadPixelShader("Data/Shader/Pixel/PixelShaderShadowMap.pso");
 	assert(m_pixelShaderH != -1);
 	m_pixelShaderFieldH = LoadPixelShader("Data/Shader/Pixel/ToonPixelShaderField.pso");
 	assert(m_pixelShaderFieldH != -1);
 
-	/*ƒ‰ƒCƒg‚Ì’è”ƒoƒbƒtƒ@‚Ìì¬*/
+	/*ãƒ©ã‚¤ãƒˆã®å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®ä½œæˆ*/
 	m_cbufferLightDirH = CreateShaderConstantBuffer(sizeof(float) * 4);
 	assert(m_cbufferLightDirH != -1);
-	// ƒAƒhƒŒƒX‚Ìæ“¾
+	// ã‚¢ãƒ‰ãƒ¬ã‚¹ã®å–å¾—
 	m_pCbufferLightDir = static_cast<VECTOR*>(GetBufferShaderConstantBuffer(m_cbufferLightDirH));
 
-	/*ƒJƒƒ‰‚Ìƒ^[ƒQƒbƒg‚ÌˆÊ’u‚Ì’è”ƒoƒbƒtƒ@‚Ìì¬*/
+	/*ã‚«ãƒ¡ãƒ©ã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ä½ç½®ã®å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®ä½œæˆ*/
 	m_cbufferCameraTargetPosH = CreateShaderConstantBuffer(sizeof(float) * 4);
 	assert(m_cbufferCameraTargetPosH != -1);
-	// ƒAƒhƒŒƒX‚Ìæ“¾
+	// ã‚¢ãƒ‰ãƒ¬ã‚¹ã®å–å¾—
 	m_pCbuffferCameraTargetPos = static_cast<VECTOR*>(GetBufferShaderConstantBuffer(m_cbufferCameraTargetPosH));
 
-	/*ƒJƒƒ‰‚ÌˆÊ’u‚Ì’è”ƒoƒbƒtƒ@‚Ìì¬*/
+	/*ã‚«ãƒ¡ãƒ©ã®ä½ç½®ã®å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®ä½œæˆ*/
 	m_cbufferCameraPosH = CreateShaderConstantBuffer(sizeof(float) * 4);
 	assert(m_cbufferCameraPosH != -1);
-	// ƒAƒhƒŒƒX‚Ìæ“¾
+	// ã‚¢ãƒ‰ãƒ¬ã‚¹ã®å–å¾—
 	m_pCbufferCameraPos = static_cast<VECTOR*>(GetBufferShaderConstantBuffer(m_cbufferCameraPosH));
 
-	// ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ‚Ì’è”ƒoƒbƒtƒ@‚Ìì¬
+	// ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—ã®å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®ä½œæˆ
 	m_cbufferViewProjectionMatH = CreateShaderConstantBuffer(sizeof(MATRIX));
 	assert(m_cbufferViewProjectionMatH != -1);
-	// ƒAƒhƒŒƒX‚Ìæ“¾
+	// ã‚¢ãƒ‰ãƒ¬ã‚¹ã®å–å¾—
 	m_viewProjectionMat = static_cast<MATRIX*>(GetBufferShaderConstantBuffer(m_cbufferViewProjectionMatH));
 
-	// ƒVƒƒƒhƒEƒ}ƒbƒv‚Ìì¬
+	// ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—ã®ä½œæˆ
 	m_shadowMap = MakeScreen(kShadowMapSizeX, kShadowMapSizeY);
 	assert(m_shadowMap != -1);
 }
 
 ShadowMapShader::~ShadowMapShader()
 {
-	// ƒVƒF[ƒ_‚ÌƒfƒŠ[ƒg
+	// ã‚·ã‚§ãƒ¼ãƒ€ã®ãƒ‡ãƒªãƒ¼ãƒˆ
 	DeleteShader(m_vertexShader1FrameH);
 	DeleteShader(m_vertexShader4FrameH);
 	DeleteShader(m_vertexShader8FrameH);
@@ -84,48 +84,48 @@ ShadowMapShader::~ShadowMapShader()
 
 void ShadowMapShader::WriteStart(VECTOR targetPos)
 {
-	// ƒVƒƒƒhƒEƒ}ƒbƒv‚Ö‚Ì‘‚«‚İ‚ÌŠJn
+	// ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—ã¸ã®æ›¸ãè¾¼ã¿ã®é–‹å§‹
 	SetDrawScreen(m_shadowMap);
 	ClearDrawScreen();
 	DrawBox(0, 0, kShadowMapSizeX, kShadowMapSizeY, 0xffffff, true);
 
-	// ƒVƒƒƒhƒEƒ}ƒbƒv‚ÌƒJƒƒ‰‚ÌˆÊ’u‚ÆŒü‚«‚ğİ’è‚·‚é
+	// ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—ã®ã‚«ãƒ¡ãƒ©ã®ä½ç½®ã¨å‘ãã‚’è¨­å®šã™ã‚‹
 	SetCameraPositionAndTargetAndUpVec(GetLightPosition(), targetPos, VGet(1, 0, 0));
 
-	// ƒVƒƒƒhƒEƒ}ƒbƒv‘‚«‚İ‚ÌƒJƒƒ‰‚Ì‹–ìŠp
-	// ClearDrawScreen‚ğ‚µ‚½‚Æ‚«‚ÉƒNƒŠƒA‚µ‚½‚à‚Ì‚ğÄİ’è‚µ‚Ä‚¢‚é
+	// ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—æ›¸ãè¾¼ã¿æ™‚ã®ã‚«ãƒ¡ãƒ©ã®è¦–é‡è§’
+	// ClearDrawScreenã‚’ã—ãŸã¨ãã«ã‚¯ãƒªã‚¢ã—ãŸã‚‚ã®ã‚’å†è¨­å®šã—ã¦ã„ã‚‹
 	SetupCamera_Perspective(kShadowMapFov);
 }
 
 void ShadowMapShader::SetShadowMapCameraTarget(VECTOR targetPos)
 {
-	// ƒJƒƒ‰À•W‚Ìæ“¾
+	// ã‚«ãƒ¡ãƒ©åº§æ¨™ã®å–å¾—
 	m_pCbufferCameraPos[0] = targetPos;
 }
 
 void ShadowMapShader::SetShader(int shaderType)
 {
-	// ƒ‰ƒCƒg‚ÌŒü‚«‚Ìæ“¾
+	// ãƒ©ã‚¤ãƒˆã®å‘ãã®å–å¾—
 	m_pCbufferLightDir[0] = GetLightDirection();
-	// ƒJƒƒ‰‚Ìƒ^[ƒQƒbƒg‚ÌˆÊ’u‚Ìæ“¾
+	// ã‚«ãƒ¡ãƒ©ã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ä½ç½®ã®å–å¾—
 	m_pCbuffferCameraTargetPos[0] = GetCameraTarget();
 
-	/*‘‚«‚ñ‚¾’l‚ğGPU‚É”½‰f‚·‚é*/
-	// ƒ‰ƒCƒg‚ÌŒü‚«
+	/*æ›¸ãè¾¼ã‚“ã å€¤ã‚’GPUã«åæ˜ ã™ã‚‹*/
+	// ãƒ©ã‚¤ãƒˆã®å‘ã
 	UpdateShaderConstantBuffer(m_cbufferLightDirH);
 	SetShaderConstantBuffer(m_cbufferLightDirH, DX_SHADERTYPE_PIXEL, 0);
-	// ƒJƒƒ‰‚Ìƒ^[ƒQƒbƒg‚ÌˆÊ’u
+	// ã‚«ãƒ¡ãƒ©ã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ä½ç½®
 	UpdateShaderConstantBuffer(m_cbufferCameraTargetPosH);
 	SetShaderConstantBuffer(m_cbufferCameraTargetPosH, DX_SHADERTYPE_PIXEL, 1);
-	// ƒJƒƒ‰‚ÌˆÊ’u
+	// ã‚«ãƒ¡ãƒ©ã®ä½ç½®
 	UpdateShaderConstantBuffer(m_cbufferCameraPosH);
 	SetShaderConstantBuffer(m_cbufferCameraPosH, DX_SHADERTYPE_PIXEL, 2);
 
-	// ƒVƒF[ƒ_‚ğ“K—p‚·‚é
-	// ƒVƒF[ƒ_‚ğ“K—p‚·‚é
+	// ã‚·ã‚§ãƒ¼ãƒ€ã‚’é©ç”¨ã™ã‚‹
+	// ã‚·ã‚§ãƒ¼ãƒ€ã‚’é©ç”¨ã™ã‚‹
 	MV1SetUseOrigShader(true);
 
-	//ƒ‚ƒfƒ‹‚Ìƒ^ƒCƒv‚É‚æ‚Á‚Ä“K‰‚³‚¹‚éƒVƒF[ƒ_[‚ğ•Ï‚¦‚é
+	//ãƒ¢ãƒ‡ãƒ«ã®ã‚¿ã‚¤ãƒ—ã«ã‚ˆã£ã¦é©å¿œã•ã›ã‚‹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’å¤‰ãˆã‚‹
 	if (shaderType == DX_MV1_VERTEX_TYPE_1FRAME)
 	{
 		SetUseVertexShader(m_vertexShader1FrameH);
@@ -160,73 +160,79 @@ void ShadowMapShader::SetShader(int shaderType)
 		MV1SetUseOrigShader(false);
 	}
 
-	// ƒsƒNƒZƒ‹ƒVƒF[ƒ_‚ÌƒZƒbƒg
+	// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ã®ã‚»ãƒƒãƒˆ
 	SetUsePixelShader(m_pixelShaderH);
 }
 
 void ShadowMapShader::SetShaderField(VECTOR targetPos)
 {
-	// ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ‚Ìæ“¾
+	// ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—ã®å–å¾—
 	*m_viewProjectionMat = ViewProjectionMatrix(targetPos);
 
-	// ƒ‰ƒCƒg‚ÌŒü‚«‚Ìæ“¾
+	// ãƒ©ã‚¤ãƒˆã®å‘ãã®å–å¾—
 	m_pCbufferLightDir[0] = GetLightDirection();
-	// ƒJƒƒ‰‚Ìƒ^[ƒQƒbƒg‚ÌˆÊ’u‚Ìæ“¾
+	// ã‚«ãƒ¡ãƒ©ã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ä½ç½®ã®å–å¾—
 	m_pCbuffferCameraTargetPos[0] = GetCameraTarget();
-	// ƒJƒƒ‰‚ÌˆÊ’u‚Ìæ“¾
+	// ã‚«ãƒ¡ãƒ©ã®ä½ç½®ã®å–å¾—
 	m_pCbufferCameraPos[0] = GetCameraPosition();
 	
 	SetUseTextureToShader(1, m_shadowMap);	
 
-	/*‘‚«‚ñ‚¾’l‚ğGPU‚É”½‰f‚·‚é*/
-	// ƒ‰ƒCƒg‚ÌŒü‚«
+	/*æ›¸ãè¾¼ã‚“ã å€¤ã‚’GPUã«åæ˜ ã™ã‚‹*/
+	// ãƒ©ã‚¤ãƒˆã®å‘ã
 	UpdateShaderConstantBuffer(m_cbufferLightDirH);
 	SetShaderConstantBuffer(m_cbufferLightDirH, DX_SHADERTYPE_PIXEL, 0);
-	// ƒJƒƒ‰‚Ìƒ^[ƒQƒbƒg‚ÌˆÊ’u
+	// ã‚«ãƒ¡ãƒ©ã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ä½ç½®
 	UpdateShaderConstantBuffer(m_cbufferCameraTargetPosH);
 	SetShaderConstantBuffer(m_cbufferCameraTargetPosH, DX_SHADERTYPE_PIXEL, 1);
-	// ƒJƒƒ‰‚ÌˆÊ’u
+	// ã‚«ãƒ¡ãƒ©ã®ä½ç½®
 	UpdateShaderConstantBuffer(m_cbufferCameraPosH);
 	SetShaderConstantBuffer(m_cbufferCameraPosH, DX_SHADERTYPE_PIXEL, 2);
-	// ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ
+	// ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—
 	UpdateShaderConstantBuffer(m_cbufferViewProjectionMatH);
 	SetShaderConstantBuffer(m_cbufferViewProjectionMatH, DX_SHADERTYPE_VERTEX, 4);
 
-	// ƒVƒF[ƒ_‚Ì“K—p
+	// ã‚·ã‚§ãƒ¼ãƒ€ã®é©ç”¨
 	MV1SetUseOrigShader(true);
-	// ’¸“_ƒVƒF[ƒ_‚Ìİ’è
+	// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ã®è¨­å®š
 	SetUseVertexShader(m_vertexShaderShadowMapFieldH);
-	// ƒsƒNƒZƒ‹ƒVƒF[ƒ_‚Ìİ’è
+	// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ã®è¨­å®š
 	SetUsePixelShader(m_pixelShaderFieldH);
 }
 
 void ShadowMapShader::WriteEnd()
 {
-	// ƒVƒƒƒhƒEƒ}ƒbƒv‚Ö‚Ì‘‚«‚İ‚ğI‚í‚é
+	// ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—ã¸ã®æ›¸ãè¾¼ã¿ã‚’çµ‚ã‚ã‚‹
 	SetDrawScreen(DX_SCREEN_BACK);
 	MV1SetUseOrigShader(false);
-	// ’Êí‚ÌƒJƒƒ‰‚Ì‹–ìŠp
+	// é€šå¸¸æ™‚ã®ã‚«ãƒ¡ãƒ©ã®è¦–é‡è§’
 	SetupCamera_Perspective(kNormalFov);
+}
+
+void ShadowMapShader::ShaderEnd()
+{
+	/*ã‚·ã‚§ãƒ¼ãƒ€ã‚’ä½¿ã‚ãªã„*/
+	MV1SetUseOrigShader(false);
 }
 
 MATRIX ShadowMapShader::ViewProjectionMatrix(VECTOR targetPos)
 {
-	// ƒrƒ…[s—ñ
+	// ãƒ“ãƒ¥ãƒ¼è¡Œåˆ—
 	MATRIX viewMat = GetCameraViewportMatrix();
 
 	VECTOR cameraPos = GetLightPosition();
 	VECTOR cameraTargetPos = targetPos;
 	VECTOR UpVec = VGet(1, 0, 0);
 
-	// ƒrƒ…[s—ñ‚ÌŒvZ
+	// ãƒ“ãƒ¥ãƒ¼è¡Œåˆ—ã®è¨ˆç®—
 	CreateLookAtMatrix(&viewMat, &cameraPos, &cameraTargetPos, &UpVec);
-	// Ë‰es—ñ‚Ìì¬
+	// å°„å½±è¡Œåˆ—ã®ä½œæˆ
 	MATRIX mat;
 
-	// Ë‰es—ñ‚ÌŒvZ
+	// å°„å½±è¡Œåˆ—ã®è¨ˆç®—
 	CreatePerspectiveFovMatrix(&mat, kShadowMapFov, GetCameraNear(), GetCameraFar(), 9.0f / 16.0f);
 
-	// ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ‚Ìì¬
+	// ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—ã®ä½œæˆ
 	MATRIX viewProjectionMat = MMult(viewMat, mat);
 
 	return viewProjectionMat;

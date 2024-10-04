@@ -135,7 +135,7 @@ void EnemyBase::Draw(std::shared_ptr<ToonShader> pToonShader)
 		// 描画
 		MV1DrawTriangleList(m_pModel->GetModelHandle(), i);
 	}
-	// シェーダのを使わない設定に戻す
+	// シェーダを使わない設定に戻す
 	pToonShader->ShaderEnd();
 
 	// 当たり判定の描画
@@ -147,7 +147,7 @@ void EnemyBase::StageClear()
 	/*処理無し*/
 }
 
-void EnemyBase::GameEnd()
+void EnemyBase::StageEnd()
 {
 	// ゲームの終了フラグを立てる
 	m_isEnd = true;
@@ -171,7 +171,7 @@ void EnemyBase::GameEnd()
 		}
 		
 		// ゲーム終了時の処理を終える
-		m_isGameEnd = true;
+		m_isStageEnd = true;
 	}	
 }
 

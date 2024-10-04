@@ -1,4 +1,4 @@
-#include "DxLib.h"
+ï»¿#include "DxLib.h"
 #include "SceneSelect.h"
 #include "SceneRanking.h"
 #include "SceneStage.h"
@@ -11,10 +11,10 @@
 
 namespace
 {
-	/*‰æ‘œ‚Ìƒtƒ@ƒCƒ‹ƒpƒX*/
-	const char* const kBackGroundFileName = "Data/Img/Select/Background.png";	// ”wŒi
-	const char* const kBackSideFileName = "Data/Img/Select/BackSide.png";		// ‰æ–Ê‰¡‚Ì•ƒ{ƒbƒNƒX
-	// ƒZƒŒƒNƒgƒ{ƒbƒNƒX
+	/*ç”»åƒã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹*/
+	const char* const kBackGroundFileName = "Data/Img/Select/Background.png";	// èƒŒæ™¯
+	const char* const kBackSideFileName = "Data/Img/Select/BackSide.png";		// ç”»é¢æ¨ªã®é»’ãƒœãƒƒã‚¯ã‚¹
+	// ã‚»ãƒ¬ã‚¯ãƒˆãƒœãƒƒã‚¯ã‚¹
 	const char* const kSelectBoxFileName[4] =
 	{
 		"Data/Img/Select/Stage1Box.png",
@@ -22,7 +22,7 @@ namespace
 		"Data/Img/Select/OnlineRankingBox.png",
 		"Data/Img/Select/GameEndBox.png"
 	};
-	// ƒeƒLƒXƒg
+	// ãƒ†ã‚­ã‚¹ãƒˆ
 	const char* const kTextFileName[4] =
 	{
 		"Data/Img/Select/Text1.png",
@@ -31,13 +31,13 @@ namespace
 		"Data/Img/Select/Text4.png",
 	};
 
-	constexpr int kIndexBackNum = 2;								// ƒXƒNƒ[ƒ‹‚É•K—v‚È”wŒi‚Ì”
-	constexpr int kScrollSpeed = 1;									// ƒXƒNƒ[ƒ‹‚ÌƒXƒs[ƒh
-	constexpr int kTextScrollSpeed = 2;								// ƒXƒNƒ[ƒ‹‚ÌƒXƒs[ƒh
-	constexpr int kBackSideRightPosX = Game::kScreenWidth - 220;	// ‰æ–Ê‰¡•ƒ{ƒbƒNƒX‚ÌÀ•WX
-	constexpr int kBackSideLeftPosX = -80;							// ‰æ–Ê‰¡•ƒ{ƒbƒNƒX‚ÌÀ•WY
+	constexpr int kIndexBackNum = 2;								// ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã«å¿…è¦ãªèƒŒæ™¯ã®æ•°
+	constexpr int kScrollSpeed = 1;									// ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã®ã‚¹ãƒ”ãƒ¼ãƒ‰
+	constexpr int kTextScrollSpeed = 2;								// ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã®ã‚¹ãƒ”ãƒ¼ãƒ‰
+	constexpr int kBackSideRightPosX = Game::kScreenWidth - 220;	// ç”»é¢æ¨ªé»’ãƒœãƒƒã‚¯ã‚¹ã®åº§æ¨™X
+	constexpr int kBackSideLeftPosX = -80;							// ç”»é¢æ¨ªé»’ãƒœãƒƒã‚¯ã‚¹ã®åº§æ¨™Y
 
-	/*ƒZƒŒƒNƒgƒ{ƒbƒNƒXÀ•W*/
+	/*ã‚»ãƒ¬ã‚¯ãƒˆãƒœãƒƒã‚¯ã‚¹åº§æ¨™*/
 	constexpr int kSelectBoxPosX1 = 600;
 	constexpr int kSelectBoxPosX2 = 1300;
 	constexpr int kSelectBoxPosX3 = 700;
@@ -45,14 +45,14 @@ namespace
 	constexpr int kUpSelectBoxPosY = 400;
 	constexpr int kDownSelectBoxPosY = 820;
 
-	/*ƒ{ƒbƒNƒXƒTƒCƒY*/
+	/*ãƒœãƒƒã‚¯ã‚¹ã‚µã‚¤ã‚º*/
 	constexpr float kUpBoxSize = 0.7f;
 	constexpr float kDownBoxSize = 0.6f;
 
-	constexpr float kBoxSinSpeed = 0.07f;	// ƒ{ƒbƒNƒX‚ªŠgk‚·‚éƒXƒs[ƒh
-	constexpr float kBoxAnimSwing = 0.03f;	// ƒ{ƒbƒNƒX‚ÌŠgk•
+	constexpr float kBoxSinSpeed = 0.07f;	// ãƒœãƒƒã‚¯ã‚¹ãŒæ‹¡ç¸®ã™ã‚‹ã‚¹ãƒ”ãƒ¼ãƒ‰
+	constexpr float kBoxAnimSwing = 0.03f;	// ãƒœãƒƒã‚¯ã‚¹ã®æ‹¡ç¸®å¹…
 
-	constexpr int kInfoBackAlpha = 200;		// ‰æ–Ê‰¡•ƒ{ƒbƒNƒX‚Ì•s“§–¾“x
+	constexpr int kInfoBackAlpha = 200;		// ç”»é¢æ¨ªé»’ãƒœãƒƒã‚¯ã‚¹ã®ä¸é€æ˜åº¦
 }
 
 SceneSelect::SceneSelect() :
@@ -74,79 +74,80 @@ SceneSelect::SceneSelect() :
 	m_boxSinSize(0.0f),
 	m_next(NextScene::My)
 {
-	/*‰æ‘œƒnƒ“ƒhƒ‹‚Ìƒ[ƒh*/
+	/*ç”»åƒãƒãƒ³ãƒ‰ãƒ«ã®ãƒ­ãƒ¼ãƒ‰*/
 	LoadImg();
 
-	// ”wŒi‰æ‘œ‚ÌƒTƒCƒY‚Ìæ“¾
+	// èƒŒæ™¯ç”»åƒã®ã‚µã‚¤ã‚ºã®å–å¾—
 	GetGraphSize(m_backgroundH, &m_backWidth, &m_backHeight);
-	// ƒeƒLƒXƒg‰æ‘œƒTƒCƒY‚Ìæ“¾
+	// ãƒ†ã‚­ã‚¹ãƒˆç”»åƒã‚µã‚¤ã‚ºã®å–å¾—
 	GetGraphSize(m_textH[0], &m_textWidth, &m_textHeight);
 }
 
 SceneSelect::~SceneSelect()
 {
-	/*‰æ‘œƒnƒ“ƒhƒ‹‚ÌƒfƒŠ[ƒg*/
+	/*ç”»åƒãƒãƒ³ãƒ‰ãƒ«ã®ãƒ‡ãƒªãƒ¼ãƒˆ*/
 	DeleteImg();
 }
 
 void SceneSelect::Init()
 {
-	/*BGM‚ğ—¬‚·*/
+	/*BGMã‚’æµã™*/
 	SoundManager::GetInstance().Play("SelectScene");
 }
 
 std::shared_ptr<SceneBase> SceneSelect::Update()
 {
-	// ƒtƒF[ƒhXV
+	// ãƒ•ã‚§ãƒ¼ãƒ‰æ›´æ–°
 	UpdateFade();
 
-	// ”wŒi‚ÌƒXƒNƒ[ƒ‹
+	// èƒŒæ™¯ã®ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«
 	m_scrollX += kScrollSpeed;
-	// •¶š‚ÌƒXƒNƒ[ƒ‹
+	// æ–‡å­—ã®ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«
 	m_scrollY += kTextScrollSpeed;
 
-	// ã‰ºƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½ê‡
+	// ä¸Šä¸‹ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸå ´åˆ
 	if (Pad::isTrigger(PAD_INPUT_UP) || Pad::isTrigger(PAD_INPUT_DOWN))
 	{
 		SoundManager::GetInstance().Play("Select");
 		m_scrollY = 0;
-		// ã‰º‚Ì‘I‘ğ‚ğ“ü‚ê‘Ö‚¦‚é
+		// ä¸Šä¸‹ã®é¸æŠã‚’å…¥ã‚Œæ›¿ãˆã‚‹
 		m_isUp = !m_isUp;
 	}
-	// ¶‰EŠÔ‚ª‰Ÿ‚³‚ê‚½ê‡
+	// å·¦å³æ™‚é–“ãŒæŠ¼ã•ã‚ŒãŸå ´åˆ
 	if (Pad::isTrigger(PAD_INPUT_LEFT) || Pad::isTrigger(PAD_INPUT_RIGHT))
 	{
 		SoundManager::GetInstance().Play("Select");
 		m_scrollY = 0;
-		// ¶‰E‚Ì‘I‘ğ‚ğ“ü‚ê‘Ö‚¦‚é
+		// å·¦å³ã®é¸æŠã‚’å…¥ã‚Œæ›¿ãˆã‚‹
 		m_isLeft = !m_isLeft;
 	}
-	// ƒ{ƒbƒNƒX‚ÌXV
+	// ãƒœãƒƒã‚¯ã‚¹ã®æ›´æ–°
 	SelectBoxUpdate();
-	// ƒZƒŒƒNƒg‚ÌXV
+	// ã‚»ãƒ¬ã‚¯ãƒˆã®æ›´æ–°
 	SelectUpdate();
 
-	// Ÿ‚ÌƒV[ƒ“‚Ö‚Ì‘JˆÚˆ—
+	// æ¬¡ã®ã‚·ãƒ¼ãƒ³ã¸ã®é·ç§»å‡¦ç†
 	switch (m_next)
 	{
 	case SceneSelect::NextScene::My:
 		return shared_from_this();
 		break;
 	case SceneSelect::NextScene::Stage1:
-		// ƒXƒe[ƒW1‚É‘JˆÚ‚·‚é
+		// ã‚¹ãƒ†ãƒ¼ã‚¸1ã«é·ç§»ã™ã‚‹
 		return std::make_shared<SceneStage>(Game::Stage::Stage1);
 		break;
 	case SceneSelect::NextScene::Stage2:
-		// ƒXƒe[ƒW2‚É‘JˆÚ‚·‚é
+		// ã‚¹ãƒ†ãƒ¼ã‚¸2ã«é·ç§»ã™ã‚‹
 		return std::make_shared<SceneStage>(Game::Stage::Stage2);
 		break;
 	case SceneSelect::NextScene::Ranking:
-		// ƒ‰ƒ“ƒLƒ“ƒOƒV[ƒ“‚É‘JˆÚ‚·‚é
+		// ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã‚·ãƒ¼ãƒ³ã«é·ç§»ã™ã‚‹
 		return std::make_shared<SceneRanking>();
 		break;
 	case SceneSelect::NextScene::End:
-		// ƒQ[ƒ€I—¹
-		DxLib_End();
+		// ã‚²ãƒ¼ãƒ çµ‚äº†
+		// ã‚·ãƒ¼ãƒ³ãƒã‚¤ãƒ³ã‚¿ã‚’nullã«ã™ã‚‹
+		return nullptr;
 		break;
 	default:
 		break;
@@ -157,81 +158,81 @@ std::shared_ptr<SceneBase> SceneSelect::Update()
 
 void SceneSelect::Draw()
 {
-	// ”wŒi•`‰æ
+	// èƒŒæ™¯æç”»
 	BackDraw();
-	// à–¾ƒeƒLƒXƒg•`‰æ
+	// èª¬æ˜ãƒ†ã‚­ã‚¹ãƒˆæç”»
 	InfoDraw();
-	// ƒZƒŒƒNƒgƒ{ƒbƒNƒX•`‰æ
+	// ã‚»ãƒ¬ã‚¯ãƒˆãƒœãƒƒã‚¯ã‚¹æç”»
 	SelectBoxDraw();
 
 #ifdef _DEBUG
-	// ƒV[ƒ“–¼•`‰æ
+	// ã‚·ãƒ¼ãƒ³åæç”»
 	DrawFormatString(0, 0, 0xffffff, "Select");
 #endif // _DEBUG   
 
-	// ƒtƒF[ƒh•`‰æ
+	// ãƒ•ã‚§ãƒ¼ãƒ‰æç”»
 	DrawFade();
 }
 
 void SceneSelect::End()
 {
-	// BGM‚ğ~‚ß‚é
+	// BGMã‚’æ­¢ã‚ã‚‹
 	SoundManager::GetInstance().DesignationStopSound("SelectScene");
 }
 
 void SceneSelect::SelectUpdate()
 {
-	// Aƒ{ƒ^ƒ“‚©Bƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚çŸ‚ÌƒV[ƒ“‚É‘JˆÚ‚·‚é
+	// Aãƒœã‚¿ãƒ³ã‹Bãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸã‚‰æ¬¡ã®ã‚·ãƒ¼ãƒ³ã«é·ç§»ã™ã‚‹
 	if (Pad::isTrigger(PAD_INPUT_1) || Pad::isTrigger(PAD_INPUT_2))
 	{
-		// SE‚ğ–Â‚ç‚·
+		// SEã‚’é³´ã‚‰ã™
 		SoundManager::GetInstance().Play("Decide");
 
-		if (m_isUp)	// ã‚Ì‘I‘ğ‚µ‚Ä‚¢‚é
+		if (m_isUp)	// ä¸Šã®é¸æŠã—ã¦ã„ã‚‹
 		{
-			if (m_isLeft)	// ¶‚ğ‘I‘ğ‚µ‚Ä‚¢‚é
+			if (m_isLeft)	// å·¦ã‚’é¸æŠã—ã¦ã„ã‚‹
 			{
-				// ƒXƒe[ƒW1
+				// ã‚¹ãƒ†ãƒ¼ã‚¸1
 				m_next = NextScene::Stage1;
 			}
 			else
 			{
-				// ƒXƒe[ƒW2
+				// ã‚¹ãƒ†ãƒ¼ã‚¸2
 				m_next = NextScene::Stage2;
 			}
 
 		}
-		else	// ‰º‚Ì‘I‘ğ‚ğ‚µ‚Ä‚¢‚é
+		else	// ä¸‹ã®é¸æŠã‚’ã—ã¦ã„ã‚‹
 		{
-			if (m_isLeft)	// ¶‚ğ‘I‘ğ‚µ‚Ä‚¢‚é
+			if (m_isLeft)	// å·¦ã‚’é¸æŠã—ã¦ã„ã‚‹
 			{
-				// ƒ‰ƒ“ƒLƒ“ƒO
+				// ãƒ©ãƒ³ã‚­ãƒ³ã‚°
 				m_next = NextScene::Ranking;
 			}
 			else
 			{
-				// I—¹
+				// çµ‚äº†
 				m_next = NextScene::End;
 			}
 		}
 	}
 	else
 	{
-		// Œ»İƒV[ƒ“
+		// ç¾åœ¨ã‚·ãƒ¼ãƒ³
 		m_next = NextScene::My;
 	}
 }
 
 void SceneSelect::SelectBoxUpdate()
 {
-	/*Œ»İ‘I‚Î‚ê‚Ä‚¢‚éƒ{ƒbƒNƒX‚ğŠgk‚·‚é*/
-	// Šgkˆ—
+	/*ç¾åœ¨é¸ã°ã‚Œã¦ã„ã‚‹ãƒœãƒƒã‚¯ã‚¹ã‚’æ‹¡ç¸®ã™ã‚‹*/
+	// æ‹¡ç¸®å‡¦ç†
 	m_boxSinCount += kBoxSinSpeed;
 	m_expansionBoxSize = sinf(m_boxSinCount) * kBoxAnimSwing;
 
-	if (m_isUp)	// ã‚Ì‘I‘ğ‚µ‚Ä‚¢‚é
+	if (m_isUp)	// ä¸Šã®é¸æŠã—ã¦ã„ã‚‹
 	{
-		if (m_isLeft)	// ¶‚ğ‘I‘ğ‚µ‚Ä‚¢‚é
+		if (m_isLeft)	// å·¦ã‚’é¸æŠã—ã¦ã„ã‚‹
 		{
 			m_upBoxSize1 = m_expansionBoxSize + kUpBoxSize;
 			m_upBoxSize2 = kUpBoxSize;
@@ -247,9 +248,9 @@ void SceneSelect::SelectBoxUpdate()
 		}
 
 	}
-	else	// ‰º‚Ì‘I‘ğ‚ğ‚µ‚Ä‚¢‚é
+	else	// ä¸‹ã®é¸æŠã‚’ã—ã¦ã„ã‚‹
 	{
-		if (m_isLeft)	// ¶‚ğ‘I‘ğ‚µ‚Ä‚¢‚é
+		if (m_isLeft)	// å·¦ã‚’é¸æŠã—ã¦ã„ã‚‹
 		{
 			m_upBoxSize1 = kUpBoxSize;
 			m_upBoxSize2 = kUpBoxSize;
@@ -269,7 +270,7 @@ void SceneSelect::SelectBoxUpdate()
 
 void SceneSelect::BackDraw()
 {
-	// ”wŒi‚ğƒXƒNƒ[ƒ‹‚³‚¹‚é
+	// èƒŒæ™¯ã‚’ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã•ã›ã‚‹
 	int scrollBack = m_scrollX % m_backWidth;
 	for (int index = 0; index < kIndexBackNum; index++)
 	{
@@ -280,18 +281,18 @@ void SceneSelect::BackDraw()
 
 void SceneSelect::InfoDraw()
 {
-	// ‰æ–Ê‰¡•ƒ{ƒbƒNƒX‚Ì•`‰æ
-	// •s“§–¾“x‚ğ­‚µ‰º‚°‚é
+	// ç”»é¢æ¨ªé»’ãƒœãƒƒã‚¯ã‚¹ã®æç”»
+	// ä¸é€æ˜åº¦ã‚’å°‘ã—ä¸‹ã’ã‚‹
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kInfoBackAlpha);
 	DrawGraph(kBackSideRightPosX, 0, m_backSideH, false);
 	DrawGraph(kBackSideLeftPosX, 0, m_backSideH, false);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	// ‰æ‘œ”Ô†‚Ìİ’è
-	// ‘I‚ñ‚Å‚¢‚éêŠ‚É‚æ‚Á‚ÄƒeƒLƒXƒg‚ğ•Ï‚¦‚é
+	// ç”»åƒç•ªå·ã®è¨­å®š
+	// é¸ã‚“ã§ã„ã‚‹å ´æ‰€ã«ã‚ˆã£ã¦ãƒ†ã‚­ã‚¹ãƒˆã‚’å¤‰ãˆã‚‹
 	int imgNum = m_isUp ? m_isLeft ? 0 : 1 : m_isLeft ? 2 : 3;
 
-	// •¶š‚ğƒXƒNƒ[ƒ‹‚ğ‚³‚¹‚é
+	// æ–‡å­—ã‚’ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã‚’ã•ã›ã‚‹
 	int scroll = m_scrollY % m_textHeight;
 	for (int index = 0; index < kIndexBackNum; index++)
 	{
@@ -320,7 +321,7 @@ void SceneSelect::SelectBoxDraw()
 
 void SceneSelect::LoadImg()
 {
-	// ƒ[ƒh‚É¸”s‚µ‚½ê‡‚Í~‚ß‚é
+	// ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—ã—ãŸå ´åˆã¯æ­¢ã‚ã‚‹
 	m_backgroundH = LoadGraph(kBackGroundFileName);
 	assert(m_backgroundH != -1);
 	m_backSideH = LoadGraph(kBackSideFileName);

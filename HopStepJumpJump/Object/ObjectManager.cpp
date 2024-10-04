@@ -262,7 +262,7 @@ bool ObjectManager::IsObjGameEnd()
 	{
 		// 何か一つでも終了処理を終えていないオブジェクトがあったら
 		// falseで返す
-		if (!obj->IsGameEnd())
+		if (!obj->IsStageEnd())
 		{
 			return false;
 		}
@@ -313,6 +313,6 @@ void ObjectManager::GameEndUpdate()
 	for (auto& obj : m_pObject)
 	{
 		// 終了処理
-		obj->GameEnd();
+		obj->StageEnd();
 	}
 }

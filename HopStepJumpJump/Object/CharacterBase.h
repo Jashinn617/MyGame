@@ -1,151 +1,174 @@
-#pragma once
+ï»¿#pragma once
 #include "ObjectBase.h"
 
-class Input;
 class Circle;
 
 class CharacterBase : public ObjectBase
 {
 public:
 
-	// ƒXƒe[ƒ^ƒXî•ñ
-	struct Status
+	/// <summary>
+	/// ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹æƒ…å ±
+	/// </summary>
+	struct StatusData
 	{
-		float spd = 5.0f;	// ƒXƒs[ƒh
+		float spd = 5.0f;	// ã‚¹ãƒ”ãƒ¼ãƒ‰
 	};
 
-	// ˆÚ“®î•ñ
-	struct MoveData
+	/// <summary>
+	/// ç§»å‹•ç”¨ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹æƒ…å ±
+	/// </summary>
+	struct MoveStatusData
 	{
-		float walkSpeed = 0;	// •à‚«ƒXƒs[ƒh
-		float runSpeed = 0;		// ‘–‚èƒXƒs[ƒh
-		float acceleration = 0;	// ‰Á‘¬“x
-		float rotSpeed = 0;		// ‰ñ“]ƒXƒs[ƒh
+		float walkSpeed = 0;	// æ­©ãã‚¹ãƒ”ãƒ¼ãƒ‰
+		float runSpeed = 0;		// èµ°ã‚Šã‚¹ãƒ”ãƒ¼ãƒ‰
+		float acceleration = 0;	// åŠ é€Ÿåº¦
+		float rotSpeed = 0;		// å›è»¢ã‚¹ãƒ”ãƒ¼ãƒ‰
 	};
 
-	// ƒAƒjƒ[ƒVƒ‡ƒ“î•ñ
+	/// <summary>
+	/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±
+	/// </summary>
 	struct AnimData
 	{
-		int8_t idle = 0;		// ‘Ò‹@
-		int8_t walk = 0;		// •à‚«
-		int8_t jumpStart = 0;	// ƒWƒƒƒ“ƒv
-		int8_t jumpIdle = 0;	// ƒWƒƒƒ“ƒv’†
-		int8_t run = 0;			// ‘–‚è
-		int8_t knockBack = 0;	// ƒmƒbƒNƒoƒbƒN
+		int8_t idle = 0;		// å¾…æ©Ÿ
+		int8_t walk = 0;		// æ­©ã
+		int8_t jumpStart = 0;	// ã‚¸ãƒ£ãƒ³ãƒ—æ™‚
+		int8_t jumpIdle = 0;	// ã‚¸ãƒ£ãƒ³ãƒ—ä¸­
+		int8_t run = 0;			// èµ°ã‚Š
+		int8_t knockBack = 0;	// ãƒãƒƒã‚¯ãƒãƒƒã‚¯
 	};
 
 public:
+	/// <summary>
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// </summary>
 	CharacterBase();
+
+	/// <summary>
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// </summary>
 	virtual ~CharacterBase();
 
-	virtual void Init();
-	virtual void Update();
-
-	virtual void Draw(std::shared_ptr<ToonShader> pToonShader);
+	/// <summary>
+	/// åˆæœŸåŒ–
+	/// </summary>
+	virtual void Init() = 0;
 
 	/// <summary>
-	/// UŒ‚‚ğó‚¯‚½‚Ìˆ—
+	/// æ›´æ–°
 	/// </summary>
-	/// <param name="targetPos">UŒ‚‚ğ“–‚Ä‚½‘Šè‚ÌÀ•W</param>
-	virtual void OnDamage(VECTOR targetPos);
+	virtual void Update() = 0;
 
 	/// <summary>
-	/// Šp“x‚Ìæ“¾
+	/// æç”»
 	/// </summary>
-	/// <returns>Šp“x</returns>
-	float GetAngle() const { return m_angle; }
+	/// <param name="pToonShader">ãƒˆã‚¥ãƒ¼ãƒ³ã‚·ã‚§ãƒ¼ãƒ€</param>
+	virtual void Draw(std::shared_ptr<ToonShader> pToonShader) = 0;
 
 	/// <summary>
-	/// ƒ_ƒ[ƒWƒtƒ‰ƒO‚Ìæ“¾
+	/// ãƒ€ãƒ¡ãƒ¼ã‚¸å‡¦ç†
 	/// </summary>
-	/// <returns></returns>
-	bool IsDamage()const { return m_isDamage; }
+	/// <param name="targetPos">æ”»æ’ƒã‚’å½“ã¦ãŸç›¸æ‰‹ã®åº§æ¨™</param>
+	virtual void OnDamage(VECTOR targetPos) {};
 
 	/// <summary>
-	/// UŒ‚‚ğó‚¯‚Ä‚È‚¢ó‘Ô‚É–ß‚·
+	/// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼åŒå£«ã®å½“ãŸã‚Šåˆ¤å®šã‚’è€ƒæ…®ã—ãŸç§»å‹•æ›´æ–°
 	/// </summary>
-	void OffDamageFlag() { m_isDamage = false; }
-
-	/// <summary>
-	/// ƒWƒƒƒ“ƒvó‘Ô‚©‚Ç‚¤‚©
-	/// </summary>
-	/// <returns></returns>
-	bool IsJump()const { return m_isJump; }
-
-	/// <summary>
-	/// ƒWƒƒƒ“ƒv—Í‚ğ•Ô‚·
-	/// </summary>
-	/// <returns></returns>
-	float GetJumpPower()const { return m_jumpPower; }
-
-	/// <summary>
-	/// €‚ñ‚¾‚©‚Ç‚¤‚©
-	/// </summary>
-	/// <returns></returns>
-	bool IsDead()const { return m_isDead; }
-
-	/// <summary>
-	/// ‰~‚Ì“–‚½‚è”¼Œaƒ|ƒCƒ“ƒ^‚Ìæ“¾
-	/// </summary>
-	/// <returns></returns>
-	const std::shared_ptr<Circle> GetCircle()const { return m_pCircle; }
-
-	/// <summary>
-	/// ƒLƒƒƒ‰ƒNƒ^[“¯m‚Ì“–‚½‚è”»’è‚ğl—¶‚µ‚½ˆÚ“®XV
-	/// </summary>
-	/// <param name="pTarget"></param>
+	/// <param name="pTarget">ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãƒã‚¤ãƒ³ã‚¿/param>
 	void MoveCollCharacterUpdate(CharacterBase* pTarget);
 
 	/// <summary>
-	/// ƒvƒŒƒCƒ„[‚ÌUŒ‚‚ª“G‚É“–‚½‚Á‚½
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ”»æ’ƒãŒæ•µã«å½“ãŸã£ãŸ
 	/// </summary>
-	/// <param name="pEnemy"></param>
+	/// <param name="pEnemy">æ•µãƒã‚¤ãƒ³ã‚¿</param>
 	void AttackPlayerCollEnemy(CharacterBase* pEnemy);
 
 	/// <summary>
-	/// “G‚ÌUŒ‚‚ªƒvƒŒƒCƒ„[‚É“–‚½‚Á‚½
+	/// æ•µã®æ”»æ’ƒãŒãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«å½“ãŸã£ãŸ
 	/// </summary>
-	/// <param name="pPlayer"></param>
+	/// <param name="pPlayer">ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒã‚¤ãƒ³ã‚¿</param>
 	void AttackEnemyCollPlayer(CharacterBase* pPlayer);
 
 	/// <summary>
-	/// ƒvƒŒƒCƒ„[‚ªƒAƒCƒeƒ€‚É“–‚½‚Á‚½
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã‚¢ã‚¤ãƒ†ãƒ ã«å½“ãŸã£ãŸ
 	/// </summary>
-	/// <param name="pItem"></param>
+	/// <param name="pItem">ã‚¢ã‚¤ãƒ†ãƒ ãƒã‚¤ãƒ³ã‚¿</param>
 	void PlayerToItem(CharacterBase* pItem);
 
 	/// <summary>
-	/// ƒWƒƒƒ“ƒvó‘Ô‚ÌI—¹ˆ—
+	/// ã‚¸ãƒ£ãƒ³ãƒ—çŠ¶æ…‹ã®çµ‚äº†å‡¦ç†
 	/// </summary>
 	virtual void EndJump();
 
 	/// <summary>
-	/// ’n–Ê‚É“–‚½‚Á‚Ä‚¢‚é‚Æ‚«‚Ìˆ—
+	/// åœ°é¢ã«å½“ãŸã£ã¦ã„ã‚‹ã¨ãã®å‡¦ç†
 	/// </summary>
 	void HitGroundUpdate();
 
 	/// <summary>
-	/// d—Í‚É‚æ‚é—‰ºˆ—
+	/// é‡åŠ›ã«ã‚ˆã‚‹è½ä¸‹å‡¦ç†
 	/// </summary>
 	void GravityUpdate();
 
-protected:	// ŠÖ”
 	/// <summary>
-	/// Šp“x‚ğŠŠ‚ç‚©‚É•Ï‰»‚³‚¹‚éŠÖ”
+	/// å††ã®å½“ãŸã‚Šåˆ¤å®šãƒã‚¤ãƒ³ã‚¿ã®å–å¾—
 	/// </summary>
-	/// <param name="nowAngle"></param>
-	/// <param name="nextAngle"></param>
+	/// <returns>å½“ãŸã‚Šåˆ¤å®šãƒã‚¤ãƒ³ã‚¿</returns>
+	const std::shared_ptr<Circle> GetCircle()const { return m_pCircle; }
+
+	/// <summary>
+	/// è§’åº¦ã®å–å¾—
+	/// </summary>
+	/// <returns>è§’åº¦</returns>
+	float GetAngle() const { return m_angle; }
+
+	/// <summary>
+	/// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãŸã‹ã©ã†ã‹
+	/// </summary>
+	/// <returns>ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãŸã‹</returns>
+	bool IsDamage()const { return m_isDamage; }
+
+	/// <summary>
+	/// æ”»æ’ƒã‚’å—ã‘ã¦ãªã„çŠ¶æ…‹ã«æˆ»ã™
+	/// </summary>
+	void OffDamageFlag() { m_isDamage = false; }
+
+	/// <summary>
+	/// ã‚¸ãƒ£ãƒ³ãƒ—çŠ¶æ…‹ã‹ã©ã†ã‹
+	/// </summary>
+	/// <returns>ã‚¸ãƒ£ãƒ³ãƒ—çŠ¶æ…‹ã‹</returns>
+	bool IsJump()const { return m_isJump; }
+
+	/// <summary>
+	/// ã‚¸ãƒ£ãƒ³ãƒ—åŠ›ã‚’è¿”ã™
+	/// </summary>
+	/// <returns>ã‚¸ãƒ£ãƒ³ãƒ—åŠ›</returns>
+	float GetJumpPower()const { return m_jumpPower; }
+
+	/// <summary>
+	/// æ­»ã‚“ã ã‹ã©ã†ã‹
+	/// </summary>
+	/// <returns>æ­»äº¡ãƒ•ãƒ©ã‚°</returns>
+	bool IsDead()const { return m_isDead; }
+
+protected:	// é–¢æ•°
+
+	/// <summary>
+	/// è§’åº¦ã‚’æ»‘ã‚‰ã‹ã«å¤‰åŒ–ã•ã›ã‚‹é–¢æ•°
+	/// </summary>
+	/// <param name="nowAngle">ç¾åœ¨ã®è§’åº¦</param>
+	/// <param name="nextAngle">ç›®æ¨™è§’åº¦</param>
 	void SmoothAngle(float& nowAngle, float nextAngle);
 
-protected:	// •Ï”
-	Status m_statusData;	// ƒXƒe[ƒ^ƒXî•ñ
-	MoveData m_moveData;	// ˆÚ“®î•ñ
-	AnimData m_animData;	// ƒAƒjƒ[ƒVƒ‡ƒ“î•ñ
+protected:	// å¤‰æ•°
+	float m_jumpPower;					// ã‚¸ãƒ£ãƒ³ãƒ—åŠ›
+	bool m_isJump;						// ã‚¸ãƒ£ãƒ³ãƒ—ä¸­ã‹ã©ã†ã‹
+	bool m_isDead;						// æ­»ã‚“ã ã‹ã©ã†ã‹
+	std::shared_ptr<Circle> m_pCircle;	// å½“ãŸã‚Šåˆ¤å®šã®å††ã®ãƒã‚¤ãƒ³ã‚¿
 
-	std::shared_ptr<Circle> m_pCircle;	// “–‚½‚è”»’è‚Ì‰~‚Ìƒ|ƒCƒ“ƒ^
-	
-	float m_jumpPower;	// ƒWƒƒƒ“ƒv—Í
-	bool m_isJump;	// ƒWƒƒƒ“ƒv’†‚©‚Ç‚¤‚©
-	bool m_isDead;	// €‚ñ‚¾‚©‚Ç‚¤‚©
+	StatusData m_statusData{};			// ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹æƒ…å ±
+	MoveStatusData m_moveData{};			// ç§»å‹•æƒ…å ±
+	AnimData m_animData{};				// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±
 };
 

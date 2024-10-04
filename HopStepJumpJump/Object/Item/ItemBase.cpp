@@ -108,10 +108,10 @@ void ItemBase::OnGet()
 	m_info.isExist = false;
 }
 
-void ItemBase::GameEnd()
+void ItemBase::StageEnd()
 {
 	// ゲームの終了フラグを立てる
-	m_isGameEnd = true;
+	m_isStageEnd = true;
 }
 
 void ItemBase::InitMoveSpeed(float moveSpeed)

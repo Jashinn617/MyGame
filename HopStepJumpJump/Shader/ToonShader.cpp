@@ -1,4 +1,4 @@
-#include "ToonShader.h"
+ï»¿#include "ToonShader.h"
 #include "../Util/Game.h"
 
 #include <cassert>
@@ -7,8 +7,7 @@
 
 ToonShader::ToonShader()
 {
-
-	/*’¸“_ƒVƒF[ƒ_*/
+	/*é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€*/
 	m_vertexShader1FrameH = LoadVertexShader("Data/Shader/Vertex/VertexShader3D.vso");
 	assert(m_vertexShader1FrameH != -1);
 	m_vertexShader4FrameH = LoadVertexShader("Data/Shader/Vertex/VertexShader3D4Frame.vso");
@@ -19,7 +18,7 @@ ToonShader::ToonShader()
 	assert(m_vertexShaderNormal4FrameH != -1);
 	m_vertexShaderNormal8FrameH = LoadVertexShader("Data/Shader/Vertex/VertexShader3DNormal8Frame.vso");
 	assert(m_vertexShaderNormal8FrameH != -1);
-	/*ƒsƒNƒZƒ‹ƒVƒF[ƒ_*/
+	/*ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€*/
 	m_pixelShaderH = LoadPixelShader("Data/Shader/Pixel/ToonPixelShader.pso");
 	assert(m_pixelShaderH != -1);
 	m_pixelShaderFieldH = LoadPixelShader("Data/Shader/Pixel/ToonPixelShaderField.pso");
@@ -28,19 +27,19 @@ ToonShader::ToonShader()
 	m_graphH = MakeScreen(Game::kScreenWidth, Game::kScreenHeight);
 	assert(m_graphH != -1);
 
-	/*ƒ‰ƒCƒg‚Ì’è”ƒoƒbƒtƒ@‚Ìì¬*/
+	/*ãƒ©ã‚¤ãƒˆã®å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®ä½œæˆ*/
 	m_cbufferLightDirH = CreateShaderConstantBuffer(sizeof(float) * 4);
 	assert(m_cbufferLightDirH != -1);
-	// ƒAƒhƒŒƒX‚Ìæ“¾
+	// ã‚¢ãƒ‰ãƒ¬ã‚¹ã®å–å¾—
 	m_pCbufferLightDir = static_cast<VECTOR*>(GetBufferShaderConstantBuffer(m_cbufferLightDirH));
 
-	/*ƒJƒƒ‰‚Ìƒ^[ƒQƒbƒg‚ÌˆÊ’u‚Ì’è”ƒoƒbƒtƒ@‚Ìì¬*/
+	/*ã‚«ãƒ¡ãƒ©ã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ä½ç½®ã®å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®ä½œæˆ*/
 	m_cbufferCameraTargetPosH = CreateShaderConstantBuffer(sizeof(float) * 4);
 	assert(m_cbufferCameraTargetPosH != -1);
-	// ƒAƒhƒŒƒX‚Ìæ“¾
+	// ã‚¢ãƒ‰ãƒ¬ã‚¹ã®å–å¾—
 	m_pCbuffferCameraTargetPos = static_cast<VECTOR*>(GetBufferShaderConstantBuffer(m_cbufferCameraTargetPosH));
 
-	/*ƒJƒƒ‰‚ÌˆÊ’u‚Ì’è”ƒoƒbƒtƒ@‚Ìì¬*/
+	/*ã‚«ãƒ¡ãƒ©ã®ä½ç½®ã®å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®ä½œæˆ*/
 	m_cbufferCameraPosH = CreateShaderConstantBuffer(sizeof(float) * 4);
 	assert(m_cbufferCameraPosH != -1);
 	m_pCbufferCameraPos = static_cast<VECTOR*>(GetBufferShaderConstantBuffer(m_cbufferCameraPosH));
@@ -48,7 +47,7 @@ ToonShader::ToonShader()
 
 ToonShader::~ToonShader()
 {
-	// ƒVƒF[ƒ_‚ÌƒfƒŠ[ƒg
+	// ã‚·ã‚§ãƒ¼ãƒ€ã®ãƒ‡ãƒªãƒ¼ãƒˆ
 	DeleteShader(m_vertexShader1FrameH);
 	DeleteShader(m_vertexShader4FrameH);
 	DeleteShader(m_vertexShader8FrameH);
@@ -67,33 +66,33 @@ ToonShader::~ToonShader()
 
 void ToonShader::Update()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void ToonShader::SetShader(int shaderType)
 {
-	// ƒ‰ƒCƒg‚ÌŒü‚«‚Ìæ“¾
+	// ãƒ©ã‚¤ãƒˆã®å‘ãã®å–å¾—
 	m_pCbufferLightDir[0] = GetLightDirection();
-	// ƒJƒƒ‰‚Ìƒ^[ƒQƒbƒg‚ÌˆÊ’u‚Ìæ“¾
+	// ã‚«ãƒ¡ãƒ©ã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ä½ç½®ã®å–å¾—
 	m_pCbuffferCameraTargetPos[0] = GetCameraTarget();
-	// ƒJƒƒ‰‚ÌˆÊ’u‚Ìæ“¾
+	// ã‚«ãƒ¡ãƒ©ã®ä½ç½®ã®å–å¾—
 	m_pCbufferCameraPos[0] = GetCameraPosition();
 
-	/*‘‚«‚ñ‚¾’l‚ğGPU‚É”½‰f‚·‚é*/
-	// ƒ‰ƒCƒg‚ÌŒü‚«
+	/*æ›¸ãè¾¼ã‚“ã å€¤ã‚’GPUã«åæ˜ ã™ã‚‹*/
+	// ãƒ©ã‚¤ãƒˆã®å‘ã
 	UpdateShaderConstantBuffer(m_cbufferLightDirH);
 	SetShaderConstantBuffer(m_cbufferLightDirH, DX_SHADERTYPE_PIXEL, 0);
-	// ƒJƒƒ‰‚Ìƒ^[ƒQƒbƒg‚ÌˆÊ’u
+	// ã‚«ãƒ¡ãƒ©ã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ä½ç½®
 	UpdateShaderConstantBuffer(m_cbufferCameraTargetPosH);
 	SetShaderConstantBuffer(m_cbufferCameraTargetPosH, DX_SHADERTYPE_PIXEL, 1);
-	// ƒJƒƒ‰‚ÌˆÊ’u
+	// ã‚«ãƒ¡ãƒ©ã®ä½ç½®
 	UpdateShaderConstantBuffer(m_cbufferCameraPosH);
 	SetShaderConstantBuffer(m_cbufferCameraPosH, DX_SHADERTYPE_PIXEL, 2);
 
-	// ƒVƒF[ƒ_‚ğ“K—p‚·‚é
+	// ã‚·ã‚§ãƒ¼ãƒ€ã‚’é©ç”¨ã™ã‚‹
 	MV1SetUseOrigShader(true);
 
-	//ƒ‚ƒfƒ‹‚Ìƒ^ƒCƒv‚É‚æ‚Á‚Ä“K‰‚³‚¹‚éƒVƒF[ƒ_[‚ğ•Ï‚¦‚é
+	//ãƒ¢ãƒ‡ãƒ«ã®ã‚¿ã‚¤ãƒ—ã«ã‚ˆã£ã¦é©å¿œã•ã›ã‚‹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’å¤‰ãˆã‚‹
 	if (shaderType == DX_MV1_VERTEX_TYPE_1FRAME)
 	{
 		SetUseVertexShader(m_vertexShader1FrameH);
@@ -128,34 +127,34 @@ void ToonShader::SetShader(int shaderType)
 		MV1SetUseOrigShader(false);
 	}
 
-	// ƒsƒNƒZƒ‹ƒVƒF[ƒ_‚ÌƒZƒbƒg
+	// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ã®ã‚»ãƒƒãƒˆ
 	SetUsePixelShader(m_pixelShaderH);
 }
 
 void ToonShader::SetShaderField(int shaderType)
 {
-	// ƒ‰ƒCƒg‚ÌŒü‚«‚Ìæ“¾
+	// ãƒ©ã‚¤ãƒˆã®å‘ãã®å–å¾—
 	m_pCbufferLightDir[0] = GetLightDirection();
-	// ƒJƒƒ‰‚Ìƒ^[ƒQƒbƒg‚ÌˆÊ’u‚Ìæ“¾
+	// ã‚«ãƒ¡ãƒ©ã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ä½ç½®ã®å–å¾—
 	m_pCbuffferCameraTargetPos[0] = GetCameraTarget();
-	// ƒJƒƒ‰‚ÌˆÊ’u‚Ìæ“¾
+	// ã‚«ãƒ¡ãƒ©ã®ä½ç½®ã®å–å¾—
 	m_pCbufferCameraPos[0] = GetCameraPosition();
 
-	/*‘‚«‚ñ‚¾’l‚ğGPU‚É”½‰f‚·‚é*/
-	// ƒ‰ƒCƒg‚ÌŒü‚«
+	/*æ›¸ãè¾¼ã‚“ã å€¤ã‚’GPUã«åæ˜ ã™ã‚‹*/
+	// ãƒ©ã‚¤ãƒˆã®å‘ã
 	UpdateShaderConstantBuffer(m_cbufferLightDirH);
 	SetShaderConstantBuffer(m_cbufferLightDirH, DX_SHADERTYPE_PIXEL, 0);
-	// ƒJƒƒ‰‚Ìƒ^[ƒQƒbƒg‚ÌˆÊ’u
+	// ã‚«ãƒ¡ãƒ©ã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ä½ç½®
 	UpdateShaderConstantBuffer(m_cbufferCameraTargetPosH);
 	SetShaderConstantBuffer(m_cbufferCameraTargetPosH, DX_SHADERTYPE_PIXEL, 1);
-	// ƒJƒƒ‰‚ÌˆÊ’u
+	// ã‚«ãƒ¡ãƒ©ã®ä½ç½®
 	UpdateShaderConstantBuffer(m_cbufferCameraPosH);
 	SetShaderConstantBuffer(m_cbufferCameraPosH, DX_SHADERTYPE_PIXEL, 2);
 
-	// ƒVƒF[ƒ_‚ğ“K—p‚·‚é
+	// ã‚·ã‚§ãƒ¼ãƒ€ã‚’é©ç”¨ã™ã‚‹
 	MV1SetUseOrigShader(true);
 
-	//ƒ‚ƒfƒ‹‚Ìƒ^ƒCƒv‚É‚æ‚Á‚Ä“K‰‚³‚¹‚éƒVƒF[ƒ_[‚ğ•Ï‚¦‚é
+	//ãƒ¢ãƒ‡ãƒ«ã®ã‚¿ã‚¤ãƒ—ã«ã‚ˆã£ã¦é©å¿œã•ã›ã‚‹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’å¤‰ãˆã‚‹
 	if (shaderType == DX_MV1_VERTEX_TYPE_1FRAME)
 	{
 		SetUseVertexShader(m_vertexShader1FrameH);
@@ -190,12 +189,12 @@ void ToonShader::SetShaderField(int shaderType)
 		MV1SetUseOrigShader(false);
 	}
 
-	// ƒsƒNƒZƒ‹ƒVƒF[ƒ_‚ÌƒZƒbƒg
+	// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ã®ã‚»ãƒƒãƒˆ
 	SetUsePixelShader(m_pixelShaderFieldH);
 }
 
 void ToonShader::ShaderEnd()
 {
-	/*ƒVƒF[ƒ_‚ğg‚í‚È‚¢*/
+	/*ã‚·ã‚§ãƒ¼ãƒ€ã‚’ä½¿ã‚ãªã„*/
 	MV1SetUseOrigShader(false);
 }

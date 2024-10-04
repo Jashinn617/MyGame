@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "DxLib.h"
 
 class ShadowMapShader
@@ -7,11 +7,11 @@ public:
 	ShadowMapShader();
 	~ShadowMapShader();
 
-	// ƒVƒƒƒhƒEƒ}ƒbƒv‚Ö‚Ì‘‚«‚İ‚ÌŠJn
+	// ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—ã¸ã®æ›¸ãè¾¼ã¿ã®é–‹å§‹
 	void WriteStart(VECTOR targetPos);
 
 	/// <summary>
-	/// ƒVƒƒƒhƒEƒ}ƒbƒv‚ÌƒJƒƒ‰‚©‚çŒ©‚½ƒ^[ƒQƒbƒg‚ğİ’è‚·‚é
+	/// ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—ã®ã‚«ãƒ¡ãƒ©ã‹ã‚‰è¦‹ãŸã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’è¨­å®šã™ã‚‹
 	/// </summary>
 	/// <param name="targetPos"></param>
 	void SetShadowMapCameraTarget(VECTOR targetPos);
@@ -20,47 +20,52 @@ public:
 	void SetShaderField(VECTOR targetPos);
 
 	/// <summary>
-	/// ƒVƒƒƒhƒEƒ}ƒbƒv‚Ö‚Ì‘‚«‚İ‚ğI‚í‚é
+	/// ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—ã¸ã®æ›¸ãè¾¼ã¿ã‚’çµ‚ã‚ã‚‹
 	/// </summary>
 	void WriteEnd();
 
-private:	// ŠÖ”
 	/// <summary>
-	/// ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ‚ğì‚é‚½‚ß‚ÌŠÖ”
+	/// ã‚·ã‚§ãƒ¼ãƒ€ã‚’ä½¿ã‚ãªã„è¨­å®šã«ã™ã‚‹
+	/// </summary>
+	void ShaderEnd();
+
+private:	// é–¢æ•°
+	/// <summary>
+	/// ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—ã‚’ä½œã‚‹ãŸã‚ã®é–¢æ•°
 	/// </summary>
 	/// <param name="targetPos"></param>
 	/// <returns></returns>
 	MATRIX ViewProjectionMatrix(VECTOR targetPos);
 
-private:	// •Ï”
-	/*’¸“_ƒVƒF[ƒ_*/
-	int m_vertexShader1FrameH;				//’¸“_ƒVƒF[ƒ_[1ƒtƒŒ[ƒ€ƒnƒ“ƒhƒ‹
-	int m_vertexShader4FrameH;				//’¸“_ƒVƒF[ƒ_[4ƒtƒŒ[ƒ€ƒnƒ“ƒhƒ‹
-	int m_vertexShader8FrameH;				//’¸“_ƒVƒF[ƒ_[8ƒtƒŒ[ƒ€ƒnƒ“ƒhƒ‹
-	int m_vertexShaderNormal4FrameH;		//’¸“_ƒVƒF[ƒ_[4ƒtƒŒ[ƒ€–@üƒ}ƒbƒv‚ ‚èƒnƒ“ƒhƒ‹
-	int m_vertexShaderNormal8FrameH;		//’¸“_ƒVƒF[ƒ_[8ƒtƒŒ[ƒ€–@üƒ}ƒbƒv‚ ‚èƒnƒ“ƒhƒ‹
-	/*ƒsƒNƒZƒ‹ƒVƒF[ƒ_*/
-	int m_vertexShaderShadowMapFieldH;		// ’¸“_ƒVƒF[ƒ_‚ÌƒVƒƒƒhƒEƒ}ƒbƒv‚ğƒtƒB[ƒ‹ƒh‚É“\‚è•t‚¯‚é‚½‚ß‚Ì’¸“_ƒVƒF[ƒ_
-	int m_pixelShaderH;						// ƒsƒNƒZƒ‹ƒVƒF[ƒ_‚Ìƒnƒ“ƒhƒ‹
-	int m_pixelShaderFieldH;				// ƒsƒNƒZƒ‹ƒVƒF[ƒ_‚ÌƒtƒB[ƒ‹ƒh‚É“K—p‚·‚éƒnƒ“ƒhƒ‹
+private:	// å¤‰æ•°
+	/*é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€*/
+	int m_vertexShader1FrameH;				//é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼1ãƒ•ãƒ¬ãƒ¼ãƒ ãƒãƒ³ãƒ‰ãƒ«
+	int m_vertexShader4FrameH;				//é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼4ãƒ•ãƒ¬ãƒ¼ãƒ ãƒãƒ³ãƒ‰ãƒ«
+	int m_vertexShader8FrameH;				//é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼8ãƒ•ãƒ¬ãƒ¼ãƒ ãƒãƒ³ãƒ‰ãƒ«
+	int m_vertexShaderNormal4FrameH;		//é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼4ãƒ•ãƒ¬ãƒ¼ãƒ æ³•ç·šãƒãƒƒãƒ—ã‚ã‚Šãƒãƒ³ãƒ‰ãƒ«
+	int m_vertexShaderNormal8FrameH;		//é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼8ãƒ•ãƒ¬ãƒ¼ãƒ æ³•ç·šãƒãƒƒãƒ—ã‚ã‚Šãƒãƒ³ãƒ‰ãƒ«
+	/*ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€*/
+	int m_vertexShaderShadowMapFieldH;		// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ã®ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—ã‚’ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«è²¼ã‚Šä»˜ã‘ã‚‹ãŸã‚ã®é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€
+	int m_pixelShaderH;						// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ã®ãƒãƒ³ãƒ‰ãƒ«
+	int m_pixelShaderFieldH;				// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«é©ç”¨ã™ã‚‹ãƒãƒ³ãƒ‰ãƒ«
 
-	/*’è”ƒoƒbƒtƒ@‚Ìƒnƒ“ƒhƒ‹*/
-	int m_cbufferLightDirH;				// ƒ‰ƒCƒg‚ÌŒü‚«
-	int m_cbufferCameraTargetPosH;		// ƒJƒƒ‰‚Ìƒ^[ƒQƒbƒg‚ÌˆÊ’u
-	int m_cbufferCameraPosH;			// ƒJƒƒ‰‚ÌˆÊ’u
-	int m_cbufferViewProjectionMatH;	// ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ
+	/*å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®ãƒãƒ³ãƒ‰ãƒ«*/
+	int m_cbufferLightDirH;				// ãƒ©ã‚¤ãƒˆã®å‘ã
+	int m_cbufferCameraTargetPosH;		// ã‚«ãƒ¡ãƒ©ã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ä½ç½®
+	int m_cbufferCameraPosH;			// ã‚«ãƒ¡ãƒ©ã®ä½ç½®
+	int m_cbufferViewProjectionMatH;	// ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—
 
-	/*’è”ƒoƒbƒtƒ@‚ğ‚¢‚¶‚é‚½‚ß‚ÌƒAƒhƒŒƒX‚ÌƒRƒs[*/
-	VECTOR* m_pCbufferLightDir;				// ƒ‰ƒCƒg‚ÌŒü‚«
-	VECTOR* m_pCbuffferCameraTargetPos;		// ƒJƒƒ‰‚Ìƒ^[ƒQƒbƒg‚ÌˆÊ’u
-	VECTOR* m_pCbufferCameraPos;			// ƒJƒƒ‰‚ÌˆÊ’u
+	/*å®šæ•°ãƒãƒƒãƒ•ã‚¡ã‚’ã„ã˜ã‚‹ãŸã‚ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã®ã‚³ãƒ”ãƒ¼*/
+	VECTOR* m_pCbufferLightDir;				// ãƒ©ã‚¤ãƒˆã®å‘ã
+	VECTOR* m_pCbuffferCameraTargetPos;		// ã‚«ãƒ¡ãƒ©ã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ä½ç½®
+	VECTOR* m_pCbufferCameraPos;			// ã‚«ãƒ¡ãƒ©ã®ä½ç½®
 
 	/// <summary>
-	/// ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ
-	/// ƒVƒƒƒhƒEƒ}ƒbƒvƒeƒNƒXƒ`ƒƒ‚ğƒtƒB[ƒ‹ƒhƒ‚ƒfƒ‹‚É
-	///	“\‚è•t‚¯‚éÛ‚ÉÀ•W‚Ì•ÏŠ·‚ğs‚¤‚½‚ß‚É•K—v‚Ès—ñ
+	/// ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—
+	/// ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒ¢ãƒ‡ãƒ«ã«
+	///	è²¼ã‚Šä»˜ã‘ã‚‹éš›ã«åº§æ¨™ã®å¤‰æ›ã‚’è¡Œã†ãŸã‚ã«å¿…è¦ãªè¡Œåˆ—
 	/// </summary>
 	MATRIX* m_viewProjectionMat;
-	int m_shadowMap;	// ƒVƒƒƒhƒEƒ}ƒbƒv—p‚Ì•Ï”
+	int m_shadowMap;	// ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—ç”¨ã®å¤‰æ•°
 };
 

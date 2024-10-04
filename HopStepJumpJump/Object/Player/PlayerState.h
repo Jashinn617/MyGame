@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "DxLib.h"
 
 #include <vector>
@@ -12,108 +12,113 @@ class Input;
 class PlayerState
 {
 public:
-	// ó‘Ô
+	/// <summary>
+	/// ã‚¹ãƒ†ã‚¤ãƒˆã®ç¨®é¡
+	/// </summary>
 	enum class StateKind
 	{
-		Idle,		// ‘Ò‹@
-		Walk,		// •à‚«
-		Dash,		// ‘–‚è
-		Jump,		// ƒWƒƒƒ“ƒv
-		KnockBack,	// ƒmƒbƒNƒoƒbƒN
-		StateClear,	// ƒXƒe[ƒWƒNƒŠƒA
+		Idle,		// å¾…æ©Ÿ
+		Walk,		// æ­©ã
+		Dash,		// èµ°ã‚Š
+		Jump,		// ã‚¸ãƒ£ãƒ³ãƒ—
+		KnockBack,	// ãƒãƒƒã‚¯ãƒãƒƒã‚¯
+		StateClear,	// ã‚¹ãƒ†ãƒ¼ã‚¸ã‚¯ãƒªã‚¢
 	};
 
 public:
+	/// <summary>
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// </summary>
 	PlayerState();
 	/// <summary>
-	/// ƒfƒXƒgƒ‰ƒNƒ^
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
-	~PlayerState() {};
+	~PlayerState();
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// ƒ_ƒ[ƒW‚ğó‚¯‚½
+	/// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãŸ
 	/// </summary>
 	void OnDamage();
 
 	/// <summary>
-	/// ƒXƒe[ƒWƒNƒŠƒA
+	/// ã‚¹ãƒ†ãƒ¼ã‚¸ã‚¯ãƒªã‚¢
 	/// </summary>
 	void StageClear();
 
 	/// <summary>
-	/// ó‘Ôî•ñ‚Ì’Ç‰Á
+	/// ã‚¹ãƒ†ã‚¤ãƒˆæƒ…å ±ã®è¿½åŠ 
 	/// </summary>
-	/// <param name="stateInit">‰Šú‰»</param>
-	/// <param name="stateUpdate">XV</param>
-	/// <param name="stateKind">ó‘Ô‚Ìí—Ş</param>
+	/// <param name="stateInit">åˆæœŸåŒ–</param>
+	/// <param name="stateUpdate">æ›´æ–°</param>
+	/// <param name="stateKind">ã‚¹ãƒ†ã‚¤ãƒˆã®ç¨®é¡</param>
 	void AddState(std::function<void(void)> stateInit, 
 		std::function<void(void)> stateUpdate, 
 		StateKind stateKind);
 
 	/// <summary>
-	/// ó‘Ô‚Ìİ’è
+	/// ã‚¹ãƒ†ã‚¤ãƒˆã®è¨­å®š
 	/// </summary>
-	/// <param name="state">ó‘Ô</param>
+	/// <param name="state">ã‚¹ãƒ†ã‚¤ãƒˆ</param>
 	void SetState(StateKind stateKind);
 
 	/// <summary>
-	/// ó‘Ô‚ÌI—¹ˆ—
+	/// ã‚¹ãƒ†ã‚¤ãƒˆã®çµ‚äº†å‡¦ç†
 	/// </summary>
 	void EndState();
 
 	/// <summary>
-	/// Œ»İ‚Ìó‘Ô‚Ìæ“¾
+	/// ç¾åœ¨ã®ã‚¹ãƒ†ã‚¤ãƒˆã®å–å¾—
 	/// </summary>
 	/// <returns></returns>
 	StateKind GetState() const { return m_pNowState.stateKind; }
 
-private:	// \‘¢‘Ì
-
-	// ó‘Ôî•ñ
+private:	// æ§‹é€ ä½“
+	/// <summary>
+	/// ã‚¹ãƒ†ã‚¤ãƒˆæƒ…å ±
+	/// </summary>
 	struct StateData
 	{
-		std::function<void(void)> stateInit{};		// ó‘Ô‰Šú‰»ˆ—
-		std::function<void(void)> stateUpdate{};	// ó‘ÔXVˆ—
-		StateKind stateKind{};						// ó‘Ô‚Ìí—Ş
+		std::function<void(void)> stateInit{};		// çŠ¶æ…‹åˆæœŸåŒ–å‡¦ç†
+		std::function<void(void)> stateUpdate{};	// çŠ¶æ…‹æ›´æ–°å‡¦ç†
+		StateKind stateKind{};						// çŠ¶æ…‹ã®ç¨®é¡
 	};
 
-private:	// ŠÖ”
+private:	// é–¢æ•°
 	/// <summary>
-	/// ‘Ò‹@ó‘Ô‚Ö‚Ì•ÏX
+	/// å¾…æ©ŸçŠ¶æ…‹ã¸ã®å¤‰æ›´
 	/// </summary>
 	void StateTransitionIdle();
 	/// <summary>
-	/// •à‚«ó‘Ô‚Ö‚Ì•ÏX
+	/// æ­©ãçŠ¶æ…‹ã¸ã®å¤‰æ›´
 	/// </summary>
 	void StateTransitionWalk();
 	/// <summary>
-	/// ƒ_ƒbƒVƒ…ó‘Ô‚Ö‚Ì•ÏX
+	/// ãƒ€ãƒƒã‚·ãƒ¥çŠ¶æ…‹ã¸ã®å¤‰æ›´
 	/// </summary>
 	void StateTransitionDash();
 	/// <summary>
-	/// ƒWƒƒƒ“ƒvó‘Ô‚Ö‚Ì•ÏX
+	/// ã‚¸ãƒ£ãƒ³ãƒ—çŠ¶æ…‹ã¸ã®å¤‰æ›´
 	/// </summary>
 	void StateTransitionJump();
 
 	/// <summary>
-	/// Šeó‘Ô‘JˆÚ
+	/// å„ã‚¹ãƒ†ã‚¤ãƒˆã®é·ç§»
 	/// </summary>
 	void StateTransition();
 
 	/// <summary>
-	/// ó‘Ô•ÏX
+	/// ã‚¹ãƒ†ã‚¤ãƒˆå¤‰æ›´
 	/// </summary>
-	/// <param name="state">ó‘Ô</param>
+	/// <param name="state">ã‚¹ãƒ†ã‚¤ãƒˆ</param>
 	void StateChange(StateKind stateKind);
 
-private:	// •Ï”
-	bool m_isAction;						// ƒAƒNƒVƒ‡ƒ“s“®’†‚©
-	std::vector<StateData> m_pState;		// ó‘Ô‚ÌŠi”[
-	StateData m_pNowState;					// Œ»İ‚Ìó‘Ô
+private:	// å¤‰æ•°
+	bool m_isAction;						// ã‚¢ã‚¯ã‚·ãƒ§ãƒ³è¡Œå‹•ä¸­ã‹
+	std::vector<StateData> m_pState;		// çŠ¶æ…‹ã®æ ¼ç´
+	StateData m_pNowState;					// ç¾åœ¨ã®çŠ¶æ…‹
 };
-
