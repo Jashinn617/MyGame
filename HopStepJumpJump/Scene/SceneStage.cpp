@@ -1,4 +1,4 @@
-#include "SceneStage.h"
+ï»¿#include "SceneStage.h"
 #include "StageSceneManager.h"
 #include "SceneSelect.h"
 #include "SceneDebug.h"
@@ -21,7 +21,7 @@
 
 namespace
 {
-	// ƒIƒvƒVƒ‡ƒ“‰æ‘œƒtƒ@ƒCƒ‹
+	// ã‚ªãƒ—ã‚·ãƒ§ãƒ³ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«
 	const char* const kOptionImgFileName[4] =
 	{
 		"Data/Img/Option/OptionText1.png",
@@ -29,37 +29,37 @@ namespace
 		"Data/Img/Option/OptionText3.png",
 		"Data/Img/Option/OptionText4.png",
 	};
-	constexpr int kOptionImgPosX = Game::kScreenWidth / 2;	// ƒIƒvƒVƒ‡ƒ“‰æ‘œÀ•WX
-	constexpr int kOptionImgPosY[4] = { 150,450,650,850 };	// ƒIƒvƒVƒ‡ƒ“‰æ‘œÀ•WX
-	constexpr float kButtonSize = 0.8f;						// ƒIƒvƒVƒ‡ƒ“‰æ‘œƒTƒCƒY
-	constexpr float kButtonSelectSize = 1.0f;				// ‘I‘ğ‚³‚ê‚Ä‚¢‚éƒIƒvƒVƒ‡ƒ“‰æ‘œƒTƒCƒY
-	constexpr int kOptionSelectNum = 3;						// ƒIƒvƒVƒ‡ƒ“‚ÌƒZƒŒƒNƒg‚Ì”
-	constexpr int kOptionBackAlpha = 220;					// ƒIƒvƒVƒ‡ƒ“‚Ì”wŒi•s“§–¾“x
+	constexpr int kOptionImgPosX = Game::kScreenWidth / 2;	// ã‚ªãƒ—ã‚·ãƒ§ãƒ³ç”»åƒåº§æ¨™X
+	constexpr int kOptionImgPosY[4] = { 150,450,650,850 };	// ã‚ªãƒ—ã‚·ãƒ§ãƒ³ç”»åƒåº§æ¨™X
+	constexpr float kButtonSize = 0.8f;						// ã‚ªãƒ—ã‚·ãƒ§ãƒ³ç”»åƒã‚µã‚¤ã‚º
+	constexpr float kButtonSelectSize = 1.0f;				// é¸æŠã•ã‚Œã¦ã„ã‚‹ã‚ªãƒ—ã‚·ãƒ§ãƒ³ç”»åƒã‚µã‚¤ã‚º
+	constexpr int kOptionSelectNum = 3;						// ã‚ªãƒ—ã‚·ãƒ§ãƒ³æ™‚ã®ã‚»ãƒ¬ã‚¯ãƒˆã®æ•°
+	constexpr int kOptionBackAlpha = 220;					// ã‚ªãƒ—ã‚·ãƒ§ãƒ³æ™‚ã®èƒŒæ™¯ä¸é€æ˜åº¦
 
-	constexpr float kCameraNear = 5.0f;						// ƒJƒƒ‰è‘OƒNƒŠƒbƒv‹——£
-	constexpr float kCameraFar = 5000.0f;					// ƒJƒƒ‰‰œƒNƒŠƒbƒv‹——£
+	constexpr float kCameraNear = 5.0f;						// ã‚«ãƒ¡ãƒ©æ‰‹å‰ã‚¯ãƒªãƒƒãƒ—è·é›¢
+	constexpr float kCameraFar = 5000.0f;					// ã‚«ãƒ¡ãƒ©å¥¥ã‚¯ãƒªãƒƒãƒ—è·é›¢
 }
 
-SceneStage::SceneStage(Game::Stage stage) :
+SceneStage::SceneStage(Game::StageKind stage) :
 	m_cursorCount(0),
 	m_isOption(false),
 	m_isSceneEnd(false),
 	m_nextScene(nullptr),
 	m_stageKind(stage)
 {
-	// ƒXƒe[ƒWƒ}ƒl[ƒWƒƒ[ƒ|ƒCƒ“ƒ^‚Ìì¬
+	// ã‚¹ãƒ†ãƒ¼ã‚¸ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ãƒã‚¤ãƒ³ã‚¿ã®ä½œæˆ
 	m_pStageSceneManager = std::make_shared<StageSceneManager>(stage);
 
-	// ƒJƒƒ‰‚Ìİ’è
+	// ã‚«ãƒ¡ãƒ©ã®è¨­å®š
 	SetCameraNearFar(kCameraNear, kCameraFar);
 
-	// ƒ{ƒ^ƒ“ƒTƒCƒY‚Ì‰Šú‰»
+	// ãƒœã‚¿ãƒ³ã‚µã‚¤ã‚ºã®åˆæœŸåŒ–
 	for (int i = 0; i < m_buttonSize.size(); i++)
 	{
 		m_buttonSize[i] = 0;
 	}
 
-	// ‰æ‘œ‚Ìƒ[ƒh
+	// ç”»åƒã®ãƒ­ãƒ¼ãƒ‰
 	for (int i = 0; i < m_optionH.size(); i++)
 	{
 		m_optionH[i] = LoadGraph(kOptionImgFileName[i]);
@@ -69,7 +69,7 @@ SceneStage::SceneStage(Game::Stage stage) :
 
 SceneStage::~SceneStage()
 {
-	// ‰æ‘œ‚ÌƒfƒŠ[ƒg
+	// ç”»åƒã®ãƒ‡ãƒªãƒ¼ãƒˆ
 	for (int i = 0; i < m_optionH.size(); i++)
 	{
 		DeleteGraph(m_optionH[i]);
@@ -78,64 +78,64 @@ SceneStage::~SceneStage()
 
 void SceneStage::Init()
 {
-	// ƒXƒe[ƒWƒ}ƒl[ƒWƒƒ[‚Ì‰Šú‰»
+	// ã‚¹ãƒ†ãƒ¼ã‚¸ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã®åˆæœŸåŒ–
 	m_pStageSceneManager->Init();
 }
 
 std::shared_ptr<SceneBase> SceneStage::Update()
 {
-	// ƒtƒF[ƒhXV
+	// ãƒ•ã‚§ãƒ¼ãƒ‰æ›´æ–°
 	UpdateFade();
 
 #ifdef _DEBUG
-	// LB‚ª‰Ÿ‚³‚ê‚½ê‡
-	if (Pad::isTrigger(PAD_INPUT_5))
+	// LBãŒæŠ¼ã•ã‚ŒãŸå ´åˆ
+	if (Pad::IsTrigger(PAD_INPUT_5))
 	{
-		// ƒfƒoƒbƒO‚É”ò‚Ô
+		// ãƒ‡ãƒãƒƒã‚°ã«é£›ã¶
 		return std::make_shared<SceneDebug>();
 	}
 #endif // _DEBUG
 
-	// Startƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½ê‡
-	if (Pad::isTrigger(PAD_INPUT_8))
+	// Startãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸå ´åˆ
+	if (Pad::IsTrigger(PAD_INPUT_8))
 	{
-		// ƒIƒvƒVƒ‡ƒ“‚ğŠJ‚­
+		// ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚’é–‹ã
 		m_isOption = true;
-		// ƒJ[ƒ\ƒ‹‚ÌƒJƒEƒ“ƒg‚ğ‰Šú‰»‚·‚é
+		// ã‚«ãƒ¼ã‚½ãƒ«ã®ã‚«ã‚¦ãƒ³ãƒˆã‚’åˆæœŸåŒ–ã™ã‚‹
 		m_cursorCount = 0;
 	}
 
-	// Ÿ‚ÌƒV[ƒ“‚É‰½‚©‚µ‚ç“ü‚Á‚Ä‚¢‚½‚ç
+	// æ¬¡ã®ã‚·ãƒ¼ãƒ³ã«ä½•ã‹ã—ã‚‰å…¥ã£ã¦ã„ãŸã‚‰
 	if (m_nextScene != nullptr)
 	{
-		// Ÿ‚ÌƒV[ƒ“‚ğ•Ï‚¦s‚¤
+		// æ¬¡ã®ã‚·ãƒ¼ãƒ³ã‚’å¤‰ãˆsã†
 		return m_nextScene;
 	}
 
-	// ƒIƒvƒVƒ‡ƒ“‚ªŠJ‚©‚ê‚Ä‚¢‚½ê‡
+	// ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãŒé–‹ã‹ã‚Œã¦ã„ãŸå ´åˆ
 	if (m_isOption)
 	{
-		// ƒIƒvƒVƒ‡ƒ“XV
+		// ã‚ªãƒ—ã‚·ãƒ§ãƒ³æ›´æ–°
 		UpdateOption();
 	}
 	else
 	{
-		// ƒXƒe[ƒWƒ}ƒl[ƒWƒƒ[XV
+		// ã‚¹ãƒ†ãƒ¼ã‚¸ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼æ›´æ–°
 		m_pStageSceneManager->Update();
 
-		// Ÿ‚ÌƒV[ƒ“‚Ìİ’è
+		// æ¬¡ã®ã‚·ãƒ¼ãƒ³ã®è¨­å®š
 		switch (m_pStageSceneManager->GetNextScene())
 		{
 		case StageSceneManager::NextScene::GameScene:
-			// ƒQ[ƒ€ƒV[ƒ“
+			// ã‚²ãƒ¼ãƒ ã‚·ãƒ¼ãƒ³
 			return std::make_shared<SceneStage>(m_stageKind);
 			break;
 		case StageSceneManager::NextScene::Select:
-			// ƒZƒŒƒNƒgƒV[ƒ“
+			// ã‚»ãƒ¬ã‚¯ãƒˆã‚·ãƒ¼ãƒ³
 			return std::make_shared<SceneSelect>();
 			break;
 		case StageSceneManager::NextScene::My:
-			// ©•ª‚ÌƒV[ƒ“
+			// è‡ªåˆ†ã®ã‚·ãƒ¼ãƒ³
 			return shared_from_this();
 			break;
 		default:
@@ -147,40 +147,40 @@ std::shared_ptr<SceneBase> SceneStage::Update()
 
 void SceneStage::Draw()
 {
-	// ƒXƒe[ƒWƒ}ƒl[ƒWƒƒ[•`‰æ
+	// ã‚¹ãƒ†ãƒ¼ã‚¸ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼æç”»
 	m_pStageSceneManager->Draw();
 
-	// ƒIƒvƒVƒ‡ƒ“‚ªŠJ‚©‚ê‚Ä‚¢‚½ê‡
+	// ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãŒé–‹ã‹ã‚Œã¦ã„ãŸå ´åˆ
 	if (m_isOption)
 	{
-		// ƒIƒvƒVƒ‡ƒ“•`‰æ
+		// ã‚ªãƒ—ã‚·ãƒ§ãƒ³æç”»
 		DrawOption();
 	}
 
-	// ƒtƒF[ƒh•`‰æ
+	// ãƒ•ã‚§ãƒ¼ãƒ‰æç”»
 	DrawFade();
 }
 
 void SceneStage::End()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void SceneStage::DrawOption()
 {
-	// •”wŒi
-	// •s“§–¾“x‚ğ­‚µ‰º‚°‚é
+	// é»’èƒŒæ™¯
+	// ä¸é€æ˜åº¦ã‚’å°‘ã—ä¸‹ã’ã‚‹
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kOptionBackAlpha);
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	// ƒeƒLƒXƒg•`‰æ
-	// ƒTƒCƒY‚ÍŒÅ’è
+	// ãƒ†ã‚­ã‚¹ãƒˆæç”»
+	// ã‚µã‚¤ã‚ºã¯å›ºå®š
 	DrawRotaGraph(kOptionImgPosX, kOptionImgPosY[0],
 		kButtonSize, 0.0f, m_optionH[0], true);
 
-	// ƒeƒLƒXƒg•`‰æ
-	// ‘I‘ğ‚³‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ÅƒTƒCƒY‚ª•Ï‚í‚é
+	// ãƒ†ã‚­ã‚¹ãƒˆæç”»
+	// é¸æŠã•ã‚Œã¦ã„ã‚‹ã‹ã©ã†ã‹ã§ã‚µã‚¤ã‚ºãŒå¤‰ã‚ã‚‹
 	DrawRotaGraph(kOptionImgPosX, kOptionImgPosY[1],
 		m_buttonSize[0], 0.0f, m_optionH[1], true);
 	DrawRotaGraph(kOptionImgPosX, kOptionImgPosY[2],
@@ -191,64 +191,64 @@ void SceneStage::DrawOption()
 
 void SceneStage::UpdateOption()
 {
-	/*ƒJƒEƒ“ƒg‚ÌØ‚è‘Ö‚¦*/
-	if (Pad::isTrigger(PAD_INPUT_UP))
+	/*ã‚«ã‚¦ãƒ³ãƒˆã®åˆ‡ã‚Šæ›¿ãˆ*/
+	if (Pad::IsTrigger(PAD_INPUT_UP))
 	{
 		SoundManager::GetInstance().Play("Select");
 		m_cursorCount--;
 
-		// ƒJ[ƒ\ƒ‹‚ªƒ‹[ƒv‚·‚é‚æ‚¤‚É‚·‚é
+		// ã‚«ãƒ¼ã‚½ãƒ«ãŒãƒ«ãƒ¼ãƒ—ã™ã‚‹ã‚ˆã†ã«ã™ã‚‹
 		if (m_cursorCount >= kOptionSelectNum) m_cursorCount = 0;
 	}
-	if (Pad::isTrigger(PAD_INPUT_DOWN))
+	if (Pad::IsTrigger(PAD_INPUT_DOWN))
 	{
 		SoundManager::GetInstance().Play("Select");
 		m_cursorCount++;
 
-		// ƒJ[ƒ\ƒ‹‚ªƒ‹[ƒv‚·‚é‚æ‚¤‚É‚·‚é
+		// ã‚«ãƒ¼ã‚½ãƒ«ãŒãƒ«ãƒ¼ãƒ—ã™ã‚‹ã‚ˆã†ã«ã™ã‚‹
 		if (m_cursorCount < 0) m_cursorCount = kOptionSelectNum - 1;
 	}
 
-	// Aƒ{ƒ^ƒ“‚©Bƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½ê‡
-	if (Pad::isTrigger(PAD_INPUT_1) || Pad::isTrigger(PAD_INPUT_2))
+	// Aãƒœã‚¿ãƒ³ã‹Bãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸå ´åˆ
+	if (Pad::IsTrigger(PAD_INPUT_1) || Pad::IsTrigger(PAD_INPUT_2))
 	{
 		if (m_cursorCount == 0)
 		{
-			// SE‚ğ–Â‚ç‚·
+			// SEã‚’é³´ã‚‰ã™
 			SoundManager::GetInstance().Play("Decide");
-			// ƒQ[ƒ€‚É–ß‚é
+			// ã‚²ãƒ¼ãƒ ã«æˆ»ã‚‹
 			m_isOption = false;
 			m_nextScene = nullptr;
 		}
 		else if (m_cursorCount == 1)
 		{
-			// BGM‚ğÁ‚·
+			// BGMã‚’æ¶ˆã™
 			SoundManager::GetInstance().DesignationStopSound("MainScene");
-			// SE‚ğ–Â‚ç‚·
+			// SEã‚’é³´ã‚‰ã™
 			SoundManager::GetInstance().Play("SceneChange");
-			// Å‰‚©‚ç
+			// æœ€åˆã‹ã‚‰
 			m_nextScene = std::make_shared<SceneStage>(m_stageKind);
 
 		}
 		else if (m_cursorCount == 2)
 		{
-			// BGM‚ğÁ‚·
+			// BGMã‚’æ¶ˆã™
 			SoundManager::GetInstance().DesignationStopSound("MainScene");
-			// SE‚ğ–Â‚ç‚·
+			// SEã‚’é³´ã‚‰ã™
 			SoundManager::GetInstance().Play("SceneChange");
-			// ƒZƒŒƒNƒg‚É–ß‚é
+			// ã‚»ãƒ¬ã‚¯ãƒˆã«æˆ»ã‚‹
 			m_nextScene = std::make_shared<SceneSelect>();
 		}
 	}
 
-	// ƒ{ƒ^ƒ“ƒTƒCƒY‚ÌØ‚è‘Ö‚¦
+	// ãƒœã‚¿ãƒ³ã‚µã‚¤ã‚ºã®åˆ‡ã‚Šæ›¿ãˆ
 	for (int i = 0; i < m_buttonSize.size(); i++)
 	{
-		if (i == m_cursorCount)	// ‘I‘ğ‚³‚ê‚Ä‚¢‚½ê‡
+		if (i == m_cursorCount)	// é¸æŠã•ã‚Œã¦ã„ãŸå ´åˆ
 		{
 			m_buttonSize[i] = kButtonSelectSize;
 		}
-		else	// ‘I‘ğ‚³‚ê‚Ä‚¢‚È‚©‚Á‚½ê‡
+		else	// é¸æŠã•ã‚Œã¦ã„ãªã‹ã£ãŸå ´åˆ
 		{
 			m_buttonSize[i] = kButtonSize;
 		}

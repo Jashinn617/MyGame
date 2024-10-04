@@ -1,11 +1,15 @@
-#include "DxLib.h"
+ï»¿#include "DxLib.h"
 #include "CountTime.h"
 
 #include "Game.h"
 
+#include <assert.h>
+
 namespace
 {
-	const char* const kFileName = "Data/Img/Time/Time.png";
+	/*ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹*/
+	const char* const kColonFileName = "Data/Img/Time/Colon.png";	// ã‚³ãƒ­ãƒ³
+	// ç§’æ•°
 	const char* const kMyTimeNumFileName[10] =
 	{
 		 "Data/Img/Time/TimeNum0.png",
@@ -20,43 +24,39 @@ namespace
 		 "Data/Img/Time/TimeNum9.png",
 	};
 
-	/*‰æ‘œ‚ÌÀ•W1*/
-	constexpr int kImagePosX1 = static_cast<int>(Game::kScreenWidth * 0.5f);	// X
-	constexpr int kImagePosY1 = 230;	// Y
-	/*•ª”‚ÌÀ•W*/
-	/*”š‚ÌÀ•W(ˆê‚ÌˆÊ)*/
-	constexpr int kMinutesFirstPosX = static_cast<int>(Game::kScreenWidth * 0.45f);	// X
-	constexpr int kMinutesFirstPosY = 230;	// Y
-	/*”š‚ÌÀ•W(\‚ÌˆÊ)*/
-	constexpr int kMinutesSecondPosX = static_cast<int>(Game::kScreenWidth * 0.39f);	// X
-	constexpr int kMinutesSecondPosY = 230;	// Y
-	/*•b”‚ÌÀ•W*/
-	/*”š‚ÌÀ•W(ˆê‚ÌˆÊ)*/
-	constexpr int kSecondFirstPosX = static_cast<int>(Game::kScreenWidth * 0.61f);	// X
-	constexpr int kSecondFirstPosY = 230;	// Y
-	/*”š‚ÌÀ•W(\‚ÌˆÊ)*/
-	constexpr int kSecondSecondPosX = static_cast<int>(Game::kScreenWidth * 0.55f);	// X
-	constexpr int kSecondSecondPosY = 230;	// Y
+	constexpr int kImagePosX1 = 960;		// ã‚³ãƒ­ãƒ³ç”»åƒXåº§æ¨™
+	constexpr int kImagePosY1 = 230;		// ã‚³ãƒ­ãƒ³ç”»åƒYåº§æ¨™
+	constexpr int kMinutesFirstPosX = 864;	// æ•°å­—ã®Xåº§æ¨™(ä¸€ã®ä½)
+	constexpr int kMinutesFirstPosY = 230;	// æ•°å­—ã®Yåº§æ¨™(ä¸€ã®ä½)
+	constexpr int kMinutesSecondPosX = 748;	// æ•°å­—ã®Xåº§æ¨™(åã®ä½)
+	constexpr int kMinutesSecondPosY = 230;	// æ•°å­—ã®Yåº§æ¨™(åã®ä½)
+	constexpr int kSecondFirstPosX = 1171;	// æ•°å­—ã®Xåº§æ¨™(ä¸€ã®ä½)
+	constexpr int kSecondFirstPosY = 230;	// æ•°å­—ã®Yåº§æ¨™(ä¸€ã®ä½)
+	constexpr int kSecondSecondPosX = 1056;	// æ•°å­—ã®Xåº§æ¨™(åã®ä½)
+	constexpr int kSecondSecondPosY = 230;	// æ•°å­—ã®Yåº§æ¨™(åã®ä½)
 
-	constexpr float kImgSize = 0.5f;	// •¶šƒTƒCƒY
+	constexpr float kImgSize = 0.5f;	// ç”»åƒã‚µã‚¤ã‚º
 }
 
 CountTime::CountTime():
 	m_time(0),
-	m_H(-1)
+	m_colonH(-1)
 {
-	m_H = LoadGraph(kFileName);
-
-	// ”š‰æ‘œƒnƒ“ƒhƒ‹ƒ[ƒh
+	/*ç”»åƒãƒ­ãƒ¼ãƒ‰*/
+	// ãƒ­ãƒ¼ãƒ‰å¤±æ•—æ™‚ã¯æ­¢ã‚ã‚‹
+	m_colonH = LoadGraph(kColonFileName);
+	assert(m_colonH != -1);
 	for (int i = 0; i < m_numberH.size(); i++)
 	{
 		m_numberH[i] = LoadGraph(kMyTimeNumFileName[i]);
+		assert(m_numberH[i] != -1);
 	}
 }
 
 CountTime::~CountTime()
 {
-	DeleteGraph(m_H);
+	/*ç”»åƒãƒ‡ãƒªãƒ¼ãƒˆ*/
+	DeleteGraph(m_colonH);
 	for (int i = 0; i < m_numberH.size(); i++)
 	{
 		DeleteGraph(m_numberH[i]);
@@ -65,24 +65,25 @@ CountTime::~CountTime()
 
 void CountTime::Update(int time)
 {
+	// ã‚¿ã‚¤ãƒ æ›´æ–°
 	m_time = time;
 }
 
 void CountTime::Draw()
 {
-	// ‰æ‘œ‚Ì•`‰æ
+	// ã‚³ãƒ­ãƒ³æç”»
 	DrawRotaGraph(kImagePosX1, kImagePosY1,
 		kImgSize, 0.0f,
-		m_H, true);
+		m_colonH, true);
 
-	// Œ»İ‚Ì•b”ŒvZ
+	// ç¾åœ¨ã®ç§’æ•°è¨ˆç®—
 	int nowTime = m_time / 60;
-
-	// •ª”‚ÌŒvZ‚Æ•`‰æ
+	// åˆ†æ•°ã®è¨ˆç®—ã¨æç”»
 	int minutesTime = nowTime / 60;
-	int minutesTimeFirst = minutesTime % 10;	// ˆê‚ÌˆÊ
-	int minutesTimeSecond = minutesTime / 10;	// \‚ÌˆÊ
+	int minutesTimeFirst = minutesTime % 10;	// ä¸€ã®ä½
+	int minutesTimeSecond = minutesTime / 10;	// åã®ä½
 
+	// åˆ†æ•°æç”»
 	DrawRotaGraph(kMinutesFirstPosX, kMinutesFirstPosY,
 		kImgSize, 0.0f,
 		m_numberH[minutesTimeFirst], true);
@@ -90,11 +91,12 @@ void CountTime::Draw()
 		kImgSize, 0.0f,
 		m_numberH[minutesTimeSecond], true);
 
-	// •b”‚ÌŒvZ‚Æ•`‰æ
+	// ç§’æ•°ã®è¨ˆç®—ã¨æç”»
 	int secondTime = nowTime % 60;
-	int secondTimeFirst = secondTime % 10;	// ˆê‚ÌˆÊ
-	int secondTimeSecond = secondTime / 10;	// \‚ÌˆÊ
+	int secondTimeFirst = secondTime % 10;	// ä¸€ã®ä½
+	int secondTimeSecond = secondTime / 10;	// åã®ä½
 
+	// ç§’æ•°æç”»
 	DrawRotaGraph(kSecondFirstPosX, kSecondFirstPosY,
 		kImgSize, 0.0f,
 		m_numberH[secondTimeFirst], true);

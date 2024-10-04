@@ -1,4 +1,4 @@
-#include "Collision.h"
+ï»¿#include "Collision.h"
 
 #include "../Object/ObjectBase.h"
 #include "../Object/Player/Player.h"
@@ -10,100 +10,105 @@
 
 Collision::Collision()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 Collision::~Collision()
 {
-	/*ˆ—–³‚µ*/
-}
-
-void Collision::Init()
-{
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void Collision::Update(ObjectBase* my, ObjectBase* target)
 {
-	// ‘¶İ‚µ‚È‚¢•¨‘Ì‚Í“–‚½‚ç‚È‚¢
+	// å­˜åœ¨ã—ãªã„ç‰©ä½“ã¯å½“ãŸã‚‰ãªã„
 	if (!my->GetInfo().isExist) return;
-	// ƒtƒB[ƒ‹ƒh‚É‚Í“–‚½‚ç‚È‚¢
+	// ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«ã¯å½“ãŸã‚‰ãªã„
 	if (!target->GetInfo().isExist && target->GetColType() != ObjectBase::ColType::Field) return;
-	// None‚É‚Í‰½‚É‚à‚Ô‚Â‚©‚ç‚È‚¢
+	// Noneã«ã¯ä½•ã«ã‚‚ã¶ã¤ã‹ã‚‰ãªã„
 	if (my->GetColType() == ObjectBase::ColType::None) return;
 
-	// ƒIƒuƒWƒFƒNƒgƒ^ƒCƒv‚ªƒvƒŒƒCƒ„[‚Ìê‡
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¿ã‚¤ãƒ—ãŒãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å ´åˆ
 	if (my->GetColType() == ObjectBase::ColType::Player)
 	{
-		// ƒ^[ƒQƒbƒg‚ÌƒIƒuƒWƒFƒNƒgƒ^ƒCƒv‚ªƒtƒB[ƒ‹ƒh‚Ìê‡
+		// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¿ã‚¤ãƒ—ãŒãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®å ´åˆ
 		if (target->GetColType() == ObjectBase::ColType::Field)
 		{
+			// ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«ã‚ã‚Šè¾¼ã¾ãªã„ã‚ˆã†ã«ã™ã‚‹
 			dynamic_cast<Player*>(my)->GetCamera()->ColUpdate(target);
 			my->MoveCollFieldUpdate(target);
 			return;
 		}
 
-		// ƒ^[ƒQƒbƒg‚ÌƒIƒuƒWƒFƒNƒgƒ^ƒCƒv‚ªƒGƒlƒ~[‚Ìê‡
+		// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¿ã‚¤ãƒ—ãŒã‚¨ãƒãƒŸãƒ¼ã®å ´åˆ
 		if (target->GetColType() == ObjectBase::ColType::Enemy)
 		{
-			// ƒvƒŒƒCƒ„[‚ªƒ_ƒ[ƒW‚ğó‚¯‚Ä‚¢‚éó‘Ô‚Å‚È‚¯‚ê‚Î
-			if (!my->IsDamage())
+			if (!my->IsDamage()) // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã¦ã„ã‚‹çŠ¶æ…‹ã§ãªã‘ã‚Œã°
 			{
+				// æ”»æ’ƒå‡¦ç†ã‚’ã™ã‚‹
 				dynamic_cast<CharacterBase*>(my)->AttackPlayerCollEnemy(dynamic_cast<CharacterBase*>(target));
 				return;		
 			}
-			else
+			else	// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã¦ã„ã‚‹çŠ¶æ…‹ã ã£ãŸã‚‰
 			{
+				// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼åŒå£«ãŒã‚ã‚Šè¾¼ã¾ãªã„ã‚ˆã†ã«ã™ã‚‹
 				dynamic_cast<CharacterBase*>(my)->MoveCollCharacterUpdate(dynamic_cast<CharacterBase*>(target));
 				return;
 			}
 		}
 
-		// ƒ^[ƒQƒbƒg‚ÌƒIƒuƒWƒFƒNƒgƒ^ƒCƒv‚ªƒAƒCƒeƒ€‚Ìê‡
+		// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¿ã‚¤ãƒ—ãŒã‚¢ã‚¤ãƒ†ãƒ ã®å ´åˆ
 		if (target->GetColType() == ObjectBase::ColType::Item)
 		{
+			// ã‚¢ã‚¤ãƒ†ãƒ ã‚’å–å¾—ã™ã‚‹
 			dynamic_cast<CharacterBase*>(my)->PlayerToItem(dynamic_cast<CharacterBase*>(target));
 			return;
 		}
 	}
 
-	// ƒIƒuƒWƒFƒNƒgƒ^ƒCƒv‚ªƒGƒlƒ~[‚Ìê‡
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¿ã‚¤ãƒ—ãŒã‚¨ãƒãƒŸãƒ¼ã®å ´åˆ
 	if (my->GetColType() == ObjectBase::ColType::Enemy)
 	{
-			// ƒ^[ƒQƒbƒg‚ÌƒIƒuƒWƒFƒNƒgƒ^ƒCƒv‚ªƒtƒB[ƒ‹ƒh‚Ìê‡
+			// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¿ã‚¤ãƒ—ãŒãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®å ´åˆ
 			if (target->GetColType() == ObjectBase::ColType::Field)
 			{
-
+				// ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«ã‚ã‚Šè¾¼ã¾ãªã„ã‚ˆã†ã«ã™ã‚‹
 				my->MoveCollFieldUpdate(target);
 
 				return;
 			}
 
-			// ƒ^[ƒQƒbƒg‚ÌƒIƒuƒWƒFƒNƒgƒ^ƒCƒv‚ªƒvƒŒƒCƒ„[‚Ìê‡
+			// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¿ã‚¤ãƒ—ãŒãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å ´åˆ
 			if (target->GetColType() == ObjectBase::ColType::Player)
 			{
-				if (!target->IsDamage())
+				if (!target->IsDamage()) // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã¦ã„ã‚‹çŠ¶æ…‹ã§ãªã‘ã‚Œã°
 				{
+					// æ”»æ’ƒå‡¦ç†ã‚’ã™ã‚‹
 					dynamic_cast<CharacterBase*>(my)->AttackEnemyCollPlayer(dynamic_cast<CharacterBase*>(target));
 					return;
 				}
-				else
+				else // ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã¦ã„ã‚‹çŠ¶æ…‹ã ã£ãŸã‚‰
 				{
+					// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼åŒå£«ãŒã‚ã‚Šè¾¼ã¾ãªã„ã‚ˆã†ã«ã™ã‚‹
 					dynamic_cast<CharacterBase*>(my)->MoveCollCharacterUpdate(dynamic_cast<CharacterBase*>(target));
 					return;
 				}
 				
 			}
+
+			// ã‚¢ã‚¤ãƒ†ãƒ ã¨ã¯å½“ãŸã‚‰ãªã„
 	}
 
-	// ƒIƒuƒWƒFƒNƒgƒ^ƒCƒv‚ªƒAƒCƒeƒ€‚Ìê‡
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¿ã‚¤ãƒ—ãŒã‚¢ã‚¤ãƒ†ãƒ ã®å ´åˆ
 	if (my->GetColType() == ObjectBase::ColType::Item)
 	{
-		// ƒ^[ƒQƒbƒg‚ÌƒIƒuƒWƒFƒNƒgƒ^ƒCƒv‚ªƒtƒB[ƒ‹ƒh‚Ìê‡
+		// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¿ã‚¤ãƒ—ãŒãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®å ´åˆ
 		if (target->GetColType() == ObjectBase::ColType::Field)
 		{
+			// ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«ã‚ã‚Šè¾¼ã¾ãªã„ã‚ˆã†ã«ã™ã‚‹
 			my->MoveCollFieldUpdate(target);
 			return;
 		}
+
+		// æ•µã‚„ã¨ã¯å½“ãŸã‚‰ãªã„
 	}
 }

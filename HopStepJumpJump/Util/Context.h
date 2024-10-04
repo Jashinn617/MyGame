@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <vector>
 #include <memory>
 #include <functional>
@@ -8,46 +8,54 @@ class State;
 class Context
 {
 public:
-	// ƒXƒeƒCƒg‚Ìí—Şî•ñ
+	// ã‚¹ãƒ†ã‚¤ãƒˆã®ç¨®é¡æƒ…å ±
 	enum class StateData
 	{
-		Idle,		// ‘Ò‹@
-		Walk,		// •à‚«
-		Jump,		// ƒWƒƒƒ“ƒv
-		Dash,		// ƒ_ƒbƒVƒ…
-		KnockBack,	// ƒmƒbƒNƒoƒbƒN
+		Idle,		// å¾…æ©Ÿ
+		Walk,		// æ­©ã
+		Jump,		// ã‚¸ãƒ£ãƒ³ãƒ—
+		Dash,		// ãƒ€ãƒƒã‚·ãƒ¥
+		KnockBack,	// ãƒãƒƒã‚¯ãƒãƒƒã‚¯
 	};
 
 	/// <summary>
-	/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
-	/// <param name="changeState">ƒXƒeƒCƒgŠÖ”</param>
+	/// <param name="changeState">ã‚¹ãƒ†ã‚¤ãƒˆé–¢æ•°</param>
 	Context(std::function<void(void)> changeState);
 
+	/// <summary>
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// </summary>
+	~Context();
+
+	/// <summary>
+	/// æ›´æ–°
+	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// ƒXƒeƒCƒg‚Ì’Ç‰Á
+	/// ã‚¹ãƒ†ã‚¤ãƒˆã®è¿½åŠ 
 	/// </summary>
-	/// <param name="listener">ƒXƒeƒCƒg‚ÌŠÖ”</param>
-	/// <param name="state">ƒXƒeƒCƒg‚Ìí—Ş</param>
+	/// <param name="listener">ã‚¹ãƒ†ã‚¤ãƒˆã®é–¢æ•°</param>
+	/// <param name="state">ã‚¹ãƒ†ã‚¤ãƒˆã®ç¨®é¡</param>
 	void AddState(std::function<void(void)> listener, Context::StateData stateData);
 
 	/// <summary>
-	/// ƒXƒeƒCƒg•ÏX
+	/// ã‚¹ãƒ†ã‚¤ãƒˆå¤‰æ›´
 	/// </summary>
-	/// <param name="state">•ÏXæ‚ÌƒXƒeƒCƒg</param>
+	/// <param name="state">å¤‰æ›´å…ˆã®ã‚¹ãƒ†ã‚¤ãƒˆ</param>
 	void ChangeState(StateData state);
 
 	/// <summary>
-	/// Œ»İ‚ÌƒXƒeƒCƒg‚ğ•Ô‚·
+	/// ç¾åœ¨ã®ã‚¹ãƒ†ã‚¤ãƒˆã‚’è¿”ã™
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>ç¾åœ¨ã®ã‚¹ãƒ†ã‚¤ãƒˆ</returns>
 	StateData GetState() const;
 
 private:
-	std::vector<std::shared_ptr<State>> m_pState;	// ‘S‚Ä‚ÌƒXƒeƒCƒg
-	std::shared_ptr<State> m_pNowState;				// Œ»İ‚ÌƒXƒeƒCƒg
-	std::function<void(void)> m_changeState;		// ƒXƒeƒCƒg•ÏX‚Ìˆ—ŠÖ”
+	std::vector<std::shared_ptr<State>> m_pState;	// å…¨ã¦ã®ã‚¹ãƒ†ã‚¤ãƒˆ
+	std::shared_ptr<State> m_pNowState;				// ç¾åœ¨ã®ã‚¹ãƒ†ã‚¤ãƒˆ
+	std::function<void(void)> m_changeState;		// ã‚¹ãƒ†ã‚¤ãƒˆå¤‰æ›´æ™‚ã®å‡¦ç†é–¢æ•°
 };
 

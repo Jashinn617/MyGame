@@ -13,12 +13,11 @@
 namespace
 {
 	// ステージごとのクリア時間の基準
-	constexpr double kResultDataTable[static_cast<int>(Game::Stage::StageNum)] =
+	constexpr double kResultDataTable[static_cast<int>(Game::StageKind::StageNum)] =
 	{
 		3600,		// テスト
 		7200,		// ステージ1
 		14400,		// ステージ2
-		0
 	};
 
 	/*画像ファイルパス*/
@@ -162,7 +161,7 @@ namespace
 	constexpr float kRankScaleUpSpeed = 0.07f;	// ランク画像が拡大するスピード
 }
 
-StageSceneManager::StageSceneManager(Game::Stage stageKind):
+StageSceneManager::StageSceneManager(Game::StageKind stageKind):
 	m_clearTime(0),
 	m_drawClearTime(0),
 	m_minusLeftPosY(kStartLeftPosY),
@@ -396,7 +395,7 @@ void StageSceneManager::ClearUpdate()
 		if (m_isButtonFall)
 		{			
 			// カーソル移動
-			if (Pad::isTrigger(PAD_INPUT_UP))
+			if (Pad::IsTrigger(PAD_INPUT_UP))
 			{
 				// SEを鳴らす
 				SoundManager::GetInstance().Play("Select");
@@ -406,7 +405,7 @@ void StageSceneManager::ClearUpdate()
 				// カーソルをループさせる
 				if (m_buttonCount < 0) m_buttonCount = static_cast<int>(NextSelect::Num) - 1;
 			}
-			if (Pad::isTrigger(PAD_INPUT_DOWN))
+			if (Pad::IsTrigger(PAD_INPUT_DOWN))
 			{
 				// SEを鳴らす
 				SoundManager::GetInstance().Play("Select");
@@ -419,7 +418,7 @@ void StageSceneManager::ClearUpdate()
 
 			// AボタンかBボタンが押されたら
 			// 押されたボタンによってシーンを遷移する
-			if (Pad::isTrigger(PAD_INPUT_1) || Pad::isTrigger(PAD_INPUT_2))
+			if (Pad::IsTrigger(PAD_INPUT_1) || Pad::IsTrigger(PAD_INPUT_2))
 			{
 				// BGMを消す
 				SoundManager::GetInstance().DesignationStopSound("ClearScene");

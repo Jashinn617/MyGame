@@ -106,7 +106,7 @@ std::shared_ptr<SceneBase> SceneSelect::Update()
 	m_scrollY += kTextScrollSpeed;
 
 	// 上下ボタンが押された場合
-	if (Pad::isTrigger(PAD_INPUT_UP) || Pad::isTrigger(PAD_INPUT_DOWN))
+	if (Pad::IsTrigger(PAD_INPUT_UP) || Pad::IsTrigger(PAD_INPUT_DOWN))
 	{
 		SoundManager::GetInstance().Play("Select");
 		m_scrollY = 0;
@@ -114,7 +114,7 @@ std::shared_ptr<SceneBase> SceneSelect::Update()
 		m_isUp = !m_isUp;
 	}
 	// 左右時間が押された場合
-	if (Pad::isTrigger(PAD_INPUT_LEFT) || Pad::isTrigger(PAD_INPUT_RIGHT))
+	if (Pad::IsTrigger(PAD_INPUT_LEFT) || Pad::IsTrigger(PAD_INPUT_RIGHT))
 	{
 		SoundManager::GetInstance().Play("Select");
 		m_scrollY = 0;
@@ -134,11 +134,11 @@ std::shared_ptr<SceneBase> SceneSelect::Update()
 		break;
 	case SceneSelect::NextScene::Stage1:
 		// ステージ1に遷移する
-		return std::make_shared<SceneStage>(Game::Stage::Stage1);
+		return std::make_shared<SceneStage>(Game::StageKind::Stage1);
 		break;
 	case SceneSelect::NextScene::Stage2:
 		// ステージ2に遷移する
-		return std::make_shared<SceneStage>(Game::Stage::Stage2);
+		return std::make_shared<SceneStage>(Game::StageKind::Stage2);
 		break;
 	case SceneSelect::NextScene::Ranking:
 		// ランキングシーンに遷移する
@@ -183,7 +183,7 @@ void SceneSelect::End()
 void SceneSelect::SelectUpdate()
 {
 	// AボタンかBボタンが押されたら次のシーンに遷移する
-	if (Pad::isTrigger(PAD_INPUT_1) || Pad::isTrigger(PAD_INPUT_2))
+	if (Pad::IsTrigger(PAD_INPUT_1) || Pad::IsTrigger(PAD_INPUT_2))
 	{
 		// SEを鳴らす
 		SoundManager::GetInstance().Play("Decide");

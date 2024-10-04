@@ -1,4 +1,4 @@
-#include "DxLib.h"
+ï»¿#include "DxLib.h"
 #include "SceneRanking.h"
 #include "SceneSelect.h"
 
@@ -12,19 +12,19 @@
 
 namespace
 {
-	/*‰æ‘œƒtƒ@ƒCƒ‹ƒpƒX*/
-	const char* const kBackgroundFileName = "Data/Img/Ranking/Background.png";	// ”wŒi
-	const char* const kBackButtonFileName = "Data/Img/Ranking/BackButton.png";	// –ß‚éƒ{ƒ^ƒ“
-	const char* const kArrowFileName = "Data/Img/Ranking/Arrow.png";			// –îˆó
-	const char* const kTextBoxFileName = "Data/Img/Result/ResultTextBox1.png";	// ƒeƒLƒXƒgƒ{ƒbƒNƒX
-	// ƒ‰ƒ“ƒLƒ“ƒO‰æ‘œ
+	/*ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹*/
+	const char* const kBackgroundFileName = "Data/Img/Ranking/Background.png";	// èƒŒæ™¯
+	const char* const kBackButtonFileName = "Data/Img/Ranking/BackButton.png";	// æˆ»ã‚‹ãƒœã‚¿ãƒ³
+	const char* const kArrowFileName = "Data/Img/Ranking/Arrow.png";			// çŸ¢å°
+	const char* const kTextBoxFileName = "Data/Img/Result/ResultTextBox1.png";	// ãƒ†ã‚­ã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹
+	// ãƒ©ãƒ³ã‚­ãƒ³ã‚°ç”»åƒ
 	const char* const kRankingFileName[3] =
 	{
 		"Data/Img/Ranking/Ranking1.png",
 		"Data/Img/Ranking/Ranking2.png",
 		"Data/Img/Ranking/Ranking3.png"
 	};
-	// ƒ‰ƒ“ƒLƒ“ƒOƒ^ƒCƒ€
+	// ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã‚¿ã‚¤ãƒ 
 	const char* const kRankingTimeNumFileName[11] =
 	{
 		"Data/Img/Ranking/RankingNum/RankingNum0.png",
@@ -39,54 +39,54 @@ namespace
 		"Data/Img/Ranking/RankingNum/RankingNum9.png",
 		"Data/Img/Ranking/RankingNum/RankingTime.png"
 	};
-	// ƒeƒLƒXƒg‰æ‘œ
+	// ãƒ†ã‚­ã‚¹ãƒˆç”»åƒ
 	const char* const kTextFileName[2] =
 	{
 		"Data/Img/Ranking/RankingText1.png",
 		"Data/Img/Ranking/RankingText2.png",
 	};
 
-	/*À•W*/
-	// ƒ‰ƒ“ƒLƒ“ƒOƒ^ƒCƒ€
+	/*åº§æ¨™*/
+	// ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã‚¿ã‚¤ãƒ 
 	constexpr int kRankingMinutesFirstPosX = 775;
 	constexpr int kRankingMinutesSecondPosX = 875;
 	constexpr int kRankingSecondFirstPosX = 975;
 	constexpr int kRankingSecondSecondPosX = 1075;
 	constexpr int kRankingTimePosY[3] = { 350,600,850 };
 	constexpr int kRankingTimeColonPosX = 925;
-	// ƒ‰ƒ“ƒLƒ“ƒOÀ•W
+	// ãƒ©ãƒ³ã‚­ãƒ³ã‚°åº§æ¨™
 	constexpr int kRankingPosX = 584;
 	constexpr int kRnakingPosY1 = 340;
 	constexpr int kRnakingPosY2 = 590;
 	constexpr int kRnakingPosY3 = 840;
-	// ƒeƒLƒXƒgÀ•W
+	// ãƒ†ã‚­ã‚¹ãƒˆåº§æ¨™
 	constexpr int kTextPosX = 850;
 	constexpr int kTextPosY = 165;
-	// ƒ{ƒ^ƒ“À•W
+	// ãƒœã‚¿ãƒ³åº§æ¨™
 	constexpr int kButtonPosX = 1600;
 	constexpr int kButtonPosY = 900;
-	// –îˆóÀ•W
+	// çŸ¢å°åº§æ¨™
 	constexpr int kArrowPosX = 1500;
 	constexpr int kArrowPosY = 500;
-	// ƒ{ƒbƒNƒXÀ•W
+	// ãƒœãƒƒã‚¯ã‚¹åº§æ¨™
 	constexpr int kBoxPosX = 835;
 	constexpr int kBoxPosY = 505;
 
-	/*ƒTƒCƒY*/
-	constexpr float kRankingSize = 0.3f;		// ƒ‰ƒ“ƒLƒ“ƒO
-	constexpr float krankingTimeSize = 0.4f;	// ƒ‰ƒ“ƒLƒ“ƒOƒ^ƒCƒ€
-	constexpr float kTextSize = 0.9f;			// ƒeƒLƒXƒg
-	constexpr float kButtonSize = 0.9f;			// ƒ{ƒ^ƒ“
-	constexpr float kArrowSize = 0.4f;			// –îˆó
-	constexpr float kBoxSize = 0.95f;			// ƒ{ƒbƒNƒX
+	/*ã‚µã‚¤ã‚º*/
+	constexpr float kRankingSize = 0.3f;		// ãƒ©ãƒ³ã‚­ãƒ³ã‚°
+	constexpr float krankingTimeSize = 0.4f;	// ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã‚¿ã‚¤ãƒ 
+	constexpr float kTextSize = 0.9f;			// ãƒ†ã‚­ã‚¹ãƒˆ
+	constexpr float kButtonSize = 0.9f;			// ãƒœã‚¿ãƒ³
+	constexpr float kArrowSize = 0.4f;			// çŸ¢å°
+	constexpr float kBoxSize = 0.95f;			// ãƒœãƒƒã‚¯ã‚¹
 
-	constexpr float kArrowAngle = 60.0f * DX_PI_F / 120.0f;	 // –îˆó‚ÌŠp“x
+	constexpr float kArrowAngle = 60.0f * DX_PI_F / 120.0f;	 // çŸ¢å°ã®è§’åº¦
 
-	constexpr int kColonArrayNum = 10;			// ƒ^ƒCƒ€‚ÌŠÔ‚É•\¦‚·‚éƒRƒƒ“‚Ì”z—ñ”Ô†
-	constexpr int kRankingNum = 3;				// ƒ‰ƒ“ƒLƒ“ƒO‚Ì”
-	constexpr int kBoxAlpha = 200;				// ƒ{ƒbƒNƒX‚Ì“§–¾“x
-	constexpr float kButtonSinSpeed = 0.07f;	// ƒ{ƒ^ƒ“‚ÌŠgkƒXƒs[ƒh
-	constexpr float kButtonAnimSwing = 0.03f;	// ƒ{ƒ^ƒ“‚ÌŠgk•
+	constexpr int kColonArrayNum = 10;			// ã‚¿ã‚¤ãƒ ã®é–“ã«è¡¨ç¤ºã™ã‚‹ã‚³ãƒ­ãƒ³ã®é…åˆ—ç•ªå·
+	constexpr int kRankingNum = 3;				// ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã®æ•°
+	constexpr int kBoxAlpha = 200;				// ãƒœãƒƒã‚¯ã‚¹ã®é€æ˜åº¦
+	constexpr float kButtonSinSpeed = 0.07f;	// ãƒœã‚¿ãƒ³ã®æ‹¡ç¸®ã‚¹ãƒ”ãƒ¼ãƒ‰
+	constexpr float kButtonAnimSwing = 0.03f;	// ãƒœã‚¿ãƒ³ã®æ‹¡ç¸®å¹…
 }
 
 SceneRanking::SceneRanking():
@@ -99,7 +99,7 @@ SceneRanking::SceneRanking():
 	m_buttonSinCount(0),
 	m_buttonSinSize(0)
 {
-	/*‰æ‘œ‚Ìƒ[ƒh*/
+	/*ç”»åƒã®ãƒ­ãƒ¼ãƒ‰*/
 	LoadImg();
 
 	m_pRanking = std::make_shared <Ranking>();
@@ -107,50 +107,50 @@ SceneRanking::SceneRanking():
 
 SceneRanking::~SceneRanking()
 {
-	/*‰æ‘œ‚ÌƒfƒŠ[ƒg*/
+	/*ç”»åƒã®ãƒ‡ãƒªãƒ¼ãƒˆ*/
 	DeleteImg();
 }
 
 void SceneRanking::Init()
 {
-	// ƒ‰ƒ“ƒLƒ“ƒO‚Ìæ“¾
-	m_stage1Ranking = m_pRanking->GetRanking(Game::Stage::Stage1);
-	m_stage2Ranking = m_pRanking->GetRanking(Game::Stage::Stage2);
+	// ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã®å–å¾—
+	m_stage1Ranking = m_pRanking->GetRanking(Game::StageKind::Stage1);
+	m_stage2Ranking = m_pRanking->GetRanking(Game::StageKind::Stage2);
 
-	// SE‚ğ–Â‚ç‚·
+	// SEã‚’é³´ã‚‰ã™
 	SoundManager::GetInstance().Play("DoorOpen");
-	// BGM‚ğ–Â‚ç‚·
+	// BGMã‚’é³´ã‚‰ã™
 	SoundManager::GetInstance().Play("RankingScene");
 }
 
 std::shared_ptr<SceneBase> SceneRanking::Update()
 {
-	// ƒtƒF[ƒhXV
+	// ãƒ•ã‚§ãƒ¼ãƒ‰æ›´æ–°
 	UpdateFade();
 
-	// ã‰ºƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½ê‡
-	if (Pad::isTrigger(PAD_INPUT_UP) || Pad::isTrigger(PAD_INPUT_DOWN))
+	// ä¸Šä¸‹ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸå ´åˆ
+	if (Pad::IsTrigger(PAD_INPUT_UP) || Pad::IsTrigger(PAD_INPUT_DOWN))
 	{
-		// SE‚ğ–Â‚ç‚·
+		// SEã‚’é³´ã‚‰ã™
 		SoundManager::GetInstance().Play("Select");
-		// ƒ{ƒ^ƒ“‚ğØ‚è‘Ö‚¦‚é
+		// ãƒœã‚¿ãƒ³ã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹
 		m_isArrow = !m_isArrow;
 	}
 
-	// –îˆó‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚éó‘Ô‚ÅAƒ{ƒ^ƒ“‚©Bƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚Ä‚¢‚½‚ç
-	if (m_isArrow && (Pad::isTrigger(PAD_INPUT_1) || Pad::isTrigger(PAD_INPUT_2)))
+	// çŸ¢å°ãŒé¸æŠã•ã‚Œã¦ã„ã‚‹çŠ¶æ…‹ã§Aãƒœã‚¿ãƒ³ã‹Bãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚Œã¦ã„ãŸã‚‰
+	if (m_isArrow && (Pad::IsTrigger(PAD_INPUT_1) || Pad::IsTrigger(PAD_INPUT_2)))
 	{
-		// SE‚ğ–Â‚ç‚·
+		// SEã‚’é³´ã‚‰ã™
 		SoundManager::GetInstance().Play("Decide");
-		// ƒ‰ƒ“ƒLƒ“ƒO‚ğØ‚è‘Ö‚¦‚é
+		// ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹
 		m_isStage1 = !m_isStage1;
 	}
-	// –îˆó‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚È‚¢ó‘Ô‚ÅAƒ{ƒ^ƒ“‚©Bƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚Ä‚¢‚½‚ç
-	else if (!m_isArrow && (Pad::isTrigger(PAD_INPUT_1) || Pad::isTrigger(PAD_INPUT_2)))
+	// çŸ¢å°ãŒé¸æŠã•ã‚Œã¦ã„ãªã„çŠ¶æ…‹ã§Aãƒœã‚¿ãƒ³ã‹Bãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚Œã¦ã„ãŸã‚‰
+	else if (!m_isArrow && (Pad::IsTrigger(PAD_INPUT_1) || Pad::IsTrigger(PAD_INPUT_2)))
 	{
-		// SE‚ğ–Â‚ç‚·
+		// SEã‚’é³´ã‚‰ã™
 		SoundManager::GetInstance().Play("DoorClose");
-		// ƒZƒŒƒNƒgƒV[ƒ“‚É–ß‚é
+		// ã‚»ãƒ¬ã‚¯ãƒˆã‚·ãƒ¼ãƒ³ã«æˆ»ã‚‹
 		return std::make_shared<SceneSelect>();
 	}
 
@@ -159,71 +159,71 @@ std::shared_ptr<SceneBase> SceneRanking::Update()
 
 void SceneRanking::Draw()
 {
-	// ”wŒi•`‰æ
+	// èƒŒæ™¯æç”»
 	DrawGraph(0, 0, m_backgroundH, false);
 
-	// ƒ{ƒbƒNƒX•`‰æ
-	// •s“§–¾“x‚ğ­‚µ‰º‚°‚é
+	// ãƒœãƒƒã‚¯ã‚¹æç”»
+	// ä¸é€æ˜åº¦ã‚’å°‘ã—ä¸‹ã’ã‚‹
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kBoxAlpha);
 	DrawRotaGraph(kBoxPosX, kBoxPosY, kBoxSize, 0.0f, m_textBoxH, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	// ƒ{ƒ^ƒ“•`‰æ
+	// ãƒœã‚¿ãƒ³æç”»
 	DrawButton();
 
-	// ƒeƒLƒXƒg•`‰æ
-	if (m_isStage1)	 // ƒXƒe[ƒW1
+	// ãƒ†ã‚­ã‚¹ãƒˆæç”»
+	if (m_isStage1)	 // ã‚¹ãƒ†ãƒ¼ã‚¸1
 	{
 		DrawRotaGraph(kTextPosX, kTextPosY, kTextSize, 0.0f,
 			m_textH[0], true);
 	}
-	else	// ƒXƒe[ƒW2
+	else	// ã‚¹ãƒ†ãƒ¼ã‚¸2
 	{
 		DrawRotaGraph(kTextPosX, kTextPosY, kTextSize, 0.0f,
 			m_textH[1], true);
 	}
 
-	// ƒ‰ƒ“ƒLƒ“ƒO•`‰æ
+	// ãƒ©ãƒ³ã‚­ãƒ³ã‚°æç”»
 	DrawRanking();
 
 
 #ifdef _DEBUG
-	// ƒV[ƒ“–¼•`‰æ
+	// ã‚·ãƒ¼ãƒ³åæç”»
 	DrawFormatString(0, 0, 0xffffff, "Ranking");
 #endif // _DEBUG   
 
-	// ƒtƒF[ƒh•`‰æ
+	// ãƒ•ã‚§ãƒ¼ãƒ‰æç”»
 	DrawFade();
 }
 
 void SceneRanking::End()
 {
-	// BGM‚ğ~‚ß‚é
+	// BGMã‚’æ­¢ã‚ã‚‹
 	SoundManager::GetInstance().DesignationStopSound("RankingScene");
 }
 
 void SceneRanking::DrawRankingTime(int ranking)
 {
 	int rankingTime = 0;
-	/*ƒ^ƒCƒ€ŒvZ*/
-	if (m_isStage1)		// ƒXƒe[ƒW1
+	/*ã‚¿ã‚¤ãƒ è¨ˆç®—*/
+	if (m_isStage1)		// ã‚¹ãƒ†ãƒ¼ã‚¸1
 	{
 		rankingTime = m_stage1Ranking[ranking] / 60;
 	}
-	else	// ƒXƒe[ƒW2
+	else	// ã‚¹ãƒ†ãƒ¼ã‚¸2
 	{
 		rankingTime = m_stage2Ranking[ranking] / 60;
 	}
-	// •ª”
+	// åˆ†æ•°
 	int clearMinutesTime = rankingTime / 60;
-	int minutesTimeFirst = clearMinutesTime / 10;	// ˆê‚ÌˆÊ
-	int minutesTimeSecond = clearMinutesTime % 10;	// \‚ÌˆÊ
-	// •b”
+	int minutesTimeFirst = clearMinutesTime / 10;	// ä¸€ã®ä½
+	int minutesTimeSecond = clearMinutesTime % 10;	// åã®ä½
+	// ç§’æ•°
 	int clearSecondTime = rankingTime % 60;
-	int secondTimeFirst = clearSecondTime / 10;		// ˆê‚ÌˆÊ
-	int secondTimeSecond = clearSecondTime % 10;	// \‚ÌˆÊ
+	int secondTimeFirst = clearSecondTime / 10;		// ä¸€ã®ä½
+	int secondTimeSecond = clearSecondTime % 10;	// åã®ä½
 
-	/*ƒ^ƒCƒ€‚Ì•`‰æ*/
+	/*ã‚¿ã‚¤ãƒ ã®æç”»*/
 	DrawRotaGraph(kRankingMinutesFirstPosX, kRankingTimePosY[ranking],
 		krankingTimeSize, 0.0f,
 		m_rankingTimeNumH[minutesTimeFirst], true);
@@ -243,7 +243,7 @@ void SceneRanking::DrawRankingTime(int ranking)
 
 void SceneRanking::DrawRanking()
 {
-	/*ƒ‰ƒ“ƒLƒ“ƒO‚Ì•`‰æ*/
+	/*ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã®æç”»*/
 	DrawRotaGraph(kRankingPosX, kRnakingPosY1,
 		kRankingSize, 0.0f,
 		m_rankingH[0], true);
@@ -254,7 +254,7 @@ void SceneRanking::DrawRanking()
 		kRankingSize, 0.0f,
 		m_rankingH[2], true);
 
-	// ƒ‰ƒ“ƒLƒ“ƒOƒ^ƒCƒ€‚Ì•`‰æ
+	// ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã‚¿ã‚¤ãƒ ã®æç”»
 	for (int i = 0; i < kRankingNum; i++)
 	{
 		DrawRankingTime(i);
@@ -263,11 +263,11 @@ void SceneRanking::DrawRanking()
 
 void SceneRanking::DrawButton()
 {
-	// Šgkˆ—
+	// æ‹¡ç¸®å‡¦ç†
 	m_buttonSinCount += kButtonSinSpeed;
 	m_expansionButtonSize = sinf(m_buttonSinCount) * kButtonAnimSwing;
 
-	if (m_isArrow)	// –îˆó‚Ì‘I‘ğ’†
+	if (m_isArrow)	// çŸ¢å°ã®é¸æŠä¸­
 	{
 		m_arrowSize = m_expansionButtonSize + kArrowSize;
 		m_backButtonSize = kButtonSize;
@@ -278,16 +278,16 @@ void SceneRanking::DrawButton()
 		m_backButtonSize = m_expansionButtonSize + kButtonSize;
 	}
 
-	// ƒ{ƒ^ƒ“•`‰æ
+	// ãƒœã‚¿ãƒ³æç”»
 	DrawRotaGraph(kButtonPosX, kButtonPosY, m_backButtonSize, 0.0f, m_buttonH, true);
 
-	// –îˆó•`‰æ
+	// çŸ¢å°æç”»
 	DrawRotaGraph(kArrowPosX, kArrowPosY, m_arrowSize, 0.0f, m_arrowH, true);
 }
 
 void SceneRanking::LoadImg()
 {
-	// ‰æ‘œƒ[ƒh‚ª¸”s‚µ‚Ä‚¢‚½‚ç~‚ß‚é
+	// ç”»åƒãƒ­ãƒ¼ãƒ‰ãŒå¤±æ•—ã—ã¦ã„ãŸã‚‰æ­¢ã‚ã‚‹
 	m_backgroundH = LoadGraph(kBackgroundFileName);
 	assert(m_backgroundH != -1);
 	m_textBoxH = LoadGraph(kTextBoxFileName);

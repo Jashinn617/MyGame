@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "../Util/Game.h"
 
 #include <memory>
@@ -14,179 +14,179 @@ class Time;
 class StageSceneManager
 {
 public:
-	// ƒ‰ƒ“ƒN
+	// ãƒ©ãƒ³ã‚¯
 	enum class Rank
 	{
-		S,			// Sƒ‰ƒ“ƒN
-		A,			// Aƒ‰ƒ“ƒN
-		B,			// Bƒ‰ƒ“ƒN
-		C,			// Cƒ‰ƒ“ƒN
-		RankNum,	// ƒ‰ƒ“ƒN‚Ì”
+		S,			// Sãƒ©ãƒ³ã‚¯
+		A,			// Aãƒ©ãƒ³ã‚¯
+		B,			// Bãƒ©ãƒ³ã‚¯
+		C,			// Cãƒ©ãƒ³ã‚¯
+		RankNum,	// ãƒ©ãƒ³ã‚¯ã®æ•°
 	};
-	// ƒNƒŠƒAŒã‚ÌƒV[ƒ“‚Ìƒ^ƒCƒv
+	// ã‚¯ãƒªã‚¢å¾Œã®ã‚·ãƒ¼ãƒ³ã®ã‚¿ã‚¤ãƒ—
 	enum class ClearSceneType
 	{
-		LeftImgDraw,		// ¶‰æ‘œ‚Ì•`‰æ
-		ClearTimeMeasure,	// ƒ^ƒCƒ€Œv‘ª
-		RankDraw,			// ƒ‰ƒ“ƒN•`‰æ
-		RankingDraw,		// ƒ‰ƒ“ƒLƒ“ƒO•`‰æ
-		SceneChange,		// ƒV[ƒ“‘JˆÚ
+		LeftImgDraw,		// å·¦ç”»åƒã®æç”»
+		ClearTimeMeasure,	// ã‚¿ã‚¤ãƒ è¨ˆæ¸¬
+		RankDraw,			// ãƒ©ãƒ³ã‚¯æç”»
+		RankingDraw,		// ãƒ©ãƒ³ã‚­ãƒ³ã‚°æç”»
+		SceneChange,		// ã‚·ãƒ¼ãƒ³é·ç§»
 	};
-	// Ÿ‚Ì‘I‘ğ
+	// æ¬¡ã®é¸æŠ
 	enum class NextSelect
 	{
-		GameScene,	// ƒQ[ƒ€ƒV[ƒ“
-		Select,		// ƒ^ƒCƒgƒ‹
-		Num,		// ƒZƒŒƒNƒg”
+		GameScene,	// ã‚²ãƒ¼ãƒ ã‚·ãƒ¼ãƒ³
+		Select,		// ã‚¿ã‚¤ãƒˆãƒ«
+		Num,		// ã‚»ãƒ¬ã‚¯ãƒˆæ•°
 	};
-	// Ÿ‚ÌƒV[ƒ“
+	// æ¬¡ã®ã‚·ãƒ¼ãƒ³
 	enum class NextScene
 	{
-		My,			// ©•ª‚ÌƒV[ƒ“
-		GameScene,	// ƒQ[ƒ€ƒV[ƒ“
-		Select,		// ƒZƒŒƒNƒgƒV[ƒ“
+		My,			// è‡ªåˆ†ã®ã‚·ãƒ¼ãƒ³
+		GameScene,	// ã‚²ãƒ¼ãƒ ã‚·ãƒ¼ãƒ³
+		Select,		// ã‚»ãƒ¬ã‚¯ãƒˆã‚·ãƒ¼ãƒ³
 	};
 
 public:
 	/// <summary>
-	/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
-	/// <param name="stageKind">ƒXƒe[ƒW‚Ìí—Ş</param>
-	StageSceneManager(Game::Stage stageKind);
+	/// <param name="stageKind">ã‚¹ãƒ†ãƒ¼ã‚¸ã®ç¨®é¡</param>
+	StageSceneManager(Game::StageKind stageKind);
 
 	/// <summary>
-	/// ƒfƒXƒgƒ‰ƒNƒ^
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
 	virtual ~StageSceneManager();
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	void Init();
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
 	void Update();
 	
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
 	void Draw();
 
 	/// <summary>
-	/// ƒXƒe[ƒW‚Ìí—Ş‚Ìæ“¾
+	/// ã‚¹ãƒ†ãƒ¼ã‚¸ã®ç¨®é¡ã®å–å¾—
 	/// </summary>
-	/// <returns>ƒXƒe[ƒW‚Ìí—Ş</returns>
-	Game::Stage GetStageKind() const { return m_stageKind; }
+	/// <returns>ã‚¹ãƒ†ãƒ¼ã‚¸ã®ç¨®é¡</returns>
+	Game::StageKind GetStageKind() const { return m_stageKind; }
 	
 	/// <summary>
-	/// ƒQ[ƒ€ƒNƒŠƒAŠÔ‚Ìæ“¾
+	/// ã‚²ãƒ¼ãƒ ã‚¯ãƒªã‚¢æ™‚é–“ã®å–å¾—
 	/// </summary>
 	/// <returns></returns>
 	int GetGameClearTime() const{return m_clearTime; }
 
 	/// <summary>
-	/// ƒQ[ƒ€ƒNƒŠƒA‚©‚Ç‚¤‚©
+	/// ã‚²ãƒ¼ãƒ ã‚¯ãƒªã‚¢ã‹ã©ã†ã‹
 	/// </summary>
 	/// <returns></returns>
 	bool IsGameClear()const { return m_isGameClear; }
 
 	NextScene GetNextScene()const { return m_nextScene; }
 
-private:	// ŠÖ”
+private:	// é–¢æ•°
 	/// <summary>
-	/// ƒNƒŠƒA‚ÌXV
+	/// ã‚¯ãƒªã‚¢æ™‚ã®æ›´æ–°
 	/// </summary>
 	void ClearUpdate();
 
 	/// <summary>
-	/// ƒNƒŠƒA‚Ì•`‰æ
+	/// ã‚¯ãƒªã‚¢æ™‚ã®æç”»
 	/// </summary>
 	void ClearDraw();
 
 	/// <summary>
-	/// ƒeƒLƒXƒg‚Ì•`‰æ
+	/// ãƒ†ã‚­ã‚¹ãƒˆã®æç”»
 	/// </summary>
 	void TextDraw();
 	/// <summary>
-	/// ƒ^ƒCƒ€‚Ì•`‰æ
+	/// ã‚¿ã‚¤ãƒ ã®æç”»
 	/// </summary>
 	void TimeDraw();
 	/// <summary>
-	/// ƒ‰ƒ“ƒLƒ“ƒO‚Ì•`‰æ
+	/// ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã®æç”»
 	/// </summary>
 	void RankingDraw();
 	/// <summary>
-	/// ƒ‰ƒ“ƒN‚Ì•`‰æ
+	/// ãƒ©ãƒ³ã‚¯ã®æç”»
 	/// </summary>
 	void RankDraw();
 	/// <summary>
-	/// ƒ‰ƒ“ƒLƒ“ƒOƒ^ƒCƒ€‚Ì•`‰æ
+	/// ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã‚¿ã‚¤ãƒ ã®æç”»
 	/// </summary>
-	/// <param name="ranking">ƒ‰ƒ“ƒLƒ“ƒO</param>
+	/// <param name="ranking">ãƒ©ãƒ³ã‚­ãƒ³ã‚°</param>
 	void RankingTimeDraw(int ranking);
 	/// <summary>
-	/// ƒ‰ƒ“ƒLƒ“ƒO“à‚É‚ ‚é©g‚Ìƒ^ƒCƒ€‚Ì•`‰æ
+	/// ãƒ©ãƒ³ã‚­ãƒ³ã‚°å†…ã«ã‚ã‚‹è‡ªèº«ã®ã‚¿ã‚¤ãƒ ã®æç”»
 	/// </summary>
-	/// <param name="ranking">ƒ‰ƒ“ƒLƒ“ƒO</param>
+	/// <param name="ranking">ãƒ©ãƒ³ã‚­ãƒ³ã‚°</param>
 	void MyRankTimeDraw(int ranking);
 	/// <summary>
-	/// ƒ{ƒ^ƒ“‚Ì•`‰æ
+	/// ãƒœã‚¿ãƒ³ã®æç”»
 	/// </summary>
 	void ButtonDraw();
 
 	/// <summary>
-	/// ‰æ‘œ‚Ìƒ[ƒh
+	/// ç”»åƒã®ãƒ­ãƒ¼ãƒ‰
 	/// </summary>
 	void LoadImg();
 	/// <summary>
-	/// ‰æ‘œ‚ÌƒfƒŠ[ƒg
+	/// ç”»åƒã®ãƒ‡ãƒªãƒ¼ãƒˆ
 	/// </summary>
 	void DeleteImg();
 
-private:	// •Ï”
-	int m_clearTime;					// ƒNƒŠƒAŠÔ
-	int m_drawClearTime;				// •\¦—p‚ÌƒNƒŠƒAŠÔ
-	int m_minusLeftPosY;				// ˆø‚­¶‘¤‚Ì‰æ‘œ‚ÌYÀ•W
-	int m_minusRightPosX;				// ˆø‚­‰E‘¤‚Ì‰æ‘œ‚ÌXÀ•W
-	int m_minusButtonPosY;				// ˆø‚­ƒ{ƒ^ƒ“‚Ì‰æ‘œ‚ÌYÀ•W
-	int m_alpha;						// ‰æ–Ê‚ÌˆÃ‚³
-	int m_buttonCount;					// ƒJ[ƒ\ƒ‹‚ÌƒJƒEƒ“ƒg
-	float m_rankSize;					// ƒ‰ƒ“ƒN‚ÌƒTƒCƒY
-	float m_selectChangeTextSize;		// ƒZƒŒƒNƒgƒV[ƒ“‚É–ß‚éƒ{ƒ^ƒ“—pƒeƒLƒXƒg‚ÌƒTƒCƒY
-	float m_gameSceneChangeTextSize;	// ƒQ[ƒ€ƒV[ƒ“‚É–ß‚éƒ{ƒ^ƒ“—pƒeƒLƒXƒg‚ÌƒTƒCƒY
-	bool m_isGameClear;					// ƒQ[ƒ€‚ğƒNƒŠƒA‚µ‚½‚©‚Ç‚¤‚©
-	bool m_isMyRank;					// ©•ª‚Ìƒ^ƒCƒ€‚ªƒ‰ƒ“ƒLƒ“ƒO‚Éæ‚Á‚Ä‚¢‚é‚©
-	bool m_isPlayClearSE;				// ƒNƒŠƒA‚ÌSE‚ğ—¬‚µ‚½‚©‚Ç‚¤‚©
-	bool m_isExpasionRnak;				// ƒ‰ƒ“ƒN‚ªŠg‘å’†‚©
-	bool m_isButtonFall;				// ƒ{ƒ^ƒ“‚ª—‚¿‚«‚Á‚½‚©‚Ç‚¤‚©
-	bool m_isPlayRankingSE;				// ƒ‰ƒ“ƒLƒ“ƒO—pSE‚ğ—¬‚µ‚½‚©‚Ç‚¤‚©
+private:	// å¤‰æ•°
+	int m_clearTime;					// ã‚¯ãƒªã‚¢æ™‚é–“
+	int m_drawClearTime;				// è¡¨ç¤ºç”¨ã®ã‚¯ãƒªã‚¢æ™‚é–“
+	int m_minusLeftPosY;				// å¼•ãå·¦å´ã®ç”»åƒã®Yåº§æ¨™
+	int m_minusRightPosX;				// å¼•ãå³å´ã®ç”»åƒã®Xåº§æ¨™
+	int m_minusButtonPosY;				// å¼•ããƒœã‚¿ãƒ³ã®ç”»åƒã®Yåº§æ¨™
+	int m_alpha;						// ç”»é¢ã®æš—ã•
+	int m_buttonCount;					// ã‚«ãƒ¼ã‚½ãƒ«ã®ã‚«ã‚¦ãƒ³ãƒˆ
+	float m_rankSize;					// ãƒ©ãƒ³ã‚¯ã®ã‚µã‚¤ã‚º
+	float m_selectChangeTextSize;		// ã‚»ãƒ¬ã‚¯ãƒˆã‚·ãƒ¼ãƒ³ã«æˆ»ã‚‹ãƒœã‚¿ãƒ³ç”¨ãƒ†ã‚­ã‚¹ãƒˆã®ã‚µã‚¤ã‚º
+	float m_gameSceneChangeTextSize;	// ã‚²ãƒ¼ãƒ ã‚·ãƒ¼ãƒ³ã«æˆ»ã‚‹ãƒœã‚¿ãƒ³ç”¨ãƒ†ã‚­ã‚¹ãƒˆã®ã‚µã‚¤ã‚º
+	bool m_isGameClear;					// ã‚²ãƒ¼ãƒ ã‚’ã‚¯ãƒªã‚¢ã—ãŸã‹ã©ã†ã‹
+	bool m_isMyRank;					// è‡ªåˆ†ã®ã‚¿ã‚¤ãƒ ãŒãƒ©ãƒ³ã‚­ãƒ³ã‚°ã«ä¹—ã£ã¦ã„ã‚‹ã‹
+	bool m_isPlayClearSE;				// ã‚¯ãƒªã‚¢ã®SEã‚’æµã—ãŸã‹ã©ã†ã‹
+	bool m_isExpasionRnak;				// ãƒ©ãƒ³ã‚¯ãŒæ‹¡å¤§ä¸­ã‹
+	bool m_isButtonFall;				// ãƒœã‚¿ãƒ³ãŒè½ã¡ãã£ãŸã‹ã©ã†ã‹
+	bool m_isPlayRankingSE;				// ãƒ©ãƒ³ã‚­ãƒ³ã‚°ç”¨SEã‚’æµã—ãŸã‹ã©ã†ã‹
 
-	NextSelect m_nextSelect;			// ƒZƒŒƒNƒg
-	NextScene m_nextScene;				// Ÿ‚ÌƒV[ƒ“
-	Rank m_rank;						// ƒ‰ƒ“ƒN
-	ClearSceneType m_clearSceneType;	// ƒNƒŠƒAŒã‚ÌƒV[ƒ“‚Ìƒ^ƒCƒv
-	Game::Stage m_stageKind;			// ƒXƒe[ƒW‚Ìí—Ş
+	NextSelect m_nextSelect;				// ã‚»ãƒ¬ã‚¯ãƒˆ
+	NextScene m_nextScene;					// æ¬¡ã®ã‚·ãƒ¼ãƒ³
+	Rank m_rank;							// ãƒ©ãƒ³ã‚¯
+	ClearSceneType m_clearSceneType;		// ã‚¯ãƒªã‚¢å¾Œã®ã‚·ãƒ¼ãƒ³ã®ã‚¿ã‚¤ãƒ—
+	Game::StageKind m_stageKind;			// ã‚¹ãƒ†ãƒ¼ã‚¸ã®ç¨®é¡
 
-	std::array<int, 11> m_myTimeNumH{};			// ©g‚ÌƒNƒŠƒAƒ^ƒCƒ€‚Ì‰æ‘œƒnƒ“ƒhƒ‹
-	std::array<int, 11> m_rankingTimeNumH{};	// ƒ‰ƒ“ƒLƒ“ƒO‚Ìƒ^ƒCƒ€‚Ì‰æ‘œƒnƒ“ƒhƒ‹
-	std::array<int, 4> m_rankH{};				// ƒ‰ƒ“ƒN‰æ‘œƒnƒ“ƒhƒ‹
-	std::array<int, 3> m_textH{};				// ƒeƒLƒXƒg‰æ‘œƒnƒ“ƒhƒ‹
-	std::array<int, 3> m_rankingH{};			// ƒ‰ƒ“ƒLƒ“ƒO‰æ‘œƒnƒ“ƒhƒ‹
-	std::array<int, 2> m_textBoxH{};			// ƒeƒLƒXƒgƒ{ƒbƒNƒX‰æ‘œƒnƒ“ƒhƒ‹
-	std::array<int, 3> m_buttonH{};				// ƒ{ƒ^ƒ“‚Ì‰æ‘œƒnƒ“ƒhƒ‹
-	std::vector<int> m_ranking{};				// ƒ‰ƒ“ƒLƒ“ƒO
+	std::array<int, 11> m_myTimeNumH{};			// è‡ªèº«ã®ã‚¯ãƒªã‚¢ã‚¿ã‚¤ãƒ ã®ç”»åƒãƒãƒ³ãƒ‰ãƒ«
+	std::array<int, 11> m_rankingTimeNumH{};	// ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã®ã‚¿ã‚¤ãƒ ã®ç”»åƒãƒãƒ³ãƒ‰ãƒ«
+	std::array<int, 4> m_rankH{};				// ãƒ©ãƒ³ã‚¯ç”»åƒãƒãƒ³ãƒ‰ãƒ«
+	std::array<int, 3> m_textH{};				// ãƒ†ã‚­ã‚¹ãƒˆç”»åƒãƒãƒ³ãƒ‰ãƒ«
+	std::array<int, 3> m_rankingH{};			// ãƒ©ãƒ³ã‚­ãƒ³ã‚°ç”»åƒãƒãƒ³ãƒ‰ãƒ«
+	std::array<int, 2> m_textBoxH{};			// ãƒ†ã‚­ã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ç”»åƒãƒãƒ³ãƒ‰ãƒ«
+	std::array<int, 3> m_buttonH{};				// ãƒœã‚¿ãƒ³ã®ç”»åƒãƒãƒ³ãƒ‰ãƒ«
+	std::vector<int> m_ranking{};				// ãƒ©ãƒ³ã‚­ãƒ³ã‚°
 
-	int m_clearTextH;									// ƒNƒŠƒA‚Éo‚·‰æ‘œ‚Ìƒnƒ“ƒhƒ‹
-	int m_operationH;									// ‘€ìà–¾‰æ‘œƒnƒ“ƒhƒ‹
-	std::shared_ptr<ObjectManager> m_pObjectManager;	// ƒIƒuƒWƒFƒNƒgƒ}ƒl[ƒWƒƒ[ƒNƒ‰ƒX‚Ìƒ|ƒCƒ“ƒ^
-	std::shared_ptr<CountTime> m_pCountTime;			// •b”ƒJƒEƒ“ƒg‚Ìƒ|ƒCƒ“ƒ^
-	std::shared_ptr<Time> m_pImageDrawTime;				// ‰æ‘œ‚ª•\¦‚³‚ê‚é‚Ü‚Å‚ÌŠÔ
-	std::shared_ptr<Time> m_pStageClearSETime;			// ƒXƒe[ƒWƒNƒŠƒA‚ÌƒTƒEƒ“ƒh‚ÌŠJnŠÔ
-	std::shared_ptr <Time> m_pRankDrawTime;				// ƒ‰ƒ“ƒN‚ª•\¦‚³‚ê‚é‚Ü‚Å‚ÌŠÔ
-	std::shared_ptr<Time> m_pLeftImgDrawTime;			// ¶‘¤‚Ì‰æ‘œ‚ª•\¦‚³‚ê‚é‚Ü‚Å‚ÌŠÔ
-	std::shared_ptr<Time> m_pRightImgDrawTime;			// ‰E‘¤‚Ì‰æ‘œ‚ª•\¦‚³‚ê‚é‚Ü‚Å‚ÌŠÔ
-	std::shared_ptr<Time> m_pButtonDrawTime;			// ƒ{ƒ^ƒ“‚ª•\¦‚³‚ê‚é‚Ü‚Å‚ÌŠÔ
-	std::shared_ptr<Ranking> m_pRanking;				// ƒ‰ƒ“ƒLƒ“ƒO
+	int m_clearTextH;									// ã‚¯ãƒªã‚¢æ™‚ã«å‡ºã™ç”»åƒã®ãƒãƒ³ãƒ‰ãƒ«
+	int m_operationH;									// æ“ä½œèª¬æ˜ç”»åƒãƒãƒ³ãƒ‰ãƒ«
+	std::shared_ptr<ObjectManager> m_pObjectManager;	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã‚¯ãƒ©ã‚¹ã®ãƒã‚¤ãƒ³ã‚¿
+	std::shared_ptr<CountTime> m_pCountTime;			// ç§’æ•°ã‚«ã‚¦ãƒ³ãƒˆã®ãƒã‚¤ãƒ³ã‚¿
+	std::shared_ptr<Time> m_pImageDrawTime;				// ç”»åƒãŒè¡¨ç¤ºã•ã‚Œã‚‹ã¾ã§ã®æ™‚é–“
+	std::shared_ptr<Time> m_pStageClearSETime;			// ã‚¹ãƒ†ãƒ¼ã‚¸ã‚¯ãƒªã‚¢æ™‚ã®ã‚µã‚¦ãƒ³ãƒ‰ã®é–‹å§‹æ™‚é–“
+	std::shared_ptr <Time> m_pRankDrawTime;				// ãƒ©ãƒ³ã‚¯ãŒè¡¨ç¤ºã•ã‚Œã‚‹ã¾ã§ã®æ™‚é–“
+	std::shared_ptr<Time> m_pLeftImgDrawTime;			// å·¦å´ã®ç”»åƒãŒè¡¨ç¤ºã•ã‚Œã‚‹ã¾ã§ã®æ™‚é–“
+	std::shared_ptr<Time> m_pRightImgDrawTime;			// å³å´ã®ç”»åƒãŒè¡¨ç¤ºã•ã‚Œã‚‹ã¾ã§ã®æ™‚é–“
+	std::shared_ptr<Time> m_pButtonDrawTime;			// ãƒœã‚¿ãƒ³ãŒè¡¨ç¤ºã•ã‚Œã‚‹ã¾ã§ã®æ™‚é–“
+	std::shared_ptr<Ranking> m_pRanking;				// ãƒ©ãƒ³ã‚­ãƒ³ã‚°
 };

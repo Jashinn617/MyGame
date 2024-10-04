@@ -1,4 +1,4 @@
-#include "DxLib.h"
+ï»¿#include "DxLib.h"
 
 #include "SceneDebug.h"
 #include "SceneStage.h"
@@ -13,16 +13,16 @@
 
 namespace
 {
-	constexpr float kCursorPosX = 500.0f;		// ‰ŠúƒJ[ƒ\ƒ‹ˆÊ’uX
-	constexpr float kCursorPosY = 300.0f;		// ‰ŠúƒJ[ƒ\ƒ‹ˆÊ’uY
+	constexpr float kCursorPosX = 500.0f;		// åˆæœŸã‚«ãƒ¼ã‚½ãƒ«ä½ç½®X
+	constexpr float kCursorPosY = 300.0f;		// åˆæœŸã‚«ãƒ¼ã‚½ãƒ«ä½ç½®Y
 
-	constexpr float kCursorMove = 50.0f;		// ƒJ[ƒ\ƒ‹‚ÌˆÚ“®—Ê
+	constexpr float kCursorMove = 50.0f;		// ã‚«ãƒ¼ã‚½ãƒ«ã®ç§»å‹•é‡
 }
 
 SceneDebug::SceneDebug():
 	m_count(0)
 {
-	// ˆÚ“®—p•¶š‚Ìİ’è
+	// ç§»å‹•ç”¨æ–‡å­—ã®è¨­å®š
 	m_sceneString[static_cast<int>(SceneType::Debug)] = "Debug";
 	m_sceneString[static_cast<int>(SceneType::Stage1)] = "Stage1";
 	m_sceneString[static_cast<int>(SceneType::Stage2)] = "Stage2";
@@ -34,26 +34,26 @@ SceneDebug::SceneDebug():
 
 SceneDebug::~SceneDebug()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void SceneDebug::Init()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 std::shared_ptr<SceneBase> SceneDebug::Update()
 {
-	// ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚ç‘I‘ğ‚³‚ê‚½ƒV[ƒ“‚É‘JˆÚ‚·‚é
-	if (Pad::isTrigger(PAD_INPUT_1))
+	// ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸã‚‰é¸æŠã•ã‚ŒãŸã‚·ãƒ¼ãƒ³ã«é·ç§»ã™ã‚‹
+	if (Pad::IsTrigger(PAD_INPUT_1))
 	{
 		return UpdateNextScene();
 	}
 
-	// ƒJ[ƒ\ƒ‹XV
+	// ã‚«ãƒ¼ã‚½ãƒ«æ›´æ–°
 	UpdateCursor();
 
-	// ƒtƒF[ƒhXV
+	// ãƒ•ã‚§ãƒ¼ãƒ‰æ›´æ–°
 	UpdateFade();
 	
 	return shared_from_this();
@@ -61,12 +61,12 @@ std::shared_ptr<SceneBase> SceneDebug::Update()
 
 void SceneDebug::Draw()
 {
-	// •¶š—ñ‚Ì•`‰æ
+	// æ–‡å­—åˆ—ã®æç”»
 	for (int i = 0; i < static_cast<int>(m_sceneString.size()); i++)
 	{
 		if (m_count == i)
 		{
-			// ‘I‚Î‚ê‚Ä‚¢‚é•¶š‚ÍÔ‚­‚·‚é
+			// é¸ã°ã‚Œã¦ã„ã‚‹æ–‡å­—ã¯èµ¤ãã™ã‚‹
 			DrawString(static_cast<int>(kCursorPosX),
 				static_cast<int>(kCursorPosY + (i * kCursorMove)),
 				m_sceneString[i].c_str(),
@@ -74,7 +74,7 @@ void SceneDebug::Draw()
 		}
 		else
 		{
-			// ‚»‚Ì‘¼‚Ì•¶š‚Í”’
+			// ãã®ä»–ã®æ–‡å­—ã¯ç™½
 			DrawString(static_cast<int>(kCursorPosX),
 				static_cast<int>(kCursorPosY + (i * kCursorMove)),
 				m_sceneString[i].c_str(),
@@ -83,49 +83,49 @@ void SceneDebug::Draw()
 	}
 
 	DrawFormatString(0, 0, 0x00ffff, "Debug");
-	DrawFormatString(60, 0, 0x00ffff, "ƒV[ƒ“‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢(A‚ÅŒˆ’è)");
+	DrawFormatString(60, 0, 0x00ffff, "ã‚·ãƒ¼ãƒ³ã‚’é¸æŠã—ã¦ãã ã•ã„(Aã§æ±ºå®š)");
 
 	DrawFade();
 }
 
 void SceneDebug::End()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void SceneDebug::UpdateCursor()
 {
-	// ƒJ[ƒ\ƒ‹‚ÌˆÚ“®
-	if (Pad::isTrigger(PAD_INPUT_UP))
+	// ã‚«ãƒ¼ã‚½ãƒ«ã®ç§»å‹•
+	if (Pad::IsTrigger(PAD_INPUT_UP))
 	{
 		m_count--;
-		// ƒJ[ƒ\ƒ‹‚ªƒ‹[ƒv‚·‚é‚æ‚¤‚É‚·‚é
+		// ã‚«ãƒ¼ã‚½ãƒ«ãŒãƒ«ãƒ¼ãƒ—ã™ã‚‹ã‚ˆã†ã«ã™ã‚‹
 		if (m_count < 0) m_count = static_cast<int>(m_sceneString.size() - 1);
 	}
-	else if (Pad::isTrigger(PAD_INPUT_DOWN))
+	else if (Pad::IsTrigger(PAD_INPUT_DOWN))
 	{
 		m_count++;
-		// ƒJ[ƒ\ƒ‹‚ªƒ‹[ƒv‚·‚é‚æ‚¤‚É‚·‚é
+		// ã‚«ãƒ¼ã‚½ãƒ«ãŒãƒ«ãƒ¼ãƒ—ã™ã‚‹ã‚ˆã†ã«ã™ã‚‹
 		if (m_count >= static_cast<int>(m_sceneString.size())) m_count = 0;
 	}
 }
 
 std::shared_ptr<SceneBase> SceneDebug::UpdateNextScene()
 {
-	// Ÿ‚ÌƒV[ƒ“‚Ìİ’è
+	// æ¬¡ã®ã‚·ãƒ¼ãƒ³ã®è¨­å®š
 	std::shared_ptr<SceneBase> nextScene = nullptr;
 
-	// ‘I‘ğ‚³‚ê‚½ƒV[ƒ“‚É‘JˆÚ‚·‚é
+	// é¸æŠã•ã‚ŒãŸã‚·ãƒ¼ãƒ³ã«é·ç§»ã™ã‚‹
 	switch (m_count)
 	{
 	case static_cast<int>(SceneType::Debug):
 		nextScene = std::make_shared<SceneDebug>();
 		break;
 	case static_cast<int>(SceneType::Stage1):
-		nextScene = std::make_shared<SceneStage>(Game::Stage::Stage1);
+		nextScene = std::make_shared<SceneStage>(Game::StageKind::Stage1);
 		break;
 	case static_cast<int>(SceneType::Stage2):
-		nextScene = std::make_shared<SceneStage>(Game::Stage::Stage2);
+		nextScene = std::make_shared<SceneStage>(Game::StageKind::Stage2);
 		break;
 	case static_cast<int>(SceneType::Title):
 		nextScene = std::make_shared<SceneTitle>();
@@ -137,10 +137,10 @@ std::shared_ptr<SceneBase> SceneDebug::UpdateNextScene()
 		nextScene = std::make_shared<SceneRanking>();
 		break;
 	case static_cast<int>(SceneType::Test):
-		nextScene = std::make_shared<SceneStage>(Game::Stage::Test);
+		nextScene = std::make_shared<SceneStage>(Game::StageKind::Test);
 		break;
 	default:
-		// ‰½‚à‘I‘ğ‚³‚ê‚Ä‚¢‚È‚©‚Á‚½ê‡‚ÍƒV[ƒ“‘JˆÚ‚ğs‚í‚È‚¢‚æ‚¤‚É‚·‚é
+		// ä½•ã‚‚é¸æŠã•ã‚Œã¦ã„ãªã‹ã£ãŸå ´åˆã¯ã‚·ãƒ¼ãƒ³é·ç§»ã‚’è¡Œã‚ãªã„ã‚ˆã†ã«ã™ã‚‹
 		return shared_from_this();
 		break;
 	}

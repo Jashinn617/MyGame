@@ -1,60 +1,61 @@
-#include "DxLib.h"
+ï»¿#include "DxLib.h"
 #include "Pad.h"
 #include <vector>
 
 namespace
 {
-	// ƒƒO‹L˜^ƒtƒŒ[ƒ€”
-	constexpr int kLogNum = 16;
-	// ƒpƒbƒhÅ‘å”
-	constexpr int kMaxPad = 2;
-	// 
+	constexpr int kLogNum = 16;	// ãƒ­ã‚°è¨˜éŒ²ãƒ•ãƒ¬ãƒ¼ãƒ æ•°
+	constexpr int kMaxPad = 2;	// ãƒ‘ãƒƒãƒ‰æœ€å¤§æ•°
+
+	/*ä½¿ã†ãƒ‘ãƒƒãƒ‰ã®ãƒ‡ãƒ¼ã‚¿*/
 	constexpr int kUsePadData[kMaxPad] =
 	{
 		DX_INPUT_KEY_PAD1,
 		DX_INPUT_PAD2
 	};
 
-	// “ü—ÍƒƒO	0‚ªÅV‚Ìó‘Ô
-	int padLog[kMaxPad][kLogNum];
+	int padLog[kMaxPad][kLogNum];	// å…¥åŠ›ãƒ­ã‚°(0ãŒæœ€æ–°ã®çŠ¶æ…‹)
 
-	// ƒL[ƒƒO
-	bool				isRecordLog = false;
-	int					playLogNo = -1;	// ƒL[ƒƒOÄ¶ƒtƒŒ[ƒ€”
-	std::vector<int>	keyLog;
+	/*ã‚­ãƒ¼ãƒ­ã‚°*/
+	bool				isRecordLog = false;	// ãƒ­ã‚°ã‚’è¨˜éŒ²ä¸­ã‹
+	int					playLogNo = -1;			// ã‚­ãƒ¼ãƒ­ã‚°ã®å†ç”Ÿãƒ•ãƒ¬ãƒ¼ãƒ æ•°
+	std::vector<int>	keyLog;					// ãƒ­ã‚°
 }
 
 namespace Pad
 {
-	// ƒpƒbƒh‚Ì“ü—Íó‘Ôæ“¾
+	// ãƒ‘ãƒƒãƒ‰å…¥åŠ›ã®çŠ¶æ…‹å–å¾—
 	void Update()
 	{
 		for (int padNo = 0; padNo < kMaxPad; padNo++)
 		{
-			// Œ»İ‚Ìƒpƒbƒh‚Ìó‘Ô‚ğæ“¾
+			// ç¾åœ¨ã®ãƒ‘ãƒƒãƒ‰ã®çŠ¶æ…‹ã‚’å–å¾—
 			int padState = GetJoypadInputState(kUsePadData[padNo]);
 			if ((playLogNo >= 0) && (padNo == 0))
 			{
+				// ãƒ­ã‚°ã®ã‚µã‚¤ã‚ºã‚ˆã‚Šã‚‚ãƒ­ã‚°ã®ãƒ•ãƒ¬ãƒ¼ãƒ æ•°ãŒå°ã•ã‹ã£ãŸã‚‰
 				if (keyLog.size() > playLogNo)
 				{
 					padState = keyLog[playLogNo];
+					// ãƒ­ã‚°ã‚’å¢—ã‚„ã™
 					playLogNo++;
 				}
-				else
+				else // å¤§ãã‹ã£ãŸã‚‰
 				{
+					// ãƒ­ã‚°ã®ãƒªã‚»ãƒƒãƒˆ
 					playLogNo = -1;
 				}
 			}
 
-			// ƒƒO‚ÌXV
+			// ãƒ­ã‚°ã®æ›´æ–°
 			for (int i = kLogNum - 1; i >= 1; i--)
 			{
 				padLog[padNo][i] = padLog[padNo][i - 1];
 			}
-			// ÅV‚Ìó‘Ô
+			// æœ€æ–°ã®çŠ¶æ…‹ã«ã™ã‚‹
 			padLog[padNo][0] = padState;
 
-			// ƒL[ƒƒO
+			// ã‚­ãƒ¼ãƒ­ã‚°
 			if (isRecordLog)
 			{
 				if (padNo == 0)
@@ -65,39 +66,42 @@ namespace Pad
 		}
 	}
 
-	// ‰Ÿ‚µ‰º‚°”»’è
-	bool isPress(int button, int padNo)
+	// æŠ¼ã—ä¸‹ã’åˆ¤å®š
+	bool IsPress(int button, int padNo)
 	{
 		return (padLog[padNo][0] & button);
 	}
-	// ƒgƒŠƒK[”»’è
-	bool isTrigger(int button, int padNo)
+	// ãƒˆãƒªã‚¬ãƒ¼åˆ¤å®š
+	bool IsTrigger(int button, int padNo)
 	{
-		bool isNow = (padLog[padNo][0] & button);	// Œ»İ‚Ìó‘Ô
-		bool isLast = (padLog[padNo][1] & button);	// ‚PƒtƒŒ[ƒ€‘O‚Ìó‘Ô
+		bool isNow = (padLog[padNo][0] & button);	// ç¾åœ¨ã®çŠ¶æ…‹
+		bool isLast = (padLog[padNo][1] & button);	// ï¼‘ãƒ•ãƒ¬ãƒ¼ãƒ å‰ã®çŠ¶æ…‹
 		return (isNow && !isLast);
 	}
-	//—£‚µ‚½”»’è
-	bool isRelase(int button, int padNo) {
-		bool isNow = (padLog[padNo][0] & button);	//Œ»İ‚Ìó‘Ô
-		bool isLast = (padLog[padNo][1] & button);	//1ƒtƒŒ[ƒ€‘O‚Ìó‘Ô
+	//é›¢ã—ãŸåˆ¤å®š
+	bool IsRelase(int button, int padNo) {
+		bool isNow = (padLog[padNo][0] & button);	//ç¾åœ¨ã®çŠ¶æ…‹
+		bool isLast = (padLog[padNo][1] & button);	//1ãƒ•ãƒ¬ãƒ¼ãƒ å‰ã®çŠ¶æ…‹
 		return (!isNow && isLast);
 	}
-	void startRecordLog()
+	
+	void StartRecordLog()
 	{
 		isRecordLog = true;
 		keyLog.clear();
 	}
 
-	void endRecordLog()
+	void EndRecordLog()
 	{
 		isRecordLog = false;
 	}
-	void startPlayLog()
+	
+	void StartPlayLog()
 	{
 		playLogNo = 0;
 	}
-	void endPlayLog()
+	
+	void EndPlayLog()
 	{
 		playLogNo = -1;
 	}

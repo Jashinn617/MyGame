@@ -11,7 +11,7 @@ namespace
 {
 	// フィールドのファイル名
 	// ステージごとに変える
-	const char* const kFileName[static_cast<int>(Game::Stage::StageNum)]
+	const char* const kColonFileName[static_cast<int>(Game::StageKind::StageNum)]
 	{
 		"Data/Model/Stage/TestStage.mv1",
 		"Data/Model/Stage/Stage1.mv1",
@@ -24,10 +24,10 @@ Field::Field()
 	/*処理無し*/
 }
 
-Field::Field(Game::Stage stageKind)
+Field::Field(Game::StageKind stageKind)
 {
 	// モデルの生成
-	m_pModel = std::make_shared<Model>(kFileName[static_cast<int>(stageKind)]);
+	m_pModel = std::make_shared<Model>(kColonFileName[static_cast<int>(stageKind)]);
 
 	m_pModel->SetScale(VGet(0.2f, 0.2f, 0.2f));
 	m_pModel->SetPos(VGet(0.0f, -200.0f, 0.0f));

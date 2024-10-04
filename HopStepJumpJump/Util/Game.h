@@ -1,39 +1,37 @@
-#pragma once
+ï»¿#pragma once
 #include "DxLib.h"
 
 /// <summary>
-/// ƒQ[ƒ€‘S‘Ì‚Åg—p‚·‚é’è”‚ğ’è‹`‚·‚énamespace
+/// ã‚²ãƒ¼ãƒ å…¨ä½“ã§ä½¿ç”¨ã™ã‚‹å®šæ•°ã‚’å®šç¾©ã™ã‚‹namespace
 /// </summary>
 namespace Game
 {
-	const char* const kTitleText = "HOP!STEP!JUMPšJUMP!!";		// ƒEƒBƒ“ƒhƒE–¼
+	const char* const kTitleText = "HOP!STEP!JUMPâ˜…JUMP!!";		// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦å
 
 #ifdef _DEBUG
-	constexpr bool kWindowMode = true;
+	constexpr bool kWindowMode = true;		// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ¢ãƒ¼ãƒ‰ã«ã™ã‚‹
 #else
-	constexpr bool kWindowMode = false;
+	constexpr bool kWindowMode = false;		// ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã«ã™ã‚‹
 #endif // _DEBUG
 
-	/*ƒEƒBƒ“ƒhƒEƒTƒCƒY*/
-	constexpr int kScreenWidth = 1920;	// ‰æ–Ê‰¡ƒTƒCƒY
-	constexpr int kScreenHeight = 1080;	// ‰æ–ÊcƒTƒCƒY
+	/*ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚º*/
+	constexpr int kScreenWidth = 1920;	// ç”»é¢æ¨ªã‚µã‚¤ã‚º
+	constexpr int kScreenHeight = 1080;	// ç”»é¢ç¸¦ã‚µã‚¤ã‚º
 
-	constexpr int kColorDepth = 32;		// ƒJƒ‰[ƒrƒbƒg”
+	constexpr int kColorDepth = 32;		// ã‚«ãƒ©ãƒ¼ãƒ“ãƒƒãƒˆæ•°
 	
-	constexpr VECTOR kLightPos = { -1000.0f,2000.0f,-1000.0f };		// ƒ‰ƒCƒg‚ÌˆÊ’u
-	constexpr VECTOR kLightDir = { -1.0f, -1.0f, -1.0f };			// ƒ‰ƒCƒg‚ÌŒü‚«
+	constexpr VECTOR kLightPos = { -1000.0f,2000.0f,-1000.0f };		// ãƒ©ã‚¤ãƒˆã®ä½ç½®
+	constexpr VECTOR kLightDir = { -1.0f, -1.0f, -1.0f };			// ãƒ©ã‚¤ãƒˆã®å‘ã
 
-	constexpr float kFov = 60.0f * DX_PI_F / 180.0f;			// ƒJƒƒ‰‚Ì‹–ìŠp
-	constexpr float kAspect = static_cast<float>(kScreenWidth) / static_cast<float>(kScreenHeight);	// ƒAƒXƒyƒNƒg”ä
+	constexpr float kFov = 60.0f * DX_PI_F / 180.0f;			// ã‚«ãƒ¡ãƒ©ã®è¦–é‡è§’
+	constexpr float kAspect = static_cast<float>(kScreenWidth) / static_cast<float>(kScreenHeight);	// ã‚¢ã‚¹ãƒšã‚¯ãƒˆæ¯”
 
-
-	// ƒXƒe[ƒW–¼
-	enum class Stage
+	// ã‚¹ãƒ†ãƒ¼ã‚¸ã®ç¨®é¡
+	enum class StageKind
 	{
-		Test,
-		Stage1,
-		Stage2,
-		Tutorial,
-		StageNum,
+		Test,		// ãƒ†ã‚¹ãƒˆ
+		Stage1,		// ã‚¹ãƒ†ãƒ¼ã‚¸1
+		Stage2,		// ã‚¹ãƒ†ãƒ¼ã‚¸2
+		StageNum,	// ã‚¹ãƒ†ãƒ¼ã‚¸æ•°
 	};
 }

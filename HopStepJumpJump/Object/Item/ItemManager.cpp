@@ -11,16 +11,15 @@
 namespace
 {
 	// アイテムデータcsvファイルパス
-	const char* const kCsvDataFile[static_cast<int>(Game::Stage::StageNum)] =
+	const char* const kCsvDataFile[static_cast<int>(Game::StageKind::StageNum)] =
 	{
 		"Data/File/Item/TestItemSpown.csv",
 		"Data/File/Item/Stage1ItemSpown.csv",
-		"Data/File/Item/Stage2ItemSpown.csv",
-		"Data/File/Item/TestItemSpown.csv"
+		"Data/File/Item/Stage2ItemSpown.csv"
 	};
 }
 
-ItemManager::ItemManager(Game::Stage stageKind, ObjectManager* pObjectManager):
+ItemManager::ItemManager(Game::StageKind stageKind, ObjectManager* pObjectManager):
 	m_isSpown(true),
 	m_isClear(false),
 	m_pObjectManager(pObjectManager)

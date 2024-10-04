@@ -1,59 +1,59 @@
-#include "MoveDirectionVec.h"
+ï»¿#include "MoveDirectionVec.h"
 #include "../Util/Pad.h"
 #include "CharacterData.h"
 
 namespace
 {
-	constexpr float kUp = -1.0f;	// ãˆÚ“®•ûŒüƒxƒNƒgƒ‹
-	constexpr float kDown = 1.0f;	// ‰ºˆÚ“®•ûŒüƒxƒNƒgƒ‹
-	constexpr float kRight = 1.0f;	// ‰EˆÚ“®•ûŒüƒxƒNƒgƒ‹
-	constexpr float kLeft = -1.0f;	// ¶ˆÚ“®•ûŒüƒxƒNƒgƒ‹
-	constexpr float kZero = 0.0f;	// ˆÚ“®•ûŒüƒxƒNƒgƒ‹‚È‚µ
+	constexpr float kUp = -1.0f;	// ä¸Šç§»å‹•æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«
+	constexpr float kDown = 1.0f;	// ä¸‹ç§»å‹•æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«
+	constexpr float kRight = 1.0f;	// å³ç§»å‹•æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«
+	constexpr float kLeft = -1.0f;	// å·¦ç§»å‹•æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«
+	constexpr float kZero = 0.0f;	// ç§»å‹•æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«ãªã—
 }
 
 MoveDirectionVec::MoveDirectionVec():
 	m_directionVec{0.0f,0.0f,0.0f}
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 MoveDirectionVec::~MoveDirectionVec()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void MoveDirectionVec::Update()
 {
-	//ƒpƒbƒhƒAƒiƒƒOî•ñæ“¾
+	//ãƒ‘ãƒƒãƒ‰ã‚¢ãƒŠãƒ­ã‚°æƒ…å ±å–å¾—
 	DINPUT_JOYSTATE input;
 
 	input.X = 0;
 	input.Y = 0;
 
-	//ˆÚ“®Šp“x
+	//ç§»å‹•è§’åº¦
 	float moveAngle = 0.0f;
 
-	// “ü—Íó‘Ô‚ğæ“¾
+	// å…¥åŠ›çŠ¶æ…‹ã‚’å–å¾—
 	GetJoypadDirectInputState(DX_INPUT_PAD1, &input);
 
-	// ˆÚ“®ƒxƒNƒgƒ‹‚Ì‰Šú‰»
+	// ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«ã®åˆæœŸåŒ–
 	m_directionVec = VGet(0.0f, 0.0f, 0.0f);
 
-	//ƒXƒeƒBƒbƒN‚Å‚ÌƒAƒiƒƒO“ü—Íó‘Ô‚ª”½‰‚µ‚Ä‚¢‚é‚Æ‚«‚Í‚»‚Á‚¿‚ğ—Dæ‚·‚é
+	//ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã§ã®ã‚¢ãƒŠãƒ­ã‚°å…¥åŠ›çŠ¶æ…‹ãŒåå¿œã—ã¦ã„ã‚‹ã¨ãã¯ãã£ã¡ã‚’å„ªå…ˆã™ã‚‹
 	if (input.X != 0 || input.Y != 0)
-	{
+	{ 
 		m_directionVec.x = 0.001f * input.X;
 		m_directionVec.z = 0.001f * input.Y;
 	}
 	else
 	{
-		// ¶ƒ{ƒ^ƒ“‚ğ‰Ÿ‚³‚ê‚½‚çƒvƒŒƒCƒ„[‚ÌŒü‚«‚ğ¶‚É
-		if (Pad::isPress(PAD_INPUT_LEFT))
+		// å·¦ãƒœã‚¿ãƒ³ã‚’æŠ¼ã•ã‚ŒãŸã‚‰ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å‘ãã‚’å·¦ã«
+		if (Pad::IsPress(PAD_INPUT_LEFT))
 		{
 			m_directionVec.x = kLeft;
 		}
-		// ‰Eƒ{ƒ^ƒ“‚ğ‰Ÿ‚³‚ê‚½‚çƒvƒŒƒCƒ„[‚ÌŒü‚«‰E‚É
-		else if (Pad::isPress(PAD_INPUT_RIGHT))
+		// å³ãƒœã‚¿ãƒ³ã‚’æŠ¼ã•ã‚ŒãŸã‚‰ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å‘ãå³ã«
+		else if (Pad::IsPress(PAD_INPUT_RIGHT))
 		{
 			m_directionVec.x = kRight;
 		}
@@ -62,13 +62,13 @@ void MoveDirectionVec::Update()
 			m_directionVec.x = kZero;
 		}
 
-		// ãƒ{ƒ^ƒ“‚ğ‰Ÿ‚³‚ê‚½‚çƒvƒŒƒCƒ„[‚ÌŒü‚«‚ğã‚É
-		if (Pad::isPress(PAD_INPUT_UP))
+		// ä¸Šãƒœã‚¿ãƒ³ã‚’æŠ¼ã•ã‚ŒãŸã‚‰ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å‘ãã‚’ä¸Šã«
+		if (Pad::IsPress(PAD_INPUT_UP))
 		{
 			m_directionVec.z = kUp;
 		}
-		// ‰ºƒ{ƒ^ƒ“‚ğ‰Ÿ‚³‚ê‚½‚çƒvƒŒƒCƒ„[‚ÌŒü‚«‰º‚É
-		else if (Pad::isPress(PAD_INPUT_DOWN))
+		// ä¸‹ãƒœã‚¿ãƒ³ã‚’æŠ¼ã•ã‚ŒãŸã‚‰ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å‘ãä¸‹ã«
+		else if (Pad::IsPress(PAD_INPUT_DOWN))
 		{
 			m_directionVec.z = kDown;
 		}
@@ -78,7 +78,7 @@ void MoveDirectionVec::Update()
 		}
 	}
 
-	//ˆÚ“®•ûŒüƒxƒNƒgƒ‹‚ğ³‹K‰»
+	//ç§»å‹•æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«ã‚’æ­£è¦åŒ–
 	if (VSize(m_directionVec) >= 1.0f)
 	{
 		m_directionVec = VNorm(m_directionVec);
@@ -87,6 +87,6 @@ void MoveDirectionVec::Update()
 
 void MoveDirectionVec::SetDirectionVec()
 {
-	// ˆÚ“®•ûŒüƒxƒNƒgƒ‹‚ğ‰Šú‰»
+	// ç§»å‹•æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«ã‚’åˆæœŸåŒ–
 	m_directionVec = VGet(0.0f, kUp, 0.0f);
 }

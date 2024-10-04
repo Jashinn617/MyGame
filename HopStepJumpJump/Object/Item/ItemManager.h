@@ -18,7 +18,7 @@ public:
 	/// </summary>
 	/// <param name="stageKind">ステージの種類</param>
 	/// <param name="pObjectManager"></param>
-	ItemManager(Game::Stage stageKind, ObjectManager* pObjectManager);
+	ItemManager(Game::StageKind stageKind, ObjectManager* pObjectManager);
 
 	/// <summary>
 	/// デストラクタ

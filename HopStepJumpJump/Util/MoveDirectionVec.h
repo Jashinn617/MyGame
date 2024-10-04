@@ -1,26 +1,36 @@
-#pragma once
+ï»¿#pragma once
 #include "DxLib.h"
 
 class MoveDirectionVec
 {
 public:
+	/// <summary>
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// </summary>
 	MoveDirectionVec();
+
+	/// <summary>
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// </summary>
 	~MoveDirectionVec();
 
+	/// <summary>
+	/// æ›´æ–°
+	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// ˆÚ“®•ûŒü‚ğİ’è‚·‚é
+	/// ç§»å‹•æ–¹å‘ã‚’è¨­å®šã™ã‚‹
 	/// </summary>
 	void SetDirectionVec();
 
 	/// <summary>
-	/// ˆÚ“®•ûŒü‚Ìæ“¾
+	/// ç§»å‹•æ–¹å‘ã®å–å¾—
 	/// </summary>
-	/// <returns>ˆÚ“®•ûŒü</returns>
+	/// <returns>ç§»å‹•æ–¹å‘</returns>
 	VECTOR GetDirectionVec()const { return m_directionVec; }
 
 private:
-	VECTOR m_directionVec;	// •ûŒüƒxƒNƒgƒ‹
+	VECTOR m_directionVec;	// æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«
 };
 

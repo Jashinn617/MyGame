@@ -1,19 +1,18 @@
-#pragma once
+ï»¿#pragma once
 
 namespace Easing
 {
-	
 	/// <summary>
-	/// ƒeƒ“ƒvƒŒ[ƒgƒNƒ‰ƒX
-	/// ƒC[ƒWƒ“ƒOŠÖ”‚ðƒeƒ“ƒvƒŒ[ƒgŠÖ”‚É‚µ‚Ä
-	/// ˆø”‚ÌŒ^‚ð•Ï‚¦‚ç‚ê‚é‚æ‚¤‚É‚·‚é
+	/// ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã‚¯ãƒ©ã‚¹
+	/// ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°é–¢æ•°ã‚’ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆé–¢æ•°ã«ã—ã¦
+	/// å¼•æ•°ã®åž‹ã‚’å¤‰ãˆã‚‰ã‚Œã‚‹ã‚ˆã†ã«ã™ã‚‹
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	/// <param name="t">Œo‰ßŽžŠÔ</param>
-	/// <param name="b">‰Šú’l</param>
-	/// <param name="c">•Ï‰»—Ê</param>
-	/// <param name="d">‘ŽžŠÔ</param>
-	/// <returns>•Ï‰»Œã‚Ì’l</returns>
+	/// <param name="t">çµŒéŽæ™‚é–“</param>
+	/// <param name="b">åˆæœŸå€¤</param>
+	/// <param name="c">å¤‰åŒ–é‡</param>
+	/// <param name="d">ç·æ™‚é–“</param>
+	/// <returns>å¤‰åŒ–å¾Œã®å€¤</returns>
 	template<typename T>
 	inline T Linear(T t, T b, T c, T d)
 	{

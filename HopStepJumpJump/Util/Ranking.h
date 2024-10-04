@@ -1,39 +1,69 @@
-#pragma once
+ï»¿#pragma once
 #include "Game.h"
 #include <string>
 #include <vector>
 
 /// <summary>
-/// ƒ‰ƒ“ƒLƒ“ƒOî•ñ‚ğXV‚·‚é
+/// ãƒ©ãƒ³ã‚­ãƒ³ã‚°æƒ…å ±ã‚’æ›´æ–°ã™ã‚‹
 /// </summary>
 class Ranking
 {
 public:
+	/// <summary>
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// </summary>
 	Ranking();
+	
+	/// <summary>
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// </summary>
 	~Ranking();
-	void CreateRanking(Game::Stage stageKind);			  // ƒ‰ƒ“ƒLƒ“ƒOì¬
-	void UpdateRanking(Game::Stage stageKind, int clearTime); // ƒ‰ƒ“ƒLƒ“ƒOXV
-	std::vector<int> GetRanking(Game::Stage stageKind);						  // ƒ‰ƒ“ƒLƒ“ƒOæ“¾
+
+	/// <summary>
+	/// ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã®ä½œæˆ
+	/// </summary>
+	/// <param name="stageKind">ã‚¹ãƒ†ãƒ¼ã‚¸ã®ç¨®é¡</param>
+	void CreateRanking(Game::StageKind stageKind);
+
+	/// <summary>
+	/// ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã®æ›´æ–°
+	/// </summary>
+	/// <param name="stageKind">ã‚¹ãƒ†ãƒ¼ã‚¸ã®ç¨®é¡</param>
+	/// <param name="clearTime">ã‚¯ãƒªã‚¢ã‚¿ã‚¤ãƒ </param>
+	void UpdateRanking(Game::StageKind stageKind, int clearTime);
+
+	/// <summary>
+	/// ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã®å–å¾—
+	/// </summary>
+	/// <param name="stageKind">ã‚¹ãƒ†ãƒ¼ã‚¸ã®ç¨®é¡</param>
+	/// <returns>ãƒ©ãƒ³ã‚­ãƒ³ã‚°</returns>
+	std::vector<int> GetRanking(Game::StageKind stageKind);
 
 private:
-	std::string HttpGet(const char* domain, const char* url); // Http’ÊM‚ÅGet–½—ß‚ğ‘—‚é
+	/// <summary>
+	/// Httpé€šä¿¡ã§Getå‘½ä»¤ã‚’é€ã‚‹
+	/// </summary>
+	/// <param name="domain">ãƒ‰ãƒ¡ã‚¤ãƒ³å</param>
+	/// <param name="url">URIå</param>
+	/// <returns>ãƒ‡ãƒ¼ã‚¿ãƒãƒƒãƒ•ã‚¡</returns>
+	std::string HttpGet(const char* domain, const char* url);
 
-private:	// ’è”
-	static const int kDataSize = 2560;	// ƒf[ƒ^ƒTƒCƒY
+private:	// å®šæ•°
+	static const int kDataSize = 2560;	// ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º
 
-private:	// •Ï”
-	int m_netH;						// ƒlƒbƒgƒ[ƒNƒnƒ“ƒhƒ‹
-	int m_dataLength;						// óMƒf[ƒ^—Ê•Û‘¶—p•Ï”
-	int m_lineCount;					// •\¦‚·‚és”‚ğƒJƒEƒ“ƒg‚·‚é
-	char m_strBuf[kDataSize] = "";		// ƒf[ƒ^ƒoƒbƒtƒ@
+private:	// å¤‰æ•°
+	int m_netH;						// ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ãƒãƒ³ãƒ‰ãƒ«
+	int m_dataLength;						// å—ä¿¡ãƒ‡ãƒ¼ã‚¿é‡ä¿å­˜ç”¨å¤‰æ•°
+	int m_lineCount;					// è¡¨ç¤ºã™ã‚‹è¡Œæ•°ã‚’ã‚«ã‚¦ãƒ³ãƒˆã™ã‚‹
+	char m_strBuf[kDataSize] = "";		// ãƒ‡ãƒ¼ã‚¿ãƒãƒƒãƒ•ã‚¡
 
-	std::vector<int> m_rankingList;		// ƒNƒŠƒAƒ^ƒCƒ€‚ğ•Û‘¶‚·‚é
+	std::vector<int> m_rankingList;		// ã‚¯ãƒªã‚¢ã‚¿ã‚¤ãƒ ã‚’ä¿å­˜ã™ã‚‹
 	std::string uri;
 	std::string createRank;
 	std::string getRank;
 
-	IPDATA m_ip;							// Ú‘±—p‚h‚oƒAƒhƒŒƒXƒf[ƒ^
-	size_t m_pos;						// •¶š‚Ì’·‚³‚ğæ“¾‚·‚é
+	IPDATA m_ip;							// æ¥ç¶šç”¨ï¼©ï¼°ã‚¢ãƒ‰ãƒ¬ã‚¹ãƒ‡ãƒ¼ã‚¿
+	size_t m_pos;						// æ–‡å­—ã®é•·ã•ã‚’å–å¾—ã™ã‚‹
 
 
 };

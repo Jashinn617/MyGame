@@ -157,7 +157,6 @@
     <ClCompile Include="Util\Ranking.cpp" />
     <ClCompile Include="Util\CountTime.cpp" />
     <ClCompile Include="Util\TutorialUI.cpp" />
-    <ClCompile Include="Util\ActionTime.cpp" />
     <ClCompile Include="Object\Enemy\EnemySkull.cpp" />
     <ClCompile Include="Object\Enemy\EnemyBee.cpp" />
     <ClCompile Include="Object\Item\ItemStop.cpp" />
@@ -207,7 +206,6 @@
     <ClInclude Include="Util\Ranking.h" />
     <ClInclude Include="Util\CountTime.h" />
     <ClInclude Include="Util\TutorialUI.h" />
-    <ClInclude Include="Util\ActionTime.h" />
     <ClInclude Include="Object\Enemy\EnemySkull.h" />
     <ClInclude Include="Object\Enemy\EnemyBee.h" />
     <ClInclude Include="Object\Item\ItemStop.h" />

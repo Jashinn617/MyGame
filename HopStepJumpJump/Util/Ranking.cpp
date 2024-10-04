@@ -1,37 +1,38 @@
-#include "DxLib.h"
+ï»¿#include "DxLib.h"
 #include "Vec2.h"
 #include "Ranking.h"
 
-// ’è”
+// å®šæ•°
 namespace
 {
-	// ƒhƒƒCƒ“–¼
+	// ãƒ‰ãƒ¡ã‚¤ãƒ³å
 	const char* kDomainName = "jashinkunn.catfood.jp";
-	// ƒeƒXƒg—pURI
-	const char* kTestCreateUri = "/HopRank/NetTest/createRanking.php";				// ì¬
-	const char* kTestUpdateUri = "/HopRank/NetTest/updateRanking.php?clearTime=";  // XV
-	const char* kTestGetUri = "/HopRank/NetTest/getRanking.php";					// æ“¾
-	// ƒXƒe[ƒW1URI
-	const char* kStage1CreateUri = "/HopRank/Stage1/createRanking.php";				// ì¬
-	const char* kStage1UpdateUri = "/HopRank/Stage1/updateRanking.php?clearTime=";  // XV
-	const char* kStage1GetUri = "/HopRank/Stage1/getRanking.php";					// æ“¾
-	// ƒXƒe[ƒW2URI
-	const char* kStage2CreateUri = "/HopRank/Stage2/createRanking.php";					// ì¬
-	const char* kStage2UpdateUri = "/HopRank/Stage2/updateRanking.php?clearTime=";		// XV
-	const char* kStage2GetUri = "/HopRank/Stage2/getRanking.php";						// æ“¾
-	constexpr int kPortNum = 80;		// ƒ|[ƒg”Ô†
-	constexpr int kMaxRankNum = 10;		// •\¦‚·‚éƒ‰ƒ“ƒLƒ“ƒO”
+	// ãƒ†ã‚¹ãƒˆç”¨URI
+	const char* kTestCreateUri = "/HopRank/NetTest/createRanking.php";				// ä½œæˆ
+	const char* kTestUpdateUri = "/HopRank/NetTest/updateRanking.php?clearTime=";  // æ›´æ–°
+	const char* kTestGetUri = "/HopRank/NetTest/getRanking.php";					// å–å¾—
+	// ã‚¹ãƒ†ãƒ¼ã‚¸1URI
+	const char* kStage1CreateUri = "/HopRank/Stage1/createRanking.php";				// ä½œæˆ
+	const char* kStage1UpdateUri = "/HopRank/Stage1/updateRanking.php?clearTime=";  // æ›´æ–°
+	const char* kStage1GetUri = "/HopRank/Stage1/getRanking.php";					// å–å¾—
+	// ã‚¹ãƒ†ãƒ¼ã‚¸2URI
+	const char* kStage2CreateUri = "/HopRank/Stage2/createRanking.php";					// ä½œæˆ
+	const char* kStage2UpdateUri = "/HopRank/Stage2/updateRanking.php?clearTime=";		// æ›´æ–°
+	const char* kStage2GetUri = "/HopRank/Stage2/getRanking.php";						// å–å¾—
 
-	// ƒ‰ƒ“ƒLƒ“ƒO•\¦
-	constexpr float kRankingIntervalAdj = 28.0f;		// •\¦ˆÊ’u’²®
-	constexpr int kTextColor = 0xffffff;				// ƒeƒLƒXƒg‚ÌF
-	constexpr float kRankingIntervalWidth = 400.0f;		// ‰¡‚Ì•\¦ŠÔŠu
-	// ƒXƒe[ƒW‘I‘ğ
-	const Vec2 kStageSlectRankPos = { 900, 320 };		// •\¦ˆÊ’u
-	constexpr float kStageSlectRankInterval = 60.0f;	// c‚Ì•\¦ŠÔŠu
-	// ƒNƒŠƒA
-	const Vec2 kRankingPos = { 1000.0f, 550.0f };		// •\¦ˆÊ’u
-	constexpr float kClearRankInterval = 80.0f;			// c‚Ì•\¦ŠÔŠu
+	constexpr int kPortNum = 80;		// ãƒãƒ¼ãƒˆç•ªå·
+	constexpr int kMaxRankNum = 10;		// å–å¾—ã™ã‚‹ãƒ©ãƒ³ã‚­ãƒ³ã‚°æ•°
+
+	// ãƒ©ãƒ³ã‚­ãƒ³ã‚°è¡¨ç¤º
+	constexpr float kRankingIntervalAdj = 28.0f;		// è¡¨ç¤ºä½ç½®èª¿æ•´
+	constexpr int kTextColor = 0xffffff;				// ãƒ†ã‚­ã‚¹ãƒˆã®è‰²
+	constexpr float kRankingIntervalWidth = 400.0f;		// æ¨ªã®è¡¨ç¤ºé–“éš”
+	// ã‚¹ãƒ†ãƒ¼ã‚¸é¸æŠæ™‚
+	const Vec2 kStageSlectRankPos = { 900, 320 };		// è¡¨ç¤ºä½ç½®
+	constexpr float kStageSlectRankInterval = 60.0f;	// ç¸¦ã®è¡¨ç¤ºé–“éš”
+	// ã‚¯ãƒªã‚¢æ™‚
+	const Vec2 kRankingPos = { 1000.0f, 550.0f };		// è¡¨ç¤ºä½ç½®
+	constexpr float kClearRankInterval = 80.0f;			// ç¸¦ã®è¡¨ç¤ºé–“éš”
 
 }
 
@@ -39,43 +40,45 @@ Ranking::Ranking() :
 	m_pos(0),
 	m_lineCount(0)
 {
+	// ãƒªã‚¹ãƒˆã®ãƒªã‚µã‚¤ã‚º
 	m_rankingList.resize(kMaxRankNum);
 }
 
 
 Ranking::~Ranking()
 {
+	/*å‡¦ç†ç„¡ã—*/
 }
 
-void Ranking::CreateRanking(Game::Stage stageKind)
+void Ranking::CreateRanking(Game::StageKind stageKind)
 {
-	// ƒXƒe[ƒW‚É‚æ‚Á‚ÄURI‚ğ•ÏX‚·‚é
+	// ã‚¹ãƒ†ãƒ¼ã‚¸ã«ã‚ˆã£ã¦URIã‚’å¤‰æ›´ã™ã‚‹
 	switch (stageKind)
 	{
-	case Game::Stage::Test:
+	case Game::StageKind::Test:
 		createRank = HttpGet(kDomainName, kTestCreateUri);
 		break;
-	case Game::Stage::Stage1:
+	case Game::StageKind::Stage1:
 		createRank = HttpGet(kDomainName, kStage1CreateUri);
 		break;
-	case Game::Stage::Stage2:
+	case Game::StageKind::Stage2:
 		createRank = HttpGet(kDomainName, kStage2CreateUri);
 		break;
 	}
 }
 
-void Ranking::UpdateRanking(Game::Stage stageKind, int clearTime)
+void Ranking::UpdateRanking(Game::StageKind stageKind, int clearTime)
 {
-	// ƒXƒe[ƒW‚É‚æ‚Á‚ÄURI‚ğ•ÏX‚·‚é
+	// ã‚¹ãƒ†ãƒ¼ã‚¸ã«ã‚ˆã£ã¦URIã‚’å¤‰æ›´ã™ã‚‹
 	switch (stageKind)
 	{
-	case Game::Stage::Test:
+	case Game::StageKind::Test:
 		uri = kTestUpdateUri + std::to_string(clearTime);
 		break;
-	case Game::Stage::Stage1:
+	case Game::StageKind::Stage1:
 		uri = kStage1UpdateUri + std::to_string(clearTime);
 		break;
-	case Game::Stage::Stage2:
+	case Game::StageKind::Stage2:
 		uri = kStage2UpdateUri + std::to_string(clearTime);
 		break;
 	}
@@ -83,27 +86,27 @@ void Ranking::UpdateRanking(Game::Stage stageKind, int clearTime)
 	std::string getRank = HttpGet(kDomainName, uri.c_str());
 }
 
-std::vector<int> Ranking::GetRanking(Game::Stage stageKind)
+std::vector<int> Ranking::GetRanking(Game::StageKind stageKind)
 {
-	// ƒXƒe[ƒW‚É‚æ‚Á‚ÄURI‚ğ•ÏX‚·‚é
+	// ã‚¹ãƒ†ãƒ¼ã‚¸ã«ã‚ˆã£ã¦URIã‚’å¤‰æ›´ã™ã‚‹
 	switch (stageKind)
 	{
-	case Game::Stage::Test:
+	case Game::StageKind::Test:
 		getRank = HttpGet(kDomainName, kTestGetUri);
 		break;
-	case Game::Stage::Stage1:
+	case Game::StageKind::Stage1:
 		getRank = HttpGet(kDomainName, kStage1GetUri);
 		break;
-	case Game::Stage::Stage2:
+	case Game::StageKind::Stage2:
 		getRank = HttpGet(kDomainName, kStage2GetUri);
 		break;
 	}
 
-	m_lineCount = 0;  // ƒ‰ƒ“ƒLƒ“ƒOƒJƒEƒ“ƒg‚ğƒŠƒZƒbƒg
+	m_lineCount = 0;  // ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã‚«ã‚¦ãƒ³ãƒˆã‚’ãƒªã‚»ãƒƒãƒˆ
 	size_t m_pos = 0;
 
-	// 1ˆÊ`10ˆÊ‚Ü‚Åæ“¾‚·‚é
-	// MEMO:clearTime‚¾‚¯‚ğ’Šo‚·‚éBclearTime‚ªŒ©‚Â‚©‚ç‚È‚¢ê‡‚Ínpos‚ğ•Ô‚·
+	// 1ä½ï½10ä½ã¾ã§å–å¾—ã™ã‚‹
+	// MEMO:clearTimeã ã‘ã‚’æŠ½å‡ºã™ã‚‹ã€‚clearTimeãŒè¦‹ã¤ã‹ã‚‰ãªã„å ´åˆã¯nposã‚’è¿”ã™
 	while (m_lineCount < kMaxRankNum && (m_pos = getRank.find("\"clearTime\":")) != std::string::npos)
 	{
 		m_pos += strlen("\"clearTime\":");
@@ -114,17 +117,17 @@ std::vector<int> Ranking::GetRanking(Game::Stage stageKind)
 		{
 			if (m_lineCount < kMaxRankNum)
 			{
-				m_rankingList[m_lineCount] = clearTime;  // ƒ‰ƒ“ƒLƒ“ƒOƒŠƒXƒg‚É•Û‘¶
+				m_rankingList[m_lineCount] = clearTime;  // ãƒ©ãƒ³ã‚­ãƒ³ã‚°ãƒªã‚¹ãƒˆã«ä¿å­˜
 				m_lineCount++;
 			}
 
-			// Ÿ‚Ì—v‘f‚Éi‚Ş
-			m_pos += numChars;				  // “Ç‚İæ‚Á‚½•¶š”•ª‚¾‚¯i‚ß‚é
-			getRank = getRank.substr(m_pos);  // c‚è‚Ì•”•ª•¶š—ñ‚ğæ“¾
+			// æ¬¡ã®è¦ç´ ã«é€²ã‚€
+			m_pos += numChars;				  // èª­ã¿å–ã£ãŸæ–‡å­—æ•°åˆ†ã ã‘é€²ã‚ã‚‹
+			getRank = getRank.substr(m_pos);  // æ®‹ã‚Šã®éƒ¨åˆ†æ–‡å­—åˆ—ã‚’å–å¾—
 		}
 		else
 		{
-			break;  // sscanf_s‚ª¸”s‚µ‚½ê‡‚Íƒ‹[ƒv‚ğI—¹
+			break;  // sscanf_sãŒå¤±æ•—ã—ãŸå ´åˆã¯ãƒ«ãƒ¼ãƒ—ã‚’çµ‚äº†
 		}
 	}
 
@@ -133,46 +136,46 @@ std::vector<int> Ranking::GetRanking(Game::Stage stageKind)
 
 std::string Ranking::HttpGet(const char* domain, const char* uri)
 {
-	char HttpCmd[128] = ""; 	// Http’ÊM‚ğì¬‚·‚é‚½‚ß‚Ì•Ï”
+	char HttpCmd[128] = ""; 	// Httpé€šä¿¡ã‚’ä½œæˆã™ã‚‹ãŸã‚ã®å¤‰æ•°
 
-	// DxLib‚Ì•s—v‚È‹@”\‚ğoff‚É‚·‚é
+	// DxLibã®ä¸è¦ãªæ©Ÿèƒ½ã‚’offã«ã™ã‚‹
 	SetUseDXNetWorkProtocol(false);
 
-	// DNS‚©‚çƒhƒƒCƒ“–¼‚ÅIPƒAƒhƒŒƒX‚ğæ“¾
+	// DNSã‹ã‚‰ãƒ‰ãƒ¡ã‚¤ãƒ³åã§IPã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾—
 	GetHostIPbyName(domain, &m_ip);
 
-	// ’ÊM‚ğŠm—§
+	// é€šä¿¡ã‚’ç¢ºç«‹
 	m_netH = ConnectNetWork(m_ip, kPortNum);
 
-	// Šm—§‚ª¬Œ÷‚µ‚½ê‡‚Ì‚İ’†‚Ìˆ—‚ğ‚·‚é
+	// ç¢ºç«‹ãŒæˆåŠŸã—ãŸå ´åˆã®ã¿ä¸­ã®å‡¦ç†ã‚’ã™ã‚‹
 	if (m_netH != -1)
 	{
-		//Http–½—ß‚Ìì¬
+		//Httpå‘½ä»¤ã®ä½œæˆ
 		sprintf_s(HttpCmd, "GET %s HTTP/1.1\nHost: %s\n\n", uri, domain);
 #ifdef _DEBUG
 		//DrawFormatString(0, 60, 0xffffff, "HttpCmd:\n%s", HttpCmd);
 #endif // _DEBUG
 
-		// ƒf[ƒ^‘—M(http–½—ß‚ğ‘—‚é)
+		// ãƒ‡ãƒ¼ã‚¿é€ä¿¡(httpå‘½ä»¤ã‚’é€ã‚‹)
 		NetWorkSend(m_netH, HttpCmd, static_cast<int>(strlen(HttpCmd)));
 
-		// ƒf[ƒ^‚ª‚­‚é‚Ì‚ğ‘Ò‚Â
+		// ãƒ‡ãƒ¼ã‚¿ãŒãã‚‹ã®ã‚’å¾…ã¤
 		while (!ProcessMessage())
 		{
-			// æ“¾‚µ‚Ä‚¢‚È‚¢óMƒf[ƒ^—Ê‚ğ“¾‚é
+			// å–å¾—ã—ã¦ã„ãªã„å—ä¿¡ãƒ‡ãƒ¼ã‚¿é‡ã‚’å¾—ã‚‹
 			m_dataLength = GetNetWorkDataLength(m_netH);
 
-			// æ“¾‚µ‚Ä‚È‚¢óMƒf[ƒ^—Ê‚ª-1‚¶‚á‚È‚¢ê‡‚Íƒ‹[ƒv‚ğ”²‚¯‚é
+			// å–å¾—ã—ã¦ãªã„å—ä¿¡ãƒ‡ãƒ¼ã‚¿é‡ãŒ-1ã˜ã‚ƒãªã„å ´åˆã¯ãƒ«ãƒ¼ãƒ—ã‚’æŠœã‘ã‚‹
 			if (m_dataLength != -1)
 			{
 				break;
 			}
 		}
 
-		// ƒf[ƒ^óM
-		NetWorkRecv(m_netH, m_strBuf, kDataSize);    // ƒf[ƒ^‚ğƒoƒbƒtƒ@‚Éæ“¾
+		// ãƒ‡ãƒ¼ã‚¿å—ä¿¡
+		NetWorkRecv(m_netH, m_strBuf, kDataSize);    // ãƒ‡ãƒ¼ã‚¿ã‚’ãƒãƒƒãƒ•ã‚¡ã«å–å¾—
 
-		// Ú‘±‚ğ’f‚Â
+		// æ¥ç¶šã‚’æ–­ã¤
 		CloseNetWork(m_netH);
 	}
 

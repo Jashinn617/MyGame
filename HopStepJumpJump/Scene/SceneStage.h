@@ -1,4 +1,4 @@
-#pragma
+ï»¿#pragma
 #include "SceneBase.h"
 #include "../Util/Game.h"
 
@@ -11,63 +11,63 @@ class SceneStage : public SceneBase
 {
 public:
 	/// <summary>
-	/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
-	/// <param name="stage">ƒXƒe[ƒW‚Ìí—Ş</param>
-	SceneStage(Game::Stage stage);
+	/// <param name="stage">ã‚¹ãƒ†ãƒ¼ã‚¸ã®ç¨®é¡</param>
+	SceneStage(Game::StageKind stage);
 
 	/// <summary>
-	/// ƒfƒXƒgƒ‰ƒNƒ^
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
 	virtual ~SceneStage();
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	virtual void Init() override final;
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
-	/// <returns>Ÿ‚ÌƒV[ƒ“</returns>
+	/// <returns>æ¬¡ã®ã‚·ãƒ¼ãƒ³</returns>
 	virtual std::shared_ptr<SceneBase> Update() override final;
 
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
 	virtual void Draw() override final;
 
 	/// <summary>
-	/// I—¹ˆ—
+	/// çµ‚äº†å‡¦ç†
 	/// </summary>
 	virtual void End() override final;
 
 	/// <summary>
-	/// ƒXƒe[ƒW‚Ìí—Ş‚Ìæ“¾
+	/// ã‚¹ãƒ†ãƒ¼ã‚¸ã®ç¨®é¡ã®å–å¾—
 	/// </summary>
-	/// <returns>ƒXƒe[ƒW‚Ìí—Ş</returns>
+	/// <returns>ã‚¹ãƒ†ãƒ¼ã‚¸ã®ç¨®é¡</returns>
 	virtual SceneKind GetSceneKind()  override final { return SceneKind::Stage; }
 
-private:	// ŠÖ”
+private:	// é–¢æ•°
 
 	/// <summary>
-	/// ƒIƒvƒVƒ‡ƒ“‚Ì•`‰æ
+	/// ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®æç”»
 	/// </summary>
 	void DrawOption();
 
 	/// <summary>
-	/// ƒIƒvƒVƒ‡ƒ“‚ÌXV
+	/// ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®æ›´æ–°
 	/// </summary>
 	void UpdateOption();
 
-private:	// •Ï”
-	int m_cursorCount;					// ƒIƒvƒVƒ‡ƒ“‚ÌƒJ[ƒ\ƒ‹ƒJƒEƒ“ƒg
-	bool m_isOption;					// ƒIƒvƒVƒ‡ƒ“’†‚©
-	bool m_isSceneEnd;					// ƒV[ƒ“‚ªI—¹‚µ‚½‚©‚Ç‚¤‚©
-	std::array<int, 4> m_optionH;		// ƒIƒvƒVƒ‡ƒ“‰æ‘œƒnƒ“ƒhƒ‹
-	std::array<float, 3> m_buttonSize;	// ƒ{ƒ^ƒ“ƒTƒCƒY
-	Game::Stage m_stageKind;			// ƒXƒe[ƒW‚Ìí—Ş
+private:	// å¤‰æ•°
+	int m_cursorCount;						// ã‚ªãƒ—ã‚·ãƒ§ãƒ³æ™‚ã®ã‚«ãƒ¼ã‚½ãƒ«ã‚«ã‚¦ãƒ³ãƒˆ
+	bool m_isOption;						// ã‚ªãƒ—ã‚·ãƒ§ãƒ³ä¸­ã‹
+	bool m_isSceneEnd;						// ã‚·ãƒ¼ãƒ³ãŒçµ‚äº†ã—ãŸã‹ã©ã†ã‹
+	std::array<int, 4> m_optionH;			// ã‚ªãƒ—ã‚·ãƒ§ãƒ³ç”»åƒãƒãƒ³ãƒ‰ãƒ«
+	std::array<float, 3> m_buttonSize;		// ãƒœã‚¿ãƒ³ã‚µã‚¤ã‚º
+	Game::StageKind m_stageKind;			// ã‚¹ãƒ†ãƒ¼ã‚¸ã®ç¨®é¡
 
-	std::shared_ptr<StageSceneManager> m_pStageSceneManager;	// ƒXƒe[ƒWƒV[ƒ“ƒ}ƒl[ƒWƒƒ[ƒ|ƒCƒ“ƒ^
-	std::shared_ptr<SceneBase> m_nextScene;						// Ÿ‚ÌƒV[ƒ“‚Ìƒ|ƒCƒ“ƒ^
+	std::shared_ptr<StageSceneManager> m_pStageSceneManager;	// ã‚¹ãƒ†ãƒ¼ã‚¸ã‚·ãƒ¼ãƒ³ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ãƒã‚¤ãƒ³ã‚¿
+	std::shared_ptr<SceneBase> m_nextScene;						// æ¬¡ã®ã‚·ãƒ¼ãƒ³ã®ãƒã‚¤ãƒ³ã‚¿
 };

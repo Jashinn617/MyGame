@@ -24,7 +24,7 @@ namespace
 	constexpr int kGameEndTime = 120;	// ゴールについてから次のシーンに移行するまでの時間
 }
 
-ObjectManager::ObjectManager(Game::Stage stageKind):
+ObjectManager::ObjectManager(Game::StageKind stageKind):
 	m_isGameClear(false),
 	m_isStageEnd(false),
 	m_pCollision(std::make_shared<Collision>()),

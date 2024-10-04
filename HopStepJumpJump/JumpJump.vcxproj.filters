@@ -189,9 +189,6 @@
     <ClCompile Include="Object\Item\SpownItem.cpp">
       <Filter>ソース ファイル\Object\Item</Filter>
     </ClCompile>
-    <ClCompile Include="Util\ActionTime.cpp">
-      <Filter>ソース ファイル\Util</Filter>
-    </ClCompile>
     <ClCompile Include="Util\CountTime.cpp">
       <Filter>ソース ファイル\Util</Filter>
     </ClCompile>
@@ -340,9 +337,6 @@
     </ClInclude>
     <ClInclude Include="Object\Item\SpownItem.h">
       <Filter>ヘッダー ファイル\Object\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="Util\ActionTime.h">
-      <Filter>ヘッダー ファイル\Util</Filter>
     </ClInclude>
     <ClInclude Include="Effect\Effect.h">
       <Filter>ヘッダー ファイル\Effect</Filter>

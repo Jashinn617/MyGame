@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "CharacterData.h"
 #include "../Object/ObjectBase.h"
 #include "../Object/CharacterBase.h"
@@ -11,62 +11,72 @@ using namespace CharacterData;
 
 namespace LoadData
 {
-	// ƒTƒEƒ“ƒhƒf[ƒ^
+	/// <summary>
+	/// ã‚µã‚¦ãƒ³ãƒ‰ãƒ‡ãƒ¼ã‚¿
+	/// </summary>
 	struct SoundData
 	{
-		// ŒÅ’èƒf[ƒ^
-		bool isBgm = false;		// BGM‚©SE‚©
-		float volRate = 255;	// ƒ{ƒŠƒ…[ƒ€’²®
-
-		int handle = -1;	// ƒTƒEƒ“ƒhƒnƒ“ƒhƒ‹
+		bool isBgm = false;		// BGMã‹SEã‹
+		float volRate = 255;	// ãƒœãƒªãƒ¥ãƒ¼ãƒ èª¿æ•´
+		int handle = -1;		// ã‚µã‚¦ãƒ³ãƒ‰ãƒãƒ³ãƒ‰ãƒ«
 	};
 
-	// ƒGƒtƒFƒNƒgƒf[ƒ^
+	/// <summary>
+	/// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
+	/// </summary>
 	struct EffectData
 	{
-		int resouceH = -1;			// ƒGƒtƒFƒNƒgƒnƒ“ƒhƒ‹ 
-		int playingEffectH = -1;	// ÀÛ‚ÉƒGƒtƒFƒNƒg‚ğÄƒZ‚·‚é‚Æ‚«‚Ég‚¤ƒnƒ“ƒhƒ‹
-		float size = 0;				// ƒGƒtƒFƒNƒg‚ÌƒTƒCƒY
-		float speed = 1;			// Ä¶ƒXƒs[ƒh
+		int resouceH = -1;			// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãƒãƒ³ãƒ‰ãƒ« 
+		int playingEffectH = -1;	// å®Ÿéš›ã«ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’å†ã‚»ã™ã‚‹ã¨ãã«ä½¿ã†ãƒãƒ³ãƒ‰ãƒ«
+		float size = 0;				// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®ã‚µã‚¤ã‚º
+		float speed = 1;			// å†ç”Ÿã‚¹ãƒ”ãƒ¼ãƒ‰
 	};
 }
 
 class CsvLoad
 {
 public:
+	/// <summary>
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// </summary>
 	~CsvLoad();
 
+	/// <summary>
+	/// å®Ÿæ…‹ã®å–å¾—
+	/// </summary>
+	/// <returns>å®Ÿæ…‹</returns>
 	static CsvLoad& GetInstance();
 
 	/// <summary>
-	/// ƒAƒjƒ[ƒVƒ‡ƒ“‚Ìƒ[ƒh
+	/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®ãƒ­ãƒ¼ãƒ‰
 	/// </summary>
-	/// <param name="Data">ƒAƒjƒ[ƒVƒ‡ƒ“î•ñ</param>
-	/// <param name="charcterName">ƒLƒƒƒ‰ƒNƒ^[–¼</param>
+	/// <param name="Data">ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±</param>
+	/// <param name="charcterName">ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼å</param>
 	void AnimLoad(CharacterBase::AnimData& Data, const char* charcterName);
 
 	/// <summary>
-	/// ƒTƒEƒ“ƒh‚Ìƒ[ƒh
+	/// ã‚µã‚¦ãƒ³ãƒ‰ã®ãƒ­ãƒ¼ãƒ‰
 	/// </summary>
-	/// <param name="Data">ƒTƒEƒ“ƒhî•ñ</param>
+	/// <param name="Data">ã‚µã‚¦ãƒ³ãƒ‰æƒ…å ±</param>
 	void SoundLoad(std::unordered_map<std::string, LoadData::SoundData>& Data);
 
 	/// <summary>
-	/// ƒGƒtƒFƒNƒg‚Ìƒ[ƒh
+	/// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®ãƒ­ãƒ¼ãƒ‰
 	/// </summary>
-	/// <param name="Data">ƒtƒ@ƒCƒ‹ƒf[ƒ^</param>
+	/// <param name="Data">ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿</param>
 	void EffectLoad(std::unordered_map<std::string, LoadData::EffectData>& Data);
 
 private:
 	/// <summary>
-	/// ƒVƒ“ƒOƒ‹ƒgƒ“ƒpƒ^[ƒ“
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ãƒ‘ã‚¿ãƒ¼ãƒ³
 	/// </summary>
 	CsvLoad();
 
-	// ƒRƒs[‚ğ‹Ö~‚·‚é
-	// ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	// ã‚³ãƒ”ãƒ¼ã‚’ç¦æ­¢ã™ã‚‹
+	// ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	CsvLoad(const CsvLoad&) = delete;
-	// ‘ã“ü‚ğ‹Ö~‚·‚é
+	// ä»£å…¥ã‚’ç¦æ­¢ã™ã‚‹
 	void operator=(const CsvLoad&) = delete;
 };
 

@@ -30,6 +30,7 @@ CsvLoad::~CsvLoad()
 
 CsvLoad& CsvLoad::GetInstance()
 {
+	// 唯一の実態
 	static CsvLoad instance;
 
 	return instance;

@@ -26,7 +26,7 @@ public:
 	/// コンストラクタ
 	/// </summary>
 	/// <param name="stage">ステージの種類</param>
-	ObjectManager(Game::Stage stageKind);
+	ObjectManager(Game::StageKind stageKind);
 
 	/// <summary>
 	/// デストラクタ

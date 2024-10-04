@@ -1,40 +1,48 @@
-#include "Context.h"
+ï»¿#include "Context.h"
 #include "State.h"
 
 Context::Context(std::function<void(void)> changeState):
 	m_pNowState(nullptr),
 	m_changeState(changeState)
 {
+	/*å‡¦ç†ç„¡ã—*/
+}
+
+Context::~Context()
+{
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void Context::Update()
 {
+	// ç¾åœ¨ã®ã‚¹ãƒ†ã‚¤ãƒˆã®æ›´æ–°
 	m_pNowState->Update();
 }
 
 void Context::AddState(std::function<void(void)> listener, Context::StateData state)
 {
-	// ƒXƒeƒCƒg‚ğ’Ç‰Á‚·‚é
+	// ã‚¹ãƒ†ã‚¤ãƒˆã‚’è¿½åŠ ã™ã‚‹
 	m_pState.push_back(std::make_shared<State>(listener, state));
 }
 
 void Context::ChangeState(StateData stateData)
 {
-	// ƒXƒeƒCƒg‚ª‚Ğ‚Æ‚Â‚à‚È‚¢ê‡æ“ª‚ÌƒXƒeƒCƒgó‘Ô‚É‚µ(Idle)ˆ—‚ğI—¹‚·‚é
-	if (m_pNowState == nullptr)
+	if (m_pNowState == nullptr) // ã‚¹ãƒ†ã‚¤ãƒˆãŒã²ã¨ã¤ã‚‚ãªã„å ´åˆ
 	{
+		// å…ˆé ­ã®ã‚¹ãƒ†ã‚¤ãƒˆã«ã—ã¦å‡¦ç†ã‚’çµ‚äº†ã™ã‚‹
 		m_pNowState = m_pState.front();
 		return;
 	}
-	// Œ»İ‚Ìó‘Ô‚Æ•ÏX‚·‚éó‘Ô‚ª“¯‚¶ê‡ˆ—‚ğI—¹‚·‚é
+
+	// ç¾åœ¨ã®çŠ¶æ…‹ã¨å¤‰æ›´ã™ã‚‹çŠ¶æ…‹ãŒåŒã˜å ´åˆå‡¦ç†ã‚’çµ‚äº†ã™ã‚‹
 	if (m_pNowState->GetStateData() == stateData) return;
 
-	// ƒXƒeƒCƒg‚ğ•ÏX‚·‚é
+	// ã‚¹ãƒ†ã‚¤ãƒˆã®å¤‰æ›´
 	for (auto& state : m_pState)
 	{
-		// •ÏX‚·‚éƒXƒeƒCƒg‚ğŒ©‚Â‚¯‚½‚çˆ—‚ğI—¹‚·‚é
-		if (state->GetStateData() == stateData)
+		if (state->GetStateData() == stateData) // å¤‰æ›´ã™ã‚‹ã‚¹ãƒ†ã‚¤ãƒˆã‚’è¦‹ã¤ã‘ãŸã‚‰
 		{
+			// ã‚¹ãƒ†ã‚¤ãƒˆã‚’å¤‰æ›´ã™ã‚‹
 			m_changeState();
 			m_pNowState = state;
 			return;
@@ -44,6 +52,6 @@ void Context::ChangeState(StateData stateData)
 
 Context::StateData Context::GetState() const
 {
-	// Œ»İ‚ÌƒXƒeƒCƒg‚ğ•Ô‚·
+	// ç¾åœ¨ã®ã‚¹ãƒ†ã‚¤ãƒˆã‚’è¿”ã™
 	return m_pNowState->GetStateData();
 }

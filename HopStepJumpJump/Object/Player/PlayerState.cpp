@@ -113,8 +113,8 @@ void PlayerState::StateTransitionIdle()
 	if (m_isAction) return;
 
 	// 移動ボタンが何も押されていなかった場合
-	if (!Pad::isPress(PAD_INPUT_LEFT) && !Pad::isPress(PAD_INPUT_RIGHT) &&
-		!Pad::isPress(PAD_INPUT_UP) && !Pad::isPress(PAD_INPUT_DOWN))
+	if (!Pad::IsPress(PAD_INPUT_LEFT) && !Pad::IsPress(PAD_INPUT_RIGHT) &&
+		!Pad::IsPress(PAD_INPUT_UP) && !Pad::IsPress(PAD_INPUT_DOWN))
 	{
 		// ステイトを待機状態にする
 		StateChange(StateKind::Idle);
@@ -127,8 +127,8 @@ void PlayerState::StateTransitionWalk()
 	if (m_isAction) return;
 
 	// 移動ボタンが何かしら押されていた場合
-	if (Pad::isPress(PAD_INPUT_LEFT) || Pad::isPress(PAD_INPUT_RIGHT) ||
-		Pad::isPress(PAD_INPUT_UP) || Pad::isPress(PAD_INPUT_DOWN))
+	if (Pad::IsPress(PAD_INPUT_LEFT) || Pad::IsPress(PAD_INPUT_RIGHT) ||
+		Pad::IsPress(PAD_INPUT_UP) || Pad::IsPress(PAD_INPUT_DOWN))
 	{
 		// ステイトを歩き状態にする
 		StateChange(StateKind::Walk);
@@ -141,11 +141,11 @@ void PlayerState::StateTransitionDash()
 	if (m_isAction) return;
 
 	//移動ボタンが押されていなかったら何もしない
-	if (!Pad::isPress(PAD_INPUT_LEFT) && !Pad::isPress(PAD_INPUT_RIGHT) &&
-		!Pad::isPress(PAD_INPUT_UP) && !Pad::isPress(PAD_INPUT_DOWN)) return;
+	if (!Pad::IsPress(PAD_INPUT_LEFT) && !Pad::IsPress(PAD_INPUT_RIGHT) &&
+		!Pad::IsPress(PAD_INPUT_UP) && !Pad::IsPress(PAD_INPUT_DOWN)) return;
 
 	// RBが押されていた場合
-	if (Pad::isPress(PAD_INPUT_6))
+	if (Pad::IsPress(PAD_INPUT_6))
 	{
 		// ステイトをダッシュ状態にする
 		StateChange(StateKind::Dash);
@@ -158,7 +158,7 @@ void PlayerState::StateTransitionJump()
 	if (m_isAction) return;
 
 	// Aボタンが押された場合
-	if (Pad::isTrigger(PAD_INPUT_1))
+	if (Pad::IsTrigger(PAD_INPUT_1))
 	{
 		// アクションフラグを立てる
 		m_isAction = true;

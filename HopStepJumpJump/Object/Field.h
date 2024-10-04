@@ -16,7 +16,7 @@ public:
 	/// コンストラクタ
 	/// </summary>
 	/// <param name="stage">ステージの種類</param>
-	Field(Game::Stage stageKind);
+	Field(Game::StageKind stageKind);
 
 	/// <summary>
 	/// デストラクタ

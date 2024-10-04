@@ -1,24 +1,54 @@
-#pragma once
+﻿#pragma once
 
-// �p�b�h����
+// パッド処理
 namespace Pad
 {
-	// �p�b�h�̓��͏�Ԏ擾
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
 
-	// ������������
-	bool isPress(int button, int padNo = 0);
-	// �g���K�[����
-	bool isTrigger(int button, int padNo = 0);
-	//����������
-	bool isRelase(int button, int padNo = 0);
+	/// <summary>
+	/// 押し下げ判定
+	/// </summary>
+	/// <param name="button">押しているボタン</param>
+	/// <param name="padNo">コントローラー番号(二人プレイとかの時に使う)</param>
+	/// <returns>今ボタンを押しているか</returns>
+	bool IsPress(int button, int padNo = 0);
 
-	// ���O�L�^�J�n�A�I��
-	void startRecordLog();
-	void endRecordLog();
+	/// <summary>
+	/// トリガー判定
+	/// </summary>
+	/// <param name="button">押しているボタン</param>
+	/// <param name="padNo">コントローラー番号(二人プレイとかの時に使う)</param>
+	/// <returns>ボタンを押した瞬間か</returns>
+	bool IsTrigger(int button, int padNo = 0);
 
-	// ���O�Đ��J�n�A�I��
-	void startPlayLog();
-	void endPlayLog();
+	/// <summary>
+	/// 離した判定
+	/// </summary>
+	/// <param name="button">押しているボタン</param>
+	/// <param name="padNo">コントローラー番号(二人プレイとかの時に使う)</param>
+	/// <returns>ボタンを離した瞬間か</returns>
+	bool IsRelase(int button, int padNo = 0);
+
+	/// <summary>
+	/// ログ記録開始
+	/// </summary>
+	void StartRecordLog();
+
+	/// <summary>
+	/// ログ記録終了
+	/// </summary>
+	void EndRecordLog();
+
+	/// <summary>
+	/// ログ再生開始
+	/// </summary>
+	void StartPlayLog();
+
+	/// <summary>
+	/// ログ再生終了
+	/// </summary>
+	void EndPlayLog();
 }
-
