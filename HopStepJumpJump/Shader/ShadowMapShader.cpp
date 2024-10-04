@@ -5,16 +5,18 @@
 
 namespace
 {
-	constexpr int kShadowMapSizeX = 15360;
-	constexpr int kShadowMapSizeY = 8640;
+	constexpr int kShadowMapSizeX = 15360;		// シャドウマップのサイズX
+	constexpr int kShadowMapSizeY = 8640;		// シャドウマップのサイズY
 
 	// カメラの視野角
-	constexpr float kShadowMapFov = 45.0f * DX_PI_F / 180.0f;
-	constexpr float kNormalFov = 60.0f * DX_PI_F / 180.0f;
+	constexpr float kShadowMapFov = 45.0f * DX_PI_F / 180.0f;	// シャドウマップのカメラの視野角
+	constexpr float kNormalFov = 60.0f * DX_PI_F / 180.0f;		// 通常時のカメラの視野角
 }
 
 ShadowMapShader::ShadowMapShader()
 {
+	/*シェーダのロード*/
+	/*ロードに失敗したら止める*/
 	/*頂点シェーダ*/
 	m_vertexShader1FrameH = LoadVertexShader("Data/Shader/Vertex/VertexShader3D.vso");
 	assert(m_vertexShader1FrameH != -1);
@@ -65,24 +67,25 @@ ShadowMapShader::ShadowMapShader()
 
 ShadowMapShader::~ShadowMapShader()
 {
-	// シェーダのデリート
+	/*シェーダのデリート*/
+	/*頂点シェーダ*/
 	DeleteShader(m_vertexShader1FrameH);
 	DeleteShader(m_vertexShader4FrameH);
 	DeleteShader(m_vertexShader8FrameH);
 	DeleteShader(m_vertexShaderNormal4FrameH);
 	DeleteShader(m_vertexShaderNormal8FrameH);
-
+	/*ピクセルシェーダ*/
 	DeleteShader(m_pixelShaderH);
 	DeleteShader(m_pixelShaderFieldH);
 	DeleteShader(m_shadowMap);
-
+	/*定数バッファ*/
 	DeleteShaderConstantBuffer(m_cbufferLightDirH);
 	DeleteShaderConstantBuffer(m_cbufferCameraTargetPosH);
 	DeleteShaderConstantBuffer(m_cbufferCameraPosH);
 	DeleteShaderConstantBuffer(m_cbufferViewProjectionMatH);
 }
 
-void ShadowMapShader::WriteStart(VECTOR targetPos)
+void ShadowMapShader::WriteStart(VECTOR cameraTargetPos)
 {
 	// シャドウマップへの書き込みの開始
 	SetDrawScreen(m_shadowMap);
@@ -90,17 +93,17 @@ void ShadowMapShader::WriteStart(VECTOR targetPos)
 	DrawBox(0, 0, kShadowMapSizeX, kShadowMapSizeY, 0xffffff, true);
 
 	// シャドウマップのカメラの位置と向きを設定する
-	SetCameraPositionAndTargetAndUpVec(GetLightPosition(), targetPos, VGet(1, 0, 0));
+	SetCameraPositionAndTargetAndUpVec(GetLightPosition(), cameraTargetPos, VGet(1, 0, 0));
 
 	// シャドウマップ書き込み時のカメラの視野角
 	// ClearDrawScreenをしたときにクリアしたものを再設定している
 	SetupCamera_Perspective(kShadowMapFov);
 }
 
-void ShadowMapShader::SetShadowMapCameraTarget(VECTOR targetPos)
+void ShadowMapShader::SetShadowMapCameraTarget(VECTOR cameraTargetPos)
 {
 	// カメラ座標の取得
-	m_pCbufferCameraPos[0] = targetPos;
+	m_pCbufferCameraPos[0] = cameraTargetPos;
 }
 
 void ShadowMapShader::SetShader(int shaderType)
@@ -122,14 +125,12 @@ void ShadowMapShader::SetShader(int shaderType)
 	SetShaderConstantBuffer(m_cbufferCameraPosH, DX_SHADERTYPE_PIXEL, 2);
 
 	// シェーダを適用する
-	// シェーダを適用する
 	MV1SetUseOrigShader(true);
 
 	//モデルのタイプによって適応させるシェーダーを変える
 	if (shaderType == DX_MV1_VERTEX_TYPE_1FRAME)
 	{
 		SetUseVertexShader(m_vertexShader1FrameH);
-
 	}
 	else if (shaderType == DX_MV1_VERTEX_TYPE_4FRAME)
 	{
@@ -164,10 +165,10 @@ void ShadowMapShader::SetShader(int shaderType)
 	SetUsePixelShader(m_pixelShaderH);
 }
 
-void ShadowMapShader::SetShaderField(VECTOR targetPos)
+void ShadowMapShader::SetShaderField(VECTOR cameraTargetPos)
 {
 	// ビュープロジェクション行列の取得
-	*m_viewProjectionMat = ViewProjectionMatrix(targetPos);
+	*m_viewProjectionMat = ViewProjectionMatrix(cameraTargetPos);
 
 	// ライトの向きの取得
 	m_pCbufferLightDir[0] = GetLightDirection();
@@ -176,6 +177,7 @@ void ShadowMapShader::SetShaderField(VECTOR targetPos)
 	// カメラの位置の取得
 	m_pCbufferCameraPos[0] = GetCameraPosition();
 	
+	// シェーダ使用時のグラフィックハンドルの設定
 	SetUseTextureToShader(1, m_shadowMap);	
 
 	/*書き込んだ値をGPUに反映する*/

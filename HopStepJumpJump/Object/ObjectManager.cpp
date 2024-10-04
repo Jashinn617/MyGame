@@ -1,4 +1,4 @@
-#include "ObjectManager.h"
+ï»¿#include "ObjectManager.h"
 #include "../Shader/ToonShader.h"
 #include "../Shader/ShadowMapShader.h"
 
@@ -20,35 +20,34 @@
 
 namespace
 {	
-	constexpr float kRotSpeed = 0.4f;	// ‰ñ“]‘¬“x
-	constexpr int kGameEndTime = 120;	// ƒS[ƒ‹‚É‚Â‚¢‚Ä‚©‚çŸ‚ÌƒV[ƒ“‚ÉˆÚs‚·‚é‚Ü‚Å‚ÌŠÔ
+	constexpr float kRotSpeed = 0.4f;	// å›è»¢é€Ÿåº¦
+	constexpr int kGameEndTime = 120;	// ã‚´ãƒ¼ãƒ«ã«ã¤ã„ã¦ã‹ã‚‰æ¬¡ã®ã‚·ãƒ¼ãƒ³ã«ç§»è¡Œã™ã‚‹ã¾ã§ã®æ™‚é–“
 }
 
-ObjectManager::ObjectManager(Game::Stage stage):
+ObjectManager::ObjectManager(Game::Stage stageKind):
 	m_isGameClear(false),
-	m_isGameEnd(false),
-	m_isGoal(false),
-	m_isTutorial(false)
+	m_isStageEnd(false),
+	m_pCollision(std::make_shared<Collision>()),
+	m_pSkyDome(std::make_shared<SkyDome>()),
+	m_pEnemyManager(std::make_shared<EnemyManager>(stageKind,this)),
+	m_pItemManager(std::make_shared<ItemManager>(stageKind,this)),
+	m_pToonShader(std::make_shared<ToonShader>()),
+	m_pShadowMapShader(std::make_shared<ShadowMapShader>()),
+	m_gameEndTime(std::make_shared<Time>(kGameEndTime))
 {
-	m_H = LoadGraph("Data/img/Sky.png");
-	m_pCollision = std::make_shared<Collision>();
-	m_pSkyDome = std::make_shared<SkyDome>();
-	m_pEnemyManager = std::make_shared<EnemyManager>(stage, this);
-	m_pItemManager = std::make_shared<ItemManager>(stage, this);
-	m_pToonShader = std::make_shared<ToonShader>();
-	m_pShadowMapShader = std::make_shared<ShadowMapShader>();
-	m_gameEndTime = std::make_shared<Time>(kGameEndTime);
-
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®è¿½åŠ 
 	AddObject(new Player);
-	AddObject(new Field(stage));
+	AddObject(new Field(stageKind));
 
+	// ã‚¢ã‚¤ãƒ†ãƒ ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã®åˆæœŸåŒ–
 	m_pItemManager->Init();
+	// ã‚¨ãƒãƒŸãƒ¼ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã®åˆæœŸåŒ–
 	m_pEnemyManager->Init();
 }
 
 ObjectManager::~ObjectManager()
 {
-	DeleteGraph(m_H);
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒã‚¤ãƒ³ã‚¿ã‚’è§£æ”¾ã™ã‚‹
 	std::list<ObjectBase*>::iterator it = m_pObject.begin();
 	while (it != m_pObject.end())
 	{
@@ -62,25 +61,25 @@ ObjectManager::~ObjectManager()
 
 void ObjectManager::Update()
 {
-	// ƒIƒuƒWƒFƒNƒg”z—ñ‚ÌÅ‰‚ÌƒCƒeƒŒ[ƒ^‚ğæ“¾‚·‚é
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…åˆ—ã®æœ€åˆã®ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã‚’å–å¾—ã™ã‚‹
 	std::list<ObjectBase*>::iterator it = m_pObject.begin();
 	while (it != m_pObject.end())
 	{
-		// ƒIƒuƒWƒFƒNƒg‚ÌXV
+		// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ›´æ–°
 		auto obj = (*it);
 		obj->Update();
 
-		// ƒIƒuƒWƒFƒNƒg‚ª‘¶İ‚µ‚Ä‚¢‚È‚¢ê‡
+		// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒå­˜åœ¨ã—ã¦ã„ãªã„å ´åˆ
 		if (!obj->GetInfo().isExist)
 		{
-			// ƒIƒuƒWƒFƒNƒg‚ªƒAƒCƒeƒ€‚¾‚Á‚½ê‡
+			// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚¢ã‚¤ãƒ†ãƒ ã ã£ãŸå ´åˆ
 			if (obj->GetColType() == ObjectBase::ColType::Item)
 			{
-				// ƒQƒbƒg”‚ğ‘‚â‚·
+				// ã‚²ãƒƒãƒˆæ•°ã‚’å¢—ã‚„ã™
 				m_pItemManager->AddGetNum();
 			}
 
-			// ƒIƒuƒWƒFƒNƒg‚ªƒvƒŒƒCƒ„[ˆÈŠO‚¾‚Á‚½ê‡
+			// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ä»¥å¤–ã ã£ãŸå ´åˆ
 			if (obj->GetColType() != ObjectBase::ColType::Player)
 			{
 				delete obj;
@@ -89,58 +88,57 @@ void ObjectManager::Update()
 			}
 			else
 			{
-				// ƒCƒeƒŒ[ƒ^‚ği‚ß‚é
+				// ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã‚’é€²ã‚ã‚‹
 				it++;
 			}
 		}
 		else
 		{
-			// ƒCƒeƒŒ[ƒ^‚ği‚ß‚é
+			// ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã‚’é€²ã‚ã‚‹
 			it++;
 		}
 	}
 
-	// ƒAƒCƒeƒ€‚ğ‚·‚×‚ÄW‚ß‚½ê‡
-	if (m_pItemManager->IsClear())
+	if (m_pItemManager->IsClear()) // ã‚¢ã‚¤ãƒ†ãƒ ã‚’ã™ã¹ã¦é›†ã‚ãŸå ´åˆ
 	{
-		// ƒNƒŠƒAƒtƒ‰ƒO‚ğtrue‚É‚·‚é
-		m_isGameEnd = true;
+		// ã‚¹ãƒ†ãƒ¼ã‚¸ã‚’çµ‚äº†ã™ã‚‹
+		m_isStageEnd = true;
 	}
-
-	if (m_isGameEnd)
+	
+	if (m_isStageEnd)	// ã‚¹ãƒ†ãƒ¼ã‚¸ãŒçµ‚äº†ã—ãŸå ´åˆ
 	{
-		// ˆê’èŠÔ‚½‚Á‚½‚çƒNƒŠƒAƒtƒ‰ƒO‚ğ—§‚Ä‚é
-		if (IsObjGameEnd())
+		if (IsObjStageEnd()) 	// å…¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®çµ‚äº†å‡¦ç†ãŒçµ‚ã‚ã£ãŸã‚‰
 		{
-			m_isGameEnd = false;
+			// ã‚¯ãƒªã‚¢ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
+			m_isStageEnd = false;
 			m_isGameClear = true;
 		}
-		else
+		else	// çµ‚ã‚ã£ã¦ã„ãªã‹ã£ãŸã‚‰
 		{
+			// çµ‚äº†å‡¦ç†ã‚’ç¶šã‘ã‚‹
 			GameEndUpdate();
 		}
 	}
 
-	if (m_isGameClear)
+	if (m_isGameClear)	// ã‚¯ãƒªã‚¢ãƒ•ãƒ©ã‚°ãŒç«‹ã£ãŸã‚‰
 	{
-		// ƒNƒŠƒA‚Ìˆ—‚ğ‚·‚é
+		// ã‚¯ãƒªã‚¢æ™‚ã®å‡¦ç†ã‚’ã™ã‚‹
 		GameClearUpdate();
 	}
 
-	// ƒXƒJƒCƒh[ƒ€‚ÌXV
+	// ã‚¹ã‚«ã‚¤ãƒ‰ãƒ¼ãƒ ã®æ›´æ–°
 	m_pSkyDome->Update(GetPlayer()->GetInfo().pos);
 
-	// ƒNƒŠƒA‚µ‚Ä‚¢‚éê‡‚ÍXVˆ—‚ğs‚í‚È‚¢
+	// ã‚¯ãƒªã‚¢ã—ã¦ã„ã‚‹å ´åˆã¯å½“ãŸã‚Šåˆ¤å®šå‡¦ç†ã‚’è¡Œã‚ãªã„
 	if (m_isGameClear) return;
-
-	// “–‚½‚è”»’è
+	// å½“ãŸã‚Šåˆ¤å®š
 	for (auto& myObj : m_pObject)
 	{
 		for (auto& targetObj : m_pObject)
 		{
-			// “¯‚¶ƒIƒuƒWƒFƒNƒg‚Ìê‡‚Í“–‚½‚è”»’è‚Ìˆ—‚ğ‚µ‚È‚¢
+			// åŒã˜ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å ´åˆã¯å½“ãŸã‚Šåˆ¤å®šã®å‡¦ç†ã‚’ã—ãªã„
 			if (myObj == targetObj)continue;
-			// “–‚½‚è”»’è‚Ìˆ—
+			// å½“ãŸã‚Šåˆ¤å®šã®å‡¦ç†
 			m_pCollision->Update(myObj, targetObj);
 		}
 	}
@@ -148,69 +146,69 @@ void ObjectManager::Update()
 
 void ObjectManager::Draw()
 {
-	// ƒJƒƒ‰‚ÌˆÊ’u‚ÌƒŠƒZƒbƒg
+	// ã‚«ãƒ¡ãƒ©ã®ä½ç½®ã®ãƒªã‚»ãƒƒãƒˆ
 	GetPlayer()->GetCamera()->ResetCamera();
 
-	// ƒXƒJƒCƒh[ƒ€‚Ì•`‰æ
+	// ã‚¹ã‚«ã‚¤ãƒ‰ãƒ¼ãƒ ã®æç”»
 	m_pSkyDome->Draw();
 
-	// ƒIƒuƒWƒFƒNƒg‚Ì•`‰æ
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æç”»
 	for (auto& obj : m_pObject)
 	{
-		// ƒJƒƒ‰ŠO‚É‚¢‚é‚Æ‚«‚Í•`‰æ‚ğ‚µ‚È‚¢
+		// ã‚«ãƒ¡ãƒ©ã«æ˜ ã£ã¦ã„ãªã„ã¨ãã¯æç”»ã‚’ã—ãªã„
 		if (!CheckCameraViewClip(obj->GetInfo().pos))
 		{
 			obj->Draw(m_pToonShader);
 		}
 	}
 
-	// ƒVƒƒƒhƒEƒ}ƒbƒv‚Ì‘‚«‚İŠJn
+	// ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—ã®æ›¸ãè¾¼ã¿é–‹å§‹
 	m_pShadowMapShader->WriteStart(GetPlayer()->GetPos());
 
 	for (auto& obj : m_pObject)
 	{
-		// ƒtƒB[ƒ‹ƒhˆÈŠO‚Éˆ—‚ğs‚¤
-		// (ƒtƒB[ƒ‹ƒh‚ÉƒVƒƒƒhƒEƒ}ƒbƒv‚ğ’£‚è•t‚¯‚é‚½‚ß)
+		// ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä»¥å¤–ã«å‡¦ç†ã‚’è¡Œã†
+		// (ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—ã‚’å¼µã‚Šä»˜ã‘ã‚‹ãŸã‚)
 		if (obj->GetColType() != ObjectBase::ColType::Field)
 		{
 			obj->ShadowMapDraw(m_pShadowMapShader);
 		}
 	}
 
-	// I—¹
+	// çµ‚äº†
 	m_pShadowMapShader->WriteEnd();
 
-	// ƒJƒƒ‰‚ÌˆÊ’u‚ÌƒŠƒZƒbƒg
+	// ã‚«ãƒ¡ãƒ©ã®ä½ç½®ã®ãƒªã‚»ãƒƒãƒˆ
 	GetPlayer()->GetCamera()->ResetCamera();
 
-	// ƒtƒB[ƒ‹ƒh‚ÉƒVƒƒƒhƒEƒ}ƒbƒv‚ğ’£‚è•t‚¯‚é€”õ‚ğ‚·‚é
+	// ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—ã‚’å¼µã‚Šä»˜ã‘ã‚‹æº–å‚™ã‚’ã™ã‚‹
 	m_pShadowMapShader->SetShaderField(GetPlayer()->GetPos());
 	for (auto& obj : m_pObject)
 	{
-		//‚±‚±‚Å‚ÍƒtƒB[ƒ‹ƒh‚¾‚¯•`‰æ‚ğs‚¤
+		//ã“ã“ã§ã¯ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã ã‘æç”»ã‚’è¡Œã†
 		if (obj->GetColType() == ObjectBase::ColType::Field)
 		{
 			obj->ShadowMapDraw(m_pShadowMapShader);
 		}
 	}
-	// ì‹ÆI—¹
+	// ä½œæ¥­çµ‚äº†
 	m_pShadowMapShader->WriteEnd();
 
-	 //ƒXƒe[ƒWƒNƒŠƒA‚Í•`‰æ‚ğ‚µ‚È‚¢
+	 //ã‚¹ãƒ†ãƒ¼ã‚¸ã‚¯ãƒªã‚¢æ™‚ã¯æç”»ã‚’ã—ãªã„
 	if (!m_isGameClear)
 	{
-		// ƒJƒƒ‰‚ÌˆÊ’u‚ÌƒŠƒZƒbƒg
+		// ã‚«ãƒ¡ãƒ©ã®ä½ç½®ã®ãƒªã‚»ãƒƒãƒˆ
 		GetPlayer()->GetCamera()->ResetCamera();
 
-	// 2D•`‰æ
+	// 2Dæç”»
 		for (auto& obj : m_pObject)
 		{
 			obj->Draw2D();
 		}
-		// c‚èƒAƒCƒeƒ€”•`‰æ
+		// æ®‹ã‚Šã‚¢ã‚¤ãƒ†ãƒ æ•°æç”»
 		m_pItemManager->Draw();		
 	}
-	 //ƒJƒƒ‰‚ÌˆÊ’u‚ÌƒŠƒZƒbƒg
+	 //ã‚«ãƒ¡ãƒ©ã®ä½ç½®ã®ãƒªã‚»ãƒƒãƒˆ
 	GetPlayer()->GetCamera()->ResetCamera();
 }
 
@@ -219,31 +217,9 @@ bool ObjectManager::IsPlayerExist()
 	return GetPlayer()->GetInfo().isExist;
 }
 
-bool ObjectManager::IsEnemyExist()
-{
-	for (auto& enemy : m_pObject)
-	{
-		if (enemy->GetColType() != ObjectBase::ColType::Enemy) continue;
-
-		if (enemy->GetInfo().isExist) return true;
-	}
-	return false;
-}
-
-bool ObjectManager::IsItemExist()
-{
-	for (auto& item : m_pObject)
-	{
-		if (item->GetColType() != ObjectBase::ColType::Item) continue;
-
-		if (item->GetInfo().isExist) return true;
-	}
-	return false;
-}
-
 int ObjectManager::GetItemNum() const
 {
-	// c‚èƒAƒCƒeƒ€‚Ì”
+	// æ®‹ã‚Šã‚¢ã‚¤ãƒ†ãƒ ã®æ•°
 	int itemNum = 0;
 
 	for (auto& item : m_pObject)
@@ -255,21 +231,20 @@ int ObjectManager::GetItemNum() const
 	return itemNum;
 }
 
-bool ObjectManager::IsObjGameEnd()
+bool ObjectManager::IsObjStageEnd()
 {
-	
 	for (auto& obj : m_pObject)
 	{
-		// ‰½‚©ˆê‚Â‚Å‚àI—¹ˆ—‚ğI‚¦‚Ä‚¢‚È‚¢ƒIƒuƒWƒFƒNƒg‚ª‚ ‚Á‚½‚ç
-		// false‚Å•Ô‚·
+		// ä½•ã‹ä¸€ã¤ã§ã‚‚çµ‚äº†å‡¦ç†ã‚’çµ‚ãˆã¦ã„ãªã„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚ã£ãŸã‚‰
+		// falseã§è¿”ã™
 		if (!obj->IsStageEnd())
 		{
 			return false;
 		}
 	}
 
-	// ‚·‚×‚Ä‚ÌƒIƒuƒWƒFƒNƒg‚ÌI—¹ˆ—‚ªI‚¦‚Ä‚©‚ç
-	// ˆê’èŠÔ‚½‚Á‚½‚çŸ‚ÌƒV[ƒ“‚É”ò‚Ô
+	// ã™ã¹ã¦ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®çµ‚äº†å‡¦ç†ãŒçµ‚ãˆã¦ã‹ã‚‰
+	// ä¸€å®šæ™‚é–“ãŸã£ãŸã‚‰æ¬¡ã®ã‚·ãƒ¼ãƒ³ã«é£›ã¶
 	if (m_gameEndTime->Update())
 	{
 		return true;
@@ -280,7 +255,7 @@ bool ObjectManager::IsObjGameEnd()
 
 Player* const ObjectManager::GetPlayer()
 {
-	// ‘SƒIƒuƒWƒFƒNƒg‚ğŒŸõ‚·‚é
+	// å…¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ¤œç´¢ã—ã¦ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’è¦‹ã¤ã‘ã‚‹
 	for (auto& obj : m_pObject)
 	{
 		if (obj->GetColType() != ObjectBase::ColType::Player) continue;
@@ -293,9 +268,9 @@ Player* const ObjectManager::GetPlayer()
 
 void ObjectManager::SetGameClear()
 {
-	// ƒNƒŠƒAƒtƒ‰ƒO‚ğtrue‚É‚·‚é
+	// ã‚¯ãƒªã‚¢ãƒ•ãƒ©ã‚°ã‚’trueã«ã™ã‚‹
 	m_isGameClear = true;
-	// ƒNƒŠƒA‚Ìˆ—‚ğs‚¤
+	// ã‚¯ãƒªã‚¢æ™‚ã®å‡¦ç†ã‚’è¡Œã†
 	GameClearUpdate();
 }
 
@@ -303,7 +278,7 @@ void ObjectManager::GameClearUpdate()
 {
 	for (auto& obj : m_pObject)
 	{
-		// ƒXƒe[ƒWƒNƒŠƒAˆ—
+		// ã‚¹ãƒ†ãƒ¼ã‚¸ã‚¯ãƒªã‚¢å‡¦ç†
 		obj->StageClear();
 	}
 }
@@ -312,7 +287,7 @@ void ObjectManager::GameEndUpdate()
 {
 	for (auto& obj : m_pObject)
 	{
-		// I—¹ˆ—
+		// çµ‚äº†å‡¦ç†
 		obj->StageEnd();
 	}
 }

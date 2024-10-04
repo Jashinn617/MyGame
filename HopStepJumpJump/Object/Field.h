@@ -7,32 +7,63 @@ class Model;
 class Field : public ObjectBase
 {
 public:
-	Field() {};
-	Field(Game::Stage stage);
-	~Field();
-
-	void Init();
-	void Update() override final;
-	
-	virtual void Draw(std::shared_ptr<ToonShader> pToonShader) override final;
-
-	virtual void ShadowMapDraw(std::shared_ptr<ShadowMapShader> pShadoeMapShader) override final;
-
-	virtual void Draw2D() override final;
-
-	virtual void StageClear() override final;
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	Field();
 
 	/// <summary>
-	/// ゲーム終了時処理
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="stage">ステージの種類</param>
+	Field(Game::Stage stageKind);
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~Field();
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	void Init() override final {/*処理無し*/ };
+
+	/// <summary>
+	/// 更新
+	/// </summary>
+	void Update() override final;
+	
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="pToonShader">トゥーンシェーダ</param>
+	virtual void Draw(std::shared_ptr<ToonShader> pToonShader) override final;
+
+	/// <summary>
+	/// シャドウマップ描画
+	/// </summary>
+	/// <param name="pShadoeMapShader">シャドウマップシェーダ</param>
+	virtual void ShadowMapDraw(std::shared_ptr<ShadowMapShader> pShadoeMapShader) override final;
+
+	/// <summary>
+	/// 2D描画
+	/// </summary>
+	virtual void Draw2D() override final {/*処理無し*/ };
+
+	/// <summary>
+	/// ステージクリア時処理
+	/// </summary>
+	virtual void StageClear() override final {/*処理無し*/ };
+
+	/// <summary>
+	/// ステージ終了時処理
 	/// </summary>
 	void StageEnd() override final;
 
 	/// <summary>
 	/// 自身の当たり判定情報
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>当たり判定の種類</returns>
 	virtual ColType GetColType() const override final { return ColType::Field; }
-
-private:
 };
 

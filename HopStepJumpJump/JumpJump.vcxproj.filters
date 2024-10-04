@@ -16,9 +16,6 @@
     <Filter Include="ソース ファイル\Util">
       <UniqueIdentifier>{5dc3560a-f048-47a4-bc65-028c4abd2ba1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\Stage">
-      <UniqueIdentifier>{3c2bca42-5390-4c57-a9c8-c33aff5ab292}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ヘッダー ファイル\Util">
       <UniqueIdentifier>{fa235003-a90c-4387-8907-e9bcbe75081b}</UniqueIdentifier>
     </Filter>

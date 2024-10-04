@@ -1,154 +1,146 @@
-#pragma once
+ï»¿#pragma once
 #include "DxLib.h"
 #include <vector>
 #include <memory>
 
 class Model
 {
-public:	// ŠÖ”
+public:	// é–¢æ•°
 
 	/// <summary>
-	/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	/// ƒtƒ@ƒCƒ‹–¼‚ðŽw’è‚µ‚Äƒ[ƒh‚ðs‚¤
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// ãƒ•ã‚¡ã‚¤ãƒ«åã‚’æŒ‡å®šã—ã¦ãƒ­ãƒ¼ãƒ‰ã‚’è¡Œã†
 	/// </summary>
-	/// <param name="fileName">ƒtƒ@ƒCƒ‹–¼</param>
+	/// <param name="fileName">ãƒ•ã‚¡ã‚¤ãƒ«å</param>
 	Model(const char* fileName);
 
 	/// <summary>
-	/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	/// Žw’è‚µ‚½ƒnƒ“ƒhƒ‹‚Ìƒ‚ƒfƒ‹‚ðƒRƒs[‚Æ‚µ‚Ä¶¬‚·‚é
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// æŒ‡å®šã—ãŸãƒãƒ³ãƒ‰ãƒ«ã®ãƒ¢ãƒ‡ãƒ«ã‚’ã‚³ãƒ”ãƒ¼ã¨ã—ã¦ç”Ÿæˆã™ã‚‹
 	/// </summary>
-	/// <param name="ModelH"></param>
+	/// <param name="ModelH">ãƒ¢ãƒ‡ãƒ«ãƒãƒ³ãƒ‰ãƒ«</param>
 	Model(int modelH);
 
 	/// <summary>
-	/// ƒfƒXƒgƒ‰ƒNƒ^
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
 	virtual ~Model();
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
-	void Update();
+	void AnimationUpdate();
 
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
 	void Draw();
 
-
 	/// <summary>
-	/// ˆÊ’u‚ÌÝ’è
+	/// ä½ç½®ã®è¨­å®š
 	/// </summary>
-	/// <param name="pos">ˆÊ’u</param>
+	/// <param name="pos">åº§æ¨™</param>
 	void SetPos(VECTOR pos);
 
 	/// <summary>
-	/// ƒTƒCƒY‚ÌÝ’è
+	/// ã‚µã‚¤ã‚ºã®è¨­å®š
 	/// </summary>
-	/// <param name="scale">ƒTƒCƒY</param>
+	/// <param name="scale">ã‚µã‚¤ã‚º</param>
 	void SetScale(VECTOR scale);
 
 	/// <summary>
-	/// ‰ñ“]ó‘Ô‚ÌÝ’è
+	/// è§’åº¦ã®è¨­å®š
 	/// </summary>
-	/// <param name="rot">‰ñ“]</param>
+	/// <param name="rot">è§’åº¦</param>
 	void SetRot(VECTOR rot);
 
 	/// <summary>
-	/// ƒ‚ƒfƒ‹ƒnƒ“ƒhƒ‹‚ÌŽæ“¾
+	/// ãƒ¢ãƒ‡ãƒ«ãƒãƒ³ãƒ‰ãƒ«ã®å–å¾—
 	/// </summary>
-	/// <returns>ƒ‚ƒfƒ‹ƒnƒ“ƒhƒ‹</returns>
+	/// <returns>ãƒ¢ãƒ‡ãƒ«ãƒãƒ³ãƒ‰ãƒ«</returns>
 	int GetModelHandle()const { return m_modelH; }
 
 	/// <summary>
-	/// “–‚½‚è”»’è—p‚ÌƒtƒŒ[ƒ€ƒCƒ“ƒfƒbƒNƒX‚ÌŽæ“¾
+	/// å½“ãŸã‚Šåˆ¤å®šç”¨ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®å–å¾—
 	/// </summary>
 	/// <returns></returns>
 	int GetColFrameIndex() const { return m_colFrameIndex; }
 
 
 	/// <summary>
-	/// ˆÊ’u‚ÌŽæ“¾
+	/// ä½ç½®ã®å–å¾—
 	/// </summary>
-	/// <returns>ˆÊ’u</returns>
+	/// <returns>ä½ç½®</returns>
 	VECTOR GetPos()const { return m_pos; }
 
-	/*ƒAƒjƒ[ƒVƒ‡ƒ“§Œä*/
-
+	/*ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³åˆ¶å¾¡*/
 	/// <summary>
-	/// ƒAƒjƒ[ƒVƒ‡ƒ“‚ðÝ’è‚·‚é
-	/// (ƒuƒŒƒ“ƒh—¦‚Él—¶‚¹‚¸‚ÉØ‚è‘Ö‚¦‚é)
+	/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’è¨­å®šã™ã‚‹
+	/// (ãƒ–ãƒ¬ãƒ³ãƒ‰çŽ‡ã«è€ƒæ…®ã›ãšã«åˆ‡ã‚Šæ›¿ãˆã‚‹)
 	/// </summary>
-	/// <param name="animNo">•ÏXŒã‚ÌƒAƒjƒ[ƒVƒ‡ƒ“”Ô†</param>
-	/// <param name="isLoop">ƒAƒjƒ[ƒVƒ‡ƒ“‚ªƒ‹[ƒv‚·‚é‚©</param>
-	/// <param name="isForceChange">Šù‚ÉanimNo‚Æ“¯‚¶ƒAƒjƒ[ƒVƒ‡ƒ“‚ªÄ¶‚³‚ê‚Ä‚¢‚Ä‚à•ÏX‚·‚é‚©</param>
+	/// <param name="animNo">å¤‰æ›´å¾Œã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ç•ªå·</param>
+	/// <param name="isLoop">ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãŒãƒ«ãƒ¼ãƒ—ã™ã‚‹ã‹</param>
+	/// <param name="isForceChange">æ—¢ã«animNoã¨åŒã˜ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãŒå†ç”Ÿã•ã‚Œã¦ã„ã¦ã‚‚å¤‰æ›´ã™ã‚‹ã‹</param>
 	void SetAnim(int animNo, bool isLoop, bool isForceChange);
 
 	/// <summary>
-	/// ƒAƒjƒ[ƒVƒ‡ƒ“‚ð•Ï‰»‚³‚¹‚é
-	/// (changeFrame‚©‚¯‚ÄƒAƒjƒ[ƒVƒ‡ƒ“‚ðØ‚è‘Ö‚¦‚é)
+	/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å¤‰åŒ–ã•ã›ã‚‹
+	/// (changeFrameã‹ã‘ã¦ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹)
 	/// </summary>
-	/// <param name="animNo">•ÏXŒã‚ÌƒAƒjƒ[ƒVƒ‡ƒ“”Ô†</param>
-	/// <param name="isLoop">ƒAƒjƒ[ƒVƒ‡ƒ“‚ªƒ‹[ƒv‚·‚é‚©</param>
-	/// <param name="isForceChange">Šù‚ÉanimNo‚Æ“¯‚¶ƒAƒjƒ[ƒVƒ‡ƒ“‚ªÄ¶‚³‚ê‚Ä‚¢‚Ä‚à•ÏX‚·‚é‚©</param>
-	/// <param name="changeFrameNum">ƒAƒjƒ[ƒVƒ‡ƒ“‚ð•Ï‰»‚³‚¹‚éƒtƒŒ[ƒ€”</param>
+	/// <param name="animNo">å¤‰æ›´å¾Œã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ç•ªå·</param>
+	/// <param name="isLoop">ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãŒãƒ«ãƒ¼ãƒ—ã™ã‚‹ã‹</param>
+	/// <param name="isForceChange">æ—¢ã«animNoã¨åŒã˜ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãŒå†ç”Ÿã•ã‚Œã¦ã„ã¦ã‚‚å¤‰æ›´ã™ã‚‹ã‹</param>
+	/// <param name="changeFrameNum">ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å¤‰åŒ–ã•ã›ã‚‹ãƒ•ãƒ¬ãƒ¼ãƒ æ•°</param>
 	void ChangeAnim(int animNo, bool isLoop, bool isForceChange, int changeFrameNum);
 
 	/// <summary>
-	/// Œ»Ý‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚ªI—¹‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ðŽæ“¾‚·‚é
-	/// (Loop‚·‚éƒAƒjƒ[ƒVƒ‡ƒ“‚Ìê‡‚ÍŽæ“¾‚Å‚«‚È‚¢)
+	/// ç¾åœ¨ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãŒçµ‚äº†ã—ã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’å–å¾—ã™ã‚‹
+	/// (Loopã™ã‚‹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å ´åˆã¯å–å¾—ã§ããªã„)
 	/// </summary>
-	/// <returns>ƒAƒjƒ[ƒVƒ‡ƒ“‚ªI—¹‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©</returns>
+	/// <returns>ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãŒçµ‚äº†ã—ã¦ã„ã‚‹ã‹ã©ã†ã‹</returns>
 	bool IsAnimEnd();
 
-private:	// \‘¢‘Ì
-	// ƒAƒjƒ[ƒVƒ‡ƒ“î•ñ
+private:	// æ§‹é€ ä½“
+	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±
 	struct AnimData
 	{
-		int animNo;			// ƒAƒjƒ[ƒVƒ‡ƒ“”Ô†
-		int attachNo;		// ƒAƒ^ƒbƒ`”Ô†
-		float totalTime;	// ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì‘Ä¶ŽžŠÔ
-		bool isLoop;		// ƒAƒjƒ[ƒVƒ‡ƒ“‚ªƒ‹[ƒv‚·‚é‚Ì‚©
+		int animNo;			// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ç•ªå·
+		int attachNo;		// ã‚¢ã‚¿ãƒƒãƒç•ªå·
+		float totalTime;	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®ç·å†ç”Ÿæ™‚é–“
+		bool isLoop;		// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãŒãƒ«ãƒ¼ãƒ—ã™ã‚‹ã‹
 	};
 
-private:	// ŠÖ”
+private:	// é–¢æ•°
 	/// <summary>
-	/// ƒAƒjƒ[ƒVƒ‡ƒ“î•ñ‚ÌƒNƒŠƒA
+	/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã®ã‚¯ãƒªã‚¢
 	/// </summary>
-	/// <param name="anim"></param>
+	/// <param name="anim">ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±</param>
 	void ClearAnimData(AnimData& anim);
 
 	/// <summary>
-	/// ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌXV
+	/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®æ›´æ–°
 	/// </summary>
-	/// <param name="anim">ƒAƒjƒ[ƒVƒ‡ƒ“î•ñ</param>
-	/// <param name="dt">ƒAƒjƒ[ƒVƒ‡ƒ“ƒXƒs[ƒh(ƒfƒtƒHƒ‹ƒg‚Í1.0f)</param>
+	/// <param name="anim">ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±</param>
+	/// <param name="dt">ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³é€Ÿåº¦(ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã¯1.0f)</param>
 	void UpdateAnim(AnimData anim, float animSpeed = 1.0f);
 
 	/// <summary>
-	// ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌƒuƒŒƒ“ƒh—¦‚ðÝ’è‚·‚é
+	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®ãƒ–ãƒ¬ãƒ³ãƒ‰çŽ‡ã‚’è¨­å®šã™ã‚‹
 	/// </summary>
 	void UpdateAnimBlendRate();
 
+private:	// å¤‰æ•°
+	int m_modelH;					// ãƒ¢ãƒ‡ãƒ«ãƒãƒ³ãƒ‰ãƒ«
+	int m_animSpeed;				// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³é€Ÿåº¦
+	VECTOR m_pos;					// åº§æ¨™
+	/*ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®åˆ‡ã‚Šæ›¿ãˆæƒ…å ±*/
+	int m_animChangeFrame;			// ç¾åœ¨ã®åˆ‡ã‚Šæ›¿ãˆãƒ•ãƒ¬ãƒ¼ãƒ æ•°
+	int m_animChangeFrameTotal;		// åˆ‡ã‚Šæ›¿ãˆã«ã‹ã‘ã‚‹ç·ãƒ•ãƒ¬ãƒ¼ãƒ æ•°
+	int m_animChangeSpeed;			// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å¤‰æ›´é€Ÿåº¦
+	int m_colFrameIndex;			// å½“ãŸã‚Šåˆ¤å®šã¨ã—ã¦ä½¿ç”¨ã™ã‚‹ãƒ•ãƒ¬ãƒ¼ãƒ ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
+	bool m_isUseCol;				// å½“ãŸã‚Šåˆ¤å®šã®æƒ…å ±ã‚’ä½¿ç”¨ã™ã‚‹ã‹ã©ã†ã‹
+	bool m_isUpdateCol;				// å½“ãŸã‚Šåˆ¤å®šã®æƒ…å ±ã‚’æ¯Žãƒ•ãƒ¬ãƒ¼ãƒ æ›´æ–°ã™ã‚‹ã‹ã©ã†ã‹
 
-private:	// •Ï”
-	VECTOR m_pos;					// ˆÊ’u
-	int m_modelH;					// ƒ‚ƒfƒ‹ƒnƒ“ƒhƒ‹
-	int m_animSpeed;
-
-	/*ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌØ‚è‘Ö‚¦î•ñ*/
-	int m_animChangeFrame;			// Œ»Ý‚ÌØ‚è‘Ö‚¦ƒtƒŒ[ƒ€”
-	int m_animChangeFrameTotal;		// Ø‚è‘Ö‚¦‚É‚©‚¯‚é‘ƒtƒŒ[ƒ€”
-
-	int m_animChangeSpeed;			// ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì•ÏX‘¬“x
-	int m_colFrameIndex;		// “–‚½‚è”»’è‚Æ‚µ‚ÄŽg—p‚·‚éƒtƒŒ[ƒ€‚ÌƒCƒ“ƒfƒbƒNƒX
-
-	bool m_isUseCol;				// “–‚½‚è”»’è‚Ìî•ñ‚ðŽg—p‚·‚é‚©‚Ç‚¤‚©
-	bool m_isUpdateCol;				// “–‚½‚è”»’è‚Ìî•ñ‚ð–ˆƒtƒŒ[ƒ€XV‚·‚é‚©‚Ç‚¤‚©
-
-	AnimData m_prevAnim;		// •ÏX‘O‚ÌƒAƒjƒ[ƒVƒ‡ƒ“
-	AnimData m_nextAnim;		// •ÏXŒã‚ÌƒAƒjƒ[ƒVƒ‡ƒ“
-
+	AnimData m_prevAnim;		// å¤‰æ›´å‰ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
+	AnimData m_nextAnim;		// å¤‰æ›´å¾Œã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
 };
-

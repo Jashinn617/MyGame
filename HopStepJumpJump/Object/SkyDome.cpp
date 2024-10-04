@@ -1,42 +1,42 @@
-#include "SkyDome.h"
+ï»¿#include "SkyDome.h"
 #include "Model.h"
 
 namespace
 {
-	constexpr float kRotSpeed = 0.0004f;	// ‰ñ“]‘¬“x
-	const char* const kSkyDomeFileName = "Data/Model/Sky/Dome.mv1";		// ƒ‚ƒfƒ‹‚Ìƒtƒ@ƒCƒ‹ƒpƒX
-	const VECTOR kSkyDomeScale = VGet(35.0f, 35.0f, 35.0f);			// ƒ‚ƒfƒ‹‚ÌƒXƒP[ƒ‹
+	const char* const kSkyDomeFileName = "Data/Model/Sky/Dome.mv1";		// ãƒ¢ãƒ‡ãƒ«ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹
+	constexpr float kRotSpeed = 0.0004f;								// å›è»¢é€Ÿåº¦
+	const VECTOR kSkyDomeScale = VGet(35.0f, 35.0f, 35.0f);				// ãƒ¢ãƒ‡ãƒ«ã®ã‚¹ã‚±ãƒ¼ãƒ«
 }
 
 SkyDome::SkyDome():
-	m_rot(0.0f)
+	m_rot(0.0f),
+	m_pModel(std::make_shared<Model>(kSkyDomeFileName))
 {
-	// ƒ‚ƒfƒ‹ƒ|ƒCƒ“ƒ^‚Ì¶¬
-	m_pModel = std::make_shared<Model>(kSkyDomeFileName);
-
-	// ƒXƒJƒCƒh[ƒ€‚ÌƒXƒP[ƒ‹‚ğİ’è‚·‚é
+	// ã‚¹ã‚«ã‚¤ãƒ‰ãƒ¼ãƒ ã®ã‚¹ã‚±ãƒ¼ãƒ«ã‚’è¨­å®šã™ã‚‹
 	m_pModel->SetScale(kSkyDomeScale);
 }
 
 SkyDome::~SkyDome()
 {
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void SkyDome::Update(VECTOR pos)
 {
-	// ‰ñ“]
+	// å›è»¢
 	m_rot += kRotSpeed;
 
-	// ˆê‰ñ“]‚µ‚½‚ç’l‚ğƒŠƒZƒbƒg‚·‚é
+	// ä¸€å›è»¢ã—ãŸã‚‰å€¤ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹
 	if (m_rot >= DX_PI_F)m_rot = 0.0f;
 
-	// ƒXƒJƒCƒh[ƒ€‚ÌXV
+	// è§’åº¦æ›´æ–°
 	m_pModel->SetRot(VGet(0.0f, m_rot, 0.0f));
+	// åº§æ¨™æ›´æ–°
 	m_pModel->SetPos(VGet(pos.x, 0.0f, pos.z));
 }
 
 void SkyDome::Draw()
 {
+	// æç”»
 	m_pModel->Draw();
-
 }

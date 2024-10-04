@@ -1,39 +1,56 @@
-#pragma once
+ï»¿#pragma once
 
 #include "DxLib.h"
 
 class ToonShader
 {
 public:
+	/// <summary>
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// </summary>
 	ToonShader();
+
+	/// <summary>
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// </summary>
 	virtual ~ToonShader();
 
-	void Update();
+	/// <summary>
+	/// ã‚·ã‚§ãƒ¼ãƒ€ã®è¨­å®š
+	/// </summary>
+	/// <param name="shaderType">é ‚ç‚¹ã‚¿ã‚¤ãƒ—</param>
 	void SetShader(int shaderType);
+
+	/// <summary>
+	/// ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ã‚·ã‚§ãƒ¼ãƒ€ã®è¨­å®š
+	/// </summary>
+	/// <param name="shaderType">é ‚ç‚¹ã‚¿ã‚¤ãƒ—</param>
 	void SetShaderField(int shaderType);
+
+	/// <summary>
+	/// ã‚·ã‚§ãƒ¼ãƒ€ã‚’ä½¿ã‚ãªã„è¨­å®šã™ã‚‹
+	/// </summary>
 	void ShaderEnd();
 
 private:
-	/*’¸“_ƒVƒF[ƒ_*/
-	int m_vertexShader1FrameH;				//’¸“_ƒVƒF[ƒ_[1ƒtƒŒ[ƒ€ƒnƒ“ƒhƒ‹
-	int m_vertexShader4FrameH;				//’¸“_ƒVƒF[ƒ_[4ƒtƒŒ[ƒ€ƒnƒ“ƒhƒ‹
-	int m_vertexShader8FrameH;				//’¸“_ƒVƒF[ƒ_[8ƒtƒŒ[ƒ€ƒnƒ“ƒhƒ‹
-	int m_vertexShaderNormal4FrameH;		//’¸“_ƒVƒF[ƒ_[4ƒtƒŒ[ƒ€–@üƒ}ƒbƒv‚ ‚èƒnƒ“ƒhƒ‹
-	int m_vertexShaderNormal8FrameH;		//’¸“_ƒVƒF[ƒ_[8ƒtƒŒ[ƒ€–@üƒ}ƒbƒv‚ ‚èƒnƒ“ƒhƒ‹
-	/*ƒsƒNƒZƒ‹ƒVƒF[ƒ_*/
-	int m_pixelShaderH;				// ƒsƒNƒZƒ‹ƒVƒF[ƒ_‚Ìƒnƒ“ƒhƒ‹
-	int m_pixelShaderFieldH;		// ƒsƒNƒZƒ‹ƒVƒF[ƒ_‚ÌƒtƒB[ƒ‹ƒh‚É“K—p‚·‚éƒnƒ“ƒhƒ‹
-	
-	int m_graphH;					// ‰æ‘œƒnƒ“ƒhƒ‹
+	/*é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€*/
+	int m_vertexShader1FrameH;				//é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼1ãƒ•ãƒ¬ãƒ¼ãƒ ãƒãƒ³ãƒ‰ãƒ«
+	int m_vertexShader4FrameH;				//é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼4ãƒ•ãƒ¬ãƒ¼ãƒ ãƒãƒ³ãƒ‰ãƒ«
+	int m_vertexShader8FrameH;				//é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼8ãƒ•ãƒ¬ãƒ¼ãƒ ãƒãƒ³ãƒ‰ãƒ«
+	int m_vertexShaderNormal4FrameH;		//é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼4ãƒ•ãƒ¬ãƒ¼ãƒ æ³•ç·šãƒãƒƒãƒ—ã‚ã‚Šãƒãƒ³ãƒ‰ãƒ«
+	int m_vertexShaderNormal8FrameH;		//é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼8ãƒ•ãƒ¬ãƒ¼ãƒ æ³•ç·šãƒãƒƒãƒ—ã‚ã‚Šãƒãƒ³ãƒ‰ãƒ«
+	/*ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€*/
+	int m_pixelShaderH;				// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ã®ãƒãƒ³ãƒ‰ãƒ«
+	int m_pixelShaderFieldH;		// ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«é©ç”¨ã™ã‚‹ãƒãƒ³ãƒ‰ãƒ«
 
-	/*’è”ƒoƒbƒtƒ@‚Ìƒnƒ“ƒhƒ‹*/
-	int m_cbufferLightDirH;				// ƒ‰ƒCƒg‚ÌŒü‚«
-	int m_cbufferCameraTargetPosH;		// ƒJƒƒ‰‚Ìƒ^[ƒQƒbƒg‚ÌˆÊ’u
-	int m_cbufferCameraPosH;			// ƒJƒƒ‰‚ÌˆÊ’u
+	/*å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®ãƒãƒ³ãƒ‰ãƒ«*/
+	int m_cbufferLightDirH;				// ãƒ©ã‚¤ãƒˆã®å‘ã
+	int m_cbufferCameraTargetPosH;		// ã‚«ãƒ¡ãƒ©ã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ä½ç½®
+	int m_cbufferCameraPosH;			// ã‚«ãƒ¡ãƒ©ã®ä½ç½®
 
-	/*’è”ƒoƒbƒtƒ@‚ğ‚¢‚¶‚é‚½‚ß‚ÌƒAƒhƒŒƒX‚ÌƒRƒs[*/
-	VECTOR* m_pCbufferLightDir;				// ƒ‰ƒCƒg‚ÌŒü‚«
-	VECTOR* m_pCbuffferCameraTargetPos;		// ƒJƒƒ‰‚Ìƒ^[ƒQƒbƒg‚ÌˆÊ’u
-	VECTOR* m_pCbufferCameraPos;			// ƒJƒƒ‰‚ÌˆÊ’u
+	/*å®šæ•°ãƒãƒƒãƒ•ã‚¡ã‚’ã„ã˜ã‚‹ãŸã‚ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã®ã‚³ãƒ”ãƒ¼*/
+	VECTOR* m_pCbufferLightDir;				// ãƒ©ã‚¤ãƒˆã®å‘ã
+	VECTOR* m_pCbuffferCameraTargetPos;		// ã‚«ãƒ¡ãƒ©ã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ä½ç½®
+	VECTOR* m_pCbufferCameraPos;			// ã‚«ãƒ¡ãƒ©ã®ä½ç½®
 };
 

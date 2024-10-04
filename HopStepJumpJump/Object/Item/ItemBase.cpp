@@ -66,7 +66,7 @@ void ItemBase::Update()
 	m_info.vec = MoveUpdate();
 
 	// モデル更新
-	m_pModel->Update();
+	m_pModel->AnimationUpdate();
 
 	// 移動ベクトルを現在座標に足す
 	m_info.pos = VAdd(m_info.pos, m_info.vec);

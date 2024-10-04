@@ -4,23 +4,42 @@
 class ShadowMapShader
 {
 public:
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	ShadowMapShader();
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~ShadowMapShader();
 
-	// シャドウマップへの書き込みの開始
-	void WriteStart(VECTOR targetPos);
+	/// <summary>
+	/// シャドウマップへの書き込み開始処理
+	/// </summary>
+	/// <param name="targetPos">カメラターゲット座標</param>
+	void WriteStart(VECTOR cameraTargetPos);
 
 	/// <summary>
 	/// シャドウマップのカメラから見たターゲットを設定する
 	/// </summary>
-	/// <param name="targetPos"></param>
-	void SetShadowMapCameraTarget(VECTOR targetPos);
-
-	void SetShader(int shaderType);
-	void SetShaderField(VECTOR targetPos);
+	/// <param name="targetPos">カメラターゲット座標</param>
+	void SetShadowMapCameraTarget(VECTOR cameraTargetPos);
 
 	/// <summary>
-	/// シャドウマップへの書き込みを終わる
+	/// シェーダの設定
+	/// </summary>
+	/// <param name="shaderType">頂点タイプ</param>
+	void SetShader(int shaderType);
+
+	/// <summary>
+	/// フィールドのシェーダの設定
+	/// </summary>
+	/// <param name="targetPos">カメラターゲット座標</param>
+	void SetShaderField(VECTOR cameraTargetPos);
+
+	/// <summary>
+	/// シャドウマップへの書き込み終了処理
 	/// </summary>
 	void WriteEnd();
 
@@ -33,8 +52,8 @@ private:	// 関数
 	/// <summary>
 	/// ビュープロジェクション行列を作るための関数
 	/// </summary>
-	/// <param name="targetPos"></param>
-	/// <returns></returns>
+	/// <param name="targetPos">カメラターゲット座標</param>
+	/// <returns>ビュープロジェクション行列</returns>
 	MATRIX ViewProjectionMatrix(VECTOR targetPos);
 
 private:	// 変数
@@ -68,4 +87,3 @@ private:	// 変数
 	MATRIX* m_viewProjectionMat;
 	int m_shadowMap;	// シャドウマップ用の変数
 };
-

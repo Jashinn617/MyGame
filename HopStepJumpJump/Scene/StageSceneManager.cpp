@@ -1,4 +1,4 @@
-#include "StageSceneManager.h"
+ï»¿#include "StageSceneManager.h"
 
 #include "../Object/ObjectManager.h"
 
@@ -12,19 +12,19 @@
 
 namespace
 {
-	// ƒXƒe[ƒW‚²‚Æ‚ÌƒNƒŠƒAŠÔ‚ÌŠî€
+	// ã‚¹ãƒ†ãƒ¼ã‚¸ã”ã¨ã®ã‚¯ãƒªã‚¢æ™‚é–“ã®åŸºæº–
 	constexpr double kResultDataTable[static_cast<int>(Game::Stage::StageNum)] =
 	{
-		3600,		// ƒeƒXƒg
-		7200,		// ƒXƒe[ƒW1
-		14400,		// ƒXƒe[ƒW2
+		3600,		// ãƒ†ã‚¹ãƒˆ
+		7200,		// ã‚¹ãƒ†ãƒ¼ã‚¸1
+		14400,		// ã‚¹ãƒ†ãƒ¼ã‚¸2
 		0
 	};
 
-	/*‰æ‘œƒtƒ@ƒCƒ‹ƒpƒX*/
-	const char* const kClearTextFileName = "Data/Img/Result/GameClearLogo.png";		// ƒQ[ƒ€ƒNƒŠƒAƒeƒLƒXƒg
-	const char* const kOperationFileName = "Data/Img/Operation.png";				// ‘€ìà–¾
-	// ƒNƒŠƒAƒ^ƒCƒ€
+	/*ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹*/
+	const char* const kClearTextFileName = "Data/Img/Result/GameClearLogo.png";		// ã‚²ãƒ¼ãƒ ã‚¯ãƒªã‚¢ãƒ†ã‚­ã‚¹ãƒˆ
+	const char* const kOperationFileName = "Data/Img/Operation.png";				// æ“ä½œèª¬æ˜
+	// ã‚¯ãƒªã‚¢ã‚¿ã‚¤ãƒ 
 	const char* const kMyTimeNumFileName[11] =
 	{
 		 "Data/Img/Result/ClearTimeNum/ClearTimeNum0.png",
@@ -39,7 +39,7 @@ namespace
 		 "Data/Img/Result/ClearTimeNum/ClearTimeNum9.png",
 		 "Data/Img/Result/ClearTimeNum/ClearTime.png"
 	};
-	// ƒ‰ƒ“ƒLƒ“ƒOƒ^ƒCƒ€
+	// ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã‚¿ã‚¤ãƒ 
 	const char* const kRankingTimeNumFileName[11] =
 	{
 		"Data/Img/Ranking/RankingNum/RankingNum0.png",
@@ -54,7 +54,7 @@ namespace
 		"Data/Img/Ranking/RankingNum/RankingNum9.png",
 		"Data/Img/Ranking/RankingNum/RankingTime.png"
 	};
-	// ƒ‰ƒ“ƒN
+	// ãƒ©ãƒ³ã‚¯
 	const char* const kRankFileName[static_cast<int>(StageSceneManager::Rank::RankNum)] =
 	{
 		"Data/Img/Result/Rank/S.png",
@@ -62,104 +62,104 @@ namespace
 		"Data/Img/Result/Rank/B.png",
 		"Data/Img/Result/Rank/C.png"
 	};
-	// ƒeƒLƒXƒg
+	// ãƒ†ã‚­ã‚¹ãƒˆ
 	const char* const kTextFileName[3] =
 	{
 		"Data/Img/Result/ClearTimeText.png",
 		"Data/Img/Result/RankText.png",
 		"Data/Img/Result/RankingText.png"
 	};
-	// ƒ‰ƒ“ƒLƒ“ƒO
+	// ãƒ©ãƒ³ã‚­ãƒ³ã‚°
 	const char* const kRankingFileName[3] =
 	{
 		"Data/Img/Ranking/Ranking1.png",
 		"Data/Img/Ranking/Ranking2.png",
 		"Data/Img/Ranking/Ranking3.png"
 	};
-	// ƒeƒLƒXƒgƒ{ƒbƒNƒX
+	// ãƒ†ã‚­ã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹
 	const char* const kTextBoxFileName[2] =
 	{
 		"Data/Img/Result/ResultTextBox1.png",
 		"Data/Img/Result/ResultTextBox2.png"
 	};
-	// ƒ{ƒ^ƒ“
+	// ãƒœã‚¿ãƒ³
 	const char* const kButtonFileName[3] =
 	{
 		"Data/Img/Result/SceneChangeText1.png",
 		"Data/Img/Result/SceneChangeText2.png",
 		"Data/Img/Result/SceneChangeText3.png",
 	};
-	/*À•W*/
-	// ƒeƒLƒXƒg
+	/*åº§æ¨™*/
+	// ãƒ†ã‚­ã‚¹ãƒˆ
 	constexpr int kTextPosX1 = 537;
 	constexpr int kTextPosX2 = 1440;
 	constexpr int kTextPosY1 = 151;
 	constexpr int kTextPosY2 = 464;
-	// ƒ‰ƒ“ƒLƒ“ƒO
+	// ãƒ©ãƒ³ã‚­ãƒ³ã‚°
 	constexpr int kRankingPosX = 1209;
 	constexpr int kRnakingPosY1 = 350;
 	constexpr int kRnakingPosY2 = 600;
 	constexpr int kRnakingPosY3 = 850;
-	// ƒeƒLƒXƒgƒ{ƒbƒNƒXÀ•W
+	// ãƒ†ã‚­ã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹åº§æ¨™
 	constexpr int kTextBoxPosX1 = static_cast<int>(Game::kScreenWidth * 0.28f);
 	constexpr int kTextBoxPosX2 = static_cast<int>(Game::kScreenWidth * 0.75f);
 	constexpr int kTextBoxPosY = static_cast<int>(Game::kScreenHeight * 0.48f);
-	// ƒ‰ƒ“ƒNÀ•W
+	// ãƒ©ãƒ³ã‚¯åº§æ¨™
 	constexpr int kRankPosX = 500;
 	constexpr int kRankPosY = 750;
-	// ƒNƒŠƒAƒ^ƒCƒ€À•W
+	// ã‚¯ãƒªã‚¢ã‚¿ã‚¤ãƒ åº§æ¨™
 	constexpr int kClearMinutesFirstPosX = 200;
 	constexpr int kClearMinutesSecondPosX = 350;
 	constexpr int kClearSecondFirstPosX = 650;
 	constexpr int kClearSecondSecondPosX = 800;
 	constexpr int kClearTimeColonPosX = 500;
 	constexpr int kClearTimePosY = 300;
-	// ƒ‰ƒ“ƒLƒ“ƒOƒ^ƒCƒ€À•W
+	// ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã‚¿ã‚¤ãƒ åº§æ¨™
 	constexpr int kRankingMinutesFirstPosX = 1400;
 	constexpr int kRankingMinutesSecondPosX = 1500;
 	constexpr int kRankingSecondFirstPosX = 1600;
 	constexpr int kRankingSecondSecondPosX = 1700;
 	constexpr int kRankingTimeColonPosX = 1550;
 	constexpr int kRankingTimePosY[3] = { 350,600,850 };
-	// ƒ{ƒ^ƒ“À•W
+	// ãƒœã‚¿ãƒ³åº§æ¨™
 	constexpr int kButtonPosX = Game::kScreenWidth / 2;
 	constexpr int kButtonPosY1 = 200;
 	constexpr int kButtonPosY2 = 500;
 	constexpr int kButtonPosY3 = 750;
-	// ‘€ìà–¾À•W
+	// æ“ä½œèª¬æ˜åº§æ¨™
 	constexpr int kOperationPosX = 1750;
 	constexpr int kOperationPosY = 200;
-	// ƒNƒŠƒAƒeƒLƒXƒg
+	// ã‚¯ãƒªã‚¢ãƒ†ã‚­ã‚¹ãƒˆ
 	constexpr int kClearTextPosX = 1000;
 	constexpr int kClearTextPosY = 200;
 	
-	/*ƒTƒCƒY*/
-	constexpr float kRankingSize = 0.3f;		// ƒ‰ƒ“ƒLƒ“ƒO
-	constexpr float kClearTimeSize = 0.5f;		// ƒNƒŠƒAƒ^ƒCƒ€
-	constexpr float krankingTimeSize = 0.4f;	// ƒ‰ƒ“ƒLƒ“ƒOƒ^ƒCƒ€
-	constexpr float kButtonSize = 1.0f;			// ’Êí‚Ìƒ{ƒ^ƒ“
-	constexpr float kSelectButtonSize = 1.7f;	// ‘I‚Î‚ê‚Ä‚¢‚éƒ{ƒ^ƒ“
-	constexpr float kOperationSize = 0.5f;		// ‘€ìà–¾
-	constexpr float kClearTextSize = 1.2f;		// ƒNƒŠƒAƒeƒLƒXƒg
+	/*ã‚µã‚¤ã‚º*/
+	constexpr float kRankingSize = 0.3f;		// ãƒ©ãƒ³ã‚­ãƒ³ã‚°
+	constexpr float kClearTimeSize = 0.5f;		// ã‚¯ãƒªã‚¢ã‚¿ã‚¤ãƒ 
+	constexpr float krankingTimeSize = 0.4f;	// ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã‚¿ã‚¤ãƒ 
+	constexpr float kButtonSize = 1.0f;			// é€šå¸¸ã®ãƒœã‚¿ãƒ³
+	constexpr float kSelectButtonSize = 1.7f;	// é¸ã°ã‚Œã¦ã„ã‚‹ãƒœã‚¿ãƒ³
+	constexpr float kOperationSize = 0.5f;		// æ“ä½œèª¬æ˜
+	constexpr float kClearTextSize = 1.2f;		// ã‚¯ãƒªã‚¢ãƒ†ã‚­ã‚¹ãƒˆ
 
-	constexpr int kStartButtonPosY = 2000;		// ƒ{ƒ^ƒ“‚Ì‰ŠúÀ•W
-	constexpr int kButtonUpSpeed = 40;			// ƒ{ƒ^ƒ“‚Ìã¸‘¬“x
-	constexpr int kTextBoxAlpha = 204;			// ƒeƒLƒXƒgƒ{ƒbƒNƒX‚Ì•s“§–¾“x
-	constexpr int kColonArrayNum = 10;			// ƒ^ƒCƒ€‚ÌŠÔ‚É•\¦‚·‚éƒRƒƒ“‚Ì”z—ñ”Ô†
-	constexpr int kRankingNum = 3;				// ƒ‰ƒ“ƒLƒ“ƒO‚Ì•\¦”
-	constexpr int kClearAnim = 63;				// ƒNƒŠƒAƒAƒjƒ[ƒVƒ‡ƒ“
-	constexpr int kStageClearSETime = 20;		// ƒNƒŠƒASE‚ª—¬‚ê‚é‚Ü‚Å‚ÌŠÔ
-	constexpr int kImageDrawTime = 500;			// ¶‰æ‘œ‚ª•\¦‚³‚ê‚é‚Ü‚Å‚ÌŠÔ
-	constexpr int kRightImgDrawTime = 100;		// ‰E‰æ‘œ‚ª•\¦‚³‚ê‚é‚Ü‚Å‚ÌŠÔ
-	constexpr int kFallSpeed = 50;				// ‰æ‘œ‚Ì—‰º‘¬“x
-	constexpr int kStartLeftPosY = 2000;		// ¶‰æ‘œ‚Ì‰ŠúˆÊ’uY
-	constexpr int kStartRightPosX = -1000;		// ‰E‰æ‘œ‚Ì‰ŠúˆÊ’uX
-	constexpr int kTimePlusSpeed = 80;			// •\¦—p‚Ìƒ^ƒCƒ€‚ª‘‚¦‚Ä‚¢‚­ƒXƒs[ƒh
-	constexpr int kRankDrawTime = 40;			// ƒ‰ƒ“ƒN‚ª•\¦‚³‚ê‚é‚Ü‚Å‚ÌŠÔ
-	constexpr int kSceneChangeAlpha = 200;		// ƒV[ƒ“‘JˆÚ‚Ì‰æ–Ê‚ÌˆÃ‚³
-	constexpr float kRankMaxSize = 1.5f;		// ƒ‰ƒ“ƒN‰æ‘œ‚ÌÅ‘åƒTƒCƒY
-	constexpr float kRankEndSize = 0.8f;		// ÅIƒ‰ƒ“ƒNƒTƒCƒY
-	constexpr float kRankScaleUpSpeed = 0.07f;	// ƒ‰ƒ“ƒN‰æ‘œ‚ªŠg‘å‚·‚éƒXƒs[ƒh
+	constexpr int kStartButtonPosY = 2000;		// ãƒœã‚¿ãƒ³ã®åˆæœŸåº§æ¨™
+	constexpr int kButtonUpSpeed = 40;			// ãƒœã‚¿ãƒ³ã®ä¸Šæ˜‡é€Ÿåº¦
+	constexpr int kTextBoxAlpha = 204;			// ãƒ†ã‚­ã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®ä¸é€æ˜åº¦
+	constexpr int kColonArrayNum = 10;			// ã‚¿ã‚¤ãƒ ã®é–“ã«è¡¨ç¤ºã™ã‚‹ã‚³ãƒ­ãƒ³ã®é…åˆ—ç•ªå·
+	constexpr int kRankingNum = 3;				// ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã®è¡¨ç¤ºæ•°
+	constexpr int kClearAnim = 63;				// ã‚¯ãƒªã‚¢ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
+	constexpr int kStageClearSETime = 20;		// ã‚¯ãƒªã‚¢SEãŒæµã‚Œã‚‹ã¾ã§ã®æ™‚é–“
+	constexpr int kImageDrawTime = 500;			// å·¦ç”»åƒãŒè¡¨ç¤ºã•ã‚Œã‚‹ã¾ã§ã®æ™‚é–“
+	constexpr int kRightImgDrawTime = 100;		// å³ç”»åƒãŒè¡¨ç¤ºã•ã‚Œã‚‹ã¾ã§ã®æ™‚é–“
+	constexpr int kFallSpeed = 50;				// ç”»åƒã®è½ä¸‹é€Ÿåº¦
+	constexpr int kStartLeftPosY = 2000;		// å·¦ç”»åƒã®åˆæœŸä½ç½®Y
+	constexpr int kStartRightPosX = -1000;		// å³ç”»åƒã®åˆæœŸä½ç½®X
+	constexpr int kTimePlusSpeed = 80;			// è¡¨ç¤ºç”¨ã®ã‚¿ã‚¤ãƒ ãŒå¢—ãˆã¦ã„ãã‚¹ãƒ”ãƒ¼ãƒ‰
+	constexpr int kRankDrawTime = 40;			// ãƒ©ãƒ³ã‚¯ãŒè¡¨ç¤ºã•ã‚Œã‚‹ã¾ã§ã®æ™‚é–“
+	constexpr int kSceneChangeAlpha = 200;		// ã‚·ãƒ¼ãƒ³é·ç§»æ™‚ã®ç”»é¢ã®æš—ã•
+	constexpr float kRankMaxSize = 1.5f;		// ãƒ©ãƒ³ã‚¯ç”»åƒã®æœ€å¤§ã‚µã‚¤ã‚º
+	constexpr float kRankEndSize = 0.8f;		// æœ€çµ‚ãƒ©ãƒ³ã‚¯ã‚µã‚¤ã‚º
+	constexpr float kRankScaleUpSpeed = 0.07f;	// ãƒ©ãƒ³ã‚¯ç”»åƒãŒæ‹¡å¤§ã™ã‚‹ã‚¹ãƒ”ãƒ¼ãƒ‰
 }
 
 StageSceneManager::StageSceneManager(Game::Stage stageKind):
@@ -193,52 +193,52 @@ StageSceneManager::StageSceneManager(Game::Stage stageKind):
 	m_pCountTime(std::make_shared<CountTime>()),
 	m_pRanking(std::make_shared<Ranking>())
 {
-	// ‰æ‘œ‚Ìƒ[ƒh
+	// ç”»åƒã®ãƒ­ãƒ¼ãƒ‰
 	LoadImg();
 }
 
 StageSceneManager::~StageSceneManager()
 {
-	// ‰æ‘œ‚ÌƒfƒŠ[ƒg
+	// ç”»åƒã®ãƒ‡ãƒªãƒ¼ãƒˆ
 	DeleteImg();
 }
 
 void StageSceneManager::Init()
 {
-	// BGM‚ğ—¬‚·
+	// BGMã‚’æµã™
 	SoundManager::GetInstance().Play("MainScene");
 }
 
 void StageSceneManager::Update()
 {
-	// ƒIƒuƒWƒFƒNƒg‚ÌXV
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ›´æ–°
 	m_pObjectManager->Update();
 
-	if (!m_isGameClear)		// ƒNƒŠƒAó‘Ô‚Å‚È‚©‚Á‚½ê‡
+	if (!m_isGameClear)		// ã‚¯ãƒªã‚¢çŠ¶æ…‹ã§ãªã‹ã£ãŸå ´åˆ
 	{
-		// ƒQ[ƒ€ƒNƒŠƒAŠÔ‚ÌXV
+		// ã‚²ãƒ¼ãƒ ã‚¯ãƒªã‚¢æ™‚é–“ã®æ›´æ–°
 		m_clearTime++;
-		// ƒJƒEƒ“ƒg‚ÌXV
+		// ã‚«ã‚¦ãƒ³ãƒˆã®æ›´æ–°
 		m_pCountTime->Update(m_clearTime);
 
-		// ƒNƒŠƒAğŒ‚ğ’B¬‚µ‚½
-		if (m_pObjectManager->IsGameEnd() && !m_isGameClear)
+		// ã‚¯ãƒªã‚¢æ¡ä»¶ã‚’é”æˆã—ãŸæ™‚
+		if (m_pObjectManager->IsStageEnd() && !m_isGameClear)
 		{
-			// ƒNƒŠƒAƒtƒ‰ƒO‚ğtrue‚É‚·‚é
+			// ã‚¯ãƒªã‚¢ãƒ•ãƒ©ã‚°ã‚’trueã«ã™ã‚‹
 			m_isGameClear = true;
-			// ƒ‰ƒ“ƒLƒ“ƒO‚Ìæ“¾AXV
+			// ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã®å–å¾—ã€æ›´æ–°
 			m_pRanking->UpdateRanking(m_stageKind, m_clearTime);
 			m_ranking = m_pRanking->GetRanking(m_stageKind);
-			// BGM‚ğ~‚ß‚é
+			// BGMã‚’æ­¢ã‚ã‚‹
 			SoundManager::GetInstance().DesignationStopSound("MainScene");
 		}
 	}
-	else	// ƒQ[ƒ€ƒNƒŠƒAó‘Ô‚¾‚Á‚½ê‡
+	else	// ã‚²ãƒ¼ãƒ ã‚¯ãƒªã‚¢çŠ¶æ…‹ã ã£ãŸå ´åˆ
 	{
-		// ‘S‚Ä‚ÌƒIƒuƒWƒFƒNƒg‚ªƒQ[ƒ€ƒNƒŠƒAó‘Ô‚É‚È‚Á‚½‚ç
+		// å…¨ã¦ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚²ãƒ¼ãƒ ã‚¯ãƒªã‚¢çŠ¶æ…‹ã«ãªã£ãŸã‚‰
 		if (m_pObjectManager->IsGameClear())
 		{
-			// ƒNƒŠƒAXV
+			// ã‚¯ãƒªã‚¢æ›´æ–°
 			ClearUpdate();
 		}	
 	}
@@ -246,23 +246,23 @@ void StageSceneManager::Update()
 
 void StageSceneManager::Draw()
 {
-	// ƒIƒuƒWƒFƒNƒg‚Ì•`‰æ
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æç”»
 	m_pObjectManager->Draw();
 
-	if (!m_isGameClear)		// ƒNƒŠƒAó‘Ô‚Å‚È‚©‚Á‚½ê‡
+	if (!m_isGameClear)		// ã‚¯ãƒªã‚¢çŠ¶æ…‹ã§ãªã‹ã£ãŸå ´åˆ
 	{
-		// Œ»İŠÔ‚Ì•`‰æ
+		// ç¾åœ¨æ™‚é–“ã®æç”»
 		m_pCountTime->Draw();
-		// ‘€ìà–¾‚Ì•`‰æ
+		// æ“ä½œèª¬æ˜ã®æç”»
 		DrawRotaGraph(kOperationPosX, kOperationPosY, kOperationSize,
 			0.0f, m_operationH, true);
 	}
-	else	// ƒQ[ƒ€ƒNƒŠƒAó‘Ô‚¾‚Á‚½ê‡
+	else	// ã‚²ãƒ¼ãƒ ã‚¯ãƒªã‚¢çŠ¶æ…‹ã ã£ãŸå ´åˆ
 	{
-		// ‘S‚Ä‚ÌƒIƒuƒWƒFƒNƒg‚ªƒQ[ƒ€ƒNƒŠƒAó‘Ô‚É‚È‚Á‚½‚ç
+		// å…¨ã¦ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚²ãƒ¼ãƒ ã‚¯ãƒªã‚¢çŠ¶æ…‹ã«ãªã£ãŸã‚‰
 		if (m_pObjectManager->IsGameClear())
 		{
-			// ƒNƒŠƒA•`‰æ
+			// ã‚¯ãƒªã‚¢æç”»
 			ClearDraw();
 		}
 	}
@@ -270,81 +270,81 @@ void StageSceneManager::Draw()
 
 void StageSceneManager::ClearUpdate()
 {
-	// ƒ‹[ƒv–h~
+	// ãƒ«ãƒ¼ãƒ—é˜²æ­¢
 	if (!m_isPlayClearSE)
 	{
-		// SE‚ğ—¬‚·
+		// SEã‚’æµã™
 		SoundManager::GetInstance().Play("GameClear");
-		// SE‚ª—¬‚êI‚í‚Á‚½ƒtƒ‰ƒO‚ğ—§‚Ä‚é
+		// SEãŒæµã‚Œçµ‚ã‚ã£ãŸãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
 		m_isPlayClearSE = true;
 	}
-	// ƒNƒŠƒASE‚ª—¬‚êI‚í‚Á‚½‚çBGM‚ğ—¬‚·
+	// ã‚¯ãƒªã‚¢SEãŒæµã‚Œçµ‚ã‚ã£ãŸã‚‰BGMã‚’æµã™
 	if (m_isPlayClearSE &&
 		!SoundManager::GetInstance().IsDesignationCheckPlaySound("GameClear"))
 	{
-		// BGM‚ğ—¬‚·
+		// BGMã‚’æµã™
 		SoundManager::GetInstance().Play("ClearScene");
 	}
 	
-	// Œ»İ‚Ìó‘Ô‚É‚æ‚Á‚Äˆ—‚ğ•Ï‚¦‚é
+	// ç¾åœ¨ã®çŠ¶æ…‹ã«ã‚ˆã£ã¦å‡¦ç†ã‚’å¤‰ãˆã‚‹
 	switch (m_clearSceneType)
 	{
 	case ClearSceneType::LeftImgDraw:
-		// ˆê’èŠÔ‚½‚Á‚½‚ç¶‘¤‚Ì‰æ‘œ‚ğ—‚Æ‚·
+		// ä¸€å®šæ™‚é–“ãŸã£ãŸã‚‰å·¦å´ã®ç”»åƒã‚’è½ã¨ã™
 		if (!m_pImageDrawTime->Update()) return;
 		m_minusLeftPosY -= kFallSpeed;
-		// ‰æ‘œ‚ª—‚¿‚½‚çŸ‚Ìˆ—‚ÉˆÚ‚é
+		// ç”»åƒãŒè½ã¡ãŸã‚‰æ¬¡ã®å‡¦ç†ã«ç§»ã‚‹
 		if (m_minusLeftPosY <= 0)
 		{
-			// ‰æ‘œ‚ÌˆÊ’u‚ªŠù’è‚ÌˆÊ’u‚©‚ç‚¸‚ê‚È‚¢‚æ‚¤‚É‚·‚é
+			// ç”»åƒã®ä½ç½®ãŒæ—¢å®šã®ä½ç½®ã‹ã‚‰ãšã‚Œãªã„ã‚ˆã†ã«ã™ã‚‹
 			m_minusLeftPosY = 0;
 			m_clearSceneType = ClearSceneType::ClearTimeMeasure;
 		}
 		break;
 
 	case ClearSceneType::ClearTimeMeasure:
-		// ƒNƒŠƒAƒ^ƒCƒ€‚ğ‘‚â‚·
+		// ã‚¯ãƒªã‚¢ã‚¿ã‚¤ãƒ ã‚’å¢—ã‚„ã™
 		m_drawClearTime += kTimePlusSpeed;
 
 		if (!SoundManager::GetInstance().IsDesignationCheckPlaySound("TimeCount"))
 		{
-			// ƒJƒEƒ“ƒg—p‚ÌSE‚ğ–Â‚ç‚·
+			// ã‚«ã‚¦ãƒ³ãƒˆç”¨ã®SEã‚’é³´ã‚‰ã™
 			SoundManager::GetInstance().Play("TimeCount");
 		}
-		// ƒNƒŠƒAƒ^ƒCƒ€‚ª‘‚¦‚«‚Á‚½‚çŸ‚Ìˆ—‚ÉˆÚ‚é
+		// ã‚¯ãƒªã‚¢ã‚¿ã‚¤ãƒ ãŒå¢—ãˆãã£ãŸã‚‰æ¬¡ã®å‡¦ç†ã«ç§»ã‚‹
 		if (m_drawClearTime >= m_clearTime)
 		{
-			// SE‚ğ~‚ß‚é
+			// SEã‚’æ­¢ã‚ã‚‹
 			SoundManager::GetInstance().DesignationStopSound("TimeCount");
-			// ƒNƒŠƒAƒ^ƒCƒ€‚ª’´‰ß‚µ‚È‚¢‚æ‚¤‚É‚·‚é
+			// ã‚¯ãƒªã‚¢ã‚¿ã‚¤ãƒ ãŒè¶…éã—ãªã„ã‚ˆã†ã«ã™ã‚‹
 			m_drawClearTime = m_clearTime;
 			m_clearSceneType = ClearSceneType::RankDraw;
 		}
 		break;
 
 	case ClearSceneType::RankDraw:
-		// ˆê’èŠÔŒo‚Á‚½‚çƒ‰ƒ“ƒN‚ğ•\¦‚·‚é
+		// ä¸€å®šæ™‚é–“çµŒã£ãŸã‚‰ãƒ©ãƒ³ã‚¯ã‚’è¡¨ç¤ºã™ã‚‹
 		if (!m_pRankDrawTime->Update()) return;
 		if (m_isExpasionRnak)
 		{
-			// ƒ‰ƒ“ƒN‚ğŠg‘å‚·‚é
+			// ãƒ©ãƒ³ã‚¯ã‚’æ‹¡å¤§ã™ã‚‹
 			m_rankSize += kRankScaleUpSpeed;
-			// ƒ‰ƒ“ƒN‚ªŠg‘å‚µ‚«‚Á‚½‚ç
+			// ãƒ©ãƒ³ã‚¯ãŒæ‹¡å¤§ã—ãã£ãŸã‚‰
 			if (m_rankSize >= kRankMaxSize)
 			{
-				// ƒ‰ƒ“ƒLƒ“ƒO•\¦—p‚ÌSE‚ğ–Â‚ç‚·
+				// ãƒ©ãƒ³ã‚­ãƒ³ã‚°è¡¨ç¤ºç”¨ã®SEã‚’é³´ã‚‰ã™
 				SoundManager::GetInstance().Play("RankDraw");
-				// ƒTƒCƒY‚ª‹K’è’lˆÈã‚É‚È‚ç‚È‚¢‚æ‚¤‚É‚·‚é
+				// ã‚µã‚¤ã‚ºãŒè¦å®šå€¤ä»¥ä¸Šã«ãªã‚‰ãªã„ã‚ˆã†ã«ã™ã‚‹
 				m_rankSize = kRankMaxSize;
-				// k¬‚ğn‚ß‚é
+				// ç¸®å°ã‚’å§‹ã‚ã‚‹
 				m_isExpasionRnak = false;
 			}
 		}
 		else	
 		{
-			// ƒ‰ƒ“ƒN‚ğk¬‚·‚é
+			// ãƒ©ãƒ³ã‚¯ã‚’ç¸®å°ã™ã‚‹
 			m_rankSize -= kRankScaleUpSpeed;
-			// ƒ‰ƒ“ƒN‚ªŠù’è‚Ì‘å‚«‚³‚É‚È‚Á‚½‚çŸ‚Ìˆ—‚ÉˆÚ‚é
+			// ãƒ©ãƒ³ã‚¯ãŒæ—¢å®šã®å¤§ãã•ã«ãªã£ãŸã‚‰æ¬¡ã®å‡¦ç†ã«ç§»ã‚‹
 			if (m_rankSize <= kRankEndSize)
 			{
 				m_rankSize = kRankEndSize;
@@ -354,27 +354,27 @@ void StageSceneManager::ClearUpdate()
 		break;
 
 	case ClearSceneType::RankingDraw:
-		// ƒ‰ƒ“ƒLƒ“ƒO‚ğ•\¦‚·‚é
-		// ‰E‚©‚ç‰æ‘œ‚ª—¬‚ê‚Ä‚­‚é
+		// ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã‚’è¡¨ç¤ºã™ã‚‹
+		// å³ã‹ã‚‰ç”»åƒãŒæµã‚Œã¦ãã‚‹
 		if (m_pRightImgDrawTime->Update())
 		{
 			m_minusRightPosX -= -kFallSpeed;
 		}
-		// ‰æ‘œ‚ªŠù’è‚ÌˆÊ’u‚É—ˆ‚½‚ç
+		// ç”»åƒãŒæ—¢å®šã®ä½ç½®ã«æ¥ãŸã‚‰
 		if (m_minusRightPosX >= 0)
 		{
-			// SE‚ğ–Â‚ç‚·
+			// SEã‚’é³´ã‚‰ã™
 			if (!m_isPlayRankingSE)
 			{
 				SoundManager::GetInstance().Play("RankingDraw");
 				m_isPlayRankingSE = true;
 			}
-			// ‚±‚êˆÈã‚ÍˆÚ“®‚ğ‚µ‚È‚¢‚æ‚¤‚É‚·‚é
+			// ã“ã‚Œä»¥ä¸Šã¯ç§»å‹•ã‚’ã—ãªã„ã‚ˆã†ã«ã™ã‚‹
 			m_minusRightPosX = 0;
-			// ‰½‚©‚µ‚ç‚Ìƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚çŸ‚Ìˆ—‚ÉˆÚ‚é
+			// ä½•ã‹ã—ã‚‰ã®ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸã‚‰æ¬¡ã®å‡¦ç†ã«ç§»ã‚‹
 			if (CheckHitKeyAll())
 			{
-				// ‰æ–Ê‚ğˆÃ‚­‚·‚é
+				// ç”»é¢ã‚’æš—ãã™ã‚‹
 				m_alpha = kSceneChangeAlpha;
 				m_clearSceneType = ClearSceneType::SceneChange;
 			}
@@ -382,58 +382,58 @@ void StageSceneManager::ClearUpdate()
 		break;
 
 	case ClearSceneType::SceneChange:
-		// ^‚ñ’†‚Éƒ{ƒ^ƒ“‚ğ•\¦‚·‚é
-		// ƒ{ƒ^ƒ“‚Í‰º‚©‚çŒ»‚ê‚é
+		// çœŸã‚“ä¸­ã«ãƒœã‚¿ãƒ³ã‚’è¡¨ç¤ºã™ã‚‹
+		// ãƒœã‚¿ãƒ³ã¯ä¸‹ã‹ã‚‰ç¾ã‚Œã‚‹
 		m_minusButtonPosY -= kButtonUpSpeed;
 		if (m_minusButtonPosY <= 0)
 		{
-			// ‰æ‘œ‚ªŠù’è‚ÌˆÊ’u‚©‚ç‚¸‚ê‚È‚¢‚æ‚¤‚É‚·‚é
+			// ç”»åƒãŒæ—¢å®šã®ä½ç½®ã‹ã‚‰ãšã‚Œãªã„ã‚ˆã†ã«ã™ã‚‹
 			m_minusButtonPosY = 0;
 			m_isButtonFall = true;
 		}
 
-		// ƒ{ƒ^ƒ“‚ª‰º‚©‚çŒ»‚ê‚½‚ç
+		// ãƒœã‚¿ãƒ³ãŒä¸‹ã‹ã‚‰ç¾ã‚ŒãŸã‚‰
 		if (m_isButtonFall)
 		{			
-			// ƒJ[ƒ\ƒ‹ˆÚ“®
+			// ã‚«ãƒ¼ã‚½ãƒ«ç§»å‹•
 			if (Pad::isTrigger(PAD_INPUT_UP))
 			{
-				// SE‚ğ–Â‚ç‚·
+				// SEã‚’é³´ã‚‰ã™
 				SoundManager::GetInstance().Play("Select");
 
-				// ƒJ[ƒ\ƒ‹ˆÚ“®
+				// ã‚«ãƒ¼ã‚½ãƒ«ç§»å‹•
 				m_buttonCount--;
-				// ƒJ[ƒ\ƒ‹‚ğƒ‹[ƒv‚³‚¹‚é
+				// ã‚«ãƒ¼ã‚½ãƒ«ã‚’ãƒ«ãƒ¼ãƒ—ã•ã›ã‚‹
 				if (m_buttonCount < 0) m_buttonCount = static_cast<int>(NextSelect::Num) - 1;
 			}
 			if (Pad::isTrigger(PAD_INPUT_DOWN))
 			{
-				// SE‚ğ–Â‚ç‚·
+				// SEã‚’é³´ã‚‰ã™
 				SoundManager::GetInstance().Play("Select");
 
-				// ƒJ[ƒ\ƒ‹ˆÚ“®
+				// ã‚«ãƒ¼ã‚½ãƒ«ç§»å‹•
 				m_buttonCount++;
-				// ƒJ[ƒ\ƒ‹‚ğƒ‹[ƒv‚³‚¹‚é
+				// ã‚«ãƒ¼ã‚½ãƒ«ã‚’ãƒ«ãƒ¼ãƒ—ã•ã›ã‚‹
 				if (m_buttonCount >= static_cast<int>(NextSelect::Num)) m_buttonCount = 0;;
 			}
 
-			// Aƒ{ƒ^ƒ“‚©Bƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚ç
-			// ‰Ÿ‚³‚ê‚½ƒ{ƒ^ƒ“‚É‚æ‚Á‚ÄƒV[ƒ“‚ğ‘JˆÚ‚·‚é
+			// Aãƒœã‚¿ãƒ³ã‹Bãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸã‚‰
+			// æŠ¼ã•ã‚ŒãŸãƒœã‚¿ãƒ³ã«ã‚ˆã£ã¦ã‚·ãƒ¼ãƒ³ã‚’é·ç§»ã™ã‚‹
 			if (Pad::isTrigger(PAD_INPUT_1) || Pad::isTrigger(PAD_INPUT_2))
 			{
-				// BGM‚ğÁ‚·
+				// BGMã‚’æ¶ˆã™
 				SoundManager::GetInstance().DesignationStopSound("ClearScene");
 
 				switch (m_buttonCount)
 				{
 				case static_cast<int>(NextSelect::GameScene):
-					// SE‚ğ–Â‚ç‚·
+					// SEã‚’é³´ã‚‰ã™
 					SoundManager::GetInstance().Play("SceneChange");
 
 					m_nextScene = NextScene::GameScene;
 					break;
 				case static_cast<int>(NextSelect::Select):
-					// SE‚ğ–Â‚ç‚·
+					// SEã‚’é³´ã‚‰ã™
 					SoundManager::GetInstance().Play("SceneChange");
 
 					m_nextScene = NextScene::Select;
@@ -452,43 +452,43 @@ void StageSceneManager::ClearUpdate()
 
 void StageSceneManager::ClearDraw()
 {
-	// ƒQ[ƒ€ƒNƒŠƒA‚Ì‰æ‘œ‚Ì•`‰æ
-	// ƒ‰ƒ“ƒLƒ“ƒO‚ªo‚½‚çÁ‚·
+	// ã‚²ãƒ¼ãƒ ã‚¯ãƒªã‚¢ã®ç”»åƒã®æç”»
+	// ãƒ©ãƒ³ã‚­ãƒ³ã‚°ãŒå‡ºãŸã‚‰æ¶ˆã™
 	if (!m_pImageDrawTime->Update())
 	{
 		DrawRotaGraph(kClearTextPosX, kClearTextPosY, kClearTextSize,
 			0.0f, m_clearTextH, true);
 	}
 
-	// ƒeƒLƒXƒg•`‰æ
+	// ãƒ†ã‚­ã‚¹ãƒˆæç”»
 	TextDraw();
-	// ƒ^ƒCƒ€•`‰æ
+	// ã‚¿ã‚¤ãƒ æç”»
 	TimeDraw();
-	// ƒ‰ƒ“ƒLƒ“ƒO•`‰æ
+	// ãƒ©ãƒ³ã‚­ãƒ³ã‚°æç”»
 	RankingDraw();
-	// ƒ‰ƒ“ƒN•`‰æ
+	// ãƒ©ãƒ³ã‚¯æç”»
 	RankDraw();
 	
-	// ”wŒi‚ğ­‚µˆÃ‚­‚·‚é
+	// èƒŒæ™¯ã‚’å°‘ã—æš—ãã™ã‚‹
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_alpha);
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	// ƒ{ƒ^ƒ“•`‰æ
+	// ãƒœã‚¿ãƒ³æç”»
 	ButtonDraw();
 
 #ifdef _DEBUG
-	// ƒV[ƒ“–¼•`‰æ
+	// ã‚·ãƒ¼ãƒ³åæç”»
 	DrawString(0, 0, "GameClear", 0x000000);
-	// ƒ‰ƒ“ƒLƒ“ƒO•`‰æ
-	DrawFormatString(0, 80, 0x000000, "1ˆÊF%d 2ˆÊF%d 3ˆÊ:%d",
+	// ãƒ©ãƒ³ã‚­ãƒ³ã‚°æç”»
+	DrawFormatString(0, 80, 0x000000, "1ä½ï¼š%d 2ä½ï¼š%d 3ä½:%d",
 		m_ranking[0] / 60, m_ranking[1] / 60, m_ranking[2] / 60);
 #endif // _DEBUG
 }
 
 void StageSceneManager::TextDraw()
 {
-	/*ƒeƒLƒXƒgƒ{ƒbƒNƒX‚Ì•`‰æ*/
+	/*ãƒ†ã‚­ã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®æç”»*/
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kTextBoxAlpha);
 	DrawRotaGraph(kTextBoxPosX1, kTextBoxPosY - m_minusLeftPosY,
 		1.0f, 0.0f,
@@ -497,7 +497,7 @@ void StageSceneManager::TextDraw()
 		1.0f, 0.0f,
 		m_textBoxH[1], true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	/*ƒeƒLƒXƒg‚Ì•`‰æ*/
+	/*ãƒ†ã‚­ã‚¹ãƒˆã®æç”»*/
 	DrawRotaGraph(kTextPosX1, kTextPosY1 - m_minusLeftPosY,
 		1.0f, 0.0f,
 		m_textH[0], true);
@@ -511,18 +511,18 @@ void StageSceneManager::TextDraw()
 
 void StageSceneManager::TimeDraw()
 {
-	/*ƒ^ƒCƒ€ŒvZ*/
+	/*ã‚¿ã‚¤ãƒ è¨ˆç®—*/
 	int clearTime = m_drawClearTime / 60;
-	// •ª”
+	// åˆ†æ•°
 	int clearMinutesTime = clearTime / 60;
-	int minutesTimeFirst = clearMinutesTime / 10;	// ˆê‚ÌˆÊ
-	int minutesTimeSecond = clearMinutesTime % 10;	// \‚ÌˆÊ
-	// •b”
+	int minutesTimeFirst = clearMinutesTime / 10;	// ä¸€ã®ä½
+	int minutesTimeSecond = clearMinutesTime % 10;	// åã®ä½
+	// ç§’æ•°
 	int clearSecondTime = clearTime % 60;
-	int secondTimeFirst = clearSecondTime / 10;		// ˆê‚ÌˆÊ
-	int secondTimeSecond = clearSecondTime % 10;	// \‚ÌˆÊ
+	int secondTimeFirst = clearSecondTime / 10;		// ä¸€ã®ä½
+	int secondTimeSecond = clearSecondTime % 10;	// åã®ä½
 
-	/*ƒNƒŠƒAƒ^ƒCƒ€‚Ì•`‰æ*/
+	/*ã‚¯ãƒªã‚¢ã‚¿ã‚¤ãƒ ã®æç”»*/
 	DrawRotaGraph(kClearMinutesFirstPosX, kClearTimePosY - m_minusLeftPosY,
 		kClearTimeSize, 0.0f,
 		m_myTimeNumH[minutesTimeFirst], true);
@@ -542,7 +542,7 @@ void StageSceneManager::TimeDraw()
 
 void StageSceneManager::RankingDraw()
 {
-	/*ƒ‰ƒ“ƒLƒ“ƒO‚Ì•`‰æ*/
+	/*ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã®æç”»*/
 	DrawRotaGraph(kRankingPosX - m_minusRightPosX, kRnakingPosY1,
 		kRankingSize, 0.0f,
 		m_rankingH[0], true);
@@ -553,18 +553,18 @@ void StageSceneManager::RankingDraw()
 		kRankingSize, 0.0f,
 		m_rankingH[2], true);
 
-	// ©•ª‚Ìƒ^ƒCƒ€‚Æ“¯‚¶ƒ^ƒCƒ€‚ª‚ ‚Á‚½ê‡‚É•\¦‚ªd•¡‚µ‚È‚¢‚æ‚¤‚É‚·‚éƒtƒ‰ƒO
+	// è‡ªåˆ†ã®ã‚¿ã‚¤ãƒ ã¨åŒã˜ã‚¿ã‚¤ãƒ ãŒã‚ã£ãŸå ´åˆã«è¡¨ç¤ºãŒé‡è¤‡ã—ãªã„ã‚ˆã†ã«ã™ã‚‹ãƒ•ãƒ©ã‚°
 	m_isMyRank = false;
-	/*ƒ‰ƒ“ƒLƒ“ƒOƒ^ƒCƒ€‚Ì•`‰æ*/
+	/*ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã‚¿ã‚¤ãƒ ã®æç”»*/
 	for (int i = 0; i < kRankingNum; i++)
 	{
-		// ƒ‰ƒ“ƒLƒ“ƒO‚Ìƒ^ƒCƒ€‚ª©•ª‚Æ“¯‚¶ƒ^ƒCƒ€‚¾‚Á‚½ê‡‚Í
-		// •¶šF‚ğ•Ï‚¦‚é
-		// “¯‚¶ƒ^ƒCƒ€‚ª“ñ‚ÂˆÈã‚¾‚Á‚½ê‡‚Íã‚Ì‡ˆÊ‚ÌF‚¾‚¯•Ï‚¦‚é
+		// ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã®ã‚¿ã‚¤ãƒ ãŒè‡ªåˆ†ã¨åŒã˜ã‚¿ã‚¤ãƒ ã ã£ãŸå ´åˆã¯
+		// æ–‡å­—è‰²ã‚’å¤‰ãˆã‚‹
+		// åŒã˜ã‚¿ã‚¤ãƒ ãŒäºŒã¤ä»¥ä¸Šã ã£ãŸå ´åˆã¯ä¸Šã®é †ä½ã®è‰²ã ã‘å¤‰ãˆã‚‹
 		if (m_ranking[i] == m_clearTime && !m_isMyRank)
 		{
 			MyRankTimeDraw(i);
-			// ”½‰fƒtƒ‰ƒO‚ğ—§‚Ä‚é
+			// åæ˜ ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
 			m_isMyRank = true;
 		}
 		else
@@ -576,8 +576,8 @@ void StageSceneManager::RankingDraw()
 
 void StageSceneManager::RankDraw()
 {
-	/*ƒ‰ƒ“ƒNŒvZ*/
-	// ‚»‚ê‚¼‚ê‚Ìƒ^ƒCƒ€‚ÌŠî€
+	/*ãƒ©ãƒ³ã‚¯è¨ˆç®—*/
+	// ãã‚Œãã‚Œã®ã‚¿ã‚¤ãƒ ã®åŸºæº–
 	float BRankTime = static_cast<float>(kResultDataTable[static_cast<int>(m_stageKind)]);
 	float ARankTime = BRankTime * 0.8f;
 	float SRankTime = ARankTime * 0.8f;
@@ -602,7 +602,7 @@ void StageSceneManager::RankDraw()
 	{
 		m_rank = Rank::S;
 	}
-	// •`‰æ
+	// æç”»
 	DrawRotaGraph(kRankPosX, kRankPosY - m_minusLeftPosY,
 		m_rankSize, 0.0f,
 		m_rankH[static_cast<int>(m_rank)], true);
@@ -610,18 +610,18 @@ void StageSceneManager::RankDraw()
 
 void StageSceneManager::RankingTimeDraw(int ranking)
 {
-	/*ƒ^ƒCƒ€ŒvZ*/
+	/*ã‚¿ã‚¤ãƒ è¨ˆç®—*/
 	int rankingTime = m_ranking[ranking] / 60;
-	// •ª”
+	// åˆ†æ•°
 	int clearMinutesTime = rankingTime / 60;
-	int minutesTimeFirst = clearMinutesTime / 10;	// ˆê‚ÌˆÊ
-	int minutesTimeSecond = clearMinutesTime % 10;	// \‚ÌˆÊ
-	// •b”
+	int minutesTimeFirst = clearMinutesTime / 10;	// ä¸€ã®ä½
+	int minutesTimeSecond = clearMinutesTime % 10;	// åã®ä½
+	// ç§’æ•°
 	int clearSecondTime = rankingTime % 60;
-	int secondTimeFirst = clearSecondTime / 10;		// ˆê‚ÌˆÊ
-	int secondTimeSecond = clearSecondTime % 10;	// \‚ÌˆÊ
+	int secondTimeFirst = clearSecondTime / 10;		// ä¸€ã®ä½
+	int secondTimeSecond = clearSecondTime % 10;	// åã®ä½
 
-	/*•`‰æ*/
+	/*æç”»*/
 	DrawRotaGraph(kRankingMinutesFirstPosX - m_minusRightPosX, kRankingTimePosY[ranking],
 		krankingTimeSize, 0.0f,
 		m_rankingTimeNumH[minutesTimeFirst], true);
@@ -641,18 +641,18 @@ void StageSceneManager::RankingTimeDraw(int ranking)
 
 void StageSceneManager::MyRankTimeDraw(int ranking)
 {
-	/*ƒ^ƒCƒ€ŒvZ*/
+	/*ã‚¿ã‚¤ãƒ è¨ˆç®—*/
 	int rankingTime = m_ranking[ranking] / 60;
-	// •ª”
+	// åˆ†æ•°
 	int clearMinutesTime = rankingTime / 60;
-	int minutesTimeFirst = clearMinutesTime / 10;	// ˆê‚ÌˆÊ
-	int minutesTimeSecond = clearMinutesTime % 10;	// \‚ÌˆÊ
-	// •b”
+	int minutesTimeFirst = clearMinutesTime / 10;	// ä¸€ã®ä½
+	int minutesTimeSecond = clearMinutesTime % 10;	// åã®ä½
+	// ç§’æ•°
 	int clearSecondTime = rankingTime % 60;
-	int secondTimeFirst = clearSecondTime / 10;		// ˆê‚ÌˆÊ
-	int secondTimeSecond = clearSecondTime % 10;	// \‚ÌˆÊ
+	int secondTimeFirst = clearSecondTime / 10;		// ä¸€ã®ä½
+	int secondTimeSecond = clearSecondTime % 10;	// åã®ä½
 
-	/*•`‰æ*/
+	/*æç”»*/
 	DrawRotaGraph(kRankingMinutesFirstPosX - m_minusRightPosX, kRankingTimePosY[ranking],
 		krankingTimeSize, 0.0f,
 		m_myTimeNumH[minutesTimeFirst], true);
@@ -672,7 +672,7 @@ void StageSceneManager::MyRankTimeDraw(int ranking)
 
 void StageSceneManager::ButtonDraw()
 {
-	// ƒZƒŒƒNƒg‚³‚ê‚Ä‚¢‚éƒ{ƒ^ƒ“‚ÌƒTƒCƒY‚ğ‘å‚«‚­‚·‚é
+	// ã‚»ãƒ¬ã‚¯ãƒˆã•ã‚Œã¦ã„ã‚‹ãƒœã‚¿ãƒ³ã®ã‚µã‚¤ã‚ºã‚’å¤§ããã™ã‚‹
 	if (m_buttonCount == static_cast<int>(NextSelect::GameScene))
 	{
 		m_selectChangeTextSize = kSelectButtonSize;
@@ -684,7 +684,7 @@ void StageSceneManager::ButtonDraw()
 		m_gameSceneChangeTextSize = kSelectButtonSize;
 	}
 
-	/*•`‰æ*/
+	/*æç”»*/
 	DrawRotaGraph(kButtonPosX, kButtonPosY1 - m_minusButtonPosY, 
 		kButtonSize, 0.0, m_buttonH[0], true);
 
@@ -696,7 +696,7 @@ void StageSceneManager::ButtonDraw()
 
 void StageSceneManager::LoadImg()
 {
-	// ƒ[ƒh‚É¸”s‚µ‚½ê‡‚Í~‚Ü‚é
+	// ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—ã—ãŸå ´åˆã¯æ­¢ã¾ã‚‹
 	m_clearTextH = LoadGraph(kClearTextFileName);
 	assert(m_clearTextH != -1);
 	m_operationH = LoadGraph(kOperationFileName);

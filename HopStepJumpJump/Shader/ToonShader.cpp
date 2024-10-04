@@ -7,6 +7,8 @@
 
 ToonShader::ToonShader()
 {
+	/*シェーダのロード*/
+	/*ロードに失敗したら止める*/
 	/*頂点シェーダ*/
 	m_vertexShader1FrameH = LoadVertexShader("Data/Shader/Vertex/VertexShader3D.vso");
 	assert(m_vertexShader1FrameH != -1);
@@ -23,9 +25,6 @@ ToonShader::ToonShader()
 	assert(m_pixelShaderH != -1);
 	m_pixelShaderFieldH = LoadPixelShader("Data/Shader/Pixel/ToonPixelShaderField.pso");
 	assert(m_pixelShaderFieldH != -1);
-
-	m_graphH = MakeScreen(Game::kScreenWidth, Game::kScreenHeight);
-	assert(m_graphH != -1);
 
 	/*ライトの定数バッファの作成*/
 	m_cbufferLightDirH = CreateShaderConstantBuffer(sizeof(float) * 4);
@@ -47,26 +46,20 @@ ToonShader::ToonShader()
 
 ToonShader::~ToonShader()
 {
-	// シェーダのデリート
+	/*シェーダのデリート*/
+	/*頂点シェーダ*/
 	DeleteShader(m_vertexShader1FrameH);
 	DeleteShader(m_vertexShader4FrameH);
 	DeleteShader(m_vertexShader8FrameH);
 	DeleteShader(m_vertexShaderNormal4FrameH);
 	DeleteShader(m_vertexShaderNormal8FrameH);
-
+	/*ピクセルシェーダ*/
 	DeleteShader(m_pixelShaderH);
 	DeleteShader(m_pixelShaderFieldH);
-
-	DeleteGraph(m_graphH);
-
+	/*定数バッファ*/
 	DeleteShaderConstantBuffer(m_cbufferLightDirH);
 	DeleteShaderConstantBuffer(m_cbufferCameraTargetPosH);
 	DeleteShaderConstantBuffer(m_cbufferCameraPosH);
-}
-
-void ToonShader::Update()
-{
-	/*処理無し*/
 }
 
 void ToonShader::SetShader(int shaderType)
@@ -96,7 +89,6 @@ void ToonShader::SetShader(int shaderType)
 	if (shaderType == DX_MV1_VERTEX_TYPE_1FRAME)
 	{
 		SetUseVertexShader(m_vertexShader1FrameH);
-
 	}
 	else if (shaderType == DX_MV1_VERTEX_TYPE_4FRAME)
 	{
@@ -158,7 +150,6 @@ void ToonShader::SetShaderField(int shaderType)
 	if (shaderType == DX_MV1_VERTEX_TYPE_1FRAME)
 	{
 		SetUseVertexShader(m_vertexShader1FrameH);
-
 	}
 	else if (shaderType == DX_MV1_VERTEX_TYPE_4FRAME)
 	{

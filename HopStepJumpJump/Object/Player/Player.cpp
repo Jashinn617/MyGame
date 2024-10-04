@@ -163,7 +163,7 @@ void Player::Update()
 		}
 	}
 	// アニメーションの更新
-	m_pModel->Update();
+	m_pModel->AnimationUpdate();
 	// モデルの座標を設定する
 	m_pModel->SetPos(m_info.pos);
 	// モデルの角度を設定する
@@ -251,11 +251,14 @@ void Player::StageEnd()
 	// ステージ終了フラグを立てる
 	m_isStageEnd = true;
 
+	// アニメーションを待機状態に変更する
+	m_pModel->ChangeAnim(m_animData.idle, true, false, kAnimSpeed::Idle);
+
 	/*プレイヤー操作が効かないようにする*/
 	// 重力を考慮した更新
 	GravityUpdate();
 	// アニメーションの更新
-	m_pModel->Update();
+	m_pModel->AnimationUpdate();
 	// モデルの座標を設定する
 	m_pModel->SetPos(m_info.pos);
 	// モデルの角度を設定する
@@ -270,7 +273,7 @@ void Player::OnDamage(VECTOR targetPos)
 {
 	// ゲームクリア状態かステージ終了状態だったら何もせずに終了する
 	if (m_pObjectManager->IsGameClear())return;
-	if (m_pObjectManager->IsGameEnd())return;
+	if (m_pObjectManager->IsStageEnd())return;
 
 	// 敵のY位置が自分の位置より低かった場合は何もしない
 	if (targetPos.y <= m_info.pos.y - kEnemyHeadPos)return;

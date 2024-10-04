@@ -1,14 +1,16 @@
-#include "Field.h"
+ï»¿#include "Field.h"
+
 #include "Model.h"
 #include "ObjectManager.h"
 #include "Player/Player.h"
+
 #include "../Shader/ToonShader.h"
 #include "../Shader/ShadowMapShader.h"
 
 namespace
 {
-	// ƒtƒB[ƒ‹ƒh‚Ìƒtƒ@ƒCƒ‹–¼
-	// ƒXƒe[ƒW‚²‚Æ‚É•Ï‚¦‚é
+	// ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ãƒ•ã‚¡ã‚¤ãƒ«å
+	// ã‚¹ãƒ†ãƒ¼ã‚¸ã”ã¨ã«å¤‰ãˆã‚‹
 	const char* const kFileName[static_cast<int>(Game::Stage::StageNum)]
 	{
 		"Data/Model/Stage/TestStage.mv1",
@@ -17,10 +19,15 @@ namespace
 	};
 }
 
-Field::Field(Game::Stage stage)
+Field::Field()
 {
-	// ƒ‚ƒfƒ‹‚Ì¶¬
-	m_pModel = std::make_shared<Model>(kFileName[static_cast<int>(stage)]);
+	/*å‡¦ç†ç„¡ã—*/
+}
+
+Field::Field(Game::Stage stageKind)
+{
+	// ãƒ¢ãƒ‡ãƒ«ã®ç”Ÿæˆ
+	m_pModel = std::make_shared<Model>(kFileName[static_cast<int>(stageKind)]);
 
 	m_pModel->SetScale(VGet(0.2f, 0.2f, 0.2f));
 	m_pModel->SetPos(VGet(0.0f, -200.0f, 0.0f));
@@ -28,42 +35,29 @@ Field::Field(Game::Stage stage)
 
 Field::~Field()
 {
-	/*ˆ—–³‚µ*/
-}
-
-void Field::Init()
-{
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void Field::Update()
 {
-	m_pModel->Update();
+	m_pModel->AnimationUpdate();
 }
 
 void Field::Draw(std::shared_ptr<ToonShader> pToonShader)
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 	m_pModel->Draw();
 }
 
 void Field::ShadowMapDraw(std::shared_ptr<ShadowMapShader> pShadoeMapShader)
 {
-	// ‰e‚Ì•`‰æ
+	// å½±ã®æç”»
 	m_pModel->Draw();
 }
 
-void Field::Draw2D()
-{
-	/*ˆ—–³‚µ*/
-}
-
-void Field::StageClear()
-{
-	/*ˆ—–³‚µ*/
-}
 
 void Field::StageEnd()
 {
+	// ç‰¹ã«ä½•ã‚‚ã›ãšã«çµ‚äº†å‡¦ç†ã‚’çµ‚ãˆã‚‹
 	m_isStageEnd = true;
 }

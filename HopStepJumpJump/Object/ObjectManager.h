@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "../Util/Game.h"
 
 #include <memory>
@@ -22,18 +22,32 @@ class ShadowMapShader;
 class ObjectManager
 {
 public:
-	ObjectManager(Game::Stage stage);
+	/// <summary>
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// </summary>
+	/// <param name="stage">ã‚¹ãƒ†ãƒ¼ã‚¸ã®ç¨®é¡</param>
+	ObjectManager(Game::Stage stageKind);
+
+	/// <summary>
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// </summary>
 	virtual ~ObjectManager();
 
+	/// <summary>
+	/// æ›´æ–°
+	/// </summary>
 	void Update();
 
+	/// <summary>
+	/// æç”»
+	/// </summary>
 	void Draw();
 
 	/// <summary>
-	/// ƒIƒuƒWƒFƒNƒg‚Ì’Ç‰Á
+	/// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®è¿½åŠ 
 	/// </summary>
-	/// <typeparam name="T">ObjectBase‚ğŒp³‚µŒ^–¼</typeparam>
-	/// <param name="pObj">‰½‚ÌƒIƒuƒWƒFƒNƒg‚ğ’Ç‰Á‚·‚é‚©</param>
+	/// <typeparam name="T">ObjectBaseã‚’ç¶™æ‰¿ã—å‹å</typeparam>
+	/// <param name="pObj">ä½•ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¿½åŠ ã™ã‚‹ã‹</param>
 	template <class T>
 	void AddObject(T* pObj)
 	{
@@ -42,87 +56,73 @@ public:
 	}
 
 	/// <summary>
-	/// ƒvƒŒƒCƒ„[‚ª‘¶İ‚·‚é‚©‚Ç‚¤‚©
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒå­˜åœ¨ã™ã‚‹ã‹ã©ã†ã‹
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>å­˜åœ¨ãƒ•ãƒ©ã‚°</returns>
 	bool IsPlayerExist();
 
 	/// <summary>
-	/// “G‚ª‘¶İ‚·‚é‚©‚Ç‚¤‚©
+	/// æ•µã®æ•°ã®å–å¾—
 	/// </summary>
-	/// <returns></returns>
-	bool IsEnemyExist();
-
-	/// <summary>
-	/// ƒAƒCƒeƒ€‚ª‘¶İ‚·‚é‚©‚Ç‚¤‚©
-	/// </summary>
-	/// <returns></returns>
-	bool IsItemExist();
-
-	/// <summary>
-	/// “G‚Ì”‚Ìæ“¾
-	/// </summary>
-	/// <returns></returns>
+	/// <returns>æ•µã®æ•°</returns>
 	int GetItemNum()const;
 
 	/// <summary>
-	/// ƒQ[ƒ€‚ğƒNƒŠƒA‚µ‚½‚©‚Ç‚¤‚©
+	/// ã‚²ãƒ¼ãƒ ã‚’ã‚¯ãƒªã‚¢ã—ãŸã‹ã©ã†ã‹
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>ã‚¯ãƒªã‚¢ãƒ•ãƒ©ã‚°</returns>
 	bool IsGameClear()const { return m_isGameClear; }
 
-	bool IsGameEnd()const { return m_isGameEnd; }
+	/// <summary>
+	/// ã‚¹ãƒ†ãƒ¼ã‚¸ãŒçµ‚äº†ã—ãŸã‹ã©ã†ã‹
+	/// </summary>
+	/// <returns>ã‚¹ãƒ†ãƒ¼ã‚¸çµ‚äº†ãƒ•ãƒ©ã‚°</returns>
+	bool IsStageEnd()const { return m_isStageEnd; }
 
 	/// <summary>
-	/// ƒQ[ƒ€‚ªI—¹‚µ‚½‚©‚Ç‚¤‚©
+	/// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¹ãƒ†ãƒ¼ã‚¸çµ‚äº†å‡¦ç†ãŒçµ‚ã‚ã£ãŸã‹ã©ã†ã‹
 	/// </summary>
-	/// <returns></returns>
-	bool IsObjGameEnd();
+	/// <returns>ã‚¹ãƒ†ãƒ¼ã‚¸çµ‚äº†ãƒ•ãƒ©ã‚°</returns>
+	bool IsObjStageEnd();
 
 	/// <summary>
-	/// ƒvƒŒƒCƒ„[ƒ|ƒCƒ“ƒ^‚Ìæ“¾
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒã‚¤ãƒ³ã‚¿ã®å–å¾—
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒã‚¤ãƒ³ã‚¿</returns>
 	Player* const GetPlayer();
 
 	/// <summary>
-	/// ƒGƒlƒ~[ƒ}ƒl[ƒWƒƒ[ƒ|ƒCƒ“ƒ^‚Ìæ“¾
+	/// ã‚¨ãƒãƒŸãƒ¼ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ãƒã‚¤ãƒ³ã‚¿ã®å–å¾—
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>ã‚¨ãƒãƒŸãƒ¼ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ãƒã‚¤ãƒ³ã‚¿</returns>
 	std::shared_ptr<EnemyManager> const GetEnemyManager() { return m_pEnemyManager; }
 
 	/// <summary>
-	/// ‹­§“I‚ÉƒQ[ƒ€ƒNƒŠƒA‚É‚·‚é
+	/// å¼·åˆ¶çš„ã«ã‚²ãƒ¼ãƒ ã‚¯ãƒªã‚¢ã«ã™ã‚‹
 	/// </summary>
 	void SetGameClear();
 
-
-
-private:	// ŠÖ”
+private:	// é–¢æ•°
 	/// <summary>
-	/// ƒXƒe[ƒWƒNƒŠƒA‚ÌXVˆ—
+	/// ã‚¹ãƒ†ãƒ¼ã‚¸ã‚¯ãƒªã‚¢æ™‚ã®æ›´æ–°å‡¦ç†
 	/// </summary>
 	void GameClearUpdate();
 
 	/// <summary>
-	/// ƒQ[ƒ€I—¹‚ÌXVˆ—
+	/// ã‚²ãƒ¼ãƒ çµ‚äº†æ™‚ã®æ›´æ–°å‡¦ç†
 	/// </summary>
 	void GameEndUpdate();
 
-private:	// •Ï”
-	int m_H;
-	bool m_isGameClear;		// ƒQ[ƒ€‚ğƒNƒŠƒA‚µ‚½‚©
-	bool m_isGameEnd;		// ƒQ[ƒ€‚ªI‚í‚Á‚½‚©‚Ç‚¤‚©
-	bool m_isGoal;			// ƒS[ƒ‹‚µ‚½‚©‚Ç‚¤‚©
-	bool m_isTutorial;		// ƒ`ƒ…[ƒgƒŠƒAƒ‹‚©‚Ç‚¤‚©
+private:	// å¤‰æ•°
+	bool m_isGameClear;		// ã‚²ãƒ¼ãƒ ã‚’ã‚¯ãƒªã‚¢ã—ãŸã‹
+	bool m_isStageEnd;		// ã‚¹ãƒ†ãƒ¼ã‚¸ãŒçµ‚äº†ã—ãŸã‹
 
-	std::shared_ptr<Collision> m_pCollision;	// “–‚½‚è”»’è
-	std::shared_ptr<SkyDome> m_pSkyDome;		// ƒXƒJƒCƒh[ƒ€
-	std::shared_ptr<EnemyManager> m_pEnemyManager;	// ƒGƒlƒ~[ƒ}ƒl[ƒWƒƒ[
-	std::shared_ptr<ItemManager> m_pItemManager;	// ƒAƒCƒeƒ€ƒ}ƒl[ƒWƒƒ[
-	std::shared_ptr<ToonShader> m_pToonShader;		// ƒgƒD[ƒ“ƒVƒF[ƒ_
-	std::shared_ptr<ShadowMapShader> m_pShadowMapShader;	// ƒVƒƒƒhƒEƒ}ƒbƒv
-	std::list<ObjectBase*> m_pObject;		// ƒIƒuƒWƒFƒNƒg
-	std::shared_ptr<Time> m_gameEndTime;	// ƒQ[ƒ€I—¹‚µ‚Ä‚©‚ç‚ÌŠÔ
-
+	std::shared_ptr<Collision> m_pCollision;				// å½“ãŸã‚Šåˆ¤å®š
+	std::shared_ptr<SkyDome> m_pSkyDome;					// ã‚¹ã‚«ã‚¤ãƒ‰ãƒ¼ãƒ 
+	std::shared_ptr<EnemyManager> m_pEnemyManager;			// ã‚¨ãƒãƒŸãƒ¼ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼
+	std::shared_ptr<ItemManager> m_pItemManager;			// ã‚¢ã‚¤ãƒ†ãƒ ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼
+	std::shared_ptr<ToonShader> m_pToonShader;				// ãƒˆã‚¥ãƒ¼ãƒ³ã‚·ã‚§ãƒ¼ãƒ€
+	std::shared_ptr<ShadowMapShader> m_pShadowMapShader;	// ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—
+	std::list<ObjectBase*> m_pObject;						// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	std::shared_ptr<Time> m_gameEndTime;					// ã‚²ãƒ¼ãƒ çµ‚äº†ã—ã¦ã‹ã‚‰ã®æ™‚é–“
 };
