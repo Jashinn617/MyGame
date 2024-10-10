@@ -55,12 +55,6 @@
     <Filter Include="ヘッダー ファイル\Object\Item">
       <UniqueIdentifier>{67f59da8-14d5-43fe-b12f-c7487596e335}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Image">
-      <UniqueIdentifier>{235a6968-1af5-4a4b-a094-da27f7399b6f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\Image">
-      <UniqueIdentifier>{1ad7b4fa-27c2-489c-8590-2aab4108fb05}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Shader">
       <UniqueIdentifier>{68dc4d5d-79b6-403c-8831-5aad2dca40eb}</UniqueIdentifier>
     </Filter>

@@ -1,18 +1,18 @@
-#include "SceneManager.h"
+ï»¿#include "SceneManager.h"
 #include "SceneDebug.h"
 #include "SceneTitle.h"
 
 #include "../Util/Pad.h"
 #include "../Util/Game.h"
 
-#include <assert.h>
+#include <cassert>
 
 namespace
 {
-	constexpr int kBarPosX = 0;								// ˆ—ƒo[‚ÌÀ•WX
-	constexpr int kBarPosY = Game::kScreenHeight - 48;		// ˆ—ƒo[‚ÌÀ•WY
-	constexpr int kUpdateBarColor = 0x0000ff;					// XV‚Ìˆ—ƒo[‚ÌF
-	constexpr int kDrawBarColor = 0xff0000;						// •`‰æ‚Ìˆ—ƒo[‚ÌF
+	constexpr int kBarPosX = 0;								// å‡¦ç†ãƒãƒ¼ã®åº§æ¨™X
+	constexpr int kBarPosY = Game::kScreenHeight - 48;		// å‡¦ç†ãƒãƒ¼ã®åº§æ¨™Y
+	constexpr int kUpdateBarColor = 0x0000ff;					// æ›´æ–°ã®å‡¦ç†ãƒãƒ¼ã®è‰²
+	constexpr int kDrawBarColor = 0xff0000;						// æç”»ã®å‡¦ç†ãƒãƒ¼ã®è‰²
 }
 
 SceneManager::SceneManager() :
@@ -20,68 +20,68 @@ SceneManager::SceneManager() :
 	m_updateTime(0),
 	m_drawTime(0)
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 SceneManager::~SceneManager()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void SceneManager::Init()
 {
 #ifdef _DEBUG
-	// Å‰‚ÌƒV[ƒ“‚Ìƒƒ‚ƒŠ‚ğŠm•Û‚·‚é
-	// ƒfƒoƒbƒO—pƒV[ƒ“‚É”ò‚Ô
+	// æœ€åˆã®ã‚·ãƒ¼ãƒ³ã®ãƒ¡ãƒ¢ãƒªã‚’ç¢ºä¿ã™ã‚‹
+	// ãƒ‡ãƒãƒƒã‚°ç”¨ã‚·ãƒ¼ãƒ³ã«é£›ã¶
 	m_pScene = std::make_shared<SceneDebug>();
 #else
-	// Å‰‚ÌƒV[ƒ“‚Ìƒƒ‚ƒŠ‚ğŠm•Û‚·‚é
-	// ƒ^ƒCƒgƒ‹ƒV[ƒ“‚É”ò‚Ô
+	// æœ€åˆã®ã‚·ãƒ¼ãƒ³ã®ãƒ¡ãƒ¢ãƒªã‚’ç¢ºä¿ã™ã‚‹
+	// ã‚¿ã‚¤ãƒˆãƒ«ã‚·ãƒ¼ãƒ³ã«é£›ã¶
 	m_pScene = std::make_shared<SceneTitle>();
 #endif // _DEBUG
 
-	// ƒV[ƒ“‚Ì‰Šú‰»
+	// ã‚·ãƒ¼ãƒ³ã®åˆæœŸåŒ–
 	m_pScene->Init();
 }
 
 bool SceneManager::Update()
 {
 #ifdef _DEBUG
-	// XV‘Oƒ[ƒfƒBƒ“ƒOŠÔ‚Ìæ“¾
+	// æ›´æ–°å‰ãƒ­ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°æ™‚é–“ã®å–å¾—
 	LONGLONG start = GetNowHiPerformanceCount();
 #endif // _DEBUG
 
-	// ƒV[ƒ“‚ªnull‚¾‚Á‚½ê‡‚Í~‚Ü‚é
+	// ã‚·ãƒ¼ãƒ³ãŒnullã ã£ãŸå ´åˆã¯æ­¢ã¾ã‚‹
 	assert(m_pScene);
 
-	// ƒpƒbƒhî•ñ‚ÌXV
+	// ãƒ‘ãƒƒãƒ‰æƒ…å ±ã®æ›´æ–°
 	Pad::Update();
 
-	// Ÿ‚ÌƒV[ƒ“‚Ìæ“¾
+	// æ¬¡ã®ã‚·ãƒ¼ãƒ³ã®å–å¾—
 	std::shared_ptr<SceneBase> pNext = m_pScene->Update();
 
-	// Ÿ‚ÌƒV[ƒ“‚ª‘¶İ‚µ‚Ä‚¢‚È‚©‚Á‚½ê‡
+	// æ¬¡ã®ã‚·ãƒ¼ãƒ³ãŒå­˜åœ¨ã—ã¦ã„ãªã‹ã£ãŸå ´åˆ
 	if (!pNext)
 	{
-		// Œ»İˆ—’†‚ÌƒV[ƒ“‚ÌI—¹ˆ—
+		// ç¾åœ¨å‡¦ç†ä¸­ã®ã‚·ãƒ¼ãƒ³ã®çµ‚äº†å‡¦ç†
 		m_pScene->End();
-		// null‚ÅI—¹
+		// nullã§çµ‚äº†
 		return false;
 	}
 
-	// Ÿ‚ÌƒV[ƒ“‚ªŒ»İ‚ÌƒV[ƒ“‚Å‚Í–³‚©‚Á‚½ê‡
+	// æ¬¡ã®ã‚·ãƒ¼ãƒ³ãŒç¾åœ¨ã®ã‚·ãƒ¼ãƒ³ã§ã¯ç„¡ã‹ã£ãŸå ´åˆ
 	if (pNext != m_pScene)
 	{
-		// Œ»İˆ—’†‚ÌƒV[ƒ“‚ÌI—¹ˆ—
+		// ç¾åœ¨å‡¦ç†ä¸­ã®ã‚·ãƒ¼ãƒ³ã®çµ‚äº†å‡¦ç†
 		m_pScene->End();
 
-		// Update‚ª•Ô‚µ‚½V‚µ‚¢ƒV[ƒ“‚ÌŠJnˆ—‚ğs‚¤
+		// UpdateãŒè¿”ã—ãŸæ–°ã—ã„ã‚·ãƒ¼ãƒ³ã®é–‹å§‹å‡¦ç†ã‚’è¡Œã†
 		m_pScene = pNext;
 		m_pScene->Init();
 	}
 
 #ifdef _DEBUG
-	// XV‚Ìˆ—‘¬“x‚ğ‘ª‚é
+	// æ›´æ–°æ™‚ã®å‡¦ç†é€Ÿåº¦ã‚’æ¸¬ã‚‹
 	m_updateTime = static_cast<float>(GetNowHiPerformanceCount() - start);
 #endif // _DEBUG
 
@@ -91,25 +91,25 @@ bool SceneManager::Update()
 void SceneManager::Draw()
 {
 #ifdef _DEBUG
-	// •`‰æ‘Oƒ[ƒfƒBƒ“ƒOŠÔ‚Ìæ“¾	
+	// æç”»å‰ãƒ­ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°æ™‚é–“ã®å–å¾—	
 	LONGLONG start = GetNowHiPerformanceCount();
 #endif // _DEBUG
 
-	// ƒV[ƒ“‚ªnull‚¾‚Á‚½ê‡‚Í~‚Ü‚é
+	// ã‚·ãƒ¼ãƒ³ãŒnullã ã£ãŸå ´åˆã¯æ­¢ã¾ã‚‹
 	assert(m_pScene);
-	// •`‰æ
+	// æç”»
 	m_pScene->Draw();
 
 #ifdef _DEBUG
-	// •`‰æ‚Ìˆ—‘¬“x‚ğ‘ª‚é
+	// æç”»æ™‚ã®å‡¦ç†é€Ÿåº¦ã‚’æ¸¬ã‚‹
 	m_drawTime = static_cast<float>(GetNowHiPerformanceCount() - start);
 
-	/*ˆ—ƒo[‚Ì•\¦*/
-	// •`‰æˆ—ƒo[
+	/*å‡¦ç†ãƒãƒ¼ã®è¡¨ç¤º*/
+	// æç”»å‡¦ç†ãƒãƒ¼
 	float rate = (m_updateTime + m_drawTime) / 16666.6f;
 	float width = Game::kScreenWidth * rate;
 	DrawBox(kBarPosX, kBarPosY, static_cast<int>(width), Game::kScreenHeight, kDrawBarColor, true);
-	// XVˆ—ƒo[
+	// æ›´æ–°å‡¦ç†ãƒãƒ¼
 	rate = m_updateTime / 16666.6f;
 	width = Game::kScreenWidth * rate;
 	DrawBox(kBarPosX, kBarPosY, static_cast<int>(width), Game::kScreenHeight, kUpdateBarColor, true);
@@ -119,8 +119,8 @@ void SceneManager::Draw()
 
 void SceneManager::End()
 {
-	// ƒV[ƒ“‚ªnull‚¾‚Á‚½ê‡‚Í~‚Ü‚é
+	// ã‚·ãƒ¼ãƒ³ãŒnullã ã£ãŸå ´åˆã¯æ­¢ã¾ã‚‹
 	assert(m_pScene);
-	// I—¹ˆ—
+	// çµ‚äº†å‡¦ç†
 	m_pScene->End();
 }

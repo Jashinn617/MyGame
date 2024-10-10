@@ -13,8 +13,9 @@
 // プログラムは WinMain から始まります
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	// windowモード設定
-	ChangeWindowMode(true);
+	// スクリーンサイズの設定
+	ChangeWindowMode(Game::kWindowMode);
+	SetGraphMode(Game::kScreenWidth, Game::kScreenHeight, Game::kColorDepth);	
 
 	// ダブルバッファモード
 	SetDrawScreen(DX_SCREEN_BACK);
@@ -22,9 +23,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// ゲームバーのタイトルの設定
 	SetWindowText(Game::kTitleText);
 
-	// スクリーンサイズの設定
-	ChangeWindowMode(Game::kWindowMode);
-	SetGraphMode(Game::kScreenWidth, Game::kScreenHeight, Game::kColorDepth);	
 
 	if (DxLib_Init() == -1)		// ＤＸライブラリ初期化処理
 	{
