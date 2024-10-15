@@ -168,7 +168,7 @@ protected:	// 変数
 	std::shared_ptr<Circle> m_pCircle;	// 当たり判定の円のポインタ
 
 	StatusData m_statusData{};			// ステータス情報
-	MoveStatusData m_moveData{};			// 移動情報
+	MoveStatusData m_moveData{};		// 移動情報
 	AnimData m_animData{};				// アニメーション情報
 };
 

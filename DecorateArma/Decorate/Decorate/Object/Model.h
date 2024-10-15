@@ -57,6 +57,24 @@ public:		// 関数
 	/// <param name="rot">回転</param>
 	void SetRot(VECTOR rot);
 
+	/// <summary>
+	/// 座標の取得
+	/// </summary>
+	/// <returns>座標</returns>
+	VECTOR GetPos()const { return m_pos; }
+
+	/// <summary>
+	/// モデルハンドルの取得
+	/// </summary>
+	/// <returns>モデルハンドル</returns>
+	int GetModelHandle() const { return m_modelH; }
+
+	/// <summary>
+	/// 当たり判定用フレームインデックスの取得
+	/// </summary>
+	/// <returns>当たり判定で使用するフレームのインデックス</returns>
+	int GetColFrameIndex()const { return m_colFrameIndex; }
+
 public:		// 関数(アニメーション制御)
 	/// <summary>
 	/// アニメーションを設定する
@@ -114,7 +132,7 @@ private:	// 関数
 
 private:	// 変数
 	int m_modelH;					// モデルハンドル
-	int m_animSpeed;				// アニメーション速度
+	int m_animFrame;				// アニメーションフレーム
 	int m_animChangeFrame;			// 現在の切り替えフレーム数
 	int m_animChangeFrameTotal;		// 切り替えにかける総フレーム数
 	int m_animChangeSpeed;			// アニメーションの変更速度

@@ -139,7 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Circle.cpp" />
+    <ClCompile Include="Object\CharacterBase.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Object\ObjectBase.cpp" />
     <ClCompile Include="Object\Model.cpp" />
     <ClCompile Include="Scene\SceneStage.cpp" />
     <ClCompile Include="Scene\StageManager.cpp" />
@@ -149,6 +152,10 @@
     <ClCompile Include="Scene\SceneBase.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Circle.h" />
+    <ClInclude Include="Object\CharacterBase.h" />
+    <ClInclude Include="Utility\CharacterData.h" />
+    <ClInclude Include="Object\ObjectBase.h" />
     <ClInclude Include="Object\Model.h" />
     <ClInclude Include="Scene\SceneStage.h" />
     <ClInclude Include="Scene\StageManager.h" />
