@@ -172,9 +172,6 @@ void Player::Update()
 	// カメラ更新
 	m_pCamera->Update(m_info.pos);
 
-	// プレイヤーからカメラまでの距離の更新
-	m_cameraToPlayerVec = VSub(m_info.pos, m_pCamera->GetPos());
-
 	// 落ちたら初期位置に戻る
 	if (m_info.pos.y <= kFallSEPosY)
 	{

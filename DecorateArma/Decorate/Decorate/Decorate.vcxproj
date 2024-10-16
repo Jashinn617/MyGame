@@ -139,7 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Circle.cpp" />
+    <ClCompile Include="Object\Camera.cpp" />
+    <ClCompile Include="Object\Player\Player.cpp" />
+    <ClCompile Include="Object\Player\PlayerState.cpp" />
+    <ClCompile Include="Utility\Box.cpp" />
+    <ClCompile Include="Utility\Sphere.cpp" />
     <ClCompile Include="Object\CharacterBase.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Object\ObjectBase.cpp" />
@@ -150,9 +154,14 @@
     <ClCompile Include="Scene\SceneDebug.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="Scene\SceneBase.cpp" />
+    <ClCompile Include="Shader\VertexShader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Circle.h" />
+    <ClInclude Include="Object\Camera.h" />
+    <ClInclude Include="Object\Player\Player.h" />
+    <ClInclude Include="Object\Player\PlayerState.h" />
+    <ClInclude Include="Utility\Box.h" />
+    <ClInclude Include="Utility\Sphere.h" />
     <ClInclude Include="Object\CharacterBase.h" />
     <ClInclude Include="Utility\CharacterData.h" />
     <ClInclude Include="Object\ObjectBase.h" />
@@ -164,6 +173,7 @@
     <ClInclude Include="Scene\SceneManager.h" />
     <ClInclude Include="Scene\SceneBase.h" />
     <ClInclude Include="Utility\Game.h" />
+    <ClInclude Include="Shader\VertexShader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

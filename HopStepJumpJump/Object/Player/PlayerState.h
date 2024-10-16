@@ -5,9 +5,7 @@
 #include <memory>
 #include <functional>
 
-class Stamina;
 class Time;
-class Input;
 
 class PlayerState
 {

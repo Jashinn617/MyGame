@@ -1,7 +1,7 @@
 #pragma once
 #include "ObjectBase.h"
 
-class Circle;
+class Sphere;
 
 /// <summary>
 /// オブジェクトの中でもキャラクターの基底クラス
@@ -19,12 +19,12 @@ public:	// 構造体
 	};
 
 	/// <summary>
-	/// 移動用ステータス情報
+	/// 移動ステータス情報
 	/// </summary>
 	struct MoveStatusData
 	{
 		float walkSpeed = 0.0f;		// 歩き速度
-		float runSpeed = 0.0f;		// 走り速度
+		float dashSpeed = 0.0f;		// 走り速度
 		float acceleration = 0.0f;	// 加速度
 		float rotSpeed = 0.0f;		// 回転速度
 	};
@@ -69,7 +69,78 @@ public:
 	/// <param name="pToonShader">トゥーンシェーダポインタ</param>
 	virtual void Draw(std::shared_ptr<ToonShader> pToonShader)override = 0;
 
+	/// <summary>
+	/// ジャンプ終了処理
+	/// </summary>
+	virtual void EndJump();
 
+	/// <summary>
+	/// ダメージ処理
+	/// </summary>
+	/// <param name="targetPos">攻撃を当てた相手の座標</param>
+	virtual void OnDamage(VECTOR targetPos) {/*処理無し*/ }
+
+	/// <summary>
+	/// キャラクター同士の当たり判定を考慮した移動処理
+	/// </summary>
+	/// <param name="pTarget">相手のキャラクターポインタ</param>
+	void MoveCollCharacter(CharacterBase* pTarget);
+
+	/// <summary>
+	/// 地面に当たっているときの処理
+	/// </summary>
+	void HitGround();
+
+	/// <summary>
+	/// 重力による落下処理
+	/// </summary>
+	void UpdateGravity();
+
+	/// <summary>
+	/// 球の当たり判定ポインタの取得
+	/// </summary>
+	/// <returns>球の当たり判定ポインタ</returns>
+	const std::shared_ptr<Sphere> GetSphere()const { return m_pSphere; }
+
+	/// <summary>
+	/// 角度の更新
+	/// </summary>
+	/// <returns>角度</returns>
+	float GetAngle() const { return m_angle; }
+
+	/// <summary>
+	/// ジャンプ中かどうかを返す
+	/// </summary>
+	/// <returns>ジャンプ中かどうか</returns>
+	bool IsJump()const { return m_isJump; }
+
+	/// <summary>
+	/// ジャンプ力を返す
+	/// </summary>
+	/// <returns>ジャンプ力</returns>
+	float GetJumpPower()const { return m_jumpPower; }
+
+	/// <summary>
+	/// ジャンプ力を反転する
+	/// </summary>
+	void InvertJumpPower() { m_jumpPower *= -1; }
+
+	/// <summary>
+	/// ダメージを受けたかどうかを返す
+	/// </summary>
+	/// <returns>ダメージを受けたかどうか</returns>
+	bool IsDamage()const { return m_isDamage; }
+
+	/// <summary>
+	/// 攻撃を受けていない状態に戻す
+	/// </summary>
+	void OffDamage() { m_isDamage = false; }
+
+	/// <summary>
+	/// 死亡状態かどうかを返す
+	/// </summary>
+	/// <returns>死亡状態かどうか</returns>
+	bool IsDead()const { return m_isDead; }
 
 protected:	// 関数
 	/// <summary>
@@ -80,8 +151,10 @@ protected:	// 関数
 	void SmoothAngle(float& nowAngle, float nextAngle);
 
 protected:	// 変数
+	float m_jumpPower;					// ジャンプ力
+	bool m_isJump;						// ジャンプ中かどうか
 	bool m_isDead;						// 死んだかどうか
-	std::shared_ptr<Circle> m_pCircle;	// 当たり判定用の円のポインタ
+	std::shared_ptr<Sphere> m_pSphere;	// 当たり判定用の円のポインタ
 
 	StatusData m_statusData{};			// ステータス情報
 	MoveStatusData m_moveData{};		// 移動情報

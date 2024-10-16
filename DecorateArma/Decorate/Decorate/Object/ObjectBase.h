@@ -1,11 +1,11 @@
 #pragma once
 #include "../Utility/CharacterData.h"
 
-//#include <array>
 #include <memory>
 #include <vector>
 
 class Model;
+class VertexShader;
 class ObjectManager;
 
 class ToonShader;
@@ -122,16 +122,22 @@ public:	// 継承用以外のパブリック関数
 	const CharacterData::CharacterInfo GetInfo()const { return m_characterInfo; }
 
 	/// <summary>
+	/// 座標の取得
+	/// </summary>
+	/// <returns>座標</returns>
+	const VECTOR& GetPos()const { return m_characterInfo.pos; }
+
+	/// <summary>
 	/// ダメージを受けているか
 	/// </summary>
 	/// <returns>ダメージを受けているかどうか</returns>
 	bool IsDamage() const { return m_isDamage; }
 
 	/// <summary>
-	/// フィールドとの当たり判定を考慮した移動の更新
+	/// フィールドとの当たり判定を考慮した移動
 	/// </summary>
 	/// <param name="pField">フィールドポインタ</param>
-	void MoveCollFieldUpdate(ObjectBase* pField);
+	void MoveCollField(ObjectBase* pField);
 
 protected:	// 変数
 	int m_modelH;									// モデルハンドル
@@ -140,7 +146,9 @@ protected:	// 変数
 	float m_moveSpeed;								// 移動スピード
 	bool m_isDamage;								// 攻撃を受けたかどうか
 	std::shared_ptr<Model> m_pModel;				// モデルクラスポインタ
+	std::shared_ptr<VertexShader> m_pVertexShader;	// 頂点シェーダポインタ
 	std::vector<int> m_vertexShaderType;			// 頂点シェーダタイプ
+	std::vector<int> m_vertexShaderH;				// 頂点シェーダハンドル
 	ObjectManager* m_pObjectManager;				// オブジェクトマネージャーポインタ
 	CharacterData::CharacterInfo m_characterInfo;	// キャラクター情報
 
@@ -167,12 +175,12 @@ private:	 // 関数
 	void FixPosWithFloor();
 
 private:	// 変数
-	int m_wallNum;				// 壁と判断されたポリゴンの数
-	int m_floorNum;				// 床と判断されたポリゴンの数
-	bool m_isMove;				// 移動中かどうか
-	bool m_isPolygonHit;		// ポリゴンに当たったかどうか
-	VECTOR m_prevPos;			// 移動前の座標
-	VECTOR m_nextPos;			// 移動後の座標
+	int m_wallNum;			// 壁と判断されたポリゴンの数
+	int m_floorNum;			// 床と判断されたポリゴンの数
+	bool m_isMove;			// 移動中かどうか
+	bool m_isPolyHit;		// ポリゴンに当たったかどうか
+	VECTOR m_prevPos;		// 移動前の座標
+	VECTOR m_nextPos;		// 移動後の座標
 	
 	MV1_COLL_RESULT_POLY_DIM m_hitDin{};								// 当たり判定結果代入用ポリゴン構造体
 	MV1_COLL_RESULT_POLY* m_pWallPoly[ColInfo::kMaxColHitPolyNum]{};	// 壁ポリゴンと判断されたポリゴンのアドレスを保存しておくためのポインタ配列

@@ -79,7 +79,7 @@ void ObjectBase::MoveCollFieldUpdate(ObjectBase* pField)
 	// 移動前の座標を保存しておく
 	m_oldPos = m_info.pos;
 	// 移動後の座標を計算する
-	m_nextPos = VAdd(m_oldPos, GetInfo().vec);
+	m_nextPos = VAdd(m_oldPos, m_info.vec);
 
 	// プレイヤーの周囲にあるステージポリゴンを取得する
 	// 移動距離も考慮してから検出する
@@ -87,7 +87,7 @@ void ObjectBase::MoveCollFieldUpdate(ObjectBase* pField)
 		dynamic_cast<CharacterBase*>(this)->GetCircle()->GetRadius() + VSize(GetInfo().vec));
 
 	// XかZにkMove(0.01f)以上移動した場合は移動した事にする
-	if (fabs(dynamic_cast<CharacterBase*>(this)->GetInfo().vec.x) > kMove || fabs(GetInfo().vec.z) > kMove)
+	if (fabs(m_info.vec.x) > kMove || fabs(m_info.vec.z) > kMove)
 	{
 		m_isMove = true;
 	}
