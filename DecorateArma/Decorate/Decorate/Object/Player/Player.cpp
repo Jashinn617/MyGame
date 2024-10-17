@@ -4,9 +4,11 @@
 #include "../Model.h"
 #include "../Camera.h"
 
-#include "../../Shader/VertexShader.h"
+#include "../../Shader/SetVertexShader.h"
+#include "../../Shader/ToonShader.h"
 
 #include "../../Utility/Sphere.h"
+#include "../../Utility/MoveDirectionVec.h"
 
 
 namespace
@@ -42,13 +44,13 @@ namespace
 }
 
 Player::Player():
-	m_pState(std::make_shared<PlayerState>()),
+	m_pState(std::make_shared<PlayerState>(this)),
 	m_pCamera(std::make_shared<Camera>())
 {
 	/*移動速度初期化*/
 	m_moveData.walkSpeed = m_statusData.spd;
 	m_moveData.dashSpeed = m_statusData.spd * kMoveSpeedDashRate;
-	m_moveData.acceleration = m_statusData.spd * kAccelerationRate;
+	m_moveData.acc = m_statusData.spd * kAccelerationRate;
 	m_moveData.rotSpeed = kAngleSpeed;
 
 	/*情報初期化*/
@@ -94,6 +96,8 @@ void Player::Update()
 {
 	// ステイト更新
 	m_pState->Update();
+	UpdateState();
+
 	// 移動更新
 	m_characterInfo.vec = Move();
 	// 重力による落下処理
@@ -110,9 +114,7 @@ void Player::Update()
 	m_pModel->SetRot(VGet(0.0f, m_angle, 0.0f));
 
 	// カメラ更新
-	m_pCamera->Update(m_characterInfo.pos);
-
-	
+	m_pCamera->Update(m_characterInfo.pos);	
 }
 
 void Player::Draw(std::shared_ptr<ToonShader> pToonShader)
@@ -121,11 +123,13 @@ void Player::Draw(std::shared_ptr<ToonShader> pToonShader)
 	for (int i = 0; i < MV1GetTriangleListNum(m_pModel->GetModelHandle()); i++)
 	{
 		// シェーダの設定
+		pToonShader->SetShader(m_vertexShaderH[i]);
 
 		// 描画
 		MV1DrawTriangleList(m_pModel->GetModelHandle(), i);
 	}
 	// シェーダを使わない設定にする
+	pToonShader->ShaderEnd();
 
 	// 当たり判定の球の描画
 	m_pSphere->DebugDraw(0xff0000);
@@ -160,7 +164,7 @@ void Player::EndJump()
 	m_jumpPower = 0.0f;
 
 	// ステージクリア時は処理を終了する
-	// if() return;
+	
 
 	// ステイトの終了処理
 	m_pState->EndState();
@@ -169,22 +173,134 @@ void Player::EndJump()
 void Player::UpdateAngle()
 {
 	// ダメージ中は処理をしない
+	if (m_pState->GetState() == PlayerState::StateKind::Damage) return;
 
+	// 目標角度の計算(ベクトル(z,x)の角度 + 90°+ カメラ角度)
+	float nextAngle = atan2(m_moveDirection.z, m_moveDirection.x)
+		+ DX_PI_F * 0.5f + m_pCamera->GetCameraAngleX();
+
+	// 角度を滑らかに変更する
+	SmoothAngle(m_angle, nextAngle);
 }
 
 void Player::UpdateMoveDirection()
 {
+	// ダメージ中は処理をしない
+	if (m_pState->GetState() == PlayerState::StateKind::Damage) return;
+
+	// 移動方向ベクトルクラスの作成
+	MoveDirectionVec moveDirectionVec;
+	// 移動方向更新
+	moveDirectionVec.Update();
+
+	// 進みたい方向と現在の方向の線形補完
+	m_moveDirection = VAdd(VScale(m_moveDirection, kNowVecNum),
+		VScale(moveDirectionVec.GetDirectionVec(), kNextVecNum));
+
+	// 進みたい方向のY軸を省く
+	m_moveDirection.y = 0.0f;
 }
 
 VECTOR Player::Move()
 {
-	return VECTOR();
+	// 移動速度が0の場合は何もしない
+	if (m_moveSpeed == 0.0f)return VGet(0.0f, 0.0f, 0.0f);
+
+	// 移動方向更新
+	UpdateMoveDirection();
+	// 角度更新
+	UpdateAngle();
+
+	// 移動ベクトルの生成
+	VECTOR move = VNorm(m_moveDirection);
+
+	// ダメージ中の処理
+	if (m_pState->GetState() == PlayerState::StateKind::Damage)
+	{
+		// return move;
+	}
+
+	// 移動ベクトルに速度をかける
+	// X軸は反転させる(カメラの角度を変えた時に移動方向がおかしくならないように)
+	move.x *= -m_moveSpeed;
+	move.z *= m_moveSpeed;
+
+	/*カメラの角度によって進む方向を変える*/
+	// カメラの角度行列を取得する
+	MATRIX rotMtx = MGetRotY(m_pCamera->GetCameraAngleX());
+
+	// 移動ベクトルとカメラ角度行列をかける
+	move = VTransform(move, rotMtx);
+
+	return move;
 }
 
 void Player::InitState()
 {
+	/*現在のステイトによって初期化処理を変える*/
+	switch (m_pState->GetState())
+	{
+	case PlayerState::StateKind::Jump:
+		// ジャンプフラグを立てる
+		m_isJump = true;
+		// ジャンプ力を設定する
+		m_jumpPower = kJumpMaxSpeed;
+		// ジャンプ音を鳴らす
+
+		break;
+	default:
+		// 上記以外だった場合は何もしない
+		break;
+	}
 }
 
 void Player::UpdateState()
 {
+	/*現在のステイトによって更新処理を変える*/
+	switch (m_pState->GetState())
+	{
+	case PlayerState::StateKind::Idle:	// 待機
+		// 段々減速する
+		m_moveSpeed = max(m_moveSpeed - m_moveData.acc, 0.0f);
+		// アニメーションを待機状態に変更する
+		m_pModel->ChangeAnim(m_animData.idle, true, false, kAnimSpeed::Idle);
+		break;
+
+	case PlayerState::StateKind::Walk:	// 歩き
+		// 移動速度を歩き状態の速度に変更する
+		m_moveSpeed = min(m_moveSpeed + m_moveData.acc, m_moveData.walkSpeed);
+		// アニメーションを歩きアニメーションに変更する
+		m_pModel->ChangeAnim(m_animData.walk, true, false, kAnimSpeed::Walk);
+		break;
+
+	case PlayerState::StateKind::Dash:	// ダッシュ
+		// 移動速度をダッシュ時の速度にする
+		m_moveSpeed = min(m_moveSpeed + m_moveData.acc, m_moveData.dashSpeed);
+		// アニメーションをダッシュアニメーションに変更する
+		m_pModel->ChangeAnim(m_animData.run, true, false, kAnimSpeed::Dash);
+		break;
+
+	case PlayerState::StateKind::Jump:	// ジャンプ
+		// 上昇中
+		if (m_jumpPower > kMinJumpRiseNum)
+		{
+			// アニメーションをジャンプ開始アニメーションに切り替える
+			m_pModel->ChangeAnim(m_animData.jumpStart, false, false, kAnimSpeed::Jump);
+		}
+		// 空中にとどまっている、下降中
+		else
+		{
+			// アニメーションをジャンプ待機アニメーションに切り替える
+			m_pModel->ChangeAnim(m_animData.jumpIdle, false, false, kAnimSpeed::Jump);
+		}
+		break;
+
+	case PlayerState::StateKind::Damage:	// ダメージ
+
+		break;
+
+	default:
+		// 上記以外だった場合は何もしない
+		break;
+	}
 }

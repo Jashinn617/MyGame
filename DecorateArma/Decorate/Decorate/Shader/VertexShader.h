@@ -1,33 +1,40 @@
-#pragma once
+// -------------------------------------------------------------------------------
+// 
+// 		ＤＸライブラリ		Direct3D11 頂点シェーダー定義コード
+// 
+// 				Ver 3.24b
+// 
+// -------------------------------------------------------------------------------
 
-/// <summary>
-/// 頂点シェーダのロードを行うクラス
-/// </summary>
-class VertexShader
+// インクルード ------------------------------------------------------------------
+
+#include "DataType.h"
+#include "DxShader_VS_D3D11.h"
+
+// 構造体定義 --------------------------------------------------------------------
+
+// 定数定義 ----------------------------------------------------------------------
+
+// 頂点シェーダー・ピクセルシェーダー共通パラメータ
+cbuffer cbD3D11_CONST_BUFFER_COMMON : register(b0)
 {
-public:
-	/// <summary>
-	/// コンストラクタ
-	/// </summary>
-	VertexShader();
+	DX_D3D11_CONST_BUFFER_COMMON				g_Common;
+};
 
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	~VertexShader();
-	
-	/// <summary>
-	/// 頂点シェーダハンドルを設定する
-	/// </summary>
-	/// <param name="vertexShaderType">頂点タイプ</param>
-	/// <returns>頂点シェーダハンドル</returns>
-	int SetVertexShaderH(int vertexShaderType);
+// 基本パラメータ
+cbuffer cbD3D11_CONST_BUFFER_VS_BASE : register(b1)
+{
+	DX_D3D11_VS_CONST_BUFFER_BASE				g_Base;
+};
 
-private:	// 変数
-	/*頂点シェーダ*/
-	int m_vertexShader1FrameH;				//頂点シェーダー1フレームハンドル
-	int m_vertexShader4FrameH;				//頂点シェーダー4フレームハンドル
-	int m_vertexShader8FrameH;				//頂点シェーダー8フレームハンドル
-	int m_vertexShaderNormal4FrameH;		//頂点シェーダー4フレーム法線マップありハンドル
-	int m_vertexShaderNormal8FrameH;		//頂点シェーダー8フレーム法線マップありハンドル
+// その他の行列
+cbuffer cbD3D11_CONST_BUFFER_VS_OTHERMATRIX : register(b2)
+{
+	DX_D3D11_VS_CONST_BUFFER_OTHERMATRIX		g_OtherMatrix;
+};
+
+// スキニングメッシュ用の　ローカル　→　ワールド行列
+cbuffer cbD3D11_CONST_BUFFER_VS_LOCALWORLDMATRIX : register(b3)
+{
+	DX_D3D11_VS_CONST_BUFFER_LOCALWORLDMATRIX	g_LocalWorldMatrix;
 };

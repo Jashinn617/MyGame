@@ -1,6 +1,13 @@
 #pragma once
 #include "DxLib.h"
 
+#include <memory>
+
+class Player;
+
+/// <summary>
+/// プレイヤーのステイトを管理するクラス
+/// </summary>
 class PlayerState
 {
 public:	// 列挙型
@@ -10,18 +17,20 @@ public:	// 列挙型
 	/// </summary>
 	enum class StateKind
 	{
-		Idle,	// 待機
-		Walk,	// 歩き
-		Dash,	// ダッシュ
-		Jump,	// ジャンプ
-		Damage,	// ダメージ
+		Idle,		// 待機
+		Walk,		// 歩き
+		Dash,		// ダッシュ
+		Jump,		// ジャンプ
+		Damage,		// ダメージ
+		StateNum,	// ステイト数
 	};
 
 public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	PlayerState();
+	/// <param name="pPlayer">プレイヤーポインタ</param>
+	PlayerState(Player* pPlayer);
 
 	/// <summary>
 	/// デストラクタ
@@ -81,9 +90,10 @@ private:	// 関数
 	/// ステイト変更
 	/// </summary>
 	/// <param name="state">ステイト</param>
-	void StateChange(StateKind stateKind);
+	void ChangeState(StateKind stateKind);
 
 private:	// 変数
 	bool m_isAction;		// アクション行動中か
 	StateKind m_nowState;	// 現在のステイト
+	Player* m_pPlayer;		// プレイヤーポインタ
 };

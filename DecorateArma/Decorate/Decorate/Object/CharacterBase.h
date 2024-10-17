@@ -25,7 +25,7 @@ public:	// 構造体
 	{
 		float walkSpeed = 0.0f;		// 歩き速度
 		float dashSpeed = 0.0f;		// 走り速度
-		float acceleration = 0.0f;	// 加速度
+		float acc = 0.0f;	// 加速度
 		float rotSpeed = 0.0f;		// 回転速度
 	};
 
@@ -39,7 +39,7 @@ public:	// 構造体
 		int8_t run = 0;			// 走り
 		int8_t jumpStart = 0;	// ジャンプ始め
 		int8_t jumpIdle = 0;	// ジャンプ中
-		int8_t Damage = 0;		// ダメージ
+		int8_t damage = 0;		// ダメージ
 	};
 
 public:

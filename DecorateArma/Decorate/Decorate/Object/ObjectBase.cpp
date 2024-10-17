@@ -3,7 +3,7 @@
 #include "CharacterBase.h"
 #include "Model.h"
 
-#include "../Shader/VertexShader.h"
+#include "../Shader/SetVertexShader.h"
 
 #include "../Utility/Sphere.h"
 
@@ -25,7 +25,7 @@ ObjectBase::ObjectBase():
 	m_moveSpeed(0.0f),
 	m_isDamage(false),
 	m_pModel(nullptr),
-	m_pVertexShader(std::make_shared<VertexShader>()),
+	m_pVertexShader(std::make_shared<SetVertexShader>()),
 	m_pObjectManager(nullptr),
 	m_wallNum(0),
 	m_floorNum(0),

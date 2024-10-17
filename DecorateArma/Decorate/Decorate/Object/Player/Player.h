@@ -79,7 +79,10 @@ public:		// 関数
 	/// <returns>カメラポインタ</returns>
 	const std::shared_ptr<Camera> GetCamera()const { return m_pCamera; }
 
-
+	/// <summary>
+	/// ステイトごとの初期化
+	/// </summary>
+	void InitState();
 
 private:	// 関数
 
@@ -100,16 +103,13 @@ private:	// 関数
 	VECTOR Move();
 
 	/// <summary>
-	/// ステイトごとの初期化
-	/// </summary>
-	void InitState();
-
-	/// <summary>
 	/// ステイトごとの更新
 	/// </summary>
 	void UpdateState();
 
 private:	// 変数
+	VECTOR m_moveDirection;
+
 	std::shared_ptr<PlayerState> m_pState;	// ステイトポインタ
 	std::shared_ptr<Camera> m_pCamera;		// カメラポインタ
 };

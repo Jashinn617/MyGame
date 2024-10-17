@@ -5,7 +5,7 @@
 #include <vector>
 
 class Model;
-class VertexShader;
+class SetVertexShader;
 class ObjectManager;
 
 class ToonShader;
@@ -146,7 +146,7 @@ protected:	// 変数
 	float m_moveSpeed;								// 移動スピード
 	bool m_isDamage;								// 攻撃を受けたかどうか
 	std::shared_ptr<Model> m_pModel;				// モデルクラスポインタ
-	std::shared_ptr<VertexShader> m_pVertexShader;	// 頂点シェーダポインタ
+	std::shared_ptr<SetVertexShader> m_pVertexShader;	// 頂点シェーダポインタ
 	std::vector<int> m_vertexShaderType;			// 頂点シェーダタイプ
 	std::vector<int> m_vertexShaderH;				// 頂点シェーダハンドル
 	ObjectManager* m_pObjectManager;				// オブジェクトマネージャーポインタ

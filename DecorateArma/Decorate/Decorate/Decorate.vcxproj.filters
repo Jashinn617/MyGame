@@ -43,6 +43,18 @@
     <Filter Include="ヘッダー ファイル\Object\Player">
       <UniqueIdentifier>{93b9dbbe-d396-42d1-b692-8fe76c7a009f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Shader">
+      <UniqueIdentifier>{8b997090-80f5-4da4-a41a-d25aaabd98f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Shader">
+      <UniqueIdentifier>{3e75b9fa-9288-45b6-857b-a75936b3c238}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PixelShader">
+      <UniqueIdentifier>{e66fad05-13ef-4107-b5f8-45da7edf5c20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="VertexShader">
+      <UniqueIdentifier>{1bca38ca-5362-468f-a2e1-a8d790642f77}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -90,7 +102,22 @@
     <ClCompile Include="Object\Player\PlayerState.cpp">
       <Filter>ソース ファイル\Object\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Shader\VertexShader.cpp">
+    <ClCompile Include="Shader\SetVertexShader.cpp">
+      <Filter>ソース ファイル\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\ToonShader.cpp">
+      <Filter>ソース ファイル\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\Time.cpp">
+      <Filter>ソース ファイル\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\ObjectManager.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\MoveDirectionVec.cpp">
+      <Filter>ソース ファイル\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\CsvLoad.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -143,8 +170,49 @@
     <ClInclude Include="Object\Player\PlayerState.h">
       <Filter>ヘッダー ファイル\Object\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Shader\VertexShader.h">
+    <ClInclude Include="Shader\ToonShader.h">
+      <Filter>ヘッダー ファイル\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\SetVertexShader.h">
+      <Filter>ヘッダー ファイル\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\MoveDirectionVec.h">
+      <Filter>ヘッダー ファイル\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Time.h">
+      <Filter>ヘッダー ファイル\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\ObjectManager.h">
+      <Filter>ヘッダー ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\CsvLoad.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="VertexShader\VertexShader3D.hlsl">
+      <Filter>VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="VertexShader\VertexShader3D4Frame.hlsl">
+      <Filter>VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="VertexShader\VertexShader3D8Frame.hlsl">
+      <Filter>VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="VertexShader\VertexShaderNormal4Frame.hlsl">
+      <Filter>VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="VertexShader\VertexShaderNormal8Frame.hlsl">
+      <Filter>VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="VertexShader\VertexShaderShadowMap.hlsl">
+      <Filter>VertexShader</Filter>
+    </FxCompile>
+    <FxCompile Include="PixelShader\ToonFieldPixelShader.hlsl">
+      <Filter>PixelShader</Filter>
+    </FxCompile>
+    <FxCompile Include="PixelShader\ToonPixelShader.hlsl">
+      <Filter>PixelShader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
