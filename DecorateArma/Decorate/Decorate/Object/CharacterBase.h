@@ -2,6 +2,7 @@
 #include "ObjectBase.h"
 
 class Sphere;
+class Capsule;
 
 /// <summary>
 /// オブジェクトの中でもキャラクターの基底クラス
@@ -151,10 +152,11 @@ protected:	// 関数
 	void SmoothAngle(float& nowAngle, float nextAngle);
 
 protected:	// 変数
-	float m_jumpPower;					// ジャンプ力
-	bool m_isJump;						// ジャンプ中かどうか
-	bool m_isDead;						// 死んだかどうか
-	std::shared_ptr<Sphere> m_pSphere;	// 当たり判定用の円のポインタ
+	float m_jumpPower;						// ジャンプ力
+	bool m_isJump;							// ジャンプ中かどうか
+	bool m_isDead;							// 死んだかどうか
+	std::shared_ptr<Sphere> m_pSphere;		// 当たり判定用の球のポインタ
+	std::shared_ptr<Capsule> m_pCapsule;	// 当たり判定用のカプセルのポインタ
 
 	StatusData m_statusData{};			// ステータス情報
 	MoveStatusData m_moveData{};		// 移動情報

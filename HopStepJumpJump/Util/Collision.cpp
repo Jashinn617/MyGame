@@ -23,7 +23,7 @@ void Collision::Update(ObjectBase* my, ObjectBase* target)
 	// 存在しない物体は当たらない
 	if (!my->GetInfo().isExist) return;
 	// フィールドには当たらない
-	if (!target->GetInfo().isExist && target->GetColType() != ObjectBase::ColType::Field) return;
+	if (!target->GetInfo().isExist) return;
 	// Noneには何にもぶつからない
 	if (my->GetColType() == ObjectBase::ColType::None) return;
 

@@ -139,6 +139,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Utility\Collision.cpp" />
+    <ClCompile Include="Utility\Capsule.cpp" />
     <ClCompile Include="Common\CsvLoad.cpp" />
     <ClCompile Include="Object\ObjectManager.cpp" />
     <ClCompile Include="Utility\Time.cpp" />
@@ -162,6 +164,8 @@
     <ClCompile Include="Shader\SetVertexShader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Utility\Collision.h" />
+    <ClInclude Include="Utility\Capsule.h" />
     <ClInclude Include="Common\CsvLoad.h" />
     <ClInclude Include="Object\ObjectManager.h" />
     <ClInclude Include="Utility\Time.h" />

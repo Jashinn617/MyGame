@@ -6,6 +6,10 @@
 #include <list>
 
 class ObjectBase;
+class Collision;
+class Player;
+class ToonShader;
+class ShadowMapShader;
 
 class ObjectManager
 {
@@ -40,14 +44,24 @@ public:		// 関数
 	void AddObject(T* pObj)
 	{
 		m_pObject.push_back(pObj);
-		m_pObject.back()->SetMain(this);
+		m_pObject.back()->SetObjectManager(this);
 	}
+
+
+	/// <summary>
+	/// プレイヤーポインタの取得
+	/// </summary>
+	/// <returns>プレイヤーポインタ</returns>
+	Player* const GetPlayer();
 
 	
 
 private:	// 変数
 
-	std::list<ObjectBase*> m_pObject;		// オブジェクト
+	std::shared_ptr<Collision> m_pCollision;		// 当たり判定
+	std::shared_ptr<ToonShader> m_pToon;			// トゥーンシェーダ
+	//std::shared_ptr<ShadowMapShader> m_pShadowMap;	// シャドウマップシェーダ
 
+	std::list<ObjectBase*> m_pObject;				// オブジェクト
 };
 

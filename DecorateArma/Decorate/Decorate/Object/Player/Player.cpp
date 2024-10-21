@@ -8,6 +8,7 @@
 #include "../../Shader/ToonShader.h"
 
 #include "../../Utility/Sphere.h"
+#include "../../Utility/Capsule.h"
 #include "../../Utility/MoveDirectionVec.h"
 
 
@@ -64,6 +65,9 @@ Player::Player():
 
 	// 当たり判定ポインタ作成
 	m_pSphere = std::make_shared<Sphere>(m_characterInfo.pos, m_objSize, kHeight * 0.5f);
+	VECTOR topPos = VAdd(m_characterInfo.pos, VGet(0.0f, kHeight * 0.5f, 0.0f));	// 頭
+	VECTOR bottomPos = VSub(m_characterInfo.pos, VGet(0.0f, kHeight * 0.5f, 0.0f));	// 足
+	m_pCapsule = std::make_shared<Capsule>(topPos, bottomPos, kHeight * 0.5f);
 
 	// モデルポインタ作成
 	m_pModel = std::make_shared<Model>(kPlayerFileName);
@@ -131,8 +135,9 @@ void Player::Draw(std::shared_ptr<ToonShader> pToonShader)
 	// シェーダを使わない設定にする
 	pToonShader->ShaderEnd();
 
-	// 当たり判定の球の描画
-	m_pSphere->DebugDraw(0xff0000);
+	// 当たり判定の描画
+	//m_pSphere->DebugDraw(0xff0000);
+	m_pCapsule->DebugDraw(0x00ff00);
 }
 
 void Player::Draw2D()
@@ -281,6 +286,9 @@ void Player::UpdateState()
 		break;
 
 	case PlayerState::StateKind::Jump:	// ジャンプ
+		// 移動速度を変更する
+		m_moveSpeed = min(m_moveSpeed + m_moveData.acc, m_moveData.walkSpeed);
+
 		// 上昇中
 		if (m_jumpPower > kMinJumpRiseNum)
 		{
