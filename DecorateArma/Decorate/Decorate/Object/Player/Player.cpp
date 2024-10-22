@@ -1,5 +1,6 @@
-#include "Player.h"
+ï»¿#include "Player.h"
 #include "PlayerState.h"
+#include "Shot.h"
 
 #include "../Model.h"
 #include "../Camera.h"
@@ -11,51 +12,66 @@
 #include "../../Utility/Capsule.h"
 #include "../../Utility/MoveDirectionVec.h"
 
+#include "../../Common/CsvLoad.h"
+
 
 namespace
 {
-	const char* const kPlayerFileName = "Data/Model/Player/Player.mv1";	// ƒvƒŒƒCƒ„[ƒ‚ƒfƒ‹ƒtƒ@ƒCƒ‹ƒpƒX
+	const char* const kFileName = "Data/Model/Player/Player.mv1";	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ¢ãƒ‡ãƒ«ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹
 
-	constexpr float kMoveSpeedDashRate = 1.2f;	// ƒ_ƒbƒVƒ…‘¬“x
-	constexpr float kAccelerationRate = 0.5f;	// ‰Á‘¬“x
-	constexpr float kJumpMaxSpeed = 8.0f;		// ƒWƒƒƒ“ƒv‚ÌÅ‘å‘¬“x
-	constexpr float kGravity = 0.8f;			// d—Í
-	constexpr float kFallMaxSpeed = -15.0f;		// Å‘å—‰º‘¬“x
-	constexpr float kNowVecNum = 0.8f;			// Œ»İ‚Ì•ûŒü
-	constexpr float kNextVecNum = 0.2f;			// i‚İ‚½‚¢•ûŒü
-	constexpr float kMinJumpRiseNum = 1.0f;		// ã¸’†‚Æ”»’f‚³‚ê‚éÅ’á’l
-	constexpr float kAngleSpeed = 0.02f;		// ‰ñ“]‘¬“x
+	constexpr float kMoveSpeedDashRate = 1.2f;	// ãƒ€ãƒƒã‚·ãƒ¥æ™‚é€Ÿåº¦
+	constexpr float kAccelerationRate = 0.5f;	// åŠ é€Ÿåº¦
+	constexpr float kJumpMaxSpeed = 8.0f;		// ã‚¸ãƒ£ãƒ³ãƒ—æ™‚ã®æœ€å¤§é€Ÿåº¦
+	constexpr float kGravity = 0.8f;			// é‡åŠ›
+	constexpr float kFallMaxSpeed = -15.0f;		// æœ€å¤§è½ä¸‹é€Ÿåº¦
+	constexpr float kNowVecNum = 0.8f;			// ç¾åœ¨ã®æ–¹å‘
+	constexpr float kNextVecNum = 0.2f;			// é€²ã¿ãŸã„æ–¹å‘
+	constexpr float kMinJumpRiseNum = 1.0f;		// ä¸Šæ˜‡ä¸­ã¨åˆ¤æ–­ã•ã‚Œã‚‹æœ€ä½å€¤
+	constexpr float kAngleSpeed = 0.02f;		// å›è»¢é€Ÿåº¦
 
-	constexpr float kHeight = 35.0f;			// ‚‚³
-	constexpr float kSize = 15.0f;				// ƒTƒCƒY
-	constexpr VECTOR kScale = { 0.11f,0.11f,0.11f };				// ƒXƒP[ƒ‹
+	constexpr float kHeight = 63.0f;					// é«˜ã•
+	constexpr float kSize = 15.0f;						// ã‚µã‚¤ã‚º
+	constexpr float kTopPos = 60.0f;					// é ­ã®é«˜ã•
+	constexpr float kBottomPos = 0.0f;					// è¶³å…ƒã®åº§æ¨™
+	constexpr float kCapsuleRadius = 8.0f;				// ã‚«ãƒ—ã‚»ãƒ«ã®åŠå¾„
+	constexpr VECTOR kScaleVec = { 0.8f,1.2f,0.8f };	// ã‚¹ã‚±ãƒ¼ãƒ«
 
 	/// <summary>
-	/// ƒAƒjƒ[ƒVƒ‡ƒ“‘¬“x
+	/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³é€Ÿåº¦
 	/// </summary>
 	enum kAnimSpeed
 	{
-		Idle=2,
-		Walk=2,
-		Dash=1,
-		Jump=1,
-		Damage=1,
+		Idle = 2,
+		Walk = 2,
+		Dash = 1,
+		Jump = 1,
+		Damage = 1,
 	};
-
 }
 
 Player::Player():
 	m_pState(std::make_shared<PlayerState>(this)),
-	m_pCamera(std::make_shared<Camera>())
+	m_pCamera(std::make_shared<Camera>()),
+	m_pShot(std::make_shared<Shot>())
 {
-	/*ˆÚ“®‘¬“x‰Šú‰»*/
-	m_moveData.walkSpeed = m_statusData.spd;
+	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãƒ­ãƒ¼ãƒ‰
+	CsvLoad::GetInstance().AnimLoad(m_animData, "Player");
+
+	/*ç§»å‹•é€Ÿåº¦åˆæœŸåŒ–*/
+	/*m_moveData.walkSpeed = m_statusData.spd;
 	m_moveData.dashSpeed = m_statusData.spd * kMoveSpeedDashRate;
 	m_moveData.acc = m_statusData.spd * kAccelerationRate;
+	m_moveData.rotSpeed = kAngleSpeed;*/
+
+	m_moveData.walkSpeed = 5;
+	m_moveData.dashSpeed = 10 * kMoveSpeedDashRate;
+	m_moveData.acc = 5 * kAccelerationRate;
 	m_moveData.rotSpeed = kAngleSpeed;
 
-	/*î•ñ‰Šú‰»*/
+	/*æƒ…å ±åˆæœŸåŒ–*/
 	m_characterInfo.pos = VGet(0.0f, 0.0f, 0.0f);
+	m_characterInfo.topPos = VAdd(m_characterInfo.pos, VGet(0.0f, kTopPos, 0.0f));
+	m_characterInfo.bottomPos = VSub(m_characterInfo.pos, VGet(0.0f, kBottomPos, 0.0f));
 	m_characterInfo.vec = VGet(0.0f, 0.0f, 0.0f);
 	m_characterInfo.rot = VGet(0.0f, 0.0f, 0.0f);
 	m_characterInfo.modelH = -1;
@@ -63,93 +79,101 @@ Player::Player():
 	m_objSize = kSize;
 	m_angle = 0.0f;
 
-	// “–‚½‚è”»’èƒ|ƒCƒ“ƒ^ì¬
+	// å½“ãŸã‚Šåˆ¤å®šãƒã‚¤ãƒ³ã‚¿ä½œæˆ
 	m_pSphere = std::make_shared<Sphere>(m_characterInfo.pos, m_objSize, kHeight * 0.5f);
-	VECTOR topPos = VAdd(m_characterInfo.pos, VGet(0.0f, kHeight * 0.5f, 0.0f));	// “ª
-	VECTOR bottomPos = VSub(m_characterInfo.pos, VGet(0.0f, kHeight * 0.5f, 0.0f));	// ‘«
-	m_pCapsule = std::make_shared<Capsule>(topPos, bottomPos, kHeight * 0.5f);
+	m_pCapsule = std::make_shared<Capsule>(m_characterInfo.topPos, m_characterInfo.bottomPos, kCapsuleRadius);
 
-	// ƒ‚ƒfƒ‹ƒ|ƒCƒ“ƒ^ì¬
-	m_pModel = std::make_shared<Model>(kPlayerFileName);
-	// ƒ‚ƒfƒ‹ƒXƒP[ƒ‹İ’è
-	m_pModel->SetScale(kScale);
-	// ƒAƒjƒ[ƒVƒ‡ƒ“‰Šú‰»
-	m_pModel->SetAnim(m_animData.idle, false, true);
+	// ãƒ¢ãƒ‡ãƒ«ãƒã‚¤ãƒ³ã‚¿ä½œæˆ
+	m_pModel = std::make_shared<Model>(kFileName);
+	// ãƒ¢ãƒ‡ãƒ«ã‚¹ã‚±ãƒ¼ãƒ«è¨­å®š
+	m_pModel->SetScale(kScaleVec);
+	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³åˆæœŸåŒ–
+	m_pModel->SetAnim(m_animData.idle, true, false);
 
-	// ‰ŠúƒXƒeƒCƒg‚Ìİ’è(‘Ò‹@ó‘Ô‚©‚ç)
+	// åˆæœŸã‚¹ãƒ†ã‚¤ãƒˆã®è¨­å®š(å¾…æ©ŸçŠ¶æ…‹ã‹ã‚‰)
 	m_pState->SetState(PlayerState::StateKind::Idle);
 
-	// ƒ‚ƒfƒ‹‚Ì’¸“_ƒ^ƒCƒv‚Ìæ“¾
-	for (int i = 0; i < MV1GetTriangleListNum(m_pModel->GetModelHandle()); i++)
-	{
-		// ’¸“_ƒ^ƒCƒv‚Ìæ“¾
-		//m_vertexShaderType.push_back(MV1GetTriangleListVertexType(m_pModel->GetModelHandle(), i));
+	// ãƒ¢ãƒ‡ãƒ«ã®é ‚ç‚¹ã‚¿ã‚¤ãƒ—ã®å–å¾—
+	//for (int i = 0; i < MV1GetTriangleListNum(m_pModel->GetModelHandle()); i++)
+	//{
+	//	// é ‚ç‚¹ã‚¿ã‚¤ãƒ—ã®å–å¾—
+	//	//m_vertexShaderType.push_back(MV1GetTriangleListVertexType(m_pModel->GetModelHandle(), i));
 
-		// ’¸“_ƒVƒF[ƒ_ƒnƒ“ƒhƒ‹‚Ìæ“¾
-		m_vertexShaderH.push_back(m_pVertexShader->
-			SetVertexShaderH(MV1GetTriangleListVertexType(m_pModel->GetModelHandle(), i)));
-	}
+	//	// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒãƒ³ãƒ‰ãƒ«ã®å–å¾—
+	//	m_vertexShaderH.push_back(m_pVertexShader->
+	//		SetVertexShaderH(MV1GetTriangleListVertexType(m_pModel->GetModelHandle(), i)));
+	//}
 }
 
 Player::~Player()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void Player::Update()
 {
-	// ƒXƒeƒCƒgXV
+	// ã‚¹ãƒ†ã‚¤ãƒˆæ›´æ–°
 	m_pState->Update();
 	UpdateState();
 
-	// ˆÚ“®XV
+	// ç§»å‹•æ›´æ–°
 	m_characterInfo.vec = Move();
-	// d—Í‚É‚æ‚é—‰ºˆ—
+	// é‡åŠ›ã«ã‚ˆã‚‹è½ä¸‹å‡¦ç†
 	UpdateGravity();
 
-	// ƒ_ƒ[ƒWˆ—
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸å‡¦ç†
 
-
-	// ƒAƒjƒ[ƒVƒ‡ƒ“XV
+	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³æ›´æ–°
 	m_pModel->Update();
-	// ƒ‚ƒfƒ‹À•W‚Ìİ’è
+	// ãƒ¢ãƒ‡ãƒ«åº§æ¨™ã®è¨­å®š
 	m_pModel->SetPos(m_characterInfo.pos);
-	// ƒ‚ƒfƒ‹‰ñ“]‚Ìİ’è
+	// ãƒ¢ãƒ‡ãƒ«å›è»¢ã®è¨­å®š
 	m_pModel->SetRot(VGet(0.0f, m_angle, 0.0f));
 
-	// ƒJƒƒ‰XV
+	// ã‚«ãƒ¡ãƒ©æ›´æ–°
 	m_pCamera->Update(m_characterInfo.pos);	
+
+	// é è·é›¢æ”»æ’ƒæ­¦å™¨æ›´æ–°
+	m_pShot->Update(m_characterInfo.pos, m_angle);
+
+	// åº§æ¨™è¨­å®š
+	m_characterInfo.topPos = VAdd(m_characterInfo.pos, VGet(0.0f, kTopPos, 0.0f));
+	m_characterInfo.bottomPos = VSub(m_characterInfo.pos, VGet(0.0f, kBottomPos, 0.0f));
 }
 
 void Player::Draw(std::shared_ptr<ToonShader> pToonShader)
 {
-	// ƒ‚ƒfƒ‹‚ğƒtƒŒ[ƒ€‚²‚Æ‚É•`‰æ‚·‚é
-	for (int i = 0; i < MV1GetTriangleListNum(m_pModel->GetModelHandle()); i++)
-	{
-		// ƒVƒF[ƒ_‚Ìİ’è
-		pToonShader->SetShader(m_vertexShaderH[i]);
+	//// ãƒ¢ãƒ‡ãƒ«ã‚’ãƒ•ãƒ¬ãƒ¼ãƒ ã”ã¨ã«æç”»ã™ã‚‹
+	//for (int i = 0; i < MV1GetTriangleListNum(m_pModel->GetModelHandle()); i++)
+	//{
+	//	// ã‚·ã‚§ãƒ¼ãƒ€ã®è¨­å®š
+	//	pToonShader->SetShader(m_vertexShaderH[i]);
 
-		// •`‰æ
-		MV1DrawTriangleList(m_pModel->GetModelHandle(), i);
-	}
-	// ƒVƒF[ƒ_‚ğg‚í‚È‚¢İ’è‚É‚·‚é
-	pToonShader->ShaderEnd();
+	//	// æç”»
+	//	MV1DrawTriangleList(m_pModel->GetModelHandle(), i);
+	//}
+	//// ã‚·ã‚§ãƒ¼ãƒ€ã‚’ä½¿ã‚ãªã„è¨­å®šã«ã™ã‚‹
+	//pToonShader->ShaderEnd();
 
-	// “–‚½‚è”»’è‚Ì•`‰æ
-	//m_pSphere->DebugDraw(0xff0000);
-	m_pCapsule->DebugDraw(0x00ff00);
+	m_pModel->Draw();
+
+	// é è·é›¢æ”»æ’ƒæ­¦å™¨æç”»
+	m_pShot->Draw();
+
+	// å½“ãŸã‚Šåˆ¤å®šã®æç”»
+	m_pCapsule->DebugDraw(0xff0000);
 }
 
 void Player::Draw2D()
 {
-	// ƒJƒƒ‰2D•”•ª‚Ì•`‰æ
+	// ã‚«ãƒ¡ãƒ©2Déƒ¨åˆ†ã®æç”»
 	m_pCamera->Draw();
 
 #ifdef _DEBUG
-	// ƒfƒoƒbƒO—p•`‰æ
-	DrawFormatString(0, 20, 0x000000, "ƒvƒŒƒCƒ„[À•WF%f,%f,%f"
+	// ãƒ‡ãƒãƒƒã‚°ç”¨æç”»
+	DrawFormatString(0, 20, 0xffffff, "ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼åº§æ¨™ï¼š%f,%f,%f"
 		, m_characterInfo.pos.x, m_characterInfo.pos.y, m_characterInfo.pos.z);
-	DrawFormatString(0, 100, 0x000000, "ƒWƒƒƒ“ƒv—ÍF%f", m_jumpPower);
+	DrawFormatString(0, 40, 0xffffff, "ã‚¸ãƒ£ãƒ³ãƒ—åŠ›ï¼š%f", m_jumpPower);
 #endif // _DEBUG
 }
 
@@ -163,78 +187,78 @@ void Player::OnAttack()
 
 void Player::EndJump()
 {
-	// ƒWƒƒƒ“ƒvƒtƒ‰ƒO‚ğfalse‚É‚·‚é
+	// ã‚¸ãƒ£ãƒ³ãƒ—ãƒ•ãƒ©ã‚°ã‚’falseã«ã™ã‚‹
 	m_isJump = false;
-	// ƒWƒƒƒ“ƒv—Í‚ğ0‚É‚·‚é
+	// ã‚¸ãƒ£ãƒ³ãƒ—åŠ›ã‚’0ã«ã™ã‚‹
 	m_jumpPower = 0.0f;
 
-	// ƒXƒe[ƒWƒNƒŠƒA‚Íˆ—‚ğI—¹‚·‚é
+	// ã‚¹ãƒ†ãƒ¼ã‚¸ã‚¯ãƒªã‚¢æ™‚ã¯å‡¦ç†ã‚’çµ‚äº†ã™ã‚‹
 	
 
-	// ƒXƒeƒCƒg‚ÌI—¹ˆ—
+	// ã‚¹ãƒ†ã‚¤ãƒˆã®çµ‚äº†å‡¦ç†
 	m_pState->EndState();
 }
 
 void Player::UpdateAngle()
 {
-	// ƒ_ƒ[ƒW’†‚Íˆ—‚ğ‚µ‚È‚¢
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ä¸­ã¯å‡¦ç†ã‚’ã—ãªã„
 	if (m_pState->GetState() == PlayerState::StateKind::Damage) return;
 
-	// –Ú•WŠp“x‚ÌŒvZ(ƒxƒNƒgƒ‹(z,x)‚ÌŠp“x + 90‹+ ƒJƒƒ‰Šp“x)
+	// ç›®æ¨™è§’åº¦ã®è¨ˆç®—(ãƒ™ã‚¯ãƒˆãƒ«(z,x)ã®è§’åº¦ + 90Â°+ ã‚«ãƒ¡ãƒ©è§’åº¦)
 	float nextAngle = atan2(m_moveDirection.z, m_moveDirection.x)
 		+ DX_PI_F * 0.5f + m_pCamera->GetCameraAngleX();
 
-	// Šp“x‚ğŠŠ‚ç‚©‚É•ÏX‚·‚é
+	// è§’åº¦ã‚’æ»‘ã‚‰ã‹ã«å¤‰æ›´ã™ã‚‹
 	SmoothAngle(m_angle, nextAngle);
 }
 
 void Player::UpdateMoveDirection()
 {
-	// ƒ_ƒ[ƒW’†‚Íˆ—‚ğ‚µ‚È‚¢
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ä¸­ã¯å‡¦ç†ã‚’ã—ãªã„
 	if (m_pState->GetState() == PlayerState::StateKind::Damage) return;
 
-	// ˆÚ“®•ûŒüƒxƒNƒgƒ‹ƒNƒ‰ƒX‚Ìì¬
+	// ç§»å‹•æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«ã‚¯ãƒ©ã‚¹ã®ä½œæˆ
 	MoveDirectionVec moveDirectionVec;
-	// ˆÚ“®•ûŒüXV
+	// ç§»å‹•æ–¹å‘æ›´æ–°
 	moveDirectionVec.Update();
 
-	// i‚İ‚½‚¢•ûŒü‚ÆŒ»İ‚Ì•ûŒü‚ÌüŒ`•âŠ®
+	// é€²ã¿ãŸã„æ–¹å‘ã¨ç¾åœ¨ã®æ–¹å‘ã®ç·šå½¢è£œå®Œ
 	m_moveDirection = VAdd(VScale(m_moveDirection, kNowVecNum),
 		VScale(moveDirectionVec.GetDirectionVec(), kNextVecNum));
 
-	// i‚İ‚½‚¢•ûŒü‚ÌY²‚ğÈ‚­
+	// é€²ã¿ãŸã„æ–¹å‘ã®Yè»¸ã‚’çœã
 	m_moveDirection.y = 0.0f;
 }
 
 VECTOR Player::Move()
 {
-	// ˆÚ“®‘¬“x‚ª0‚Ìê‡‚Í‰½‚à‚µ‚È‚¢
+	// ç§»å‹•é€Ÿåº¦ãŒ0ã®å ´åˆã¯ä½•ã‚‚ã—ãªã„
 	if (m_moveSpeed == 0.0f)return VGet(0.0f, 0.0f, 0.0f);
 
-	// ˆÚ“®•ûŒüXV
+	// ç§»å‹•æ–¹å‘æ›´æ–°
 	UpdateMoveDirection();
-	// Šp“xXV
+	// è§’åº¦æ›´æ–°
 	UpdateAngle();
 
-	// ˆÚ“®ƒxƒNƒgƒ‹‚Ì¶¬
+	// ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«ã®ç”Ÿæˆ
 	VECTOR move = VNorm(m_moveDirection);
 
-	// ƒ_ƒ[ƒW’†‚Ìˆ—
+	// ãƒ€ãƒ¡ãƒ¼ã‚¸ä¸­ã®å‡¦ç†
 	if (m_pState->GetState() == PlayerState::StateKind::Damage)
 	{
-		// return move;
+		 return move;
 	}
 
-	// ˆÚ“®ƒxƒNƒgƒ‹‚É‘¬“x‚ğ‚©‚¯‚é
-	// X²‚Í”½“]‚³‚¹‚é(ƒJƒƒ‰‚ÌŠp“x‚ğ•Ï‚¦‚½‚ÉˆÚ“®•ûŒü‚ª‚¨‚©‚µ‚­‚È‚ç‚È‚¢‚æ‚¤‚É)
+	// ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«ã«é€Ÿåº¦ã‚’ã‹ã‘ã‚‹
+	// Xè»¸ã¯åè»¢ã•ã›ã‚‹(ã‚«ãƒ¡ãƒ©ã®è§’åº¦ã‚’å¤‰ãˆãŸæ™‚ã«ç§»å‹•æ–¹å‘ãŒãŠã‹ã—ããªã‚‰ãªã„ã‚ˆã†ã«)
 	move.x *= -m_moveSpeed;
 	move.z *= m_moveSpeed;
 
-	/*ƒJƒƒ‰‚ÌŠp“x‚É‚æ‚Á‚Äi‚Ş•ûŒü‚ğ•Ï‚¦‚é*/
-	// ƒJƒƒ‰‚ÌŠp“xs—ñ‚ğæ“¾‚·‚é
+	/*ã‚«ãƒ¡ãƒ©ã®è§’åº¦ã«ã‚ˆã£ã¦é€²ã‚€æ–¹å‘ã‚’å¤‰ãˆã‚‹*/
+	// ã‚«ãƒ¡ãƒ©ã®è§’åº¦è¡Œåˆ—ã‚’å–å¾—ã™ã‚‹
 	MATRIX rotMtx = MGetRotY(m_pCamera->GetCameraAngleX());
 
-	// ˆÚ“®ƒxƒNƒgƒ‹‚ÆƒJƒƒ‰Šp“xs—ñ‚ğ‚©‚¯‚é
+	// ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«ã¨ã‚«ãƒ¡ãƒ©è§’åº¦è¡Œåˆ—ã‚’ã‹ã‘ã‚‹
 	move = VTransform(move, rotMtx);
 
 	return move;
@@ -242,73 +266,73 @@ VECTOR Player::Move()
 
 void Player::InitState()
 {
-	/*Œ»İ‚ÌƒXƒeƒCƒg‚É‚æ‚Á‚Ä‰Šú‰»ˆ—‚ğ•Ï‚¦‚é*/
+	/*ç¾åœ¨ã®ã‚¹ãƒ†ã‚¤ãƒˆã«ã‚ˆã£ã¦åˆæœŸåŒ–å‡¦ç†ã‚’å¤‰ãˆã‚‹*/
 	switch (m_pState->GetState())
 	{
 	case PlayerState::StateKind::Jump:
-		// ƒWƒƒƒ“ƒvƒtƒ‰ƒO‚ğ—§‚Ä‚é
+		// ã‚¸ãƒ£ãƒ³ãƒ—ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
 		m_isJump = true;
-		// ƒWƒƒƒ“ƒv—Í‚ğİ’è‚·‚é
+		// ã‚¸ãƒ£ãƒ³ãƒ—åŠ›ã‚’è¨­å®šã™ã‚‹
 		m_jumpPower = kJumpMaxSpeed;
-		// ƒWƒƒƒ“ƒv‰¹‚ğ–Â‚ç‚·
+		// ã‚¸ãƒ£ãƒ³ãƒ—éŸ³ã‚’é³´ã‚‰ã™
 
 		break;
 	default:
-		// ã‹LˆÈŠO‚¾‚Á‚½ê‡‚Í‰½‚à‚µ‚È‚¢
+		// ä¸Šè¨˜ä»¥å¤–ã ã£ãŸå ´åˆã¯ä½•ã‚‚ã—ãªã„
 		break;
 	}
 }
 
 void Player::UpdateState()
 {
-	/*Œ»İ‚ÌƒXƒeƒCƒg‚É‚æ‚Á‚ÄXVˆ—‚ğ•Ï‚¦‚é*/
+	/*ç¾åœ¨ã®ã‚¹ãƒ†ã‚¤ãƒˆã«ã‚ˆã£ã¦æ›´æ–°å‡¦ç†ã‚’å¤‰ãˆã‚‹*/
 	switch (m_pState->GetState())
 	{
-	case PlayerState::StateKind::Idle:	// ‘Ò‹@
-		// ’iXŒ¸‘¬‚·‚é
+	case PlayerState::StateKind::Idle:	// å¾…æ©Ÿ
+		// æ®µã€…æ¸›é€Ÿã™ã‚‹
 		m_moveSpeed = max(m_moveSpeed - m_moveData.acc, 0.0f);
-		// ƒAƒjƒ[ƒVƒ‡ƒ“‚ğ‘Ò‹@ó‘Ô‚É•ÏX‚·‚é
+		// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å¾…æ©ŸçŠ¶æ…‹ã«å¤‰æ›´ã™ã‚‹
 		m_pModel->ChangeAnim(m_animData.idle, true, false, kAnimSpeed::Idle);
 		break;
 
-	case PlayerState::StateKind::Walk:	// •à‚«
-		// ˆÚ“®‘¬“x‚ğ•à‚«ó‘Ô‚Ì‘¬“x‚É•ÏX‚·‚é
+	case PlayerState::StateKind::Walk:	// æ­©ã
+		// ç§»å‹•é€Ÿåº¦ã‚’æ­©ãçŠ¶æ…‹ã®é€Ÿåº¦ã«å¤‰æ›´ã™ã‚‹
 		m_moveSpeed = min(m_moveSpeed + m_moveData.acc, m_moveData.walkSpeed);
-		// ƒAƒjƒ[ƒVƒ‡ƒ“‚ğ•à‚«ƒAƒjƒ[ƒVƒ‡ƒ“‚É•ÏX‚·‚é
+		// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’æ­©ãã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã«å¤‰æ›´ã™ã‚‹
 		m_pModel->ChangeAnim(m_animData.walk, true, false, kAnimSpeed::Walk);
 		break;
 
-	case PlayerState::StateKind::Dash:	// ƒ_ƒbƒVƒ…
-		// ˆÚ“®‘¬“x‚ğƒ_ƒbƒVƒ…‚Ì‘¬“x‚É‚·‚é
+	case PlayerState::StateKind::Dash:	// ãƒ€ãƒƒã‚·ãƒ¥
+		// ç§»å‹•é€Ÿåº¦ã‚’ãƒ€ãƒƒã‚·ãƒ¥æ™‚ã®é€Ÿåº¦ã«ã™ã‚‹
 		m_moveSpeed = min(m_moveSpeed + m_moveData.acc, m_moveData.dashSpeed);
-		// ƒAƒjƒ[ƒVƒ‡ƒ“‚ğƒ_ƒbƒVƒ…ƒAƒjƒ[ƒVƒ‡ƒ“‚É•ÏX‚·‚é
+		// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’ãƒ€ãƒƒã‚·ãƒ¥ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã«å¤‰æ›´ã™ã‚‹
 		m_pModel->ChangeAnim(m_animData.run, true, false, kAnimSpeed::Dash);
 		break;
 
-	case PlayerState::StateKind::Jump:	// ƒWƒƒƒ“ƒv
-		// ˆÚ“®‘¬“x‚ğ•ÏX‚·‚é
-		m_moveSpeed = min(m_moveSpeed + m_moveData.acc, m_moveData.walkSpeed);
+	case PlayerState::StateKind::Jump:	// ã‚¸ãƒ£ãƒ³ãƒ—
+		// ç§»å‹•é€Ÿåº¦ã‚’å¤‰æ›´ã™ã‚‹
+		//m_moveSpeed = min(m_moveSpeed + m_moveData.acc, m_moveData.walkSpeed);
 
-		// ã¸’†
-		if (m_jumpPower > kMinJumpRiseNum)
-		{
-			// ƒAƒjƒ[ƒVƒ‡ƒ“‚ğƒWƒƒƒ“ƒvŠJnƒAƒjƒ[ƒVƒ‡ƒ“‚ÉØ‚è‘Ö‚¦‚é
-			m_pModel->ChangeAnim(m_animData.jumpStart, false, false, kAnimSpeed::Jump);
-		}
-		// ‹ó’†‚É‚Æ‚Ç‚Ü‚Á‚Ä‚¢‚éA‰º~’†
-		else
-		{
-			// ƒAƒjƒ[ƒVƒ‡ƒ“‚ğƒWƒƒƒ“ƒv‘Ò‹@ƒAƒjƒ[ƒVƒ‡ƒ“‚ÉØ‚è‘Ö‚¦‚é
-			m_pModel->ChangeAnim(m_animData.jumpIdle, false, false, kAnimSpeed::Jump);
-		}
+		// ä¸Šæ˜‡ä¸­
+		//if (m_jumpPower > kMinJumpRiseNum)
+		//{
+		//	// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’ã‚¸ãƒ£ãƒ³ãƒ—é–‹å§‹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã«åˆ‡ã‚Šæ›¿ãˆã‚‹
+		//	m_pModel->ChangeAnim(m_animData.jumpStart, false, false, kAnimSpeed::Jump);
+		//}
+		//// ç©ºä¸­ã«ã¨ã©ã¾ã£ã¦ã„ã‚‹ã€ä¸‹é™ä¸­
+		//else
+		//{
+			// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’ã‚¸ãƒ£ãƒ³ãƒ—å¾…æ©Ÿã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã«åˆ‡ã‚Šæ›¿ãˆã‚‹
+			m_pModel->ChangeAnim(m_animData.jumpIdle, true, false, kAnimSpeed::Jump);
+		//}
 		break;
 
-	case PlayerState::StateKind::Damage:	// ƒ_ƒ[ƒW
+	case PlayerState::StateKind::Damage:	// ãƒ€ãƒ¡ãƒ¼ã‚¸
 
 		break;
 
 	default:
-		// ã‹LˆÈŠO‚¾‚Á‚½ê‡‚Í‰½‚à‚µ‚È‚¢
+		// ä¸Šè¨˜ä»¥å¤–ã ã£ãŸå ´åˆã¯ä½•ã‚‚ã—ãªã„
 		break;
 	}
 }

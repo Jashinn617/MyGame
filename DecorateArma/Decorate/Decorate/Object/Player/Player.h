@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "DxLib.h"
 
 #include "../CharacterBase.h"
@@ -7,109 +7,111 @@
 
 class Camera;
 class PlayerState;
+class Shot;
 
 /// <summary>
-/// ƒvƒŒƒCƒ„[
+/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼
 /// </summary>
 class Player : public CharacterBase
 {
-public:		// ŠÖ”
+public:		// é–¢æ•°
 	/// <summary>
-	/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
 	Player();
 
 	/// <summary>
-	/// ƒfƒXƒgƒ‰ƒNƒ^
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
 	~Player();
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
-	void Init() override final{/*ˆ—–³‚µ*/ }
+	void Init() override final{/*å‡¦ç†ç„¡ã—*/ }
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
 	void Update() override final;
 
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
-	/// <param name="pToonShader">ƒgƒD[ƒ“ƒVƒF[ƒ_ƒ|ƒCƒ“ƒ^</param>
+	/// <param name="pToonShader">ãƒˆã‚¥ãƒ¼ãƒ³ã‚·ã‚§ãƒ¼ãƒ€ãƒã‚¤ãƒ³ã‚¿</param>
 	virtual void Draw(std::shared_ptr<ToonShader> pToonShader) override final;
 
 	/// <summary>
-	/// 2D‰æ‘œ•`‰æ
+	/// 2Dç”»åƒæç”»
 	/// </summary>
 	void Draw2D() override final;
 
 	/// <summary>
-	/// ƒ_ƒ[ƒWˆ—
+	/// ãƒ€ãƒ¡ãƒ¼ã‚¸å‡¦ç†
 	/// </summary>
-	/// <param name="targetPos">‘Šè‚ÌÀ•W</param>
+	/// <param name="targetPos">ç›¸æ‰‹ã®åº§æ¨™</param>
 	void OnDamage(VECTOR targetPos) override final;
 
 	/// <summary>
-	/// UŒ‚ˆ—
+	/// æ”»æ’ƒå‡¦ç†
 	/// </summary>
 	void OnAttack() override final;
 
 	/// <summary>
-	/// ƒWƒƒƒ“ƒvó‘Ô‚ÌI—¹
+	/// ã‚¸ãƒ£ãƒ³ãƒ—çŠ¶æ…‹ã®çµ‚äº†
 	/// </summary>
 	void EndJump() override final;
 
 	/// <summary>
-	/// ƒWƒƒƒ“ƒv—Í‚Ìİ’è
+	/// ã‚¸ãƒ£ãƒ³ãƒ—åŠ›ã®è¨­å®š
 	/// </summary>
-	/// <param name="jumpPower">ƒWƒƒƒ“ƒv—Í</param>
+	/// <param name="jumpPower">ã‚¸ãƒ£ãƒ³ãƒ—åŠ›</param>
 	void SetJumpPower(float jumpPower) { m_jumpPower = jumpPower; }
 
 	/// <summary>
-	/// “–‚½‚è”»’è‚Ìí—Ş‚Ìæ“¾
+	/// å½“ãŸã‚Šåˆ¤å®šã®ç¨®é¡ã®å–å¾—
 	/// </summary>
-	/// <returns>“–‚½‚è”»’è‚Ìí—Ş</returns>
+	/// <returns>å½“ãŸã‚Šåˆ¤å®šã®ç¨®é¡</returns>
 	ColType GetColType()const override final { return ColType::Player; }
 
 	/// <summary>
-	/// ƒJƒƒ‰æ“¾
+	/// ã‚«ãƒ¡ãƒ©å–å¾—
 	/// </summary>
-	/// <returns>ƒJƒƒ‰ƒ|ƒCƒ“ƒ^</returns>
+	/// <returns>ã‚«ãƒ¡ãƒ©ãƒã‚¤ãƒ³ã‚¿</returns>
 	const std::shared_ptr<Camera> GetCamera()const { return m_pCamera; }
 
 	/// <summary>
-	/// ƒXƒeƒCƒg‚²‚Æ‚Ì‰Šú‰»
+	/// ã‚¹ãƒ†ã‚¤ãƒˆã”ã¨ã®åˆæœŸåŒ–
 	/// </summary>
 	void InitState();
 
-private:	// ŠÖ”
+private:	// é–¢æ•°
 
 	/// <summary>
-	/// Šp“xXV
+	/// è§’åº¦æ›´æ–°
 	/// </summary>
 	void UpdateAngle();
 
 	/// <summary>
-	/// ˆÚ“®•ûŒüXV
+	/// ç§»å‹•æ–¹å‘æ›´æ–°
 	/// </summary>
 	void UpdateMoveDirection();
 
 	/// <summary>
-	/// ˆÚ“®ˆ—
+	/// ç§»å‹•å‡¦ç†
 	/// </summary>
-	/// <returns>ˆÚ“®’l</returns>
+	/// <returns>ç§»å‹•å€¤</returns>
 	VECTOR Move();
 
 	/// <summary>
-	/// ƒXƒeƒCƒg‚²‚Æ‚ÌXV
+	/// ã‚¹ãƒ†ã‚¤ãƒˆã”ã¨ã®æ›´æ–°
 	/// </summary>
 	void UpdateState();
 
-private:	// •Ï”
+private:	// å¤‰æ•°
 	VECTOR m_moveDirection;
 
-	std::shared_ptr<PlayerState> m_pState;	// ƒXƒeƒCƒgƒ|ƒCƒ“ƒ^
-	std::shared_ptr<Camera> m_pCamera;		// ƒJƒƒ‰ƒ|ƒCƒ“ƒ^
+	std::shared_ptr<PlayerState> m_pState;	// ã‚¹ãƒ†ã‚¤ãƒˆãƒã‚¤ãƒ³ã‚¿
+	std::shared_ptr<Camera> m_pCamera;		// ã‚«ãƒ¡ãƒ©ãƒã‚¤ãƒ³ã‚¿
+	std::shared_ptr<Shot> m_pShot;			// ã‚·ãƒ§ãƒƒãƒˆ
 };

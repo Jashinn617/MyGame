@@ -1,2 +1,2 @@
 CharacterName,Idle,Walk,Dash,JumpStart,JumpIdle,Damage
-Player,0,0,0,0,0,0
+Player,0,1,2,8,9,7

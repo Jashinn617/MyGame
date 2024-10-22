@@ -1,4 +1,4 @@
-#include "PlayerState.h"
+ï»¿#include "PlayerState.h"
 
 #include "Player.h"
 
@@ -9,27 +9,25 @@ PlayerState::PlayerState(Player* player):
 	m_nowState(StateKind::Idle),
 	m_pPlayer(player)
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 PlayerState::~PlayerState()
 {
-	// ƒ|ƒCƒ“ƒ^‚Ì‰ğ•ú
-	delete(m_pPlayer);
-	m_pPlayer = nullptr;
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void PlayerState::Update()
 {
-	// ó‘Ô‘JˆÚ
+	// çŠ¶æ…‹é·ç§»
 	StateTransition();
 
-	// ‘–‚èA•à‚«ó‘Ô‚Å‚È‚¢‚Æ‚«‚ÍƒTƒEƒ“ƒh‚ğ~‚ß‚é
+	// èµ°ã‚Šã€æ­©ãçŠ¶æ…‹ã§ãªã„ã¨ãã¯ã‚µã‚¦ãƒ³ãƒ‰ã‚’æ­¢ã‚ã‚‹
 }
 
 void PlayerState::OnDamage()
 {
-	// Œ»İ‚Ìó‘Ô‚ªƒ_ƒ[ƒWó‘Ô‚¾‚Á‚½ê‡‚Í‰½‚à‚µ‚È‚¢
+	// ç¾åœ¨ã®çŠ¶æ…‹ãŒãƒ€ãƒ¡ãƒ¼ã‚¸çŠ¶æ…‹ã ã£ãŸå ´åˆã¯ä½•ã‚‚ã—ãªã„
 	if (m_nowState == StateKind::Damage) return;
 
 }
@@ -38,10 +36,10 @@ void PlayerState::SetState(StateKind stateKind)
 {
 	for (int i = 0; i < static_cast<int>(StateKind::StateNum); i++)
 	{
-		// ƒXƒeƒCƒg‚Ìí—Ş‚ªw’è‚ÌƒXƒeƒCƒg‚Ìê‡
+		// ã‚¹ãƒ†ã‚¤ãƒˆã®ç¨®é¡ãŒæŒ‡å®šã®ã‚¹ãƒ†ã‚¤ãƒˆã®å ´åˆ
 		if (static_cast<int>(stateKind) == i)
 		{
-			// ó‘Ô‚ğ•ÏX‚·‚é
+			// çŠ¶æ…‹ã‚’å¤‰æ›´ã™ã‚‹
 			m_nowState = static_cast<StateKind>(i);
 			return;
 		}
@@ -50,73 +48,73 @@ void PlayerState::SetState(StateKind stateKind)
 
 void PlayerState::EndState()
 {
-	// ƒAƒNƒVƒ‡ƒ“ó‘Ô‚ÌI—¹
+	// ã‚¢ã‚¯ã‚·ãƒ§ãƒ³çŠ¶æ…‹ã®çµ‚äº†
 	m_isAction = false;
 }
 
 void PlayerState::StateTransitionIdle()
 {
-	// ƒAƒNƒVƒ‡ƒ“’†‚Ìê‡‚Í‰½‚à‚µ‚È‚¢
+	// ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ä¸­ã®å ´åˆã¯ä½•ã‚‚ã—ãªã„
 	if (m_isAction) return;
 
-	// ˆÚ“®ƒ{ƒ^ƒ“‚ª‰½‚à‰Ÿ‚³‚ê‚Ä‚¢‚È‚©‚Á‚½ê‡
+	// ç§»å‹•ãƒœã‚¿ãƒ³ãŒä½•ã‚‚æŠ¼ã•ã‚Œã¦ã„ãªã‹ã£ãŸå ´åˆ
 	if (!Pad::IsPress(PAD_INPUT_LEFT) && !Pad::IsPress(PAD_INPUT_RIGHT) &&
 		!Pad::IsPress(PAD_INPUT_UP) && !Pad::IsPress(PAD_INPUT_DOWN))
 	{
-		// ƒXƒeƒCƒg‚ğ‘Ò‹@ó‘Ô‚É‚·‚é
+		// ã‚¹ãƒ†ã‚¤ãƒˆã‚’å¾…æ©ŸçŠ¶æ…‹ã«ã™ã‚‹
 		ChangeState(StateKind::Idle);
 	}
 }
 
 void PlayerState::StateTransitionWalk()
 {
-	// ƒAƒNƒVƒ‡ƒ“’†‚Ìê‡‚Í‰½‚à‚µ‚È‚¢
+	// ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ä¸­ã®å ´åˆã¯ä½•ã‚‚ã—ãªã„
 	if (m_isAction) return;
 
-	// ˆÚ“®ƒ{ƒ^ƒ“‚ª‰½‚©‚µ‚ç‰Ÿ‚³‚ê‚Ä‚¢‚½ê‡
+	// ç§»å‹•ãƒœã‚¿ãƒ³ãŒä½•ã‹ã—ã‚‰æŠ¼ã•ã‚Œã¦ã„ãŸå ´åˆ
 	if (Pad::IsPress(PAD_INPUT_LEFT) || Pad::IsPress(PAD_INPUT_RIGHT) ||
 		Pad::IsPress(PAD_INPUT_UP) || Pad::IsPress(PAD_INPUT_DOWN))
 	{
-		// ƒXƒeƒCƒg‚ğ•à‚«ó‘Ô‚É‚·‚é
+		// ã‚¹ãƒ†ã‚¤ãƒˆã‚’æ­©ãçŠ¶æ…‹ã«ã™ã‚‹
 		ChangeState(StateKind::Walk);
 	}
 }
 
 void PlayerState::StateTransitionDash()
 {
-	// ƒAƒNƒVƒ‡ƒ“’†‚Ìê‡‚Í‰½‚à‚µ‚È‚¢
+	// ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ä¸­ã®å ´åˆã¯ä½•ã‚‚ã—ãªã„
 	if (m_isAction) return;
 
-	//ˆÚ“®ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚Ä‚¢‚È‚©‚Á‚½‚ç‰½‚à‚µ‚È‚¢
+	//ç§»å‹•ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚Œã¦ã„ãªã‹ã£ãŸã‚‰ä½•ã‚‚ã—ãªã„
 	if (!Pad::IsPress(PAD_INPUT_LEFT) && !Pad::IsPress(PAD_INPUT_RIGHT) &&
 		!Pad::IsPress(PAD_INPUT_UP) && !Pad::IsPress(PAD_INPUT_DOWN)) return;
 
-	// RB‚ª‰Ÿ‚³‚ê‚Ä‚¢‚½ê‡
+	// RBãŒæŠ¼ã•ã‚Œã¦ã„ãŸå ´åˆ
 	if (Pad::IsPress(PAD_INPUT_6))
 	{
-		// ƒXƒeƒCƒg‚ğƒ_ƒbƒVƒ…ó‘Ô‚É‚·‚é
+		// ã‚¹ãƒ†ã‚¤ãƒˆã‚’ãƒ€ãƒƒã‚·ãƒ¥çŠ¶æ…‹ã«ã™ã‚‹
 		ChangeState(StateKind::Dash);
 	}
 }
 
 void PlayerState::StateTransitionJump()
 {
-	// ƒAƒNƒVƒ‡ƒ“’†‚Ìê‡‚Í‰½‚à‚µ‚È‚¢
+	// ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ä¸­ã®å ´åˆã¯ä½•ã‚‚ã—ãªã„
 	if (m_isAction) return;
 
-	// Aƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½ê‡
+	// Aãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸå ´åˆ
 	if (Pad::IsTrigger(PAD_INPUT_1))
 	{
-		// ƒAƒNƒVƒ‡ƒ“ƒtƒ‰ƒO‚ğ—§‚Ä‚é
+		// ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
 		m_isAction = true;
-		// ƒXƒeƒCƒg‚ğƒWƒƒƒ“ƒvó‘Ô‚É‚·‚é
+		// ã‚¹ãƒ†ã‚¤ãƒˆã‚’ã‚¸ãƒ£ãƒ³ãƒ—çŠ¶æ…‹ã«ã™ã‚‹
 		ChangeState(StateKind::Jump);
 	}
 }
 
 void PlayerState::StateTransition()
 {
-	// ó‘Ô‘JˆÚ
+	// çŠ¶æ…‹é·ç§»
 	StateTransitionIdle();
 	StateTransitionWalk();
 	StateTransitionDash();
@@ -127,12 +125,12 @@ void PlayerState::ChangeState(StateKind stateKind)
 {
 	for (int i = 0; i < static_cast<int>(StateKind::StateNum); i++)
 	{
-		// ƒXƒeƒCƒg‚Ìí—Ş‚ªw’è‚ÌƒXƒeƒCƒg‚Ìê‡
+		// ã‚¹ãƒ†ã‚¤ãƒˆã®ç¨®é¡ãŒæŒ‡å®šã®ã‚¹ãƒ†ã‚¤ãƒˆã®å ´åˆ
 		if (static_cast<int>(stateKind) == i)
 		{
-			// Œ»İ‚ÌƒXƒeƒCƒg‚ğw’è‚ÌƒXƒeƒCƒg‚É•ÏX
+			// ç¾åœ¨ã®ã‚¹ãƒ†ã‚¤ãƒˆã‚’æŒ‡å®šã®ã‚¹ãƒ†ã‚¤ãƒˆã«å¤‰æ›´
 			m_nowState = static_cast<StateKind>(i);
-			// ƒXƒeƒCƒg‚Ì‰Šú‰»
+			// ã‚¹ãƒ†ã‚¤ãƒˆã®åˆæœŸåŒ–
 			m_pPlayer->InitState();
 			return;
 		}

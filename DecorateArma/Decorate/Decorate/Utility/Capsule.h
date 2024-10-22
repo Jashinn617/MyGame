@@ -1,64 +1,58 @@
-#pragma once
+ï»¿#pragma once
 #include "DxLib.h"
 
 #include <memory>
 
 /// <summary>
-/// “–‚½‚è”»’è—p‚ÌƒJƒvƒZƒ‹
+/// å½“ãŸã‚Šåˆ¤å®šç”¨ã®ã‚«ãƒ—ã‚»ãƒ«
 /// </summary>
 class Capsule
 {
-private:	// \‘¢‘Ì
-	/// <summary>
-	/// “–‚½‚è”»’è—pî•ñ
-	/// </summary>
-	struct CollInfo
-	{
-		VECTOR topPos;			// ”»’èn“_
-		VECTOR bottomPos;		// ”»’èI“_
-	};
+
+
 
 public:
 	/// <summary>
-	/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
-	/// <param name="topPos">”»’èn“_</param>
-	/// <param name="bottomPos">”»’èI“_</param>
-	/// <param name="radius">”¼Œa</param>
-	Capsule(const VECTOR topPos, const VECTOR bottomPos, float radius);
+	/// <param name="topPos">åˆ¤å®šå§‹ç‚¹</param>
+	/// <param name="bottomPos">åˆ¤å®šçµ‚ç‚¹</param>
+	/// <param name="radius">åŠå¾„</param>
+	Capsule(const VECTOR& topPos, const VECTOR& bottomPos, float radius);
 
 	/// <summary>
-	/// ƒfƒXƒgƒ‰ƒNƒ^
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
 	~Capsule();
 
 	/// <summary>
-	/// “–‚½‚è”»’è‚ÌƒfƒoƒbƒO•\¦
+	/// å½“ãŸã‚Šåˆ¤å®šã®ãƒ‡ãƒãƒƒã‚°è¡¨ç¤º
 	/// </summary>
-	/// <param name="color">ƒJƒvƒZƒ‹‚ÌF</param>
+	/// <param name="color">ã‚«ãƒ—ã‚»ãƒ«ã®è‰²</param>
 	void DebugDraw(unsigned int color);
 
 	/// <summary>
-	/// Õ“Ë”»’è
+	/// è¡çªåˆ¤å®š
 	/// </summary>
-	/// <param name="target">‘Šè‚Ì“–‚½‚è”»’è‚ÌƒJƒvƒZƒ‹</param>
-	/// <returns>“–‚½‚Á‚Ä‚¢‚é‚©‚Ç‚¤‚©</returns>
+	/// <param name="target">ç›¸æ‰‹ã®å½“ãŸã‚Šåˆ¤å®šã®ã‚«ãƒ—ã‚»ãƒ«</param>
+	/// <returns>å½“ãŸã£ã¦ã„ã‚‹ã‹ã©ã†ã‹</returns>
 	bool IsCollide(const std::shared_ptr<Capsule> target) const;
 
-	/// <summary>
-	/// ƒJƒvƒZƒ‹‚Ì“–‚½‚è”»’è—pî•ñ‚Ìæ“¾
-	/// </summary>
-	/// <returns>“–‚½‚è”»’è—pî•ñ</returns>
-	const CollInfo& GetCollInfo()const { return m_collInfo; }
+	
+
+	const VECTOR& GetTopPos()const { return *topPos; }
+
+	const VECTOR& GetBottomPos()const { return *bottomPos; }
 
 	/// <summary>
-	/// ”¼Œa‚Ìæ“¾
+	/// åŠå¾„ã®å–å¾—
 	/// </summary>
-	/// <returns>”¼Œa</returns>
+	/// <returns>åŠå¾„</returns>
 	float GetRadius()const { return m_radius; }
 
 
 private:
-	float m_radius;				// ”¼Œa
-	CollInfo m_collInfo;		// “–‚½‚è”»’è—pî•ñ
+	const float m_radius;			// åŠå¾„
+	const VECTOR* topPos;			// åˆ¤å®šå§‹ç‚¹
+	const VECTOR* bottomPos;		// åˆ¤å®šçµ‚ç‚¹
 };

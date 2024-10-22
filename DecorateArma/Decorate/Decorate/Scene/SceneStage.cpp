@@ -1,49 +1,48 @@
-#include "SceneStage.h"
-#include "StageManager.h"
+ï»¿#include "SceneStage.h"
+#include "../Object/ObjectManager.h"
 
 
 #include <cassert>
 
 namespace
 {
-	constexpr float kCameraNear = 5.0f;		// ƒJƒƒ‰è‘OƒNƒŠƒbƒv‹——£
-	constexpr float kCameraFar = 5000.0f;	// ƒJƒƒ‰‰œƒNƒŠƒbƒv‹——£
+	constexpr float kCameraNear = 5.0f;		// ã‚«ãƒ¡ãƒ©æ‰‹å‰ã‚¯ãƒªãƒƒãƒ—è·é›¢
+	constexpr float kCameraFar = 5000.0f;	// ã‚«ãƒ¡ãƒ©å¥¥ã‚¯ãƒªãƒƒãƒ—è·é›¢
 }
 
 SceneStage::SceneStage(Game::StageKind stage):
 	m_stageKind(stage),
-	m_pStageManager(std::make_shared<StageManager>(stage)),
+	m_pObject(std::make_shared<ObjectManager>(stage)),
 	m_pNextScene(nullptr)
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 SceneStage::~SceneStage()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void SceneStage::Init()
 {
-	// ƒXƒe[ƒWƒ}ƒl[ƒWƒƒ[‚Ì‰Šú‰»
-	m_pStageManager->Init();
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 std::shared_ptr<SceneBase> SceneStage::Update()
 {
-	// ƒXƒe[ƒWƒ}ƒl[ƒWƒƒ[XV
-	m_pStageManager->Update();
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ›´æ–°
+	m_pObject->Update();
 
 	return shared_from_this();
 }
 
 void SceneStage::Draw()
 {
-	// ƒXƒe[ƒWƒ}ƒl[ƒWƒƒ[•`‰æ
-	m_pStageManager->Draw();
+	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æç”»
+	m_pObject->Draw();
 
 #ifdef _DEBUG
-	// ƒfƒoƒbƒO—pƒV[ƒ“–¼•`‰æ
+	// ãƒ‡ãƒãƒƒã‚°ç”¨ã‚·ãƒ¼ãƒ³åæç”»
 	if (static_cast<int>(m_stageKind) == 0)
 	{
 		DrawFormatString(0, 0, 0xffffff, "StageTest");

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "SceneBase.h"
 
 #include "../Utility/Game.h"
@@ -6,55 +6,55 @@
 #include <list>
 #include <array>
 
-class StageManager;
+class ObjectManager;
 
 /// <summary>
-/// ƒXƒe[ƒWƒV[ƒ“ƒNƒ‰ƒX
+/// ã‚¹ãƒ†ãƒ¼ã‚¸ã‚·ãƒ¼ãƒ³ã‚¯ãƒ©ã‚¹
 /// </summary>
 class SceneStage : public SceneBase
 {
-public:		// ŠÖ”
+public:		// é–¢æ•°
 	/// <summary>
-	/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
-	/// <param name="stage">ƒXƒe[ƒW‚Ìí—Ş</param>
+	/// <param name="stage">ã‚¹ãƒ†ãƒ¼ã‚¸ã®ç¨®é¡</param>
 	SceneStage(Game::StageKind stage);
 
 	/// <summary>
-	/// ƒfƒXƒgƒ‰ƒNƒ^
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
 	virtual ~SceneStage();
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	virtual void Init() override final;
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
-	/// <returns>Ÿ‚ÌƒV[ƒ“</returns>
+	/// <returns>æ¬¡ã®ã‚·ãƒ¼ãƒ³</returns>
 	virtual std::shared_ptr<SceneBase> Update() override final;
 
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
 	virtual void Draw() override final;
 
 	/// <summary>
-	/// I—¹ˆ—
+	/// çµ‚äº†å‡¦ç†
 	/// </summary>
-	virtual void End() override final {/*ˆ—–³‚µ*/ };
+	virtual void End() override final {/*å‡¦ç†ç„¡ã—*/ };
 
 	/// <summary>
-	/// ƒXƒe[ƒW‚Ìí—Ş‚Ìæ“¾
+	/// ã‚¹ãƒ†ãƒ¼ã‚¸ã®ç¨®é¡ã®å–å¾—
 	/// </summary>
-	/// <returns>ƒXƒe[ƒW‚Ìí—Ş</returns>
+	/// <returns>ã‚¹ãƒ†ãƒ¼ã‚¸ã®ç¨®é¡</returns>
 	virtual SceneKind GetSceneKind() override final { return SceneKind::Stage; }
 
-private:	// •Ï”
-	Game::StageKind m_stageKind;					// ƒXƒe[ƒW‚Ìí—Ş
+private:	// å¤‰æ•°
+	Game::StageKind m_stageKind;					// ã‚¹ãƒ†ãƒ¼ã‚¸ã®ç¨®é¡
 
-	std::shared_ptr<StageManager> m_pStageManager;	// ƒXƒe[ƒWƒ}ƒl[ƒWƒƒ[ƒ|ƒCƒ“ƒ^
-	std::shared_ptr<SceneBase> m_pNextScene;		// Ÿ‚ÌƒV[ƒ“‚Ìƒ|ƒCƒ“ƒ^
+	std::shared_ptr<ObjectManager> m_pObject;		// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼
+	std::shared_ptr<SceneBase> m_pNextScene;		// æ¬¡ã®ã‚·ãƒ¼ãƒ³ã®ãƒã‚¤ãƒ³ã‚¿
 };

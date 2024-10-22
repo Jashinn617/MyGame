@@ -139,6 +139,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Object\Field.cpp" />
+    <ClCompile Include="Object\Player\Shot.cpp" />
     <ClCompile Include="Utility\Collision.cpp" />
     <ClCompile Include="Utility\Capsule.cpp" />
     <ClCompile Include="Common\CsvLoad.cpp" />
@@ -156,7 +158,6 @@
     <ClCompile Include="Object\ObjectBase.cpp" />
     <ClCompile Include="Object\Model.cpp" />
     <ClCompile Include="Scene\SceneStage.cpp" />
-    <ClCompile Include="Scene\StageManager.cpp" />
     <ClCompile Include="Utility\Pad.cpp" />
     <ClCompile Include="Scene\SceneDebug.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
@@ -164,6 +165,8 @@
     <ClCompile Include="Shader\SetVertexShader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Object\Field.h" />
+    <ClInclude Include="Object\Player\Shot.h" />
     <ClInclude Include="Utility\Collision.h" />
     <ClInclude Include="Utility\Capsule.h" />
     <ClInclude Include="Common\CsvLoad.h" />
@@ -181,7 +184,6 @@
     <ClInclude Include="Object\ObjectBase.h" />
     <ClInclude Include="Object\Model.h" />
     <ClInclude Include="Scene\SceneStage.h" />
-    <ClInclude Include="Scene\StageManager.h" />
     <ClInclude Include="Utility\Pad.h" />
     <ClInclude Include="Scene\SceneDebug.h" />
     <ClInclude Include="Scene\SceneManager.h" />

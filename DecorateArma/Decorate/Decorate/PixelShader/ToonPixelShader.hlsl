@@ -68,22 +68,22 @@ PS_OUTPUT main(PS_INPUT input)
     ret.col.rgb *= bright;
     
     // 明るさをかさ増しする
-    ret.col.rbg *= 5.0f;
+    ret.col.rbg *= 50.0f;
     
-    /*リムライトをつけて立体感を出すく*/    
-    //カメラの向いている方向を求める
-    float3 cameraDir = normalize(CameraTarget - CameraPos);
+    ///*リムライトをつけて立体感を出すく*/    
+    ////カメラの向いている方向を求める
+    //float3 cameraDir = normalize(CameraTarget - CameraPos);
     
-    //法線の向きとカメラの向きでリムライトの強さを求める
-    float rim = dot(n, cameraDir);
+    ////法線の向きとカメラの向きでリムライトの強さを求める
+    //float rim = dot(n, cameraDir);
     
-    //リムライトの強さが-0.25~0.25の間の場合
-    // (法線とカメラの向きが直角の場合)
-    // その部分の色成分を0.05f(ほとんど黒)にする
-    if (rim > -0.25f && rim < 0.25f)
-    {
-        ret.col.rbg = 0.05f;
-    }
+    ////リムライトの強さが-0.25~0.25の間の場合
+    //// (法線とカメラの向きが直角の場合)
+    //// その部分の色成分を0.05f(ほとんど黒)にする
+    //if (rim > -0.25f && rim < 0.25f)
+    //{
+    //    ret.col.rbg = 0.05f;
+    //}
     
     return ret;
 }

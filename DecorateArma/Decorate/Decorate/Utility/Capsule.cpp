@@ -1,30 +1,31 @@
-#include "Capsule.h"
+ï»¿#include "Capsule.h"
 
-Capsule::Capsule(const VECTOR topPos, const VECTOR bottomPos, float radius):
-	m_radius(radius)
+Capsule::Capsule(const VECTOR& topPos, const VECTOR& bottomPos, float radius):
+	m_radius(radius),
+	topPos(&topPos),
+	bottomPos(&bottomPos)
 {
-	m_collInfo.topPos = topPos;
-	m_collInfo.bottomPos = bottomPos;
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 Capsule::~Capsule()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void Capsule::DebugDraw(unsigned int color)
 {
-	// ƒfƒoƒbƒO•\¦
+	// ãƒ‡ãƒãƒƒã‚°è¡¨ç¤º
 #ifdef _DEBUG
-	// •`‰æ
-	DrawCapsule3D(m_collInfo.topPos, m_collInfo.bottomPos,
-		m_radius, 1, color, color, false);
+	// æç”»
+	DrawCapsule3D(*topPos, *bottomPos,
+		m_radius, 32, color, color, false);
 #endif // _DEBUG
 }
 
 bool Capsule::IsCollide(const std::shared_ptr<Capsule> target) const
 {
-	// “–‚½‚è”»’è
-	return HitCheck_Capsule_Capsule(m_collInfo.topPos, m_collInfo.bottomPos, m_radius,
-		target->GetCollInfo().topPos, target->GetCollInfo().bottomPos, target->GetRadius());
+	// å½“ãŸã‚Šåˆ¤å®š
+	return HitCheck_Capsule_Capsule(*topPos, *bottomPos, m_radius,
+		*target->topPos, *target->bottomPos, target->GetRadius());
 }

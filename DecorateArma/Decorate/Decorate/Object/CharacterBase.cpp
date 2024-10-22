@@ -1,18 +1,18 @@
-#include "CharacterBase.h"
+﻿#include "CharacterBase.h"
 #include "../Utility/Sphere.h"
 
 namespace
 {
-	constexpr int kMaxColHitPolyNum = 2000;				// �ő哖���蔻��|���S����
-	constexpr int kMaxColHitTryNum = 16;				// �ǂɉ����o�������̍ő厎�s��
-	constexpr float kColHitSlideLength = 1.0f;			// �ǉ����o�����ɃX���C�h�����鋗��
-	constexpr float kGravity = 0.8f;					// �d��
-	constexpr float kFixGravity = 0.5f;					// �d�͂��}���ɑ��x��ς��Ȃ��悤�ɒ������鐔
-	constexpr float kFallMaxSpeed = -15.0f;				// �ő嗎�����x
-	constexpr float kChangeAngleSpeed = 0.25f;			// ���炩�Ɋp�x���ړ������鑬�x
-	constexpr float kAngleDiffMax = DX_PI_F + 0.3f;		// �p�x�̍ő卷
-	constexpr float kAngleDiffMin = -DX_PI_F - 0.3f;	// �p�x�̍ŏ���
-	constexpr float kSlideLength = 10.0f;				// �����o���̑傫��	
+	constexpr int kMaxColHitPolyNum = 2000;				// 最大当たり判定ポリゴン数
+	constexpr int kMaxColHitTryNum = 16;				// 壁に押し出す処理の最大試行回数
+	constexpr float kColHitSlideLength = 1.0f;			// 壁押し出し時にスライドさせる距離
+	constexpr float kGravity = 0.8f;					// 重力
+	constexpr float kFixGravity = 0.5f;					// 重力が急激に速度を変えないように調整する数
+	constexpr float kFallMaxSpeed = -15.0f;				// 最大落下速度
+	constexpr float kChangeAngleSpeed = 0.25f;			// 滑らかに角度を移動させる速度
+	constexpr float kAngleDiffMax = DX_PI_F + 0.3f;		// 角度の最大差
+	constexpr float kAngleDiffMin = -DX_PI_F - 0.3f;	// 角度の最小差
+	constexpr float kSlideLength = 10.0f;				// 押し出しの大きさ	
 }
 
 CharacterBase::CharacterBase():
@@ -21,124 +21,124 @@ CharacterBase::CharacterBase():
 	m_isDead(false),
 	m_pSphere(nullptr)
 {
-	/*��������*/
+	/*処理無し*/
 }
 
 CharacterBase::~CharacterBase()
 {
-	/*��������*/
+	/*処理無し*/
 }
 
 void CharacterBase::EndJump()
 {
-	// �W�����v�����Ă��Ȃ���Ԃɖ߂�
+	// ジャンプをしていない状態に戻す
 	m_isJump = false;
-	// �W�����v��0�ɂ���
+	// ジャンプを0にする
 	m_jumpPower = 0.0f;
 }
 
 void CharacterBase::MoveCollCharacter(CharacterBase* pTarget)
 {
-	// ���������肪���S��Ԃ̎��͔�������Ȃ�
+	// 自分か相手が死亡状態の時は判定をしない
 	if (m_isDead || pTarget->IsDead())return;
 
-	// �I�u�W�F�N�g���m�̓����蔻�������
-	// �I�u�W�F�N�g���m���������Ă��Ȃ������ꍇ�͉������Ȃ�
+	// オブジェクト同士の当たり判定をする
+	// オブジェクト同士が当たっていなかった場合は何もしない
 	if (!GetSphere()->IsCollide(pTarget->GetSphere()))return;
 
-	// �ړ��O�̍��W��ۑ�����(���W - �ړ��x�N�g��)
+	// 移動前の座標を保存する(座標 - 移動ベクトル)
 	VECTOR prevPos = VSub(m_characterInfo.pos, m_characterInfo.vec);
 
-	VECTOR nextPos;		// �ړ���̍��W
-	VECTOR slideVec;	// ����̃I�u�W�F�N�g���l�����Ĉړ�������W
+	VECTOR nextPos;		// 移動後の座標
+	VECTOR slideVec;	// 相手のオブジェクトを考慮して移動する座標
 
-	// �ړ������Ƒ���̍��W���玩���̍��W���������x�N�g���ɐ����ȃx�N�g�����v�Z����
+	// 移動方向と相手の座標から自分の座標を引いたベクトルに垂直なベクトルを計算する
 	slideVec = VCross(m_characterInfo.vec,
 		VNorm(VSub(m_characterInfo.pos, pTarget->GetInfo().pos)));
 
-	// ��ŏo�����x�N�g�����g���āA��������ւ̈ړ�����������
+	// 上で出したベクトルを使って、相手方向への移動成分を除く
 	slideVec = VCross(VNorm(VSub(m_characterInfo.pos, pTarget->GetInfo().pos)),
 		slideVec);
 
-	// ��������ւ̈ړ��������������x�N�g���𑫂�
+	// 相手方向への移動成分を除いたベクトルを足す
 	nextPos = VAdd(prevPos, slideVec);
 
-	// �����o������
+	// 押し出し処理
 	for (int i = 0; i < kMaxColHitTryNum; i++)
 	{
-		// ����Ɠ������Ă��Ȃ�������I���
+		// 相手と当たっていなかったら終わる
 		if (!GetSphere()->IsCollide(pTarget->GetSphere()))return;
 
-		// ����Ƃ̃x�N�g���̌v�Z
+		// 相手とのベクトルの計算
 		VECTOR move = VSub(m_characterInfo.pos, pTarget->GetInfo().pos);
-		// ��ŏo�����x�N�g�����g���đ���Ƃ̋������擾����
+		// 上で出したベクトルを使って相手との距離を取得する
 		float vecSize = VSize(move);
-		// �x�N�g���𐳋K�����ăX���C�h�����鋗���𒲐�����
+		// ベクトルを正規化してスライドさせる距離を調性する
 		move = VScale(move, (1.0f / (vecSize * kSlideLength)));
 
-		// ��������ւ̈ړ��������������x�N�g���ɃX���C�h���鋗���𑫂�
+		// 相手方向への移動成分を除いたベクトルにスライドする距離を足す
 		nextPos = VAdd(nextPos, move);
 
-		// ���W��ۑ�����
+		// 座標を保存する
 		m_characterInfo.pos = nextPos;
 	}
 
-	// �V�������W��ۑ�����
+	// 新しい座標を保存する
 	m_characterInfo.pos = nextPos;
 }
 
 void CharacterBase::HitGround()
 {
-	// �W�����v�͂�0�ɂ���
+	// ジャンプ力を0にする
 	m_jumpPower = 0.0f;
 }
 
 void CharacterBase::UpdateGravity()
 {
-	// �����鑬�x���ő嗎�����x�𒴂��Ȃ��悤�ɂ���
+	// 落ちる速度が最大落下速度を超えないようにする
 	m_jumpPower = max(m_jumpPower - (kGravity * kFixGravity), kFallMaxSpeed);
 
-	// ��������
+	// 落下処理
 	m_characterInfo.vec.y = m_jumpPower;
 }
 
 void CharacterBase::SmoothAngle(float& nowAngle, float nextAngle)
 {
-	// -180�x�ȉ��ɂȂ�����p�x���傫���Ȃ肷���Ȃ��悤��360�x����
+	// -180度以下になったら角度が大きくなりすぎないように360度足す
 	if (nextAngle < -DX_PI_F)
 	{
 		nextAngle += DX_TWO_PI_F;
 	}
-	// 180�x�ȏ�ɂȂ�����p�x���������Ȃ肷���Ȃ��悤��360�x����
+	// 180度以上になったら角度が小さくなりすぎないように360度引く
 	if (nextAngle > DX_PI_F)
 	{
 		nextAngle -= DX_TWO_PI_F;
 	}
 
-	// �p�x�̍������߂�
+	// 角度の差を求める
 	float angleDiff = nowAngle - nextAngle;
 
-	// �p�x�̍����ő卷���傫�������ꍇ
+	// 角度の差が最大差より大きかった場合
 	if (angleDiff > kAngleDiffMax)
 	{
-		// �p�x�̍����������Ȃ肷���Ȃ��悤��360�x����
+		// 角度の差が小さくなりすぎないように360度引く
 		nowAngle -= DX_TWO_PI_F;
 	}
-	// �p�x�̍����ő卷��菬���������ꍇ
+	// 角度の差が最大差より小さかった場合
 	else if (angleDiff < kAngleDiffMin)
 	{
-		// �p�x�̍����p�x���傫���Ȃ肷���Ȃ��悤��360�x����
+		// 角度の差が角度が大きくなりすぎないように360度足す
 		nowAngle += DX_TWO_PI_F;
 	}
 
-	// �p�x�̍����������ꍇ�͉��������ɂ��̂܂܎��̊p�x��Ԃ�
+	// 角度の差が小さい場合は何もせずにそのまま次の角度を返す
 	if (angleDiff < kChangeAngleSpeed && angleDiff > -kChangeAngleSpeed)
 	{
 		nowAngle = nextAngle;
 		return;
 	}
 
-	/*����ȊO�̏ꍇ�͏������p�x��ω�������*/
+	/*それ以外の場合は少しずつ角度を変化させる*/
 	else if (angleDiff > kChangeAngleSpeed)
 	{
 		nowAngle -= kChangeAngleSpeed;

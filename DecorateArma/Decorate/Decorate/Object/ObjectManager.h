@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../Utility/Game.h"
 
@@ -13,33 +13,33 @@ class ShadowMapShader;
 
 class ObjectManager
 {
-public:		// ŠÖ”
+public:		// é–¢æ•°
 	/// <summary>
-	/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
-	/// <param name="stageKind">ƒXƒe[ƒW‚Ìí—Ş</param>
+	/// <param name="stageKind">ã‚¹ãƒ†ãƒ¼ã‚¸ã®ç¨®é¡</param>
 	ObjectManager(Game::StageKind stageKind);
 
 	/// <summary>
-	/// ƒfƒXƒgƒ‰ƒNƒ^
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
 	virtual ~ObjectManager();
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
 	void Draw();
 
 	/// <summary>
-	/// ƒIƒuƒWƒFƒNƒg‚Ì’Ç‰Á
+	/// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®è¿½åŠ 
 	/// </summary>
-	/// <typeparam name="T">ƒIƒuƒWƒFƒNƒgƒx[ƒX‚ğŒp³‚µ‚½Œ^</typeparam>
-	/// <param name="pObj">’Ç‰Á‚·‚éƒIƒuƒWƒFƒNƒg</param>
+	/// <typeparam name="T">ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ™ãƒ¼ã‚¹</typeparam>
+	/// <param name="pObj">è¿½åŠ ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ</param>
 	template <class T>
 	void AddObject(T* pObj)
 	{
@@ -49,19 +49,19 @@ public:		// ŠÖ”
 
 
 	/// <summary>
-	/// ƒvƒŒƒCƒ„[ƒ|ƒCƒ“ƒ^‚Ìæ“¾
+	/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒã‚¤ãƒ³ã‚¿ã®å–å¾—
 	/// </summary>
-	/// <returns>ƒvƒŒƒCƒ„[ƒ|ƒCƒ“ƒ^</returns>
+	/// <returns>ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒã‚¤ãƒ³ã‚¿</returns>
 	Player* const GetPlayer();
 
 	
 
-private:	// •Ï”
+private:	// å¤‰æ•°
 
-	std::shared_ptr<Collision> m_pCollision;		// “–‚½‚è”»’è
-	std::shared_ptr<ToonShader> m_pToon;			// ƒgƒD[ƒ“ƒVƒF[ƒ_
-	//std::shared_ptr<ShadowMapShader> m_pShadowMap;	// ƒVƒƒƒhƒEƒ}ƒbƒvƒVƒF[ƒ_
+	std::shared_ptr<Collision> m_pCollision;		// å½“ãŸã‚Šåˆ¤å®š
+	std::shared_ptr<ToonShader> m_pToon;			// ãƒˆã‚¥ãƒ¼ãƒ³ã‚·ã‚§ãƒ¼ãƒ€
+	//std::shared_ptr<ShadowMapShader> m_pShadowMap;	// ã‚·ãƒ£ãƒ‰ã‚¦ãƒãƒƒãƒ—ã‚·ã‚§ãƒ¼ãƒ€
 
-	std::list<ObjectBase*> m_pObject;				// ƒIƒuƒWƒFƒNƒg
+	std::list<ObjectBase*> m_pObject;				// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 };
 

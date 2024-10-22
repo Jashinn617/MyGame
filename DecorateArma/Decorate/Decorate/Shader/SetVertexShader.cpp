@@ -1,27 +1,27 @@
-#include "SetVertexShader.h"
+ï»¿#include "SetVertexShader.h"
 #include "DxLib.h"
 
 #include <cassert>
 
 SetVertexShader::SetVertexShader()
 {
-	/*ƒVƒF[ƒ_‚Ìƒ[ƒh
-	ƒ[ƒh‚É¸”s‚µ‚½‚ç~‚ß‚é*/
+	/*ã‚·ã‚§ãƒ¼ãƒ€ã®ãƒ­ãƒ¼ãƒ‰
+	ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—ã—ãŸã‚‰æ­¢ã‚ã‚‹*/
 	m_vertexShader1FrameH = LoadVertexShader("Data/Shader/VertexShader/VertexShader3D.vso");
 	assert(m_vertexShader1FrameH != -1);
 	m_vertexShader4FrameH = LoadVertexShader("Data/Shader/VertexShader/VertexShader3D4Frame.vso");
 	assert(m_vertexShader4FrameH != -1);
 	m_vertexShader8FrameH = LoadVertexShader("Data/Shader/VertexShader/VertexShader3D8Frame.vso");
 	assert(m_vertexShader8FrameH != -1);
-	m_vertexShaderNormal4FrameH = LoadVertexShader("Data/Shader/VertexShader/VertexShader3DNormal4Frame.vso");
+	m_vertexShaderNormal4FrameH = LoadVertexShader("Data/Shader/VertexShader/VertexShaderNormal4Frame.vso");
 	assert(m_vertexShaderNormal4FrameH != -1);
-	m_vertexShaderNormal8FrameH = LoadVertexShader("Data/Shader/VertexShader/VertexShader3DNormal4Frame.vso");
+	m_vertexShaderNormal8FrameH = LoadVertexShader("Data/Shader/VertexShader/VertexShaderNormal4Frame.vso");
 	assert(m_vertexShaderNormal8FrameH != -1);
 }
 
 SetVertexShader::~SetVertexShader()
 {
-	/*ƒVƒF[ƒ_‚ÌƒfƒŠ[ƒg*/
+	/*ã‚·ã‚§ãƒ¼ãƒ€ã®ãƒ‡ãƒªãƒ¼ãƒˆ*/
 	DeleteShader(m_vertexShader1FrameH);
 	DeleteShader(m_vertexShader4FrameH);
 	DeleteShader(m_vertexShader8FrameH);
@@ -31,7 +31,7 @@ SetVertexShader::~SetVertexShader()
 
 int SetVertexShader::SetVertexShaderH(int vertexShaderType)
 {
-	// ƒVƒF[ƒ_‚Ìƒ^ƒCƒv‚É‚æ‚Á‚Ä•Ô‚·ƒnƒ“ƒhƒ‹‚ğ•Ï‚¦‚é
+	// ã‚·ã‚§ãƒ¼ãƒ€ã®ã‚¿ã‚¤ãƒ—ã«ã‚ˆã£ã¦è¿”ã™ãƒãƒ³ãƒ‰ãƒ«ã‚’å¤‰ãˆã‚‹
 	if (vertexShaderType == DX_MV1_VERTEX_TYPE_1FRAME)
 	{
 		return m_vertexShader1FrameH;

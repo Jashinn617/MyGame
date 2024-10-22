@@ -1,4 +1,4 @@
-#include "Camera.h"
+ï»¿#include "Camera.h"
 
 #include "ObjectBase.h"
 #include "Model.h"
@@ -7,23 +7,24 @@
 
 namespace
 {
-	constexpr int kMaxInputNum = 1000;													// ƒAƒiƒƒO“ü—Íó‘ÔÅ‘å’l
-	constexpr int kMaxColHitTryNum = 50;												// ƒJƒƒ‰‚Ì‰Ÿ‚µo‚µs‰ñ”
-	constexpr float kNear = 10.0f;														// ƒJƒƒ‰‚Ìˆê”Ô‹ß‚¢•`‰æ‹——£
-	constexpr float kFar = 7000.0f;														// ƒJƒƒ‰‚Ìˆê”Ô‰“‚¢•`‰æ‹——£
-	constexpr float kCameraAngleSpeedX = 0.1f;											// ƒJƒƒ‰‚Ìù‰ñ‘¬“xX
-	constexpr float kCameraAngleSpeedY = 0.05f;											// ƒJƒƒ‰‚Ìù‰ñ‘¬“xY
-	constexpr float kCameraAngleVMax = DX_PI_F / 2.0f - 0.8f;							// ƒJƒƒ‰‚ÌÅ‘å‚’¼Šp“x
-	constexpr float kCameraAngleVMin = -DX_PI_F / 2.0f + 0.6f;							// ƒJƒƒ‰‚ÌÅ¬‚’¼Šp“x
-	constexpr float kCameraViewpointHeight = 65.0f;										// ƒ^[ƒQƒbƒg‚©‚ç’‹“_‚Ü‚Å‚Ì‚‚³
-	constexpr float kCameraToTargetLenghtMax = 175.0f;									// ƒJƒƒ‰‚©‚çƒ^[ƒQƒbƒg‚Ü‚Å‚ÌÅ‘å‹——£
-	constexpr float kCameraToTargetLenghtMin = 0.0f;									// ƒJƒƒ‰‚©‚çƒ^[ƒQƒbƒg‚Ü‚Å‚ÌÅ¬‹——£
-	constexpr float kCameraToTargetLenghtSpeed = 5.0f;									// ƒJƒƒ‰‚©‚çƒ^[ƒQƒbƒg‚Ü‚Å‚Ì‹——£‚ğ•Ï‚¦‚é‘¬“x
-	constexpr float kSize = 10.0f;														// “–‚½‚è”»’è—p‚ÌƒJƒƒ‰‚ÌƒTƒCƒY
-	constexpr float kCameraFollowSpeed = 0.2f;											// ƒJƒƒ‰‚ª•t‚¢‚Ä‚­‚é‘¬“x
-	constexpr float kPrevCameraFollowSpeed = 1.0f - kCameraFollowSpeed;					// ƒJƒƒ‰‚Ì‰‘¬“x
-	constexpr float kCameraTargetFollowSpeed = 0.2f;									// ƒJƒƒ‰‚ª’‹“_‚ğ’Ç‚¢‚©‚¯‚é‘¬“x
-	constexpr float kPrevCameraTargetFollowSpeed = 1.0f - kCameraTargetFollowSpeed;		// ƒJƒƒ‰‚ª’‹“_‚ğ’Ç‚¢‚©‚¯‚é‰‘¬“x
+	constexpr int kMaxInputNum = 1000;													// ã‚¢ãƒŠãƒ­ã‚°å…¥åŠ›çŠ¶æ…‹æœ€å¤§å€¤
+	constexpr int kMaxColHitTryNum = 50;												// ã‚«ãƒ¡ãƒ©ã®æŠ¼ã—å‡ºã—è©¦è¡Œå›æ•°
+	constexpr float kNear = 10.0f;														// ã‚«ãƒ¡ãƒ©ã®ä¸€ç•ªè¿‘ã„æç”»è·é›¢
+	constexpr float kFar = 7000.0f;														// ã‚«ãƒ¡ãƒ©ã®ä¸€ç•ªé ã„æç”»è·é›¢
+	constexpr float kCameraAngleSpeedX = 0.1f;											// ã‚«ãƒ¡ãƒ©ã®æ—‹å›é€Ÿåº¦X
+	constexpr float kCameraAngleSpeedY = 0.05f;											// ã‚«ãƒ¡ãƒ©ã®æ—‹å›é€Ÿåº¦Y
+	constexpr float kCameraAngleVMax = DX_PI_F / 2.0f - 0.8f;							// ã‚«ãƒ¡ãƒ©ã®æœ€å¤§å‚ç›´è§’åº¦
+	constexpr float kCameraAngleVMin = -DX_PI_F / 2.0f + 0.6f;							// ã‚«ãƒ¡ãƒ©ã®æœ€å°å‚ç›´è§’åº¦
+	constexpr float kCameraViewpointHeight = 30.0f;										// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‹ã‚‰æ³¨è¦–ç‚¹ã¾ã§ã®é«˜ã•
+	constexpr float kCameraToTargetLenghtMax = 200.0f;									// ã‚«ãƒ¡ãƒ©ã‹ã‚‰ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã¾ã§ã®æœ€å¤§è·é›¢
+	constexpr float kCameraToTargetLenghtMin = 0.0f;									// ã‚«ãƒ¡ãƒ©ã‹ã‚‰ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã¾ã§ã®æœ€å°è·é›¢
+	constexpr float kCameraToTargetLenghtSpeed = 5.0f;									// ã‚«ãƒ¡ãƒ©ã‹ã‚‰ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã¾ã§ã®è·é›¢ã‚’å¤‰ãˆã‚‹é€Ÿåº¦
+	constexpr float kSize = 10.0f;														// å½“ãŸã‚Šåˆ¤å®šç”¨ã®ã‚«ãƒ¡ãƒ©ã®ã‚µã‚¤ã‚º
+	
+	constexpr float kCameraFollowSpeed = 0.2f;											// ã‚«ãƒ¡ãƒ©ãŒä»˜ã„ã¦ãã‚‹é€Ÿåº¦
+	constexpr float kPrevCameraFollowSpeed = 1.0f - kCameraFollowSpeed;					// ã‚«ãƒ¡ãƒ©ã®åˆé€Ÿåº¦
+	constexpr float kCameraTargetFollowSpeed = 0.2f;									// ã‚«ãƒ¡ãƒ©ãŒæ³¨è¦–ç‚¹ã‚’è¿½ã„ã‹ã‘ã‚‹é€Ÿåº¦
+	constexpr float kPrevCameraTargetFollowSpeed = 1.0f - kCameraTargetFollowSpeed;		// ã‚«ãƒ¡ãƒ©ãŒæ³¨è¦–ç‚¹ã‚’è¿½ã„ã‹ã‘ã‚‹åˆé€Ÿåº¦
 }
 
 Camera::Camera():
@@ -41,73 +42,73 @@ Camera::Camera():
 	m_isPolyHit(false),
 	m_pPoly(nullptr)
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 Camera::~Camera()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void Camera::Init()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 void Camera::Update(VECTOR targetPos)
 {
-	// ˆÚ“®‘O‚ÌÀ•W‚ğ•Û‘¶‚·‚é
+	// ç§»å‹•å‰ã®åº§æ¨™ã‚’ä¿å­˜ã™ã‚‹
 	m_prevPos = m_nextPos;
 
-	// ’‹“_À•W‚ğİ’è‚·‚é
+	// æ³¨è¦–ç‚¹åº§æ¨™ã‚’è¨­å®šã™ã‚‹
 	VECTOR viewpointPos;
 	viewpointPos = targetPos;
-	// ƒ^[ƒQƒbƒgÀ•W‚É’‹“_‚Ì‚‚³‚ğ‘«‚·
+	// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆåº§æ¨™ã«æ³¨è¦–ç‚¹ã®é«˜ã•ã‚’è¶³ã™
 	viewpointPos.y += kCameraViewpointHeight;
 
-	// Šp“xXV
+	// è§’åº¦æ›´æ–°
 	UpdateAngle();
-	// ’ÊíXV
+	// é€šå¸¸æ™‚æ›´æ–°
 	NormalUpdate(viewpointPos);
-	// À•W‚ÌŠm’è
+	// åº§æ¨™ã®ç¢ºå®š
 	UpdatePos();
 }
 
 void Camera::Draw()
 {
 #ifdef _DEBUG
-	// ƒfƒoƒbƒO•\¦
-	DrawFormatString(0, 0, 0x000000, "ƒJƒƒ‰À•WF%f,%f,%f", m_prevPos.x, m_prevPos.y, m_prevPos.z);
-	DrawFormatString(0, 40, 0x000000, "ƒ^[ƒQƒbƒgÀ•WF%f,%f,%f", m_targetPos.x, m_targetPos.y, m_targetPos.z);
-	DrawFormatString(0, 120, 0x000000, "GetTargetPos:%f,%f,%f", GetCameraTarget().x, GetCameraTarget().y, GetCameraTarget().z);
+	// ãƒ‡ãƒãƒƒã‚°è¡¨ç¤º
+	DrawFormatString(0, 120, 0xffffff, "ã‚«ãƒ¡ãƒ©åº§æ¨™ï¼š%f,%f,%f", m_prevPos.x, m_prevPos.y, m_prevPos.z);
+	DrawFormatString(0, 60, 0xffffff, "ã‚¿ãƒ¼ã‚²ãƒƒãƒˆåº§æ¨™ï¼š%f,%f,%f", m_targetPos.x, m_targetPos.y, m_targetPos.z);
+	DrawFormatString(0, 80, 0xffffff, "GetTargetPos:%f,%f,%f", GetCameraTarget().x, GetCameraTarget().y, GetCameraTarget().z);
 #endif // _DEBUG
 }
 
 void Camera::ResetCamera()
 {
-	// ƒJƒƒ‰‚Ì•\¦İ’è
+	// ã‚«ãƒ¡ãƒ©ã®è¡¨ç¤ºè¨­å®š
 	SetCameraNearFar(kNear, kFar);
-	// À•Wİ’è
+	// åº§æ¨™è¨­å®š
 	SetCameraPositionAndTarget_UpVecY(m_pos, m_targetPos);
 }
 
 void Camera::ColUpdate(ObjectBase* pField)
 {
-	// ƒJƒƒ‰‚ÌüˆÍ‚É‚ ‚éƒXƒe[ƒWƒ|ƒŠƒSƒ“‚ğæ“¾‚·‚é
-	// ŒŸo‚·‚é”ÍˆÍ‚ÍˆÚ“®‹——£‚àl—¶‚·‚é
+	// ã‚«ãƒ¡ãƒ©ã®å‘¨å›²ã«ã‚ã‚‹ã‚¹ãƒ†ãƒ¼ã‚¸ãƒãƒªã‚´ãƒ³ã‚’å–å¾—ã™ã‚‹
+	// æ¤œå‡ºã™ã‚‹ç¯„å›²ã¯ç§»å‹•è·é›¢ã‚‚è€ƒæ…®ã™ã‚‹
 	m_hitDim = MV1CollCheck_Capsule(pField->GetModel()->GetModelHandle(),
 		-1, m_nextPos, m_prevPos,
 		m_pSphere->GetRadius());
 
 	if (m_hitDim.HitNum == 0)
 	{
-		// ŒŸo‚µ‚½ƒvƒŒƒCƒ„[‚ÌüˆÍ‚Ìƒ|ƒŠƒSƒ“î•ñ‚ğŠJ•ú‚·‚é
+		// æ¤œå‡ºã—ãŸãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å‘¨å›²ã®ãƒãƒªã‚´ãƒ³æƒ…å ±ã‚’é–‹æ”¾ã™ã‚‹
 		MV1CollResultPolyDimTerminate(m_hitDim);
 
 		m_cameraToTargetLenght = min(m_cameraToTargetLenght + kCameraToTargetLenghtSpeed,
 			kCameraToTargetLenghtMax);
 
-		// ƒJƒƒ‰‚ÌÀ•W‚ğŒˆ’è‚·‚é
+		// ã‚«ãƒ¡ãƒ©ã®åº§æ¨™ã‚’æ±ºå®šã™ã‚‹
 		UpdatePos();
 
 		m_hitDim = MV1CollCheck_Capsule(pField->GetModel()->GetModelHandle(),
@@ -120,45 +121,45 @@ void Camera::ColUpdate(ObjectBase* pField)
 		m_pPolyIndex[i] = &m_hitDim.Dim[i];
 	}
 
-	// ƒJƒƒ‰‚Ì‰Ÿ‚µo‚µˆ—
+	// ã‚«ãƒ¡ãƒ©ã®æŠ¼ã—å‡ºã—å‡¦ç†
 	FixPosInternal();
 
-	// ŒŸo‚µ‚½ƒvƒŒƒCƒ„[‚ÌüˆÍ‚Ìƒ|ƒŠƒSƒ“î•ñ‚ğŠJ•ú‚·‚é
+	// æ¤œå‡ºã—ãŸãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å‘¨å›²ã®ãƒãƒªã‚´ãƒ³æƒ…å ±ã‚’é–‹æ”¾ã™ã‚‹
 	MV1CollResultPolyDimTerminate(m_hitDim);
 
-	// ƒJƒƒ‰‚ÌÀ•W‚ğŒˆ’è‚·‚é
+	// ã‚«ãƒ¡ãƒ©ã®åº§æ¨™ã‚’æ±ºå®šã™ã‚‹
 	UpdatePos();
 
-	// ƒJƒƒ‰‚Ìî•ñ‚ğ”½‰f‚³‚¹‚é
+	// ã‚«ãƒ¡ãƒ©ã®æƒ…å ±ã‚’åæ˜ ã•ã›ã‚‹
 	m_pos = VAdd(VScale(m_prevPos, kPrevCameraFollowSpeed), VScale(m_nextPos, kCameraFollowSpeed));
 	SetCameraPositionAndTarget_UpVecY(m_pos, m_targetPos);
 }
 
 void Camera::UpdateAngle()
 {
-	// ƒpƒbƒh‚ÌƒAƒiƒƒOî•ñ‚Ìæ“¾
+	// ãƒ‘ãƒƒãƒ‰ã®ã‚¢ãƒŠãƒ­ã‚°æƒ…å ±ã®å–å¾—
 	DINPUT_JOYSTATE input;
 
-	// “ü—Íî•ñ‚Ì‰Šú‰»
+	// å…¥åŠ›æƒ…å ±ã®åˆæœŸåŒ–
 	input.Rx = 0;
 	input.Ry = 0;
 
-	// “ü—Íî•ñ‚Ìæ“¾
+	// å…¥åŠ›æƒ…å ±ã®å–å¾—
 	GetJoypadDirectInputState(DX_INPUT_PAD1, &input);
 
-	// ‰ñ“]‚ğ1`1000‚©‚ç0.001`1‚Ì”ÍˆÍ‚É‚·‚é
-	// Œã‚ÅƒJƒƒ‰Š´“x‚à—pˆÓ‚·‚é(ˆê’U3‚É‚µ‚Ä‚¨‚­)
+	// å›è»¢ã‚’1ï½1000ã‹ã‚‰0.001ï½1ã®ç¯„å›²ã«ã™ã‚‹
+	// å¾Œã§ã‚«ãƒ¡ãƒ©æ„Ÿåº¦ã‚‚ç”¨æ„ã™ã‚‹(ä¸€æ—¦3ã«ã—ã¦ãŠã)
 	float rotX = 0.00020f * input.Rx * 3;
 	float rotY = 0.00017f * input.Ry * 3;
 
-	// ƒJƒƒ‰‚Ì‰ñ“]ƒXƒs[ƒh‚ğ‚©‚¯‚é
+	// ã‚«ãƒ¡ãƒ©ã®å›è»¢ã‚¹ãƒ”ãƒ¼ãƒ‰ã‚’ã‹ã‘ã‚‹
 	rotX *= kCameraAngleSpeedX;
 	rotY *= kCameraAngleSpeedY;
 
 	m_angleH += rotX;
 	if (input.Rx < 0.0f)
 	{
-		// -180‹ˆÈ‰º‚É‚È‚Á‚½‚çŠp“x’n‚ª‘å‚«‚­‚È‚è‚·‚¬‚È‚¢‚æ‚¤‚É360‹‚ğ‘«‚·
+		// -180Â°ä»¥ä¸‹ã«ãªã£ãŸã‚‰è§’åº¦åœ°ãŒå¤§ãããªã‚Šã™ããªã„ã‚ˆã†ã«360Â°ã‚’è¶³ã™
 		if (m_angleH < -DX_PI_F)
 		{
 			m_angleH += DX_TWO_PI_F;
@@ -166,7 +167,7 @@ void Camera::UpdateAngle()
 	}
 	if (input.Rx > 0.0f)
 	{
-		// 180‹ˆÈã‚É‚È‚Á‚½‚çŠp“x’n‚ª‘å‚«‚­‚È‚è‚·‚¬‚È‚¢‚æ‚¤‚É360‹‚ğˆø‚­
+		// 180Â°ä»¥ä¸Šã«ãªã£ãŸã‚‰è§’åº¦åœ°ãŒå¤§ãããªã‚Šã™ããªã„ã‚ˆã†ã«360Â°ã‚’å¼•ã
 		if (m_angleH > DX_PI_F)
 		{
 			m_angleH -= DX_TWO_PI_F;
@@ -174,12 +175,12 @@ void Camera::UpdateAngle()
 	}
 
 	m_angleV -= rotY;
-	// ˆê’èŠp“xˆÈ‰º‚É‚É‚Í‚È‚ç‚È‚¢‚æ‚¤‚É‚·‚é
+	// ä¸€å®šè§’åº¦ä»¥ä¸‹ã«ã«ã¯ãªã‚‰ãªã„ã‚ˆã†ã«ã™ã‚‹
 	if (m_angleV < kCameraAngleVMin)
 	{
 		m_angleV = kCameraAngleVMin;
 	}
-	// ˆê’èŠp“xˆÈã‚É‚Í‚È‚ç‚È‚¢‚æ‚¤‚É‚·‚é
+	// ä¸€å®šè§’åº¦ä»¥ä¸Šã«ã¯ãªã‚‰ãªã„ã‚ˆã†ã«ã™ã‚‹
 	if (m_angleV > kCameraAngleVMax)
 	{
 		m_angleV = kCameraAngleVMax;
@@ -188,7 +189,7 @@ void Camera::UpdateAngle()
 
 void Camera::NormalUpdate(VECTOR targetPos)
 {
-	// ƒ^[ƒQƒbƒgÀ•WXV
+	// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆåº§æ¨™æ›´æ–°
 	m_targetPos.x = (m_targetPos.x * kPrevCameraTargetFollowSpeed) + (targetPos.x * kCameraTargetFollowSpeed);
 	m_targetPos.y = (m_targetPos.y * kPrevCameraTargetFollowSpeed) + (targetPos.y * kCameraTargetFollowSpeed);
 	m_targetPos.z = (m_targetPos.z * kPrevCameraTargetFollowSpeed) + (targetPos.z * kCameraTargetFollowSpeed);
@@ -196,48 +197,48 @@ void Camera::NormalUpdate(VECTOR targetPos)
 
 void Camera::UpdatePos()
 {
-	// ‚’¼•ûŒü‚Ì‰ñ“](X²)
+	// å‚ç›´æ–¹å‘ã®å›è»¢(Xè»¸)
 	MATRIX RotX = MGetRotX(m_angleV);
-	// …•½•ûŒü‚Ì‰ñ“](Y²)
+	// æ°´å¹³æ–¹å‘ã®å›è»¢(Yè»¸)
 	MATRIX RotY = MGetRotY(m_angleH);
 
-	/*ƒJƒƒ‰‚ÌÀ•W‚ÌŒvZ
-	(X²‚ÉƒJƒƒ‰‚ÆƒvƒŒƒCƒ„[‚Æ‚Ì‹——£•ª‚¾‚¯L‚Ñ‚½ƒxƒNƒgƒ‹‚ğ
-	‚’¼•ûŒü‰ñ“]‚³‚¹‚½Œã‚É…•½•ûŒü‰ñ“]‚µ‚Ä
-	‚»‚ê‚É’‹“_‚ÌÀ•W‚ğ‘«‚·)*/
+	/*ã‚«ãƒ¡ãƒ©ã®åº§æ¨™ã®è¨ˆç®—
+	(Xè»¸ã«ã‚«ãƒ¡ãƒ©ã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨ã®è·é›¢åˆ†ã ã‘ä¼¸ã³ãŸãƒ™ã‚¯ãƒˆãƒ«ã‚’
+	å‚ç›´æ–¹å‘å›è»¢ã•ã›ãŸå¾Œã«æ°´å¹³æ–¹å‘å›è»¢ã—ã¦
+	ãã‚Œã«æ³¨è¦–ç‚¹ã®åº§æ¨™ã‚’è¶³ã™)*/
 	m_nextPos = VAdd(VTransform(VTransform(VGet(0.0f, 0.0f, m_cameraToTargetLenght), RotX), RotY), m_targetPos);
 }
 
 void Camera::FixPos()
 {
-	// •Ç‚É“–‚½‚Á‚½‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO‚ğfalse‚É‚µ‚Ä‚¨‚­
+	// å£ã«å½“ãŸã£ãŸã‹ã©ã†ã‹ã®ãƒ•ãƒ©ã‚°ã‚’falseã«ã—ã¦ãŠã
 	m_isPolyHit = false;
 
-	// ˆÚ“®‚µ‚½‚©‚Ç‚¤‚©
+	// ç§»å‹•ã—ãŸã‹ã©ã†ã‹
 	if (m_isMove)
 	{
-		// •Çƒ|ƒŠƒSƒ“‚Ì”‚¾‚¯ŒJ‚è•Ô‚·
+		// å£ãƒãƒªã‚´ãƒ³ã®æ•°ã ã‘ç¹°ã‚Šè¿”ã™
 		for (int i = 0; i < m_hitDim.HitNum; i++)
 		{
-			// i”Ô–Ú‚Ì•Çƒ|ƒŠƒSƒ“‚ÌƒAƒhƒŒƒX‚ğ•Çƒ|ƒ`ƒSƒ“ƒ|ƒCƒ“ƒ^”z—ñ‚©‚çæ“¾
+			// iç•ªç›®ã®å£ãƒãƒªã‚´ãƒ³ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å£ãƒãƒã‚´ãƒ³ãƒã‚¤ãƒ³ã‚¿é…åˆ—ã‹ã‚‰å–å¾—
 			m_pPoly = m_pPolyIndex[i];
 
-			// ƒ|ƒŠƒSƒ“‚ÆƒvƒŒƒCƒ„[‚ª“–‚½‚Á‚Ä‚¢‚È‚©‚Á‚½‚çŸ‚ÌƒJƒEƒ“ƒg‚Ö
+			// ãƒãƒªã‚´ãƒ³ã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒå½“ãŸã£ã¦ã„ãªã‹ã£ãŸã‚‰æ¬¡ã®ã‚«ã‚¦ãƒ³ãƒˆã¸
 			if (HitCheck_Capsule_Triangle(m_nextPos, m_prevPos, m_pSphere->GetRadius(),
 				m_pPoly->Position[0], m_pPoly->Position[1],
 				m_pPoly->Position[2]) == false) continue;
 
-			// ‚±‚±‚É—ˆ‚½‚ç“–‚½‚Á‚Ä‚¢‚é
+			// ã“ã“ã«æ¥ãŸã‚‰å½“ãŸã£ã¦ã„ã‚‹
 			m_isPolyHit = true;
 
-			// ƒJƒƒ‰‚ª“–‚½‚Á‚Ä‚¢‚é‚Æ‚«
+			// ã‚«ãƒ¡ãƒ©ãŒå½“ãŸã£ã¦ã„ã‚‹ã¨ã
 			while (m_isPolyHit)
 			{
 				m_cameraToTargetLenght = max(m_cameraToTargetLenght--, kCameraToTargetLenghtMin);
-				// ƒJƒƒ‰‚ÌÀ•WXV
+				// ã‚«ãƒ¡ãƒ©ã®åº§æ¨™æ›´æ–°
 				UpdatePos();
 
-				// ƒ|ƒŠƒSƒ“‚ÆƒvƒŒƒCƒ„[‚ª“–‚½‚Á‚Ä‚¢‚È‚©‚Á‚½‚çƒ‹[ƒv‚©‚ç”²‚¯‚é
+				// ãƒãƒªã‚´ãƒ³ã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒå½“ãŸã£ã¦ã„ãªã‹ã£ãŸã‚‰ãƒ«ãƒ¼ãƒ—ã‹ã‚‰æŠœã‘ã‚‹
 				if (HitCheck_Capsule_Triangle(m_nextPos, m_prevPos, m_pSphere->GetRadius(),
 					m_pPoly->Position[0], m_pPoly->Position[1],
 					m_pPoly->Position[2]) == false)
@@ -246,14 +247,14 @@ void Camera::FixPos()
 				}
 			}
 
-			// V‚½‚ÈˆÚ“®À•W‚Å•Çƒ|ƒŠƒSƒ“‚Æ“–‚½‚Á‚Ä‚¢‚È‚¢‚©‚Ç‚¤‚©‚ğ”»’è‚·‚é
+			// æ–°ãŸãªç§»å‹•åº§æ¨™ã§å£ãƒãƒªã‚´ãƒ³ã¨å½“ãŸã£ã¦ã„ãªã„ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹
 			bool isHitWallPolygom = false;
 			for (int j = 0; j < m_hitDim.HitNum; j++)
 			{
-				// j”Ô–Ú‚Ì•Çƒ|ƒŠƒSƒ“‚ÌƒAƒhƒŒƒX‚ğ•Çƒ|ƒŠƒSƒ“ƒ|ƒCƒ“ƒ^”z—ñ‚©‚çæ“¾
+				// jç•ªç›®ã®å£ãƒãƒªã‚´ãƒ³ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å£ãƒãƒªã‚´ãƒ³ãƒã‚¤ãƒ³ã‚¿é…åˆ—ã‹ã‚‰å–å¾—
 				m_pPoly = m_pPolyIndex[j];
 
-				// “–‚½‚Á‚Ä‚¢‚½‚çƒ‹[ƒv‚©‚ç”²‚¯‚é
+				// å½“ãŸã£ã¦ã„ãŸã‚‰ãƒ«ãƒ¼ãƒ—ã‹ã‚‰æŠœã‘ã‚‹
 				if (HitCheck_Capsule_Triangle(m_nextPos, m_prevPos, m_pSphere->GetRadius(),
 					m_pPoly->Position[0], m_pPoly->Position[1], m_pPoly->Position[2]) == false)
 				{
@@ -262,7 +263,7 @@ void Camera::FixPos()
 				}
 			}
 
-			// ‚·‚×‚Ä‚Ìƒ|ƒŠƒSƒ“‚Æ“–‚½‚Á‚Ä‚¢‚È‚©‚Á‚½‚çƒ‹[ƒv‚©‚ç”²‚¯‚é
+			// ã™ã¹ã¦ã®ãƒãƒªã‚´ãƒ³ã¨å½“ãŸã£ã¦ã„ãªã‹ã£ãŸã‚‰ãƒ«ãƒ¼ãƒ—ã‹ã‚‰æŠœã‘ã‚‹
 			if (!isHitWallPolygom)
 			{
 				m_isPolyHit = false;
@@ -270,15 +271,15 @@ void Camera::FixPos()
 			}
 		}
 	}
-	else // ˆÚ“®‚µ‚Ä‚¢‚È‚©‚Á‚½ê‡
+	else // ç§»å‹•ã—ã¦ã„ãªã‹ã£ãŸå ´åˆ
 	{
-		// •Çƒ|ƒŠƒSƒ“‚Ì”‚¾‚¯ŒJ‚è•Ô‚·
+		// å£ãƒãƒªã‚´ãƒ³ã®æ•°ã ã‘ç¹°ã‚Šè¿”ã™
 		for (int i = 0; i < m_hitDim.HitNum; i++)
 		{
-			// i”Ô–Ú‚Ì•Çƒ|ƒŠƒSƒ“‚ÌƒAƒhƒŒƒX‚ğ•Çƒ|ƒŠƒSƒ“ƒ|ƒCƒ“ƒ^”z—ñ‚©‚çæ“¾
+			// iç•ªç›®ã®å£ãƒãƒªã‚´ãƒ³ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å£ãƒãƒªã‚´ãƒ³ãƒã‚¤ãƒ³ã‚¿é…åˆ—ã‹ã‚‰å–å¾—
 			m_pPoly = m_pPolyIndex[i];
 
-			// ƒ|ƒŠƒSƒ“‚É“–‚½‚Á‚Ä‚¢‚½‚ r“–‚½‚Á‚½ƒtƒ‰ƒO‚ğ—§‚Ä‚½‚¤‚¦‚Åƒ‹[ƒv‚©‚ç”²‚¯‚é
+			// ãƒãƒªã‚´ãƒ³ã«å½“ãŸã£ã¦ã„ãŸã‚rå½“ãŸã£ãŸãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ãŸã†ãˆã§ãƒ«ãƒ¼ãƒ—ã‹ã‚‰æŠœã‘ã‚‹
 			if (HitCheck_Capsule_Triangle(m_nextPos, m_prevPos, m_pSphere->GetRadius(),
 				m_pPoly->Position[0], m_pPoly->Position[1], m_pPoly->Position[2]) == false)
 			{
@@ -291,27 +292,27 @@ void Camera::FixPos()
 
 void Camera::FixPosInternal()
 {
-	// •Ç‚©‚ç‚Ì‰Ÿ‚µo‚µˆ—‚ğ‚İ‚éÅ‘å”‚¾‚¯ŒJ‚è•Ô‚·
+	// å£ã‹ã‚‰ã®æŠ¼ã—å‡ºã—å‡¦ç†ã‚’è©¦ã¿ã‚‹æœ€å¤§æ•°ã ã‘ç¹°ã‚Šè¿”ã™
 	for (int i = 0; i < kMaxColHitTryNum; i++)
 	{
-		// “–‚½‚é‰Â”\«‚Ì‚ ‚é•Çƒ|ƒŠƒSƒ“‚ğ‚·‚×‚ÄŒ©‚é
+		// å½“ãŸã‚‹å¯èƒ½æ€§ã®ã‚ã‚‹å£ãƒãƒªã‚´ãƒ³ã‚’ã™ã¹ã¦è¦‹ã‚‹
 		bool isHitWall = false;
 
-		// •Çƒ|ƒŠƒSƒ“‚Ì”‚¾‚¯ŒJ‚è•Ô‚·
+		// å£ãƒãƒªã‚´ãƒ³ã®æ•°ã ã‘ç¹°ã‚Šè¿”ã™
 		for (int j = 0; j < m_hitDim.HitNum; j++)
 		{
-			// j”Ô–Ú‚Ì•Çƒ|ƒŠƒSƒ“‚ÌƒAƒhƒŒƒX‚ğ•Çƒ|ƒŠƒSƒ“ƒ|ƒCƒ“ƒ^”z—ñ‚©‚çæ“¾
+			// jç•ªç›®ã®å£ãƒãƒªã‚´ãƒ³ã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å£ãƒãƒªã‚´ãƒ³ãƒã‚¤ãƒ³ã‚¿é…åˆ—ã‹ã‚‰å–å¾—
 			m_pPoly = m_pPolyIndex[j];
 
 			m_cameraToTargetLenght = max(m_cameraToTargetLenght--, kCameraToTargetLenghtMin);
 
-			// ƒJƒƒ‰‚ÌÀ•WXV
+			// ã‚«ãƒ¡ãƒ©ã®åº§æ¨™æ›´æ–°
 			UpdatePos();
 
-			// ˆÚ“®‚µ‚½‚¤‚¦‚Å•Çƒ|ƒŠƒSƒ“‚ÆÚG‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğ”»’è
+			// ç§»å‹•ã—ãŸã†ãˆã§å£ãƒãƒªã‚´ãƒ³ã¨æ¥è§¦ã—ã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤å®š
 			for (int k = 0; k < m_hitDim.HitNum; k++)
 			{
-				// “–‚½‚Á‚½‚çƒ‹[ƒv‚©‚ç”²‚¯‚é
+				// å½“ãŸã£ãŸã‚‰ãƒ«ãƒ¼ãƒ—ã‹ã‚‰æŠœã‘ã‚‹
 				m_pPoly = m_pPolyIndex[k]; if (HitCheck_Capsule_Triangle(m_nextPos, m_prevPos, m_pSphere->GetRadius(),
 					m_pPoly->Position[0], m_pPoly->Position[1], m_pPoly->Position[2]) == false)
 				{
@@ -320,10 +321,10 @@ void Camera::FixPosInternal()
 				}
 			}
 
-			// ‚·‚×‚Ä‚Ìƒ|ƒŠƒSƒ“‚Æ“–‚½‚Á‚Ä‚¢‚È‚©‚Á‚½‚çƒ‹[ƒv‚©‚ç”²‚¯‚é
+			// ã™ã¹ã¦ã®ãƒãƒªã‚´ãƒ³ã¨å½“ãŸã£ã¦ã„ãªã‹ã£ãŸã‚‰ãƒ«ãƒ¼ãƒ—ã‹ã‚‰æŠœã‘ã‚‹
 			if (!isHitWall) break;
 		}
-		// ƒ‹[ƒvI—¹
+		// ãƒ«ãƒ¼ãƒ—çµ‚äº†
 		if (!isHitWall)break;
 	}
 }
