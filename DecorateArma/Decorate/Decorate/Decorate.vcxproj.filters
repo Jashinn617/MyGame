@@ -114,20 +114,20 @@
     <ClCompile Include="Utility\MoveDirectionVec.cpp">
       <Filter>ソース ファイル\Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Common\CsvLoad.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Utility\Capsule.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Utility</Filter>
     </ClCompile>
     <ClCompile Include="Utility\Collision.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\CsvLoad.cpp">
+      <Filter>ソース ファイル\Common</Filter>
     </ClCompile>
     <ClCompile Include="Object\Field.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Object</Filter>
     </ClCompile>
     <ClCompile Include="Object\Player\Shot.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Object\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -192,19 +192,19 @@
       <Filter>ヘッダー ファイル\Object</Filter>
     </ClInclude>
     <ClInclude Include="Common\CsvLoad.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Common</Filter>
     </ClInclude>
     <ClInclude Include="Utility\Capsule.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Utility</Filter>
     </ClInclude>
     <ClInclude Include="Utility\Collision.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Utility</Filter>
     </ClInclude>
     <ClInclude Include="Object\Field.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Object</Filter>
     </ClInclude>
     <ClInclude Include="Object\Player\Shot.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Object\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

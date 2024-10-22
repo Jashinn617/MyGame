@@ -34,8 +34,23 @@ public:
 	/// </summary>
 	void Draw();
 
+private:	// 構造体
+
+	struct Bullet
+	{
+		VECTOR pos;
+		std::shared_ptr<Model> model;
+	};
+
+private:	// 関数
+
+	void Attack(float rot);
+
 private:
-	VECTOR m_pos;	// 座標
+	float m_sinCount;	// 上下移動カウント
+	float m_sinPosY;	// サイン計算に使うY座標
+
+	VECTOR m_pos;		// 座標
 
 
 	std::shared_ptr<Model> m_pModel;

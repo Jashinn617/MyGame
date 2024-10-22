@@ -205,7 +205,7 @@ void Player::UpdateAngle()
 	if (m_pState->GetState() == PlayerState::StateKind::Damage) return;
 
 	// 目標角度の計算(ベクトル(z,x)の角度 + 90°+ カメラ角度)
-	float nextAngle = atan2(m_moveDirection.z, m_moveDirection.x)
+	float nextAngle = atan2(static_cast<double>(m_moveDirection.z), static_cast<double>(m_moveDirection.x))
 		+ DX_PI_F * 0.5f + m_pCamera->GetCameraAngleX();
 
 	// 角度を滑らかに変更する
