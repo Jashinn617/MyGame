@@ -73,7 +73,7 @@ bool SceneManager::Update()
 
 #ifdef _DEBUG
 	// LBが押された場合
-	if (Pad::IsTrigger(PAD_INPUT_5))
+	if (CheckHitKey(KEY_INPUT_SPACE))
 	{
 		// デバッグシーンに飛ぶ
 		pNext = std::make_shared<SceneDebug>();

@@ -1,2 +1,2 @@
-CharacterName,Idle,Walk,Dash,JumpStart,JumpIdle,Damage
-Player,0,1,2,8,9,7
+CharacterName,Idle,Walk,Dash,Attack1,Attack2,Attack3,HardAttack,Damage,Death,JumpStart,JumpIdle
+Player,1,2,3,4,5,6,7,8,9,10,11

@@ -11,8 +11,12 @@
 #include "../../Utility/Sphere.h"
 #include "../../Utility/Capsule.h"
 #include "../../Utility/MoveDirectionVec.h"
+#include "../../Utility/Time.h"
+#include "../../Utility/Pad.h"
 
 #include "../../Common/CsvLoad.h"
+
+#include <cassert>
 
 
 namespace
@@ -34,7 +38,9 @@ namespace
 	constexpr float kTopPos = 60.0f;					// 頭の高さ
 	constexpr float kBottomPos = 0.0f;					// 足元の座標
 	constexpr float kCapsuleRadius = 8.0f;				// カプセルの半径
-	constexpr VECTOR kScaleVec = { 0.8f,1.2f,0.8f };	// スケール
+	constexpr VECTOR kScaleVec = { 0.3f,0.4f,0.3f };	// スケール
+
+	constexpr int kAttackStanTime = 1;		// 攻撃硬直時間
 
 	/// <summary>
 	/// アニメーション速度
@@ -44,15 +50,25 @@ namespace
 		Idle = 2,
 		Walk = 2,
 		Dash = 1,
-		Jump = 1,
+		Attack1 = 1,
+		Attack2 = 1,
+		Attack3 = 1,
+		HardAttack = 1,
+		JumpStart = 1,
+		JumpIdle = 1,
 		Damage = 1,
 	};
 }
 
-Player::Player():
+Player::Player() :
+	m_attackCount(0),
+	m_isAttack(false),
+	m_isNextAttack(false),
+	m_moveDirection{ 0.0f,0.0f,0.0f },
 	m_pState(std::make_shared<PlayerState>(this)),
 	m_pCamera(std::make_shared<Camera>()),
-	m_pShot(std::make_shared<Shot>())
+	m_pShot(std::make_shared<Shot>()),
+	m_pAttackStanTime(std::make_shared<Time>(kAttackStanTime))
 {
 	// アニメーションロード
 	CsvLoad::GetInstance().AnimLoad(m_animData, "Player");
@@ -68,20 +84,8 @@ Player::Player():
 	m_moveData.acc = 5 * kAccelerationRate;
 	m_moveData.rotSpeed = kAngleSpeed;
 
-	/*情報初期化*/
-	m_characterInfo.pos = VGet(0.0f, 0.0f, 0.0f);
-	m_characterInfo.topPos = VAdd(m_characterInfo.pos, VGet(0.0f, kTopPos, 0.0f));
-	m_characterInfo.bottomPos = VSub(m_characterInfo.pos, VGet(0.0f, kBottomPos, 0.0f));
-	m_characterInfo.vec = VGet(0.0f, 0.0f, 0.0f);
-	m_characterInfo.rot = VGet(0.0f, 0.0f, 0.0f);
-	m_characterInfo.modelH = -1;
-	m_characterInfo.isExist = true;
-	m_objSize = kSize;
-	m_angle = 0.0f;
 
-	// 当たり判定ポインタ作成
-	m_pSphere = std::make_shared<Sphere>(m_characterInfo.pos, m_objSize, kHeight * 0.5f);
-	m_pCapsule = std::make_shared<Capsule>(m_characterInfo.topPos, m_characterInfo.bottomPos, kCapsuleRadius);
+
 
 	// モデルポインタ作成
 	m_pModel = std::make_shared<Model>(kFileName);
@@ -90,8 +94,33 @@ Player::Player():
 	// アニメーション初期化
 	m_pModel->SetAnim(m_animData.idle, true, false);
 
+	// モデル頂点の取得
+	m_topFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(), "mixamorig:HeadTop_End");
+	assert(m_topFrameIndex != -1);
+	assert(m_topFrameIndex != -2);
+	// モデル底辺の取得
+	m_bottomFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(), "Nightshade");
+	assert(m_bottomFrameIndex != -1);
+	assert(m_bottomFrameIndex != -2);
 	// 初期ステイトの設定(待機状態から)
 	m_pState->SetState(PlayerState::StateKind::Idle);
+
+	/*情報初期化*/
+	m_characterInfo.pos = VGet(0.0f, 0.0f, 0.0f);
+	m_characterInfo.topPos = MV1GetFramePosition(m_pModel->GetModelHandle(), m_topFrameIndex);
+	m_characterInfo.bottomPos = MV1GetFramePosition(m_pModel->GetModelHandle(), m_bottomFrameIndex);
+	m_characterInfo.vec = VGet(0.0f, 0.0f, 0.0f);
+	m_characterInfo.rot = VGet(0.0f, 0.0f, 0.0f);
+	m_characterInfo.modelH = -1;
+	m_characterInfo.isExist = true;
+	m_objSize = kSize;
+	m_angle = 0.0f;
+
+
+	// 当たり判定ポインタ作成
+	m_pSphere = std::make_shared<Sphere>(m_characterInfo.pos, m_objSize, kHeight * 0.5f);
+	m_pCapsule = std::make_shared<Capsule>(m_characterInfo.topPos, m_characterInfo.bottomPos, kCapsuleRadius);
+
 
 	// モデルの頂点タイプの取得
 	//for (int i = 0; i < MV1GetTriangleListNum(m_pModel->GetModelHandle()); i++)
@@ -131,14 +160,18 @@ void Player::Update()
 	m_pModel->SetRot(VGet(0.0f, m_angle, 0.0f));
 
 	// カメラ更新
-	m_pCamera->Update(m_characterInfo.pos);	
+	m_pCamera->Update(m_characterInfo.pos);
 
+	// カメラの角度行列を取得する
+	MATRIX rotMtx = MGetRotY(m_pCamera->GetCameraAngleX());
+	// ショットにカメラの角度行列を渡す
+	m_pShot->SetCameraRot(rotMtx);
 	// 遠距離攻撃武器更新
 	m_pShot->Update(m_characterInfo.pos, m_angle);
 
 	// 座標設定
-	m_characterInfo.topPos = VAdd(m_characterInfo.pos, VGet(0.0f, kTopPos, 0.0f));
-	m_characterInfo.bottomPos = VSub(m_characterInfo.pos, VGet(0.0f, kBottomPos, 0.0f));
+	m_characterInfo.topPos = MV1GetFramePosition(m_pModel->GetModelHandle(), m_topFrameIndex);
+	m_characterInfo.bottomPos = MV1GetFramePosition(m_pModel->GetModelHandle(), m_bottomFrameIndex);
 }
 
 void Player::Draw(std::shared_ptr<ToonShader> pToonShader)
@@ -174,6 +207,8 @@ void Player::Draw2D()
 	DrawFormatString(0, 20, 0xffffff, "プレイヤー座標：%f,%f,%f"
 		, m_characterInfo.pos.x, m_characterInfo.pos.y, m_characterInfo.pos.z);
 	DrawFormatString(0, 40, 0xffffff, "ジャンプ力：%f", m_jumpPower);
+	DrawFormatString(0, 180, 0xffffff, "攻撃カウント：%d", m_attackCount);
+	DrawFormatString(0, 200, 0xffffff, "次攻撃フラグ：%d", m_isAttack);
 #endif // _DEBUG
 }
 
@@ -193,7 +228,7 @@ void Player::EndJump()
 	m_jumpPower = 0.0f;
 
 	// ステージクリア時は処理を終了する
-	
+
 
 	// ステイトの終了処理
 	m_pState->EndState();
@@ -246,7 +281,7 @@ VECTOR Player::Move()
 	// ダメージ中の処理
 	if (m_pState->GetState() == PlayerState::StateKind::Damage)
 	{
-		 return move;
+		return move;
 	}
 
 	// 移動ベクトルに速度をかける
@@ -269,6 +304,26 @@ void Player::InitState()
 	/*現在のステイトによって初期化処理を変える*/
 	switch (m_pState->GetState())
 	{
+	case PlayerState::StateKind::Attack:
+
+
+
+		m_pAttackStanTime->Reset();		// 硬直時間のリセット
+		m_attackCount = 0;				// 攻撃回数のリセット
+
+		//	攻撃フラグを立てる
+		m_isAttack = true;
+		// 次の攻撃をするかどうかのフラグをfalseにする
+		m_isNextAttack = false;
+		// 攻撃判定リセットフラグを立てる
+		m_isResetAttack = true;
+
+		break;
+
+	case PlayerState::StateKind::HardAttack:
+
+		break;
+
 	case PlayerState::StateKind::Jump:
 		// ジャンプフラグを立てる
 		m_isJump = true;
@@ -309,6 +364,27 @@ void Player::UpdateState()
 		m_pModel->ChangeAnim(m_animData.run, true, false, kAnimSpeed::Dash);
 		break;
 
+	case PlayerState::StateKind::Attack:	// 攻撃
+		// 攻撃更新
+		UpdateAttack();
+		break;
+
+	case PlayerState::StateKind::HardAttack:	// 強攻撃
+
+		// 止まる
+		m_moveSpeed = 0.0f;
+
+		// アニメーションを再生する
+		m_pModel->ChangeAnim(m_animData.hardAttack, false, false, kAnimSpeed::HardAttack);
+
+		// アニメーションが終わった場合
+		if (m_pModel->IsAnimEnd())
+		{
+			m_pState->EndState();
+		}
+
+		break;
+
 	case PlayerState::StateKind::Jump:	// ジャンプ
 		// 移動速度を変更する
 		//m_moveSpeed = min(m_moveSpeed + m_moveData.acc, m_moveData.walkSpeed);
@@ -317,13 +393,13 @@ void Player::UpdateState()
 		//if (m_jumpPower > kMinJumpRiseNum)
 		//{
 		//	// アニメーションをジャンプ開始アニメーションに切り替える
-		//	m_pModel->ChangeAnim(m_animData.jumpStart, false, false, kAnimSpeed::Jump);
+		//	m_pModel->ChangeAnim(m_animData.jumpStart, false, false, kAnimSpeed::JumpStart);
 		//}
 		//// 空中にとどまっている、下降中
 		//else
 		//{
 			// アニメーションをジャンプ待機アニメーションに切り替える
-			m_pModel->ChangeAnim(m_animData.jumpIdle, true, false, kAnimSpeed::Jump);
+			m_pModel->ChangeAnim(m_animData.jumpIdle, true, false, kAnimSpeed::JumpIdle);
 		//}
 		break;
 
@@ -334,5 +410,66 @@ void Player::UpdateState()
 	default:
 		// 上記以外だった場合は何もしない
 		break;
+	}
+}
+
+void Player::UpdateAttack()
+{
+	// 止まる
+	m_moveSpeed = 0.0f;
+
+	// 攻撃回数によってアニメーションを変更する
+	switch (m_attackCount % 3)
+	{
+	case 0:
+		m_pModel->ChangeAnim(m_animData.attack1, false, false, kAnimSpeed::Attack1);
+		break;
+
+	case 1:
+		m_pModel->ChangeAnim(m_animData.attack2, false, false, kAnimSpeed::Attack2);
+		break;
+
+	case 2:
+		m_pModel->ChangeAnim(m_animData.attack3, false, false, kAnimSpeed::Attack3);
+		break;
+
+	default:
+		break;
+	}
+
+	if (m_pAttackStanTime->Update())
+	{
+		// 攻撃中に攻撃ボタンが押された場合
+		if (Pad::IsTrigger(PAD_INPUT_3) && !m_isNextAttack)
+		{
+			// 次に攻撃するフラグを立てる
+			m_isNextAttack = true;
+		}
+	}
+
+	// アニメーションが終わった段階で次に攻撃するフラグが立っていなかった場合
+	if (m_pModel->IsAnimEnd() && !m_isNextAttack)
+	{
+		// 攻撃を終了する
+		m_isAttack = false;
+		// 硬直時間をリセットする
+		m_pAttackStanTime->Reset();
+		// 攻撃カウントをリセットする
+		m_attackCount = 0;
+		// ステイトを終了する
+		m_pState->EndState();
+	}
+	// アニメーションが終わった段階で次に攻撃するフラグが立っていた場合
+	if (m_pModel->IsAnimEnd() && m_isNextAttack)
+	{
+		// 攻撃判定の初期化
+		m_isResetAttack = true;
+		// 硬直時間のリセット
+		m_pAttackStanTime->Reset();
+		// 次の攻撃をするフラグをfalseにする
+		m_isNextAttack = false;
+		// 攻撃カウントを増やす
+		m_attackCount++;
+		// SEを鳴らす
 	}
 }

@@ -5,9 +5,10 @@
 
 #include "../../Utility/CharacterData.h"
 
-class Camera;
 class PlayerState;
 class Shot;
+class Camera;
+class Time;
 
 /// <summary>
 /// プレイヤー
@@ -108,10 +109,22 @@ private:	// 関数
 	/// </summary>
 	void UpdateState();
 
+	/// <summary>
+	/// 攻撃更新
+	/// </summary>
+	void UpdateAttack();
+
 private:	// 変数
+	int m_attackCount;			// 連続で攻撃した回数
+
+	bool m_isAttack;			// 攻撃中かどうか
+	bool m_isNextAttack;		// 次の攻撃が実行されるかどうか
+
 	VECTOR m_moveDirection;
 
 	std::shared_ptr<PlayerState> m_pState;	// ステイトポインタ
 	std::shared_ptr<Camera> m_pCamera;		// カメラポインタ
 	std::shared_ptr<Shot> m_pShot;			// ショット
+
+	std::shared_ptr<Time> m_pAttackStanTime;	// 攻撃硬直時間
 };

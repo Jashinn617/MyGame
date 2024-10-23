@@ -1,4 +1,4 @@
-#include "CsvLoad.h"
+ï»¿#include "CsvLoad.h"
 
 #include <array>
 #include <fstream>
@@ -7,11 +7,11 @@
 #include <vector>
 
 /// <summary>
-/// ‹æØ‚è•¶š‚ªŒŸo‚³‚ê‚é‚Ü‚Å•¶š‚ğƒvƒbƒVƒ…ƒoƒbƒN‚·‚é
+/// åŒºåˆ‡ã‚Šæ–‡å­—ãŒæ¤œå‡ºã•ã‚Œã‚‹ã¾ã§æ–‡å­—ã‚’ãƒ—ãƒƒã‚·ãƒ¥ãƒãƒƒã‚¯ã™ã‚‹
 /// </summary>
-/// <param name="input">”²‚«o‚·•¶š</param>
-/// <param name="delimiter">‹æØ‚è•¶š</param>
-/// <returns>ŒŸo‚³‚ê‚é‚Ü‚Å‚Ì•¶š—ñ</returns>
+/// <param name="input">æŠœãå‡ºã™æ–‡å­—</param>
+/// <param name="delimiter">åŒºåˆ‡ã‚Šæ–‡å­—</param>
+/// <returns>æ¤œå‡ºã•ã‚Œã‚‹ã¾ã§ã®æ–‡å­—åˆ—</returns>
 std::vector<std::string> Split(std::string& input, char delimiter)
 {
 	std::istringstream stream(input);
@@ -25,17 +25,17 @@ std::vector<std::string> Split(std::string& input, char delimiter)
 
 CsvLoad::CsvLoad()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 CsvLoad::~CsvLoad()
 {
-	/*ˆ—–³‚µ*/
+	/*å‡¦ç†ç„¡ã—*/
 }
 
 CsvLoad& CsvLoad::GetInstance()
 {
-	// —Bˆê‚ÌÀ‘Ô
+	// å”¯ä¸€ã®å®Ÿæ…‹
 	static CsvLoad instance;
 
 	return instance;
@@ -43,34 +43,39 @@ CsvLoad& CsvLoad::GetInstance()
 
 void CsvLoad::AnimLoad(CharacterBase::AnimData& data, const char* charcterName)
 {
-	// ƒtƒ@ƒCƒ‹î•ñ‚Ì“Ç‚İ‚İ
+	// ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ã®èª­ã¿è¾¼ã¿
 	std::ifstream ifs("Data/CsvFile/AnimNum.csv");
 	std::string line;
 
-	std::array<int8_t, 7> animData{};
+	std::array<int8_t, 12> animData{};
 
 	std::vector<std::string> strvec;
 
 	while (getline(ifs, line))
 	{
-		// csvƒf[ƒ^‚Ps‚ğA','‚Å•¡”‚Ì•¶š—ñ‚É•ªŠ„
+		// csvãƒ‡ãƒ¼ã‚¿ï¼‘è¡Œã‚’ã€','ã§è¤‡æ•°ã®æ–‡å­—åˆ—ã«åˆ†å‰²
 		strvec = Split(line, ',');
 
-		// strvec[0]	: ƒLƒƒƒ‰–¼	string
-		// strvec[1]	: ‘Ò‹@ƒ‚[ƒVƒ‡ƒ“
-		// strvec[2]	: •à‚«ƒ‚[ƒVƒ‡ƒ“
-		// strvec[3]	: ‘–‚èƒ‚[ƒVƒ‡ƒ“
-		// strvec[4]	: ƒWƒƒƒ“ƒvƒ‚[ƒVƒ‡ƒ“
-		// strvec[5]	: ƒWƒƒƒ“ƒv’†ƒ‚[ƒVƒ‡ƒ“
-		// strvec[6]	: ƒ_ƒ[ƒWƒ‚[ƒVƒ‡ƒ“
+		// strvec[0]	: ã‚­ãƒ£ãƒ©å	string
+		// strvec[1]	: å¾…æ©Ÿ
+		// strvec[2]	: æ­©ã
+		// strvec[3]	: èµ°ã‚Š
+		// strvec[4]    : æ”»æ’ƒ1
+		// strvec[5]    : æ”»æ’ƒ2
+		// strvec[6]    : æ”»æ’ƒ3
+		// strvec[7]    : å¼·æ”»æ’ƒ
+		// strvec[8]    : ãƒ€ãƒ¡ãƒ¼ã‚¸
+		// strvec[9]    : æ­»äº¡
+		// strvec[10]	: ã‚¸ãƒ£ãƒ³ãƒ—æ™‚
+		// strvec[11]	: ã‚¸ãƒ£ãƒ³ãƒ—ä¸­
 
-		//QÆ‚µ‚½‚¢ƒLƒƒƒ‰‚ªŒ©‚Â‚©‚Á‚Ä‚¢‚½‚çˆ—‚ğ‚â‚ß‚é
+		//å‚ç…§ã—ãŸã„ã‚­ãƒ£ãƒ©ãŒè¦‹ã¤ã‹ã£ã¦ã„ãŸã‚‰å‡¦ç†ã‚’ã‚„ã‚ã‚‹
 		const char* str = strvec[0].c_str();
 		if (strcmp(str, charcterName) == 0)
 		{
 			for (int i = 0; i < animData.size(); i++)
 			{
-				//ƒLƒƒƒ‰ƒNƒ^[–¼î•ñ‚Í‚¢‚ç‚È‚¢‚Ì‚ÅÈ‚­
+				//ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼åæƒ…å ±ã¯ã„ã‚‰ãªã„ã®ã§çœã
 				if (i == 0)continue;
 				int animNum = stoi(strvec[i]);
 				animData[i] = static_cast<int8_t>(animNum);
@@ -83,12 +88,24 @@ void CsvLoad::AnimLoad(CharacterBase::AnimData& data, const char* charcterName)
 		}
 	}
 
-	//ŠO•”ƒtƒ@ƒCƒ‹‚©‚ç‚Á‚Ä‚«‚½ƒXƒe[ƒ^ƒXî•ñ‚ğƒXƒe[ƒ^ƒXƒf[ƒ^‚É“ü‚ê‚é
-	data.idle = animData[1];
+	//å¤–éƒ¨ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰æŒã£ã¦ããŸã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹æƒ…å ±ã‚’ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒ‡ãƒ¼ã‚¿ã«å…¥ã‚Œã‚‹
+	/*data.idle = animData[1];
 	data.walk = animData[2];
 	data.run = animData[3];
 	data.jumpStart = animData[4];
 	data.jumpIdle = animData[5];
-	data.damage = animData[6];
+	data.damage = animData[6];*/
+
+	data.idle = animData[1];
+	data.walk = animData[2];
+	data.run = animData[3];
+	data.attack1 = animData[4];
+	data.attack2 = animData[5];
+	data.attack3 = animData[6];
+	data.hardAttack = animData[7];
+	data.damage = animData[8];
+	data.death = animData[9];
+	data.jumpStart = animData[10];
+	data.jumpIdle = animData[11];
 }
 

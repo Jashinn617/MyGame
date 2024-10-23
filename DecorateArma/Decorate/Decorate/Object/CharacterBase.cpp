@@ -19,6 +19,7 @@ CharacterBase::CharacterBase():
 	m_jumpPower(0.0f),
 	m_isJump(false),
 	m_isDead(false),
+	m_isResetAttack(false),
 	m_pSphere(nullptr)
 {
 	/*処理無し*/

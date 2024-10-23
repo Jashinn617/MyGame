@@ -3,8 +3,11 @@
 #include "DxLib.h"
 
 #include <memory>
+#include <vector>
 
 class Model;
+class Time;
+class Sphere;
 
 /// <summary>
 /// プレイヤーに追従する遠距離攻撃武器
@@ -34,26 +37,42 @@ public:
 	/// </summary>
 	void Draw();
 
+	void SetCameraRot(MATRIX rotMtx) { m_cameraRotMtx = rotMtx; }
+
 private:	// 構造体
 
 	struct Bullet
 	{
-		VECTOR pos;
-		std::shared_ptr<Model> model;
+		bool isExist;						// 存在フラグ
+		VECTOR pos;							// 座標
+		VECTOR direction;					// 進む方向
+		std::shared_ptr<Time> vanishTime;	// 消えるまでの時間
+		std::shared_ptr<Sphere> coll;		// 当たり判定
+		std::shared_ptr<Model> model;		// モデル
 	};
 
 private:	// 関数
 
-	void Attack(float rot);
+	/// <summary>
+	/// 弾更新
+	/// </summary>
+	void UpdateBullet();
+
+	/// <summary>
+	/// 弾生成
+	/// </summary>
+	void MakeBullet();
 
 private:
-	float m_sinCount;	// 上下移動カウント
-	float m_sinPosY;	// サイン計算に使うY座標
+	float m_sinCount;		// 上下移動カウント
+	float m_sinPosY;		// サイン計算に使うY座標
+	VECTOR m_pos;			// 座標
+	MATRIX m_cameraRotMtx;	// カメラの角度行列
 
-	VECTOR m_pos;		// 座標
+	std::vector<Bullet> m_bullet;	// 弾構造体
 
-
-	std::shared_ptr<Model> m_pModel;
+	std::shared_ptr<Model> m_pModel;				// 武器本体モデル
+	std::shared_ptr<Time> m_pBulletIntervalTime;	// 次の球が発射されるまでの時間
 
 };
 

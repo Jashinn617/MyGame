@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "DxLib.h"
 
 #include <memory>
@@ -6,94 +6,106 @@
 class Player;
 
 /// <summary>
-/// ƒvƒŒƒCƒ„[‚ÌƒXƒeƒCƒg‚ğŠÇ—‚·‚éƒNƒ‰ƒX
+/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚¹ãƒ†ã‚¤ãƒˆã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹
 /// </summary>
 class PlayerState
 {
-public:	// —ñ‹“Œ^
+public:	// åˆ—æŒ™å‹
 
 	/// <summary>
-	/// ƒXƒeƒCƒg‚Ìí—Ş
+	/// ã‚¹ãƒ†ã‚¤ãƒˆã®ç¨®é¡
 	/// </summary>
 	enum class StateKind
 	{
-		Idle,		// ‘Ò‹@
-		Walk,		// •à‚«
-		Dash,		// ƒ_ƒbƒVƒ…
-		Jump,		// ƒWƒƒƒ“ƒv
-		Damage,		// ƒ_ƒ[ƒW
-		StateNum,	// ƒXƒeƒCƒg”
+		Idle,			// å¾…æ©Ÿ
+		Walk,			// æ­©ã
+		Dash,			// ãƒ€ãƒƒã‚·ãƒ¥
+		Attack,			// æ”»æ’ƒ
+		HardAttack,		// å¼·æ”»æ’ƒ
+		Jump,			// ã‚¸ãƒ£ãƒ³ãƒ—
+		Damage,			// ãƒ€ãƒ¡ãƒ¼ã‚¸
+		StateNum,		// ã‚¹ãƒ†ã‚¤ãƒˆæ•°
 	};
 
 public:
 	/// <summary>
-	/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
-	/// <param name="pPlayer">ƒvƒŒƒCƒ„[ƒ|ƒCƒ“ƒ^</param>
+	/// <param name="pPlayer">ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒã‚¤ãƒ³ã‚¿</param>
 	PlayerState(Player* pPlayer);
 
 	/// <summary>
-	/// ƒfƒXƒgƒ‰ƒNƒ^
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
 	~PlayerState();
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// ƒ_ƒ[ƒWˆ—
+	/// ãƒ€ãƒ¡ãƒ¼ã‚¸å‡¦ç†
 	/// </summary>
 	void OnDamage();
 
 	/// <summary>
-	/// ƒXƒeƒCƒg‚Ìİ’è
+	/// ã‚¹ãƒ†ã‚¤ãƒˆã®è¨­å®š
 	/// </summary>
 	/// <param name="stateKind"></param>
 	void SetState(StateKind stateKind);
 
 	/// <summary>
-	/// ƒXƒeƒCƒg‚ÌI—¹ˆ—
+	/// ã‚¹ãƒ†ã‚¤ãƒˆã®çµ‚äº†å‡¦ç†
 	/// </summary>
 	void EndState();
 
 	StateKind GetState()const { return m_nowState; }
 
-private:	// ŠÖ”
+private:	// é–¢æ•°
 	/// <summary>
-	/// ‘Ò‹@ó‘Ô‚Ö‚Ì•ÏX
+	/// å¾…æ©ŸçŠ¶æ…‹ã¸ã®å¤‰æ›´
 	/// </summary>
 	void StateTransitionIdle();
 
 	/// <summary>
-	/// •à‚«ó‘Ô‚Ö‚Ì•ÏX
+	/// æ­©ãçŠ¶æ…‹ã¸ã®å¤‰æ›´
 	/// </summary>
 	void StateTransitionWalk();
 
 	/// <summary>
-	/// ƒ_ƒbƒVƒ…ó‘Ô‚Ö‚Ì•ÏX
+	/// ãƒ€ãƒƒã‚·ãƒ¥çŠ¶æ…‹ã¸ã®å¤‰æ›´
 	/// </summary>
 	void StateTransitionDash();
 
 	/// <summary>
-	/// ƒWƒƒƒ“ƒvó‘Ô‚Ö‚Ì•ÏX
+	/// ã‚¸ãƒ£ãƒ³ãƒ—çŠ¶æ…‹ã¸ã®å¤‰æ›´
 	/// </summary>
 	void StateTransitionJump();
 
 	/// <summary>
-	/// ŠeƒXƒeƒCƒg‚Ì‘JˆÚ
+	/// æ”»æ’ƒçŠ¶æ…‹ã¸ã®å¤‰æ›´
+	/// </summary>
+	void StateTransitionAttack();
+
+	/// <summary>
+	/// å¼·æ”»æ’ƒçŠ¶æ…‹ã¸ã®å¤‰æ›´
+	/// </summary>
+	void StateTransitionHardAttack();
+
+	/// <summary>
+	/// å„ã‚¹ãƒ†ã‚¤ãƒˆã®é·ç§»
 	/// </summary>
 	void StateTransition();
 
 	/// <summary>
-	/// ƒXƒeƒCƒg•ÏX
+	/// ã‚¹ãƒ†ã‚¤ãƒˆå¤‰æ›´
 	/// </summary>
-	/// <param name="state">ƒXƒeƒCƒg</param>
+	/// <param name="state">ã‚¹ãƒ†ã‚¤ãƒˆ</param>
 	void ChangeState(StateKind stateKind);
 
-private:	// •Ï”
-	bool m_isAction;		// ƒAƒNƒVƒ‡ƒ“s“®’†‚©
-	StateKind m_nowState;	// Œ»İ‚ÌƒXƒeƒCƒg
-	Player* m_pPlayer;		// ƒvƒŒƒCƒ„[ƒ|ƒCƒ“ƒ^
+private:	// å¤‰æ•°
+	bool m_isAction;		// ã‚¢ã‚¯ã‚·ãƒ§ãƒ³è¡Œå‹•ä¸­ã‹
+	StateKind m_nowState;	// ç¾åœ¨ã®ã‚¹ãƒ†ã‚¤ãƒˆ
+	Player* m_pPlayer;		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒã‚¤ãƒ³ã‚¿
 };

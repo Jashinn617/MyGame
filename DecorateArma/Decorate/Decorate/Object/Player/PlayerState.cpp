@@ -112,6 +112,36 @@ void PlayerState::StateTransitionJump()
 	}
 }
 
+void PlayerState::StateTransitionAttack()
+{
+	// アクション中の場合は何もしない
+	if (m_isAction) return;
+
+	// Xボタンが押された場合
+	if (Pad::IsTrigger(PAD_INPUT_3))
+	{
+		// アクションフラグを立てる
+		m_isAction = true;
+		// ステイトを攻撃状態にする
+		ChangeState(StateKind::Attack);
+	}
+}
+
+void PlayerState::StateTransitionHardAttack()
+{
+	// アクション中の場合は何もしない
+	if (m_isAction) return;
+
+	// Yボタンが押された場合
+	if (Pad::IsTrigger(PAD_INPUT_4))
+	{
+		// アクションフラグを立てる
+		m_isAction = true;
+		// ステイトを強攻撃状態にする
+		ChangeState(StateKind::HardAttack);
+	}
+}
+
 void PlayerState::StateTransition()
 {
 	// 状態遷移
@@ -119,6 +149,8 @@ void PlayerState::StateTransition()
 	StateTransitionWalk();
 	StateTransitionDash();
 	StateTransitionJump();
+	StateTransitionAttack();
+	StateTransitionHardAttack();
 }
 
 void PlayerState::ChangeState(StateKind stateKind)

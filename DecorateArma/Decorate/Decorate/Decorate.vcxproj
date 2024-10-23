@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Object\Enemy\EnemyBase.cpp" />
     <ClCompile Include="Object\Field.cpp" />
     <ClCompile Include="Object\Player\Shot.cpp" />
     <ClCompile Include="Utility\Collision.cpp" />
@@ -165,6 +166,7 @@
     <ClCompile Include="Shader\SetVertexShader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Object\Enemy\EnemyBase.h" />
     <ClInclude Include="Object\Field.h" />
     <ClInclude Include="Object\Player\Shot.h" />
     <ClInclude Include="Utility\Collision.h" />

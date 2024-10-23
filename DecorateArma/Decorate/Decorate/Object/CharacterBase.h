@@ -1,164 +1,170 @@
-#pragma once
+ï»¿#pragma once
 #include "ObjectBase.h"
 
 class Sphere;
 class Capsule;
 
 /// <summary>
-/// ƒIƒuƒWƒFƒNƒg‚Ì’†‚Å‚àƒLƒƒƒ‰ƒNƒ^[‚ÌŠî’êƒNƒ‰ƒX
+/// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä¸­ã§ã‚‚ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®åŸºåº•ã‚¯ãƒ©ã‚¹
 /// </summary>
 class CharacterBase : public ObjectBase
 {
-public:	// \‘¢‘Ì
+public:	// æ§‹é€ ä½“
 
 	/// <summary>
-	/// ƒXƒe[ƒ^ƒXî•ñ
+	/// ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹æƒ…å ±
 	/// </summary>
 	struct StatusData
 	{
-		float spd = 0.0f;	// ‘¬“x
+		float spd = 0.0f;	// é€Ÿåº¦
 	};
 
 	/// <summary>
-	/// ˆÚ“®ƒXƒe[ƒ^ƒXî•ñ
+	/// ç§»å‹•ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹æƒ…å ±
 	/// </summary>
 	struct MoveStatusData
 	{
-		float walkSpeed = 0.0f;		// •à‚«‘¬“x
-		float dashSpeed = 0.0f;		// ‘–‚è‘¬“x
-		float acc = 0.0f;	// ‰Á‘¬“x
-		float rotSpeed = 0.0f;		// ‰ñ“]‘¬“x
+		float walkSpeed = 0.0f;		// æ­©ãé€Ÿåº¦
+		float dashSpeed = 0.0f;		// èµ°ã‚Šé€Ÿåº¦
+		float acc = 0.0f;	// åŠ é€Ÿåº¦
+		float rotSpeed = 0.0f;		// å›è»¢é€Ÿåº¦
 	};
 
 	/// <summary>
-	/// ƒAƒjƒ[ƒVƒ‡ƒ“î•ñ
+	/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±
 	/// </summary>
 	struct AnimData
 	{
-		int8_t idle = 0;		// ‘Ò‹@
-		int8_t walk = 0;		// •à‚«
-		int8_t run = 0;			// ‘–‚è
-		int8_t jumpStart = 0;	// ƒWƒƒƒ“ƒvn‚ß
-		int8_t jumpIdle = 0;	// ƒWƒƒƒ“ƒv’†
-		int8_t damage = 0;		// ƒ_ƒ[ƒW
+		int8_t idle = 0;			// å¾…æ©Ÿ
+		int8_t walk = 0;			// æ­©ã
+		int8_t run = 0;				// èµ°ã‚Š
+		int8_t attack1 = 0;			// æ”»æ’ƒ1
+		int8_t attack2 = 0;			// æ”»æ’ƒ2
+		int8_t attack3 = 0;			// æ”»æ’ƒ3
+		int8_t hardAttack = 0;		// å¼·æ”»æ’ƒ
+		int8_t damage = 0;			// ãƒ€ãƒ¡ãƒ¼ã‚¸
+		int8_t death = 0;			// æ­»äº¡
+		int8_t jumpStart = 0;		// ã‚¸ãƒ£ãƒ³ãƒ—æ™‚
+		int8_t jumpIdle = 0;		// ã‚¸ãƒ£ãƒ³ãƒ—ä¸­
 	};
 
 public:
 	/// <summary>
-	/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
 	CharacterBase();
 
 	/// <summary>
-	/// ƒfƒXƒgƒ‰ƒNƒ^
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
 	virtual ~CharacterBase();
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	virtual void Init() override = 0;
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
 	virtual void Update() override = 0;
 
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
-	/// <param name="pToonShader">ƒgƒD[ƒ“ƒVƒF[ƒ_ƒ|ƒCƒ“ƒ^</param>
+	/// <param name="pToonShader">ãƒˆã‚¥ãƒ¼ãƒ³ã‚·ã‚§ãƒ¼ãƒ€ãƒã‚¤ãƒ³ã‚¿</param>
 	virtual void Draw(std::shared_ptr<ToonShader> pToonShader)override = 0;
 
 	/// <summary>
-	/// ƒWƒƒƒ“ƒvI—¹ˆ—
+	/// ã‚¸ãƒ£ãƒ³ãƒ—çµ‚äº†å‡¦ç†
 	/// </summary>
 	virtual void EndJump();
 
 	/// <summary>
-	/// ƒ_ƒ[ƒWˆ—
+	/// ãƒ€ãƒ¡ãƒ¼ã‚¸å‡¦ç†
 	/// </summary>
-	/// <param name="targetPos">UŒ‚‚ğ“–‚Ä‚½‘Šè‚ÌÀ•W</param>
-	virtual void OnDamage(VECTOR targetPos) {/*ˆ—–³‚µ*/ }
+	/// <param name="targetPos">æ”»æ’ƒã‚’å½“ã¦ãŸç›¸æ‰‹ã®åº§æ¨™</param>
+	virtual void OnDamage(VECTOR targetPos) {/*å‡¦ç†ç„¡ã—*/ }
 
 	/// <summary>
-	/// ƒLƒƒƒ‰ƒNƒ^[“¯m‚Ì“–‚½‚è”»’è‚ğl—¶‚µ‚½ˆÚ“®ˆ—
+	/// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼åŒå£«ã®å½“ãŸã‚Šåˆ¤å®šã‚’è€ƒæ…®ã—ãŸç§»å‹•å‡¦ç†
 	/// </summary>
-	/// <param name="pTarget">‘Šè‚ÌƒLƒƒƒ‰ƒNƒ^[ƒ|ƒCƒ“ƒ^</param>
+	/// <param name="pTarget">ç›¸æ‰‹ã®ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ãƒã‚¤ãƒ³ã‚¿</param>
 	void MoveCollCharacter(CharacterBase* pTarget);
 
 	/// <summary>
-	/// ’n–Ê‚É“–‚½‚Á‚Ä‚¢‚é‚Æ‚«‚Ìˆ—
+	/// åœ°é¢ã«å½“ãŸã£ã¦ã„ã‚‹ã¨ãã®å‡¦ç†
 	/// </summary>
 	void HitGround();
 
 	/// <summary>
-	/// d—Í‚É‚æ‚é—‰ºˆ—
+	/// é‡åŠ›ã«ã‚ˆã‚‹è½ä¸‹å‡¦ç†
 	/// </summary>
 	void UpdateGravity();
 
 	/// <summary>
-	/// ‹…‚Ì“–‚½‚è”»’èƒ|ƒCƒ“ƒ^‚Ìæ“¾
+	/// çƒã®å½“ãŸã‚Šåˆ¤å®šãƒã‚¤ãƒ³ã‚¿ã®å–å¾—
 	/// </summary>
-	/// <returns>‹…‚Ì“–‚½‚è”»’èƒ|ƒCƒ“ƒ^</returns>
+	/// <returns>çƒã®å½“ãŸã‚Šåˆ¤å®šãƒã‚¤ãƒ³ã‚¿</returns>
 	const std::shared_ptr<Sphere> GetSphere()const { return m_pSphere; }
 
 	/// <summary>
-	/// Šp“x‚ÌXV
+	/// è§’åº¦ã®æ›´æ–°
 	/// </summary>
-	/// <returns>Šp“x</returns>
+	/// <returns>è§’åº¦</returns>
 	float GetAngle() const { return m_angle; }
 
 	/// <summary>
-	/// ƒWƒƒƒ“ƒv’†‚©‚Ç‚¤‚©‚ğ•Ô‚·
+	/// ã‚¸ãƒ£ãƒ³ãƒ—ä¸­ã‹ã©ã†ã‹ã‚’è¿”ã™
 	/// </summary>
-	/// <returns>ƒWƒƒƒ“ƒv’†‚©‚Ç‚¤‚©</returns>
+	/// <returns>ã‚¸ãƒ£ãƒ³ãƒ—ä¸­ã‹ã©ã†ã‹</returns>
 	bool IsJump()const { return m_isJump; }
 
 	/// <summary>
-	/// ƒWƒƒƒ“ƒv—Í‚ğ•Ô‚·
+	/// ã‚¸ãƒ£ãƒ³ãƒ—åŠ›ã‚’è¿”ã™
 	/// </summary>
-	/// <returns>ƒWƒƒƒ“ƒv—Í</returns>
+	/// <returns>ã‚¸ãƒ£ãƒ³ãƒ—åŠ›</returns>
 	float GetJumpPower()const { return m_jumpPower; }
 
 	/// <summary>
-	/// ƒWƒƒƒ“ƒv—Í‚ğ”½“]‚·‚é
+	/// ã‚¸ãƒ£ãƒ³ãƒ—åŠ›ã‚’åè»¢ã™ã‚‹
 	/// </summary>
 	void InvertJumpPower() { m_jumpPower *= -1; }
 
 	/// <summary>
-	/// ƒ_ƒ[ƒW‚ğó‚¯‚½‚©‚Ç‚¤‚©‚ğ•Ô‚·
+	/// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãŸã‹ã©ã†ã‹ã‚’è¿”ã™
 	/// </summary>
-	/// <returns>ƒ_ƒ[ƒW‚ğó‚¯‚½‚©‚Ç‚¤‚©</returns>
+	/// <returns>ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãŸã‹ã©ã†ã‹</returns>
 	bool IsDamage()const { return m_isDamage; }
 
 	/// <summary>
-	/// UŒ‚‚ğó‚¯‚Ä‚¢‚È‚¢ó‘Ô‚É–ß‚·
+	/// æ”»æ’ƒã‚’å—ã‘ã¦ã„ãªã„çŠ¶æ…‹ã«æˆ»ã™
 	/// </summary>
 	void OffDamage() { m_isDamage = false; }
 
 	/// <summary>
-	/// €–Só‘Ô‚©‚Ç‚¤‚©‚ğ•Ô‚·
+	/// æ­»äº¡çŠ¶æ…‹ã‹ã©ã†ã‹ã‚’è¿”ã™
 	/// </summary>
-	/// <returns>€–Só‘Ô‚©‚Ç‚¤‚©</returns>
+	/// <returns>æ­»äº¡çŠ¶æ…‹ã‹ã©ã†ã‹</returns>
 	bool IsDead()const { return m_isDead; }
 
-protected:	// ŠÖ”
+protected:	// é–¢æ•°
 	/// <summary>
-	/// Šp“x‚ğŠŠ‚ç‚©‚É•Ï‰»‚³‚¹‚éŠÖ”
+	/// è§’åº¦ã‚’æ»‘ã‚‰ã‹ã«å¤‰åŒ–ã•ã›ã‚‹é–¢æ•°
 	/// </summary>
-	/// <param name="nowAngle">Œ»İ‚ÌŠp“x</param>
-	/// <param name="nextAngle">–Ú•WŠp“x</param>
+	/// <param name="nowAngle">ç¾åœ¨ã®è§’åº¦</param>
+	/// <param name="nextAngle">ç›®æ¨™è§’åº¦</param>
 	void SmoothAngle(float& nowAngle, float nextAngle);
 
-protected:	// •Ï”
-	float m_jumpPower;						// ƒWƒƒƒ“ƒv—Í
-	bool m_isJump;							// ƒWƒƒƒ“ƒv’†‚©‚Ç‚¤‚©
-	bool m_isDead;							// €‚ñ‚¾‚©‚Ç‚¤‚©
-	std::shared_ptr<Sphere> m_pSphere;		// “–‚½‚è”»’è—p‚Ì‹…‚Ìƒ|ƒCƒ“ƒ^
-	std::shared_ptr<Capsule> m_pCapsule;	// “–‚½‚è”»’è—p‚ÌƒJƒvƒZƒ‹‚Ìƒ|ƒCƒ“ƒ^
+protected:	// å¤‰æ•°
+	float m_jumpPower;						// ã‚¸ãƒ£ãƒ³ãƒ—åŠ›
+	bool m_isJump;							// ã‚¸ãƒ£ãƒ³ãƒ—ä¸­ã‹ã©ã†ã‹
+	bool m_isDead;							// æ­»ã‚“ã ã‹ã©ã†ã‹
+	bool m_isResetAttack;				// æ”»æ’ƒåˆ¤å®šã®åˆæœŸåŒ–(ä¸€åº¦æ”»æ’ƒã®å½“ãŸã£ãŸæ•µã®ã‚‚ã†ä¸€åº¦å½“ã¦ã‚‹ç‚º)
+	std::shared_ptr<Sphere> m_pSphere;		// å½“ãŸã‚Šåˆ¤å®šç”¨ã®çƒã®ãƒã‚¤ãƒ³ã‚¿
+	std::shared_ptr<Capsule> m_pCapsule;	// å½“ãŸã‚Šåˆ¤å®šç”¨ã®ã‚«ãƒ—ã‚»ãƒ«ã®ãƒã‚¤ãƒ³ã‚¿
 
-	StatusData m_statusData{};			// ƒXƒe[ƒ^ƒXî•ñ
-	MoveStatusData m_moveData{};		// ˆÚ“®î•ñ
-	AnimData m_animData{};				// ƒAƒjƒ[ƒVƒ‡ƒ“î•ñ
+	StatusData m_statusData{};			// ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹æƒ…å ±
+	MoveStatusData m_moveData{};		// ç§»å‹•æƒ…å ±
+	AnimData m_animData{};				// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±
 };
