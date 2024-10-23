@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\\u4E2D\u5C71\u3000\u4E03\u8349\\Documents\\GitHub\\MyGame\\DecorateArma\\Decorate\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F426952E-476E-41E8-B5AE-B518307F6B8E}|Decorate\\Decorate.vcxproj|C:\\Users\\\u4E2D\u5C71\u3000\u4E03\u8349\\Documents\\GitHub\\MyGame\\DecorateArma\\Decorate\\Decorate\\Object\\Player\\Shot.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{F426952E-476E-41E8-B5AE-B518307F6B8E}|Decorate\\Decorate.vcxproj|solutionrelative:Decorate\\Object\\Player\\Shot.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{F426952E-476E-41E8-B5AE-B518307F6B8E}|Decorate\\Decorate.vcxproj|C:\\Users\\\u4E2D\u5C71\u3000\u4E03\u8349\\Documents\\GitHub\\MyGame\\DecorateArma\\Decorate\\Decorate\\Object\\Player\\Shot.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{F426952E-476E-41E8-B5AE-B518307F6B8E}|Decorate\\Decorate.vcxproj|solutionrelative:Decorate\\Object\\Player\\Shot.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F426952E-476E-41E8-B5AE-B518307F6B8E}|Decorate\\Decorate.vcxproj|C:\\Users\\\u4E2D\u5C71\u3000\u4E03\u8349\\Documents\\GitHub\\MyGame\\DecorateArma\\Decorate\\Decorate\\Object\\Player\\Shot.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{F426952E-476E-41E8-B5AE-B518307F6B8E}|Decorate\\Decorate.vcxproj|solutionrelative:Decorate\\Object\\Player\\Shot.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F426952E-476E-41E8-B5AE-B518307F6B8E}|Decorate\\Decorate.vcxproj|C:\\Users\\\u4E2D\u5C71\u3000\u4E03\u8349\\Documents\\GitHub\\MyGame\\DecorateArma\\Decorate\\Decorate\\Object\\Player\\Player.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -34,18 +34,17 @@
               "RelativeToolTip": "Decorate\\Object\\Player\\Player.cpp",
               "ViewState": "AgIAAKAAAAAAAAAAAAAMwLAAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-10-22T08:25:03.375Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-22T08:25:03.375Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Shot.cpp",
               "DocumentMoniker": "C:\\Users\\\u4E2D\u5C71\u3000\u4E03\u8349\\Documents\\GitHub\\MyGame\\DecorateArma\\Decorate\\Decorate\\Object\\Player\\Shot.cpp",
               "RelativeDocumentMoniker": "Decorate\\Object\\Player\\Shot.cpp",
               "ToolTip": "C:\\Users\\\u4E2D\u5C71\u3000\u4E03\u8349\\Documents\\GitHub\\MyGame\\DecorateArma\\Decorate\\Decorate\\Object\\Player\\Shot.cpp",
               "RelativeToolTip": "Decorate\\Object\\Player\\Shot.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAArAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-10-22T08:23:55.955Z",
               "EditorCaption": ""
@@ -58,13 +57,13 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Shot.h",
               "DocumentMoniker": "C:\\Users\\\u4E2D\u5C71\u3000\u4E03\u8349\\Documents\\GitHub\\MyGame\\DecorateArma\\Decorate\\Decorate\\Object\\Player\\Shot.h",
               "RelativeDocumentMoniker": "Decorate\\Object\\Player\\Shot.h",
               "ToolTip": "C:\\Users\\\u4E2D\u5C71\u3000\u4E03\u8349\\Documents\\GitHub\\MyGame\\DecorateArma\\Decorate\\Decorate\\Object\\Player\\Shot.h",
               "RelativeToolTip": "Decorate\\Object\\Player\\Shot.h",
-              "ViewState": "AgIAACEAAAAAAAAAAAAAACYAAAAOAAAAAAAAAA==",
+              "ViewState": "AgIAACEAAAAAAAAAAAAAACYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2024-10-22T08:24:04.664Z",
               "EditorCaption": ""
