@@ -127,14 +127,21 @@ void ObjectBase::CheckWallAndFloor()
 		if (m_hitDin.Dim[i].Normal.y < kWallPolyBorder &&
 			m_hitDin.Dim[i].Normal.y > -kWallPolyBorder) // 壁だった場合
 		{
-			// ポリゴンの数が限界数に達していなかった場合
-			if (m_wallNum < ColInfo::kMaxColHitPolyNum)
+			// 壁ポリゴンと判断された場合でも、
+			// プレイヤーのY座標よりも高いポリゴンのみと当たり判定を行う
+			if (m_hitDin.Dim[i].Position[0].y > GetInfo().pos.y + kWallPolyHeight ||
+				m_hitDin.Dim[i].Position[1].y > GetInfo().pos.y + kWallPolyHeight ||
+				m_hitDin.Dim[i].Position[2].y > GetInfo().pos.y + kWallPolyHeight)
 			{
-				// ポリゴンの構造体のアドレスを壁ポリゴンポインタに保存する
-				m_pWallPoly[m_wallNum] = &m_hitDin.Dim[i];
-				// 壁ポリゴンの数を足す
-				m_wallNum++;
-			}
+				// ポリゴンの数が限界数に達していなかった場合
+				if (m_wallNum < ColInfo::kMaxColHitPolyNum)
+				{
+					// ポリゴンの構造体のアドレスを壁ポリゴンポインタに保存する
+					m_pWallPoly[m_wallNum] = &m_hitDin.Dim[i];
+					// 壁ポリゴンの数を足す
+					m_wallNum++;
+				}
+			}			
 		}
 		else	// 床ポリゴンの場合
 		{

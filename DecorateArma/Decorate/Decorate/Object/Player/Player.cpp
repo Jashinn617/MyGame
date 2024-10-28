@@ -38,7 +38,7 @@ namespace
 	constexpr float kTopPos = 60.0f;					// 頭の高さ
 	constexpr float kBottomPos = 0.0f;					// 足元の座標
 	constexpr float kCapsuleRadius = 8.0f;				// カプセルの半径
-	constexpr VECTOR kScaleVec = { 0.3f,0.4f,0.3f };	// スケール
+	constexpr VECTOR kScaleVec = { 0.5f,0.6f,0.5f };	// スケール
 
 	constexpr int kAttackStanTime = 1;		// 攻撃硬直時間
 
@@ -99,7 +99,7 @@ Player::Player() :
 	assert(m_topFrameIndex != -1);
 	assert(m_topFrameIndex != -2);
 	// モデル底辺の取得
-	m_bottomFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(), "Nightshade");
+	m_bottomFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(), "mixamorig:Ribbon3");
 	assert(m_bottomFrameIndex != -1);
 	assert(m_bottomFrameIndex != -2);
 	// 初期ステイトの設定(待機状態から)
