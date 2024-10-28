@@ -14,9 +14,9 @@ Field::Field()
 Field::Field(Game::StageKind stageKind)
 {
 	// モデル生成
-	m_pModel = std::make_shared<Model>("Data/Model/Field/Test.mv1");
+	m_pModel = std::make_shared<Model>("Data/Model/Field/Stage1/Stage1.mv1");
 
-	m_pModel->SetScale(VGet(0.3f, 0.3f, 0.3f));
+	m_pModel->SetScale(VGet(0.4f, 0.4f, 0.4f));
 	m_pModel->SetPos(VGet(0.0f, -300.0f, 0.0f));
 }
 
