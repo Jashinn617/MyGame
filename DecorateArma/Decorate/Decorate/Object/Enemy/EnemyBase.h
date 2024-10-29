@@ -2,7 +2,7 @@
 #include "../CharacterBase.h"
 
 /// <summary>
-/// 敵キャラクターの基底クラス
+/// 敵キャラクター基底クラス
 /// </summary>
 class EnemyBase : public CharacterBase
 {
@@ -53,5 +53,71 @@ public:	// 関数
 	/// </summary>
 	virtual void Update() override;
 
-};
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="pToonShader">トゥーンシェーダポインタ</param>
+	virtual void Draw(std::shared_ptr<ToonShader> pToonShader) override;
 
+	/// <summary>
+	/// 2D描画
+	/// </summary>
+	virtual void Draw2D()override;
+
+	/// <summary>
+	/// ダメージ処理
+	/// </summary>
+	/// <param name="targetPos"></param>
+	void OnDamage(VECTOR targetPos) override final;
+
+	/// <summary>
+	/// 死亡処理
+	/// </summary>
+	void OnDead();
+
+	/// <summary>
+	/// 存在するかどうか
+	/// </summary>
+	/// <returns>存在フラグ</returns>
+	bool IsExist()const { return m_characterInfo.isExist; }
+
+	/// <summary>
+	/// 敵からプレイヤーまでのベクトルの取得
+	/// </summary>
+	/// <returns>プレイヤーまでのベクトル</returns>
+	VECTOR GetEnemyToPlayerVec()const { return m_enemyToPlayer; }
+
+	/// <summary>
+	/// 自身の当たり判定情報の取得
+	/// </summary>
+	/// <returns>当たり判定情報</returns>
+	virtual ColType GetColType()const { return ColType::Enemy; }
+
+	/// <summary>
+	/// 敵の種類の取得
+	/// </summary>
+	/// <returns>敵の種類</returns>
+	virtual EnemyType GetEnemyType()const { return EnemyType::Normal; }
+
+protected:	// 関数
+	/// <summary>
+	/// 角度更新
+	/// </summary>
+	void UpdateAngle();
+
+	/// <summary>
+	/// 移動方向更新
+	/// </summary>
+	virtual void UpdateMoveDirection();
+
+	/// <summary>
+	/// 移動更新
+	/// </summary>
+	/// <returns>移動値</returns>
+	virtual VECTOR UpdateMove();
+
+protected:	// 変数
+	VECTOR m_moveDirection;		// 移動方向ベクトル
+	VECTOR m_enemyToPlayer;		// 敵からプレイヤーまでのベクトル
+	AttackType m_attackType;	// 攻撃タイプ
+};

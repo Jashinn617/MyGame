@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../Object/CharacterBase.h"
 
@@ -7,41 +7,53 @@
 using namespace CharacterData;
 
 /// <summary>
-/// CSVƒtƒ@ƒCƒ‹ƒf[ƒ^‚ğ“Ç‚İ‚ŞƒNƒ‰ƒX
+/// CSVãƒ•ã‚¡ã‚¤ãƒ«ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚€ã‚¯ãƒ©ã‚¹
 /// </summary>
 class CsvLoad
 {
-public:	// ŠÖ”
+public:	// é–¢æ•°
 	/// <summary>
-	/// ƒfƒXƒgƒ‰ƒNƒ^
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
 	~CsvLoad();
 
 	/// <summary>
-	/// À‘Ô‚Ìæ“¾
+	/// å®Ÿæ…‹ã®å–å¾—
 	/// </summary>
-	/// <returns>À‘Ô</returns>
+	/// <returns>å®Ÿæ…‹</returns>
 	static CsvLoad& GetInstance();
 
-	void AnimLoad(CharacterBase::AnimData& data, const char* charcterName);
-
-private:	// ŠÖ”
 	/// <summary>
-	/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	/// ƒVƒ“ƒOƒ‹ƒgƒ“ƒpƒ^[ƒ“
+	/// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ãƒ­ãƒ¼ãƒ‰
+	/// </summary>
+	/// <param name="data">ã‚¢ãƒ‹ãƒ¡ãƒ‡ãƒ¼ã‚¿</param>
+	/// <param name="characterName">ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼å</param>
+	void AnimLoad(CharacterBase::AnimData& data, const char* characterName);
+
+	/// <summary>
+	/// ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹æƒ…å ±ãƒ­ãƒ¼ãƒ‰
+	/// </summary>
+	/// <param name="data">ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒ‡ãƒ¼ã‚¿</param>
+	/// <param name="characterName">ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼å</param>
+	void StatusLoad(CharacterBase::StatusData& data, const char* characterName);
+
+private:	// é–¢æ•°
+	/// <summary>
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ãƒ‘ã‚¿ãƒ¼ãƒ³
 	/// </summary>
 	CsvLoad();
 
 	/// <summary>
-	/// ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	/// ƒRƒs[‚ğ‹Ö~‚·‚é
+	/// ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// ã‚³ãƒ”ãƒ¼ã‚’ç¦æ­¢ã™ã‚‹
 	/// </summary>
-	/// <param name="">À‘Ô</param>
+	/// <param name="">å®Ÿæ…‹</param>
 	CsvLoad(const CsvLoad&) = delete;
 
 	/// <summary>
-	/// ‘ã“ü‚ğ‹Ö~‚·‚é
+	/// ä»£å…¥ã‚’ç¦æ­¢ã™ã‚‹
 	/// </summary>
-	/// <param name="">À‘Ô</param>
+	/// <param name="">å®Ÿæ…‹</param>
 	void operator=(const CsvLoad&) = delete;
 };

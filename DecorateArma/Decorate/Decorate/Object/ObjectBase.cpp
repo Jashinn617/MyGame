@@ -5,7 +5,7 @@
 
 #include "../Shader/SetVertexShader.h"
 
-#include "../Utility/Sphere.h"
+#include "../Utility/Capsule.h"
 
 namespace
 {
@@ -86,7 +86,7 @@ void ObjectBase::MoveCollField(ObjectBase* pField)
 	球の半径)*/
 	m_hitDin = MV1CollCheck_Sphere(pField->GetModel()->GetModelHandle(), 
 		-1, m_characterInfo.pos,
-		dynamic_cast<CharacterBase*>(this)->GetSphere()->GetRadius() + VSize(m_characterInfo.vec));
+		dynamic_cast<CharacterBase*>(this)->GetCapsule()->GetRadius() + VSize(m_characterInfo.vec));
 
 	// X,Z方向への移動量が0.01f以下だった場合は移動をしていないことにする
 	if (fabs(m_characterInfo.vec.x) <= kMove || fabs(m_characterInfo.vec.z) > kMove)
@@ -179,8 +179,8 @@ void ObjectBase::FixPosWithWall()
 			// ポリゴンとキャラクターが当たっていなかったら次のカウントに行く
 			if (!HitCheck_Capsule_Triangle(m_nextPos,
 				VAdd(m_nextPos,
-					VGet(0.0f, dynamic_cast<CharacterBase*>(this)->GetSphere()->GetRadius(), 0.0f)),
-				dynamic_cast<CharacterBase*>(this)->GetSphere()->GetRadius(),
+					VGet(0.0f, dynamic_cast<CharacterBase*>(this)->GetCapsule()->GetRadius(), 0.0f)),
+				dynamic_cast<CharacterBase*>(this)->GetCapsule()->GetRadius(),
 				m_pPoly->Position[0], m_pPoly->Position[1], m_pPoly->Position[2])) continue;
 
 			// 当たっていなかったら当たっているフラグを立てる
@@ -209,8 +209,8 @@ void ObjectBase::FixPosWithWall()
 				// ポリゴンとキャラクターが当たっていた場合
 				if (HitCheck_Capsule_Triangle(m_nextPos,
 					VAdd(m_nextPos,
-						VGet(0.0f, dynamic_cast<CharacterBase*>(this)->GetSphere()->GetRadius(), 0.0f)),
-					dynamic_cast<CharacterBase*>(this)->GetSphere()->GetRadius(),
+						VGet(0.0f, dynamic_cast<CharacterBase*>(this)->GetCapsule()->GetRadius(), 0.0f)),
+					dynamic_cast<CharacterBase*>(this)->GetCapsule()->GetRadius(),
 					m_pPoly->Position[0], m_pPoly->Position[1], m_pPoly->Position[2]))
 				{
 					// 当たっているフラグを立てる
@@ -240,8 +240,8 @@ void ObjectBase::FixPosWithWall()
 			// ポリゴンとキャラクターが当たっていた場合
 			if (HitCheck_Capsule_Triangle(m_nextPos,
 				VAdd(m_nextPos,
-					VGet(0.0f, dynamic_cast<CharacterBase*>(this)->GetSphere()->GetRadius(), 0.0f)),
-				dynamic_cast<CharacterBase*>(this)->GetSphere()->GetRadius(),
+					VGet(0.0f, dynamic_cast<CharacterBase*>(this)->GetCapsule()->GetRadius(), 0.0f)),
+				dynamic_cast<CharacterBase*>(this)->GetCapsule()->GetRadius(),
 				m_pPoly->Position[0], m_pPoly->Position[1], m_pPoly->Position[2]))
 			{
 				// 当たっているフラグを立てる
@@ -274,8 +274,8 @@ void ObjectBase::FixPosWithWallInternal()
 			// ポリゴンとキャラクターが当たっていなかったら次のカウントに行く
 			if (!HitCheck_Capsule_Triangle(m_nextPos,
 				VAdd(m_nextPos,
-					VGet(0.0f, dynamic_cast<CharacterBase*>(this)->GetSphere()->GetRadius(), 0.0f)),
-				dynamic_cast<CharacterBase*>(this)->GetSphere()->GetRadius(),
+					VGet(0.0f, dynamic_cast<CharacterBase*>(this)->GetCapsule()->GetRadius(), 0.0f)),
+				dynamic_cast<CharacterBase*>(this)->GetCapsule()->GetRadius(),
 				m_pPoly->Position[0], m_pPoly->Position[1], m_pPoly->Position[2])) continue;
 
 			// 当たっていた場合は基底距離分、壁の法線方向に移動させる
@@ -288,8 +288,8 @@ void ObjectBase::FixPosWithWallInternal()
 				// 当たっていた場合
 				if (HitCheck_Capsule_Triangle(m_nextPos,
 					VAdd(m_nextPos,
-						VGet(0.0f, dynamic_cast<CharacterBase*>(this)->GetSphere()->GetRadius(), 0.0f)),
-					dynamic_cast<CharacterBase*>(this)->GetSphere()->GetRadius(),
+						VGet(0.0f, dynamic_cast<CharacterBase*>(this)->GetCapsule()->GetRadius(), 0.0f)),
+					dynamic_cast<CharacterBase*>(this)->GetCapsule()->GetRadius(),
 					m_pPoly->Position[0], m_pPoly->Position[1], m_pPoly->Position[2]))
 				{
 					// 当たっているフラグを立てる

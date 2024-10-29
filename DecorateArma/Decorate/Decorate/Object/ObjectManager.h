@@ -10,6 +10,7 @@ class Collision;
 class Player;
 class ToonShader;
 class ShadowMapShader;
+class Spawn;
 
 class ObjectManager
 {
@@ -58,8 +59,9 @@ public:		// 関数
 
 private:	// 変数
 
-	std::shared_ptr<Collision> m_pCollision;		// 当たり判定
-	std::shared_ptr<ToonShader> m_pToon;			// トゥーンシェーダ
+	std::shared_ptr<Collision> m_pCollision;			// 当たり判定
+	std::shared_ptr<Spawn> m_pSpawn;					// オブジェクト出現
+	std::shared_ptr<ToonShader> m_pToon;				// トゥーンシェーダ
 	//std::shared_ptr<ShadowMapShader> m_pShadowMap;	// シャドウマップシェーダ
 
 	std::list<ObjectBase*> m_pObject;				// オブジェクト

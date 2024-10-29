@@ -1,5 +1,5 @@
 ﻿#include "CharacterBase.h"
-#include "../Utility/Sphere.h"
+#include "../Utility/Capsule.h"
 
 namespace
 {
@@ -45,7 +45,7 @@ void CharacterBase::MoveCollCharacter(CharacterBase* pTarget)
 
 	// オブジェクト同士の当たり判定をする
 	// オブジェクト同士が当たっていなかった場合は何もしない
-	if (!GetSphere()->IsCollide(pTarget->GetSphere()))return;
+	if (!GetCapsule()->IsCollide(pTarget->GetCapsule()))return;
 
 	// 移動前の座標を保存する(座標 - 移動ベクトル)
 	VECTOR prevPos = VSub(m_characterInfo.pos, m_characterInfo.vec);
@@ -68,7 +68,7 @@ void CharacterBase::MoveCollCharacter(CharacterBase* pTarget)
 	for (int i = 0; i < kMaxColHitTryNum; i++)
 	{
 		// 相手と当たっていなかったら終わる
-		if (!GetSphere()->IsCollide(pTarget->GetSphere()))return;
+		if (!GetCapsule()->IsCollide(pTarget->GetCapsule()))return;
 
 		// 相手とのベクトルの計算
 		VECTOR move = VSub(m_characterInfo.pos, pTarget->GetInfo().pos);

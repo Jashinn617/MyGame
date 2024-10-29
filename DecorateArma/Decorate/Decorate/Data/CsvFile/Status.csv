@@ -1,0 +1,4 @@
+CharacterName,HP,ATK,DEF,SPD
+Player,100,10,10,5
+Robot,30,5,5,5
+Skeleton,40,6,5,5.5

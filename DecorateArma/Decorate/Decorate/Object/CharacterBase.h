@@ -16,6 +16,9 @@ public:	// 構造体
 	/// </summary>
 	struct StatusData
 	{
+		int hp = 0;		// 体力
+		int atk = 0;		// 攻撃力
+		int def = 0;		// 防御力
 		float spd = 0.0f;	// 速度
 	};
 
@@ -103,10 +106,10 @@ public:
 	void UpdateGravity();
 
 	/// <summary>
-	/// 球の当たり判定ポインタの取得
+	/// カプセルの当たり判定ポインタの取得
 	/// </summary>
-	/// <returns>球の当たり判定ポインタ</returns>
-	const std::shared_ptr<Sphere> GetSphere()const { return m_pSphere; }
+	/// <returns>カプセルの当たり判定ポインタ</returns>
+	const std::shared_ptr<Capsule> GetCapsule()const { return m_pCapsule; }
 
 	/// <summary>
 	/// 角度の更新

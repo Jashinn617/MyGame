@@ -33,11 +33,11 @@ namespace
 	constexpr float kMinJumpRiseNum = 1.0f;		// 上昇中と判断される最低値
 	constexpr float kAngleSpeed = 0.02f;		// 回転速度
 
-	constexpr float kHeight = 63.0f;					// 高さ
-	constexpr float kSize = 15.0f;						// サイズ
+	constexpr float kHeight = 140.0f;					// 高さ
+	constexpr float kSize = 50.0f;						// サイズ
 	constexpr float kTopPos = 60.0f;					// 頭の高さ
 	constexpr float kBottomPos = 0.0f;					// 足元の座標
-	constexpr float kCapsuleRadius = 8.0f;				// カプセルの半径
+	constexpr float kCapsuleRadius = 10.0f;				// カプセルの半径
 	constexpr VECTOR kScaleVec = { 0.5f,0.6f,0.5f };	// スケール
 
 	constexpr int kAttackStanTime = 1;		// 攻撃硬直時間
@@ -72,20 +72,14 @@ Player::Player() :
 {
 	// アニメーションロード
 	CsvLoad::GetInstance().AnimLoad(m_animData, "Player");
+	// ステータス情報初期化
+	CsvLoad::GetInstance().StatusLoad(m_statusData, "Player");
 
 	/*移動速度初期化*/
-	/*m_moveData.walkSpeed = m_statusData.spd;
+	m_moveData.walkSpeed = m_statusData.spd;
 	m_moveData.dashSpeed = m_statusData.spd * kMoveSpeedDashRate;
 	m_moveData.acc = m_statusData.spd * kAccelerationRate;
-	m_moveData.rotSpeed = kAngleSpeed;*/
-
-	m_moveData.walkSpeed = 5;
-	m_moveData.dashSpeed = 10 * kMoveSpeedDashRate;
-	m_moveData.acc = 5 * kAccelerationRate;
 	m_moveData.rotSpeed = kAngleSpeed;
-
-
-
 
 	// モデルポインタ作成
 	m_pModel = std::make_shared<Model>(kFileName);

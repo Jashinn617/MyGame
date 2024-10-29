@@ -7,10 +7,13 @@
 
 #include "../Utility/Collision.h"
 
+#include "../Common/Spawn.h"
+
 #include "../Shader/ToonShader.h"
 
 ObjectManager::ObjectManager(Game::StageKind stageKind) :
 	m_pCollision(std::make_shared<Collision>()),
+	m_pSpawn(std::make_shared<Spawn>(stageKind,this)),
 	m_pToon(std::make_shared<ToonShader>())
 	//m_pShadowMap(std::make_shared<ShadowMapShader>())
 {
@@ -18,6 +21,8 @@ ObjectManager::ObjectManager(Game::StageKind stageKind) :
 	AddObject(new Player);
 	// フィールド追加
 	AddObject(new Field(stageKind));
+	// オブジェクト出現
+	m_pSpawn->Init();
 }
 
 ObjectManager::~ObjectManager()

@@ -41,7 +41,7 @@ CsvLoad& CsvLoad::GetInstance()
 	return instance;
 }
 
-void CsvLoad::AnimLoad(CharacterBase::AnimData& data, const char* charcterName)
+void CsvLoad::AnimLoad(CharacterBase::AnimData& data, const char* characterName)
 {
 	// ファイル情報の読み込み
 	std::ifstream ifs("Data/CsvFile/AnimNum.csv");
@@ -71,7 +71,7 @@ void CsvLoad::AnimLoad(CharacterBase::AnimData& data, const char* charcterName)
 
 		//参照したいキャラが見つかっていたら処理をやめる
 		const char* str = strvec[0].c_str();
-		if (strcmp(str, charcterName) == 0)
+		if (strcmp(str, characterName) == 0)
 		{
 			for (int i = 0; i < animData.size(); i++)
 			{
@@ -109,3 +109,40 @@ void CsvLoad::AnimLoad(CharacterBase::AnimData& data, const char* charcterName)
 	data.jumpIdle = animData[11];
 }
 
+void CsvLoad::StatusLoad(CharacterBase::StatusData& data, const char* characterName)
+{
+	// ファイル情報の読み込み
+	std::ifstream ifs("Data/CsvFile/Status.csv");
+	std::string line;
+
+	std::array<int, 6> statusData{};
+
+	std::vector<std::string>strvec;
+
+	while (getline(ifs, line))
+	{
+		// csvデータ１行を、','で複数の文字列に分割
+		strvec = Split(line, ',');
+
+		// strvec[0]	: キャラ名	string
+		// strvec[1]	: HP		int
+		// strvec[2]	: ATK		int
+		// strvec[3]	: DEF		int
+		// strvec[4]	: SPD		float
+
+		//参照したいキャラが見つかっていたら処理をやめる
+		const char* str = strvec[0].c_str();
+		if (strcmp(str, characterName) == 0) break;
+
+		else
+		{
+			strvec.erase(strvec.begin(), strvec.end());
+		}
+	}
+
+	// ステータス情報をステータスデータに入れる
+	data.hp = stoi(strvec[1]);
+	data.atk = stoi(strvec[2]);
+	data.def = stoi(strvec[3]);
+	data.spd = stof(strvec[4]);
+}

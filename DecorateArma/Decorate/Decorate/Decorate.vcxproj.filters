@@ -138,8 +138,11 @@
     <ClCompile Include="Object\Enemy\EnemyBase.cpp">
       <Filter>ソース ファイル\Object\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Object\Enemy\EnemyManager.cpp">
-      <Filter>ソース ファイル\Object\Enemy</Filter>
+    <ClCompile Include="Common\Spawn.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Enemy\EnemyRobot.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -221,8 +224,11 @@
     <ClInclude Include="Object\Enemy\EnemyBase.h">
       <Filter>ヘッダー ファイル\Object\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="Object\Enemy\EnemyManager.h">
-      <Filter>ヘッダー ファイル\Object\Enemy</Filter>
+    <ClInclude Include="Common\Spawn.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Enemy\EnemyRobot.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
