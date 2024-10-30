@@ -8,10 +8,7 @@
 /// </summary>
 class Capsule
 {
-
-
-
-public:
+public:	// 構造体
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
