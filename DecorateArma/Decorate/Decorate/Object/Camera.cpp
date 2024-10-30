@@ -2,6 +2,7 @@
 
 #include "ObjectBase.h"
 #include "Model.h"
+#include "LockOnTarget.h"
 
 #include "../Utility/Sphere.h"
 
@@ -19,12 +20,18 @@ namespace
 	constexpr float kCameraToTargetLenghtMax = 400.0f;									// カメラからターゲットまでの最大距離
 	constexpr float kCameraToTargetLenghtMin = 0.0f;									// カメラからターゲットまでの最小距離
 	constexpr float kCameraToTargetLenghtSpeed = 5.0f;									// カメラからターゲットまでの距離を変える速度
-	constexpr float kSize = 10.0f;														// 当たり判定用のカメラのサイズ
+	constexpr float kSize = 50.0f;														// 当たり判定用のカメラのサイズ
 	
 	constexpr float kCameraFollowSpeed = 0.2f;											// カメラが付いてくる速度
 	constexpr float kPrevCameraFollowSpeed = 1.0f - kCameraFollowSpeed;					// カメラの初速度
 	constexpr float kCameraTargetFollowSpeed = 0.2f;									// カメラが注視点を追いかける速度
 	constexpr float kPrevCameraTargetFollowSpeed = 1.0f - kCameraTargetFollowSpeed;		// カメラが注視点を追いかける初速度
+
+	/*ロックオン時*/
+	constexpr float kLockOnAngleH = -DX_PI_F * 0.5f + 0.1f;										// ロックオン時にカメラを少し傾けるための値
+	constexpr float kLockOnAngleV = -DX_PI_F / 2.0f + 1.3f;										// ロックオン時にカメラを少し傾けるための値
+	constexpr float kCameraTargetLockOnFollowSpeed = 0.5f;										// ロックオン時にカメラが付いてくる速度
+	constexpr float kPrevCameraTargetLockOnFollowSpeed = 1.0f - kCameraTargetLockOnFollowSpeed;	// ロックオン時にカメラが付いてくる初速度
 }
 
 Camera::Camera():
@@ -38,6 +45,8 @@ Camera::Camera():
 	m_rotX(MGetRotX(m_angleV)),
 	m_rotY(MGetRotY(m_angleH)),
 	m_pSphere(std::make_shared<Sphere>(m_nextPos,kSize,0.0f)),
+	m_isLockOn(false),
+	m_pLockOnTarget(std::make_shared<LockOnTarget>()),
 	m_isMove(false),
 	m_isPolyHit(false),
 	m_pPoly(nullptr)
@@ -55,7 +64,7 @@ void Camera::Init()
 	/*処理無し*/
 }
 
-void Camera::Update(VECTOR targetPos)
+void Camera::Update(VECTOR targetPos, bool isLockOn)
 {
 	// 移動前の座標を保存する
 	m_prevPos = m_nextPos;
@@ -66,21 +75,41 @@ void Camera::Update(VECTOR targetPos)
 	// ターゲット座標に注視点の高さを足す
 	viewpointPos.y += kCameraViewpointHeight;
 
+	// ロックオン状態状態かどうかの確認
+	m_isLockOn = isLockOn;
+
 	// 角度更新
-	UpdateAngle();
-	// 通常時更新
-	NormalUpdate(viewpointPos);
+	UpdateAngle(m_isLockOn);
+
+	if (m_isLockOn)	// ロックオン時
+	{
+		// カメラのロックオン時の更新
+		LockOnUpdate(viewpointPos);
+		m_pLockOnTarget->Update(m_lockOnEnemyPos);
+	}
+	else // 通常時
+	{
+		// 通常時更新
+		NormalUpdate(viewpointPos);
+	}
 	// 座標の確定
 	UpdatePos();
 }
 
 void Camera::Draw()
 {
+	if (m_isLockOn) // ロックオン時
+	{
+		// ロックオン画像の描画
+		m_pLockOnTarget->Draw();
+	}
+
 #ifdef _DEBUG
 	// デバッグ表示
 	DrawFormatString(0, 120, 0xffffff, "カメラ座標：%f,%f,%f", m_prevPos.x, m_prevPos.y, m_prevPos.z);
 	DrawFormatString(0, 60, 0xffffff, "ターゲット座標：%f,%f,%f", m_targetPos.x, m_targetPos.y, m_targetPos.z);
 	DrawFormatString(0, 80, 0xffffff, "GetTargetPos:%f,%f,%f", GetCameraTarget().x, GetCameraTarget().y, GetCameraTarget().z);
+	DrawFormatString(0, 220, 0x000000, "ロックオン状態敵座標：%f,%f,%f", m_lockOnEnemyPos.x, m_lockOnEnemyPos.y, m_lockOnEnemyPos.z);
 #endif // _DEBUG
 }
 
@@ -105,8 +134,8 @@ void Camera::ColUpdate(ObjectBase* pField)
 		// 検出したプレイヤーの周囲のポリゴン情報を開放する
 		MV1CollResultPolyDimTerminate(m_hitDim);
 
-		m_cameraToTargetLenght = min(m_cameraToTargetLenght + kCameraToTargetLenghtSpeed,
-			kCameraToTargetLenghtMax);
+		// カメラからターゲットまでの最小距離を出す
+		m_cameraToTargetLenght = min(m_cameraToTargetLenght + kCameraToTargetLenghtSpeed, kCameraToTargetLenghtMax);
 
 		// カメラの座標を決定する
 		UpdatePos();
@@ -135,8 +164,11 @@ void Camera::ColUpdate(ObjectBase* pField)
 	SetCameraPositionAndTarget_UpVecY(m_pos, m_targetPos);
 }
 
-void Camera::UpdateAngle()
+void Camera::UpdateAngle(bool isLockOn)
 {
+	// ロックオン状態の時は何もしない
+	if (isLockOn) return;
+
 	// パッドのアナログ情報の取得
 	DINPUT_JOYSTATE input;
 
@@ -195,6 +227,32 @@ void Camera::NormalUpdate(VECTOR targetPos)
 	m_targetPos.z = (m_targetPos.z * kPrevCameraTargetFollowSpeed) + (targetPos.z * kCameraTargetFollowSpeed);
 }
 
+void Camera::LockOnUpdate(VECTOR targetPos)
+{
+	// ターゲット座標更新
+	m_targetPos.x = (m_targetPos.x * kPrevCameraTargetFollowSpeed) + (targetPos.x * kCameraTargetFollowSpeed);
+	m_targetPos.y = (m_targetPos.y * kPrevCameraTargetFollowSpeed) + (targetPos.y * kCameraTargetFollowSpeed);
+	m_targetPos.z = (m_targetPos.z * kPrevCameraTargetFollowSpeed) + (targetPos.z * kCameraTargetFollowSpeed);
+	// プレイヤーからカメラまでの方向ベクトルを出す
+	VECTOR playerToCameraVec = VNorm(VSub(m_targetPos, m_nextPos));
+	// プレイヤーから敵までの方向ベクトルを出す
+	VECTOR playerToEnemyVec = VNorm(VSub(m_lockOnEnemyPos, targetPos));
+
+	// ロックオン時のカメラの方向ベクトルを出す
+	VECTOR lockOnCameraVec = VAdd(VScale(playerToCameraVec, kPrevCameraTargetLockOnFollowSpeed),
+		VScale(playerToEnemyVec, kCameraTargetLockOnFollowSpeed));
+	// カメラを少し傾ける
+	m_angleH = atan2(-lockOnCameraVec.z, lockOnCameraVec.x) + kLockOnAngleH;
+	m_angleV = (m_angleV * kPrevCameraFollowSpeed) + (kLockOnAngleV * kCameraFollowSpeed);
+
+	// カメラ座標を出す
+	VECTOR cameraPos = VAdd(VScale(m_prevPos, kPrevCameraTargetLockOnFollowSpeed),
+		VScale(m_nextPos, kCameraTargetLockOnFollowSpeed));
+
+	// カメラ座標の設定
+	SetCameraPositionAndTarget_UpVecY(cameraPos, m_targetPos);
+}
+
 void Camera::UpdatePos()
 {
 	// 垂直方向の回転(X軸)
@@ -224,9 +282,9 @@ void Camera::FixPos()
 			m_pPoly = m_pPolyIndex[i];
 
 			// ポリゴンとプレイヤーが当たっていなかったら次のカウントへ
-			if (HitCheck_Capsule_Triangle(m_nextPos, m_prevPos, m_pSphere->GetRadius(),
+			if (!HitCheck_Capsule_Triangle(m_nextPos, m_prevPos, m_pSphere->GetRadius(),
 				m_pPoly->Position[0], m_pPoly->Position[1],
-				m_pPoly->Position[2]) == false) continue;
+				m_pPoly->Position[2])) continue;
 
 			// ここに来たら当たっている
 			m_isPolyHit = true;
@@ -239,9 +297,9 @@ void Camera::FixPos()
 				UpdatePos();
 
 				// ポリゴンとプレイヤーが当たっていなかったらループから抜ける
-				if (HitCheck_Capsule_Triangle(m_nextPos, m_prevPos, m_pSphere->GetRadius(),
+				if (!HitCheck_Capsule_Triangle(m_nextPos, m_prevPos, m_pSphere->GetRadius(),
 					m_pPoly->Position[0], m_pPoly->Position[1],
-					m_pPoly->Position[2]) == false)
+					m_pPoly->Position[2]))
 				{
 					m_isPolyHit = false;
 				}
@@ -255,8 +313,8 @@ void Camera::FixPos()
 				m_pPoly = m_pPolyIndex[j];
 
 				// 当たっていたらループから抜ける
-				if (HitCheck_Capsule_Triangle(m_nextPos, m_prevPos, m_pSphere->GetRadius(),
-					m_pPoly->Position[0], m_pPoly->Position[1], m_pPoly->Position[2]) == false)
+				if (!HitCheck_Capsule_Triangle(m_nextPos, m_prevPos, m_pSphere->GetRadius(),
+					m_pPoly->Position[0], m_pPoly->Position[1], m_pPoly->Position[2]))
 				{
 					isHitWallPolygom = true;
 					break;
@@ -281,7 +339,7 @@ void Camera::FixPos()
 
 			// ポリゴンに当たっていたあr当たったフラグを立てたうえでループから抜ける
 			if (HitCheck_Capsule_Triangle(m_nextPos, m_prevPos, m_pSphere->GetRadius(),
-				m_pPoly->Position[0], m_pPoly->Position[1], m_pPoly->Position[2]) == false)
+				m_pPoly->Position[0], m_pPoly->Position[1], m_pPoly->Position[2]))
 			{
 				m_isPolyHit = true;
 				break;
@@ -306,15 +364,16 @@ void Camera::FixPosInternal()
 
 			m_cameraToTargetLenght = max(m_cameraToTargetLenght--, kCameraToTargetLenghtMin);
 
-			// カメラの座標更新
+			// 座標更新
 			UpdatePos();
 
 			// 移動したうえで壁ポリゴンと接触しているかどうかを判定
 			for (int k = 0; k < m_hitDim.HitNum; k++)
 			{
 				// 当たったらループから抜ける
-				m_pPoly = m_pPolyIndex[k]; if (HitCheck_Capsule_Triangle(m_nextPos, m_prevPos, m_pSphere->GetRadius(),
-					m_pPoly->Position[0], m_pPoly->Position[1], m_pPoly->Position[2]) == false)
+				m_pPoly = m_pPolyIndex[k];
+				if (HitCheck_Capsule_Triangle(m_nextPos, m_prevPos, m_pSphere->GetRadius(),
+					m_pPoly->Position[0], m_pPoly->Position[1], m_pPoly->Position[2]))
 				{
 					isHitWall = true;
 					break;

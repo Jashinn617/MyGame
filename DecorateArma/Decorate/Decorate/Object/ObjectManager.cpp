@@ -1,9 +1,10 @@
 ﻿#include "ObjectManager.h"
 
 #include "../Object/ObjectBase.h"
-#include "../Object/Player/Player.h"
 #include "../Object/Field.h"
 #include "../Object/Camera.h"
+#include "../Object/Player/Player.h"
+#include "../Object/Enemy/EnemyBase.h"
 
 #include "../Utility/Collision.h"
 
@@ -11,13 +12,24 @@
 
 #include "../Shader/ToonShader.h"
 
+namespace
+{
+	constexpr float kLockOnRange = 10000.0f;					// ロックオンできる範囲
+
+	constexpr float kMinLockOnValidRangeMin = -DX_PI_F * 0.4f;	// ロックオンの有効範囲
+	constexpr float kMinLockOnValidRangeMax = DX_PI_F * 0.4f;	// ロックオンの有効範囲
+	constexpr float kMaxLockOnValidRangeMin = -DX_PI_F * 0.8f;	// ロックオンの有効範囲
+	constexpr float kMaxLockOnValidRangeMax = DX_PI_F * 0.8f;	// ロックオンの有効範囲
+}
+
 ObjectManager::ObjectManager(Game::StageKind stageKind) :
+	m_pLockOnEnemy(nullptr),
 	m_pCollision(std::make_shared<Collision>()),
 	m_pSpawn(std::make_shared<Spawn>(stageKind,this)),
 	m_pToon(std::make_shared<ToonShader>())
 	//m_pShadowMap(std::make_shared<ShadowMapShader>())
 {
-	// プレイやーの追加
+	// プレイヤーの追加
 	AddObject(new Player);
 	// フィールド追加
 	AddObject(new Field(stageKind));
@@ -117,4 +129,49 @@ Player* const ObjectManager::GetPlayer()
 	}
 
 	return nullptr;
+}
+
+void ObjectManager::InitLockOnEnemy()
+{
+	// ロックオン出来る範囲の設定
+	float nearEnemyToPlayerVec = kLockOnRange;
+	// カメラの向いている方向の取得
+	float cameraAngle = GetPlayer()->GetCamera()->GetCameraAngleX();
+
+	// ロックオンしている敵のポインタを空にする
+	m_pLockOnEnemy = nullptr;
+
+	for (auto& obj : m_pObject)
+	{
+		// 当たり判定の種類がエネミーじゃなかったらcontinueする
+		if (obj->GetColType() != ObjectBase::ColType::Enemy) continue;
+
+		// 敵からプレイヤーまでのベクトルを求める
+		VECTOR enemyToPlayerVec = VSub(GetPlayer()->GetInfo().pos, obj->GetInfo().pos);
+
+		// 敵からプレイヤーまでの角度を求める
+		float enemyToPlayerAngle = atan2(enemyToPlayerVec.x, enemyToPlayerVec.z);
+		// カメラの角度と敵からプレイヤーまでの角度の差を求める
+		float differenceAngle = cameraAngle - enemyToPlayerAngle;
+
+		// ロックオンできる範囲に入っているかどうか調べる
+		bool isLockOnRangeMin = differenceAngle < kMinLockOnValidRangeMax && differenceAngle > kMinLockOnValidRangeMin;
+		bool isLockOnRangeMax = differenceAngle > kMaxLockOnValidRangeMax || differenceAngle < kMaxLockOnValidRangeMin;
+
+		// 角度の違いによってロックオンできる敵かどうかを判断する
+		if (isLockOnRangeMin || isLockOnRangeMax)
+		{
+			// 敵からプレイヤーまでの距離を求める
+			float EnemyToPlayerLen = VSize(dynamic_cast<EnemyBase*>(obj)->GetEnemyToPlayerVec());
+
+			// 今見ている敵が今までに見た敵よりも近くにいる場合
+			if (nearEnemyToPlayerVec > EnemyToPlayerLen)
+			{
+				// 一番近い距離を設定する
+				nearEnemyToPlayerVec = EnemyToPlayerLen;
+				// 今見ている敵をロックオンする敵にする
+				m_pLockOnEnemy = dynamic_cast<EnemyBase*>(obj);
+			}
+		}
+	}
 }

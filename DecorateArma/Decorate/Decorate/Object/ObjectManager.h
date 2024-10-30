@@ -8,6 +8,7 @@
 class ObjectBase;
 class Collision;
 class Player;
+class EnemyBase;
 class ToonShader;
 class ShadowMapShader;
 class Spawn;
@@ -55,9 +56,21 @@ public:		// 関数
 	/// <returns>プレイヤーポインタ</returns>
 	Player* const GetPlayer();
 
+	/// <summary>
+	/// ロックオンされている敵の設定
+	/// </summary>
+	void InitLockOnEnemy();
+
+	/// <summary>
+	/// ロックオンされている敵の取得
+	/// </summary>
+	/// <returns>ロックオンされている敵のポインタ</returns>
+	const EnemyBase* const GetLockOnEnemy() { return m_pLockOnEnemy; }
+
 	
 
 private:	// 変数
+	EnemyBase* m_pLockOnEnemy;							// ロックオンされている敵のポインタ
 
 	std::shared_ptr<Collision> m_pCollision;			// 当たり判定
 	std::shared_ptr<Spawn> m_pSpawn;					// オブジェクト出現

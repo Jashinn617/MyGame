@@ -2,8 +2,10 @@
 #include "PlayerState.h"
 #include "Shot.h"
 
+#include "../ObjectManager.h"
 #include "../Model.h"
 #include "../Camera.h"
+#include "../Enemy/EnemyBase.h"
 
 #include "../../Shader/SetVertexShader.h"
 #include "../../Shader/ToonShader.h"
@@ -154,9 +156,9 @@ void Player::Update()
 	m_pModel->SetRot(VGet(0.0f, m_angle, 0.0f));
 
 	// カメラ更新
-	m_pCamera->Update(m_characterInfo.pos);
+	UpdateCamera();
 
-	// カメラの角度行列を取得する
+	// カメラの角度行列の取得
 	MATRIX rotMtx = MGetRotY(m_pCamera->GetCameraAngleX());
 	// ショットにカメラの角度行列を渡す
 	m_pShot->SetCameraRot(rotMtx);
@@ -257,6 +259,48 @@ void Player::UpdateMoveDirection()
 
 	// 進みたい方向のY軸を省く
 	m_moveDirection.y = 0.0f;
+}
+
+void Player::UpdateCamera()
+{
+	// 左スティックが押し込まれた場合
+	if (Pad::IsTrigger(PAD_INPUT_10))
+	{
+		// ロックオン状態が切り替わる
+		m_isLockOn = !m_isLockOn;
+
+		// ロックオン状態だった場合
+		if (m_isLockOn)
+		{
+			m_pObjectManager->InitLockOnEnemy();
+		}
+	}
+
+	// ロックオンされていた敵が消えた場合
+	if (m_pObjectManager->GetLockOnEnemy() == nullptr)
+	{
+		// ロックオン状態を解除する
+		m_isLockOn = false;
+	}
+	else	// そうでなかった場合
+	{
+		// 存在フラグが立っていなかった場合
+		if (!m_pObjectManager->GetLockOnEnemy()->GetInfo().isExist)
+		{
+			// ロックオン状態を解除する
+			m_isLockOn = false;
+		}
+	}
+
+	// ロックオン状態の場合
+	if (m_isLockOn)
+	{
+		// カメラに敵の座標を渡す
+		m_pCamera->SetLockOnEnemyPos(m_pObjectManager->GetLockOnEnemy()->GetInfo().pos);
+	}
+
+	// カメラ更新
+	m_pCamera->Update(m_characterInfo.pos, m_isLockOn);
 }
 
 VECTOR Player::Move()
@@ -393,7 +437,7 @@ void Player::UpdateState()
 		//else
 		//{
 			// アニメーションをジャンプ待機アニメーションに切り替える
-			m_pModel->ChangeAnim(m_animData.jumpIdle, true, false, kAnimSpeed::JumpIdle);
+		m_pModel->ChangeAnim(m_animData.jumpIdle, true, false, kAnimSpeed::JumpIdle);
 		//}
 		break;
 

@@ -99,6 +99,11 @@ private:	// 関数
 	void UpdateMoveDirection();
 
 	/// <summary>
+	/// カメラ更新
+	/// </summary>
+	void UpdateCamera();
+
+	/// <summary>
 	/// 移動処理
 	/// </summary>
 	/// <returns>移動値</returns>
@@ -119,6 +124,7 @@ private:	// 変数
 
 	bool m_isAttack;			// 攻撃中かどうか
 	bool m_isNextAttack;		// 次の攻撃が実行されるかどうか
+	bool m_isLockOn;			// ロックオン状態かどうか
 
 	VECTOR m_moveDirection;
 

@@ -114,7 +114,7 @@ void EnemyBase::UpdateMoveDirection()
 
 VECTOR EnemyBase::UpdateMove()
 {
-	if (m_moveSpeed == 0.0f)return VGet(0.0f, 0.0f, 0.0f);
+	//if (m_moveSpeed == 0.0f)return VGet(0.0f, 0.0f, 0.0f);
 
 	// 移動方向更新
 	UpdateMoveDirection();

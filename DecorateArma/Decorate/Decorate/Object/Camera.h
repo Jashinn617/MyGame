@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "DxLib.h"
 
 #include "ObjectBase.h"
@@ -6,125 +6,140 @@
 #include <memory>
 
 class Sphere;
+class LockOnTarget;
 
 /// <summary>
-/// �J����
+/// カメラ
 /// </summary>
 class Camera
 {
 public:
 	/// <summary>
-	/// �R���X�g���N�^
+	/// コンストラクタ
 	/// </summary>
 	Camera();
 
 	/// <summary>
-	/// �f�X�g���N�^
+	/// デストラクタ
 	/// </summary>
 	~Camera();
 
 	/// <summary>
-	/// ������
+	/// 初期化
 	/// </summary>
 	void Init();
 
 	/// <summary>
-	/// �X�V
+	/// 更新
 	/// </summary>
-	/// <param name="playerPos">�v���C���[���W</param>
-	void Update(VECTOR playerPos);
+	/// <param name="targetPos">ターゲット座標</param>
+	/// <param name="isLockOn">ロックオン状態かどうか</param>
+	void Update(VECTOR targetPos, bool isLockOn);
 
 	/// <summary>
-	/// �`��
+	/// 描画
 	/// </summary>
 	void Draw();
 
 	/// <summary>
-	/// �J�����̍��W�̃��Z�b�g
+	/// カメラの座標のリセット
 	/// </summary>
 	void ResetCamera();
 
 	/// <summary>
-	/// �����蔻��̍X�V
+	/// 当たり判定の更新
 	/// </summary>
-	/// <param name="Field">�t�B�[���h�|�C���^</param>
+	/// <param name="Field">フィールドポインタ</param>
 	void ColUpdate(ObjectBase* Field);
 
 	/// <summary>
-	/// �J�����̐����p�x�̎擾
+	/// カメラの水平角度の取得
 	/// </summary>
-	/// <returns>�J���������p�x</returns>
+	/// <returns>カメラ水平角度</returns>
 	float GetCameraAngleX() { return m_angleH; }
 
 	/// <summary>
-	/// �����蔻��̋��̎擾
+	/// 当たり判定の球の取得
 	/// </summary>
-	/// <returns>�J�����̓����蔻��̋��|�C���^</returns>
+	/// <returns>カメラの当たり判定の球ポインタ</returns>
 	const std::shared_ptr<Sphere> GetCircle() const { return m_pSphere; }
 
 	/// <summary>
-	/// ���W�̎擾
+	/// 座標の取得
 	/// </summary>
-	/// <returns>�J�������W</returns>
+	/// <returns>カメラ座標</returns>
 	const VECTOR& GetPos() const { return m_nextPos; }
 
 	/// <summary>
-	/// �J�������W�̐ݒ�
+	/// 前フレームのカメラの座標の取得
 	/// </summary>
-	/// <param name="pos">�ݒ肷����W</param>
-	void SetPos(VECTOR pos) { m_nextPos = pos; }
-
-	/// <summary>
-	/// �O�t���[���̃J�����̍��W�̎擾
-	/// </summary>
-	/// <returns>�O�t���[���J�������W</returns>
+	/// <returns>前フレームカメラ座標</returns>
 	const VECTOR& GetPrevPos()const { return m_prevPos; }
 
-private:	// �֐�
 	/// <summary>
-	/// �p�x�̍X�V
+	/// ロックオンしている敵座標の取得
 	/// </summary>
-	void UpdateAngle();
+	/// <param name="lockOnEnemyPos">ロックオンしている敵の座標</param>
+	void SetLockOnEnemyPos(VECTOR lockOnEnemyPos) { m_lockOnEnemyPos = lockOnEnemyPos; }
+
+private:	// 関数
+	/// <summary>
+	/// 角度更新
+	/// </summary>
+	/// <param name="isLockOn">ロックオン状態かどうか</param>
+	void UpdateAngle(bool isLockOn);
 
 	/// <summary>
-	/// �ʏ펞�̍X�V
+	/// 通常時更新
 	/// </summary>
-	/// <param name="targetPos">�^�[�Q�b�g���W</param>
+	/// <param name="targetPos">ターゲット座標</param>
 	void NormalUpdate(VECTOR targetPos);
 
 	/// <summary>
-	/// ���W�̍X�V
+	/// ロックオン時更新
+	/// </summary>
+	/// <param name="targetPos">ターゲット座標</param>
+	void LockOnUpdate(VECTOR targetPos);
+
+	/// <summary>
+	/// 座標の更新
 	/// </summary>
 	void UpdatePos();
 
 	/// <summary>
-	/// �����蔻����l���������W�X�V
+	/// 当たり判定を考慮した座標更新
 	/// </summary>
 	void FixPos();
 
 	/// <summary>
-	/// �����o������
+	/// 押し出し処理
 	/// </summary>
 	void FixPosInternal();
 
-private:	// �ϐ�
-	float m_angleH;						// �����p�x
-	float m_angleV;						// �����p�x
-	float m_cameraToTargetLenght;		// �J��������^�[�Q�b�g�܂ł̋���
-	VECTOR m_pos;						// ���W
-	VECTOR m_nextPos;					// ���̍��W
-	VECTOR m_prevPos;					// �O�̍��W
-	VECTOR m_targetPos;					// �J��������^�[�Q�b�g�̍��W
-	MATRIX m_rotX;						// ��]�p�s��X
-	MATRIX m_rotY;						// ��]�p�s��Y
-	std::shared_ptr<Sphere> m_pSphere;	// �����蔻��|�C���^
+private:	// 変数
+	float m_angleH;						// 水平角度
+	float m_angleV;						// 垂直角度
+	float m_cameraToTargetLenght;		// カメラからターゲットまでの距離
+	VECTOR m_pos;						// 座標
+	VECTOR m_nextPos;					// 次の座標
+	VECTOR m_prevPos;					// 前の座標
+	VECTOR m_targetPos;					// カメラからターゲットの座標
+	MATRIX m_rotX;						// 回転用行列X
+	MATRIX m_rotY;						// 回転用行列Y
+	std::shared_ptr<Sphere> m_pSphere;	// 当たり判定ポインタ
 
-private:	// �����蔻��p�ϐ�
-	bool m_isMove;		// �ړ��������ǂ���
-	bool m_isPolyHit;	// �|���S���ɓ����������ǂ���
+private:	// ロックオン用変数
+	bool m_isLockOn;								// ロックオンしているかどうか
+	VECTOR m_lockOnEnemyPos;						// ロックオンした敵の座標
 
-	MV1_COLL_RESULT_POLY_DIM m_hitDim{};									// �����蔻�茋�ʑ���p�|���S���\����
-	MV1_COLL_RESULT_POLY* m_pPolyIndex[ColInfo::kMaxColHitPolyNum]{};	// �ǃ|���S���Ɣ��f���ꂽ�|���S���̃A�h���X��ۑ����Ă������߂̃|�C���^�z��
-	MV1_COLL_RESULT_POLY* m_pPoly;											// �|���S���̍\���̂ɃA�N�Z�X����ׂɎg�p����|�C���^
-	HITRESULT_LINE m_lineRes{};												// �����ƃ|���S���Ƃ̓����蔻��̌��ʂ�������\����
+	std::shared_ptr<LockOnTarget> m_pLockOnTarget;	// ロックオン処理ポインタ
+
+private:	// 当たり判定用変数
+	bool m_isMove;		// 移動したかどうか
+	bool m_isPolyHit;	// ポリゴンに当たったかどうか
+
+	MV1_COLL_RESULT_POLY_DIM m_hitDim{};									// 当たり判定結果代入用ポリゴン構造体
+	MV1_COLL_RESULT_POLY* m_pPolyIndex[ColInfo::kMaxColHitPolyNum]{};	// 壁ポリゴンと判断されたポリゴンのアドレスを保存しておくためのポインタ配列
+	MV1_COLL_RESULT_POLY* m_pPoly;											// ポリゴンの構造体にアクセスする為に使用するポインタ
+	HITRESULT_LINE m_lineRes{};												// 線分とポリゴンとの当たり判定の結果を代入する構造体
 };
