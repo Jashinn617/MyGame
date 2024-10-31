@@ -24,6 +24,7 @@ namespace
 {
 	const char* const kFileName = "Data/Model/Player/Player.mv1";	// プレイヤーモデルファイルパス
 
+	constexpr int kHardAttackRate = 3;			// 強攻撃時の攻撃力の倍率
 	constexpr float kMoveSpeedDashRate = 1.2f;	// ダッシュ時速度
 	constexpr float kAccelerationRate = 0.5f;	// 加速度
 	constexpr float kJumpMaxSpeed = 8.0f;		// ジャンプ時の最大速度
@@ -34,19 +35,23 @@ namespace
 	constexpr float kMinJumpRiseNum = 1.0f;		// 上昇中と判断される最低値
 	constexpr float kAngleSpeed = 0.02f;		// 回転速度
 
-	constexpr float kHeight = 140.0f;					// 高さ
-	constexpr float kSize = 50.0f;						// サイズ
-	constexpr float kTopPos = 60.0f;					// 頭の高さ
-	constexpr float kBottomPos = 0.0f;					// 足元の座標
-	constexpr float kCapsuleRadius = 10.0f;				// カプセルの半径
-	constexpr VECTOR kScaleVec = { 0.5f,0.6f,0.5f };	// スケール
 
-	constexpr int kAttackStanTime = 1;		// 攻撃硬直時間
+	constexpr float kHeight = 140.0f;						// 高さ
+	constexpr float kSize = 50.0f;							// サイズ
+	constexpr float kTopPos = 60.0f;						// 頭の高さ
+	constexpr float kBottomPos = 0.0f;						// 足元の座標
+	constexpr float kCapsuleRadius = 15.0f;					// カプセルの半径
+	constexpr float kSwordCapsuleRadius = 8.0f;				// 剣のカプセルの半径
+	constexpr float kHardRadius = 70.0f;					// 強攻撃の当たり判定半径
+	constexpr float kHardHeight = -10.0f;					// 強攻撃の当たり判定高さ
+	constexpr VECTOR kScaleVec = { 0.5f,0.6f,0.5f };		// スケール
+	
+	constexpr int kAttackStanTime = 22;		// 攻撃硬直時間
 
 	/// <summary>
-	/// アニメーション速度
+	/// アニメーション切り替え速度
 	/// </summary>
-	enum kAnimSpeed
+	enum kAnimChangeFrameNum
 	{
 		Idle = 2,
 		Walk = 2,
@@ -64,11 +69,13 @@ namespace
 Player::Player() :
 	m_attackCount(0),
 	m_isAttack(false),
+	m_isHardAttack(false),
 	m_isNextAttack(false),
 	m_moveDirection{ 0.0f,0.0f,0.0f },
 	m_pState(std::make_shared<PlayerState>(this)),
 	m_pCamera(std::make_shared<Camera>()),
-	m_pAttackStanTime(std::make_shared<Time>(kAttackStanTime))
+	m_pAttackStanTime(std::make_shared<Time>(kAttackStanTime)),
+	m_animSpeed(AnimSpeed::Idle)
 {
 	// アニメーションロード
 	CsvLoad::GetInstance().AnimLoad(m_animData, "Player");
@@ -113,9 +120,13 @@ Player::Player() :
 	m_angle = 0.0f;
 
 
-	// 当たり判定ポインタ作成
-	//m_pSphere = std::make_shared<Sphere>(m_characterInfo.pos, m_objSize, kHeight * 0.5f);
+	/*当たり判定ポインタ作成*/
+	// プレイヤー
 	m_pCollShape = std::make_shared<CollisionShape>(m_characterInfo.topPos, m_characterInfo.bottomPos, kCapsuleRadius);
+	// 剣
+	m_swordCol = std::make_shared<CollisionShape>(m_swordTopPos, m_swordBottomPos, kSwordCapsuleRadius);
+	// 強攻撃
+	m_hardAtkCol = std::make_shared<CollisionShape>(m_characterInfo.topPos, kHardRadius, kHardHeight);
 
 
 	// モデルの頂点タイプの取得
@@ -149,7 +160,7 @@ void Player::Update()
 	// ダメージ処理
 
 	// アニメーション更新
-	m_pModel->Update();
+	m_pModel->Update(static_cast<int>(m_animSpeed));
 	// モデル座標の設定
 	m_pModel->SetPos(m_characterInfo.pos);
 	// モデル回転の設定
@@ -165,9 +176,11 @@ void Player::Update()
 	// 遠距離攻撃武器更新
 	m_pShot->Update(m_characterInfo.pos, m_angle);
 
-	// 座標設定
+	// フレーム座標の更新
 	m_characterInfo.topPos = MV1GetFramePosition(m_pModel->GetModelHandle(), m_topFrameIndex);
 	m_characterInfo.bottomPos = MV1GetFramePosition(m_pModel->GetModelHandle(), m_bottomFrameIndex);
+	m_swordTopPos = MV1GetFramePosition(m_pModel->GetModelHandle(), m_swordTopFrameIndex);
+	m_swordBottomPos = MV1GetFramePosition(m_pModel->GetModelHandle(), m_swordBottomFrameIndex);
 }
 
 void Player::Draw(std::shared_ptr<ToonShader> pToonShader)
@@ -191,6 +204,8 @@ void Player::Draw(std::shared_ptr<ToonShader> pToonShader)
 
 	// 当たり判定の描画
 	m_pCollShape->DebugDraw(0xff0000);
+	m_swordCol->DebugDraw(0x0000ff);
+	m_hardAtkCol->DebugDraw(0xff00ff);
 }
 
 void Player::Draw2D()
@@ -235,9 +250,26 @@ void Player::UpdateAngle()
 	// ダメージ中は処理をしない
 	if (m_pState->GetState() == PlayerState::StateKind::Damage) return;
 
-	// 目標角度の計算(ベクトル(z,x)の角度 + 90°+ カメラ角度)
-	float nextAngle = atan2(static_cast<double>(m_moveDirection.z), static_cast<double>(m_moveDirection.x))
-		+ DX_PI_F * 0.5f + m_pCamera->GetCameraAngleX();
+	float nextAngle = 0.0f;
+
+	// ロックオン状態で、ダッシュ状態ではなかった場合は
+	// ロックオンされている敵の方向を向くようにする
+	if (m_isLockOn && m_pState->GetState() != PlayerState::StateKind::Dash)
+	{
+		// ロックオンされている敵がいなかったら返る
+		if (m_pObjectManager->GetLockOnEnemy() == nullptr) return;
+		// プレイヤーから敵までのベクトルを出す
+		VECTOR enemyToPlayer = VSub(m_pObjectManager->GetLockOnEnemy()->GetInfo().pos, m_characterInfo.pos);
+
+		// 目標角度の計算
+		nextAngle = atan2(-enemyToPlayer.z, enemyToPlayer.x) - DX_PI_F * 0.5f;
+	}
+	else
+	{
+		// 目標角度の計算(ベクトル(z,x)の角度 + 90°+ カメラ角度)
+		nextAngle = atan2(static_cast<double>(m_moveDirection.z), static_cast<double>(m_moveDirection.x))
+			+ DX_PI_F * 0.5f + m_pCamera->GetCameraAngleX();
+	}
 
 	// 角度を滑らかに変更する
 	SmoothAngle(m_angle, nextAngle);
@@ -344,8 +376,6 @@ void Player::InitState()
 	{
 	case PlayerState::StateKind::Attack:
 
-
-
 		m_pAttackStanTime->Reset();		// 硬直時間のリセット
 		m_attackCount = 0;				// 攻撃回数のリセット
 
@@ -359,6 +389,9 @@ void Player::InitState()
 		break;
 
 	case PlayerState::StateKind::HardAttack:
+
+		// 強攻撃フラグを立てる
+		m_isHardAttack = true;
 
 		break;
 
@@ -376,6 +409,19 @@ void Player::InitState()
 	}
 }
 
+void Player::OnHardAttack(CharacterBase* pEnemy)
+{
+	// 強攻撃をしていなかったら何もしない
+	if (!m_isHardAttack) return;
+
+	// 衝突判定
+	if (m_hardAtkCol->IsCollide(pEnemy->GetCollShape()))
+	{
+		// 当たっていたらダメージを与える
+		pEnemy->OnDamage(m_characterInfo.pos, m_statusData.meleeAtk * kHardAttackRate);
+	}
+}
+
 void Player::UpdateState()
 {
 	/*現在のステイトによって更新処理を変える*/
@@ -385,21 +431,24 @@ void Player::UpdateState()
 		// 段々減速する
 		m_moveSpeed = max(m_moveSpeed - m_moveData.acc, 0.0f);
 		// アニメーションを待機状態に変更する
-		m_pModel->ChangeAnim(m_animData.idle, true, false, kAnimSpeed::Idle);
+		m_pModel->ChangeAnim(m_animData.idle, true, false, kAnimChangeFrameNum::Idle);
+		m_animSpeed = AnimSpeed::Idle;
 		break;
 
 	case PlayerState::StateKind::Walk:	// 歩き
 		// 移動速度を歩き状態の速度に変更する
 		m_moveSpeed = min(m_moveSpeed + m_moveData.acc, m_moveData.walkSpeed);
 		// アニメーションを歩きアニメーションに変更する
-		m_pModel->ChangeAnim(m_animData.walk, true, false, kAnimSpeed::Walk);
+		m_pModel->ChangeAnim(m_animData.walk, true, false, kAnimChangeFrameNum::Walk);
+		m_animSpeed = AnimSpeed::Walk;
 		break;
 
 	case PlayerState::StateKind::Dash:	// ダッシュ
 		// 移動速度をダッシュ時の速度にする
 		m_moveSpeed = min(m_moveSpeed + m_moveData.acc, m_moveData.dashSpeed);
 		// アニメーションをダッシュアニメーションに変更する
-		m_pModel->ChangeAnim(m_animData.run, true, false, kAnimSpeed::Dash);
+		m_pModel->ChangeAnim(m_animData.run, true, false, kAnimChangeFrameNum::Dash);
+		m_animSpeed = AnimSpeed::Dash;
 		break;
 
 	case PlayerState::StateKind::Attack:	// 攻撃
@@ -408,19 +457,8 @@ void Player::UpdateState()
 		break;
 
 	case PlayerState::StateKind::HardAttack:	// 強攻撃
-
-		// 止まる
-		m_moveSpeed = 0.0f;
-
-		// アニメーションを再生する
-		m_pModel->ChangeAnim(m_animData.hardAttack, false, false, kAnimSpeed::HardAttack);
-
-		// アニメーションが終わった場合
-		if (m_pModel->IsAnimEnd())
-		{
-			m_pState->EndState();
-		}
-
+		// 強攻撃更新
+		UpdateHardAttack();
 		break;
 
 	case PlayerState::StateKind::Jump:	// ジャンプ
@@ -437,7 +475,8 @@ void Player::UpdateState()
 		//else
 		//{
 			// アニメーションをジャンプ待機アニメーションに切り替える
-		m_pModel->ChangeAnim(m_animData.jumpIdle, true, false, kAnimSpeed::JumpIdle);
+		m_pModel->ChangeAnim(m_animData.jumpIdle, true, false, kAnimChangeFrameNum::JumpIdle);
+		m_animSpeed = AnimSpeed::JumpIdle;
 		//}
 		break;
 
@@ -460,15 +499,18 @@ void Player::UpdateAttack()
 	switch (m_attackCount % 3)
 	{
 	case 0:
-		m_pModel->ChangeAnim(m_animData.attack1, false, false, kAnimSpeed::Attack1);
+		m_pModel->ChangeAnim(m_animData.attack1, false, false, kAnimChangeFrameNum::Attack1);
+		m_animSpeed = AnimSpeed::Attack1;
 		break;
 
 	case 1:
-		m_pModel->ChangeAnim(m_animData.attack2, false, false, kAnimSpeed::Attack2);
+		m_pModel->ChangeAnim(m_animData.attack2, false, false, kAnimChangeFrameNum::Attack2);
+		m_animSpeed = AnimSpeed::Attack2;
 		break;
 
 	case 2:
-		m_pModel->ChangeAnim(m_animData.attack3, false, false, kAnimSpeed::Attack3);
+		m_pModel->ChangeAnim(m_animData.attack3, false, false, kAnimChangeFrameNum::Attack3);
+		m_animSpeed = AnimSpeed::Attack3;
 		break;
 
 	default:
@@ -509,5 +551,22 @@ void Player::UpdateAttack()
 		// 攻撃カウントを増やす
 		m_attackCount++;
 		// SEを鳴らす
+	}
+}
+
+void Player::UpdateHardAttack()
+{
+	// 止まる
+	m_moveSpeed = 0.0f;
+
+	// アニメーションを再生する
+	m_pModel->ChangeAnim(m_animData.hardAttack, false, false, kAnimChangeFrameNum::HardAttack);
+	m_animSpeed = AnimSpeed::HardAttack;
+
+	// アニメーションが終わった場合
+	if (m_pModel->IsAnimEnd())
+	{
+		m_pState->EndState();
+		m_isHardAttack = false;
 	}
 }

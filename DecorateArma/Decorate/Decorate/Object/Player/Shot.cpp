@@ -132,10 +132,10 @@ void Shot::OnAttack(CharacterBase* pEnemy)
 {
 	for (auto& bullet : m_bullet)
 	{
-		// 当たっていたら処理をする
+		// 衝突判定
 		if (bullet.coll->IsCollide(pEnemy->GetCollShape()) && bullet.isExist)
 		{
-			// ダメージを与える
+			// 当たっていたらダメージを与える
 			pEnemy->OnDamage(m_pos, m_atkPoint);
 
 			// 弾を消す

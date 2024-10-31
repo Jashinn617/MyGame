@@ -107,14 +107,20 @@ bool CollisionShape::CapsuleToCapsuleCollide(const std::shared_ptr<CollisionShap
 
 bool CollisionShape::CapsuleToSphereCollide(const std::shared_ptr<CollisionShape> target) const
 {
+	// 相手の真ん中の座標
+	VECTOR targetCenter = VAdd(*target->m_pos, VGet(0.0f, target->m_height, 0.0f));
+
 	// 判定
-	return HitCheck_Sphere_Capsule(target->GetCenter(), target->GetRadius(),
+	return HitCheck_Sphere_Capsule(targetCenter, target->GetRadius(),
 		*topPos, *bottomPos, m_radius);
 }
 
 bool CollisionShape::SphereToCapsuleCollide(const std::shared_ptr<CollisionShape> target) const
 {
+	// 真ん中の座標
+	VECTOR center = VAdd(*m_pos, VGet(0.0f, m_height, 0.0f));
+
 	// 判定
-	return HitCheck_Sphere_Capsule(*m_pos, m_radius,
+	return HitCheck_Sphere_Capsule(center, m_radius,
 		target->GetTopPos(), target->GetBottomPos(), target->GetRadius());
 }

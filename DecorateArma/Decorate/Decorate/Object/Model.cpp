@@ -66,17 +66,17 @@ Model::~Model()
 	MV1DeleteModel(m_modelH);
 }
 
-void Model::Update()
+void Model::Update(int animSpeed)
 {
 	// アニメーションを進める
-	m_animFrame++;
+	m_animFrame += animSpeed;
 
 	// アニメーションが一周した場合
 	if (m_animFrame >= m_animChangeFrameTotal)
 	{
 		// アニメーションの更新をする
-		UpdateAnim(m_prevAnim);
-		UpdateAnim(m_nextAnim);
+		UpdateAnim(m_prevAnim, animSpeed);
+		UpdateAnim(m_nextAnim, animSpeed);
 		// フレームをリセットする
 		m_animFrame = 0;
 	}
@@ -222,12 +222,18 @@ void Model::UpdateAnim(AnimData anim, float animSpeed)
 	// アニメーションの更新
 	float nowFrame = MV1GetAttachAnimTime(m_modelH, anim.attachNo);
 	nowFrame += animSpeed;
-	// 現在のフレーム数が総再生時間よりも大きかった場合
-	if (nowFrame > anim.totalTime)
+
+	// ループするアニメーションだった場合
+	if (anim.isLoop)
 	{
-		// アニメーションをループさせる
-		nowFrame -= anim.totalTime;
+		// 現在のフレーム数が総再生時間よりも大きかった場合
+		if (nowFrame > anim.totalTime)
+		{
+			// アニメーションをループさせる
+			nowFrame -= anim.totalTime;
+		}
 	}
+	
 	// アニメーションの再生時間の設定
 	MV1SetAttachAnimTime(m_modelH, anim.attachNo, nowFrame);
 }

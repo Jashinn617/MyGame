@@ -93,6 +93,30 @@ public:		// 関数
 	/// </summary>
 	void InitState();
 
+	/// <summary>
+	/// 強攻撃処理
+	/// </summary>
+	/// <param name="pEnemy">敵ポインタ</param>
+	void OnHardAttack(CharacterBase* pEnemy);
+
+private:	// 列挙型
+	/// <summary>
+	/// アニメーション速度
+	/// </summary>
+	enum AnimSpeed
+	{
+		Idle = 1,
+		Walk = 1,
+		Dash = 1,
+		Attack1 = 1,
+		Attack2 = 1,
+		Attack3 = 1,
+		HardAttack = 2,
+		JumpStart = 1,
+		JumpIdle = 1,
+		Damage = 1,
+	};
+
 private:	// 関数
 
 	/// <summary>
@@ -126,18 +150,32 @@ private:	// 関数
 	/// </summary>
 	void UpdateAttack();
 
+	/// <summary>
+	/// 強攻撃更新
+	/// </summary>
+	void UpdateHardAttack();
+
 private:	// 変数
-	int m_attackCount;			// 連続で攻撃した回数
+	int m_attackCount;								// 連続で攻撃した回数
+	int m_swordTopFrameIndex;						// 剣の始点ベクトルのフレーム番号
+	int m_swordBottomFrameIndex;					// 剣の終点点ベクトルのフレーム番号
 
-	bool m_isAttack;			// 攻撃中かどうか
-	bool m_isNextAttack;		// 次の攻撃が実行されるかどうか
-	bool m_isLockOn;			// ロックオン状態かどうか
+	bool m_isAttack;								// 攻撃中か
+	bool m_isHardAttack;							// 強攻撃中か
+	bool m_isNextAttack;							// 次の攻撃が実行されるかどうか
+	bool m_isLockOn;								// ロックオン状態かどうか
 
-	VECTOR m_moveDirection;
+	VECTOR m_moveDirection;							// 移動方向
+	VECTOR m_swordTopPos;							// 剣の始点ベクトル
+	VECTOR m_swordBottomPos;						// 剣の終点ベクトル
 
-	std::shared_ptr<PlayerState> m_pState;		// ステイトポインタ
-	std::shared_ptr<Camera> m_pCamera;			// カメラポインタ
-	std::shared_ptr<Shot> m_pShot;				// ショット
+	std::shared_ptr<PlayerState> m_pState;			// ステイトポインタ
+	std::shared_ptr<Camera> m_pCamera;				// カメラポインタ
+	std::shared_ptr<Shot> m_pShot;					// ショット
+	std::shared_ptr<CollisionShape> m_swordCol;		// 剣の当たり判定
+	std::shared_ptr<CollisionShape> m_hardAtkCol;	// 強攻撃当たり判定
 
-	std::shared_ptr<Time> m_pAttackStanTime;	// 攻撃硬直時間
+	std::shared_ptr<Time> m_pAttackStanTime;		// 攻撃硬直時間
+
+	AnimSpeed m_animSpeed;							// アニメーション速度
 };

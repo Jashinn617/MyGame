@@ -32,7 +32,8 @@ public:		// 関数
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update();
+	/// <param name="animSpeed">アニメーション速度(基本は1)</param>
+	void Update(int animSpeed = 1);
 
 	/// <summary>
 	/// 描画
