@@ -77,10 +77,22 @@ public:
 	const VECTOR& GetPrevPos()const { return m_prevPos; }
 
 	/// <summary>
+	/// ロックオンしている敵座標の設定
+	/// </summary>
+	/// <param name="lockOnEnemyPos">ロックオンしている敵座標</param>
+	void SetLockOnEnemyPos(VECTOR lockOnEnemyPos) { m_lockOnEnemyPos = lockOnEnemyPos; }
+
+	/// <summary>
 	/// ロックオンしている敵座標の取得
 	/// </summary>
-	/// <param name="lockOnEnemyPos">ロックオンしている敵の座標</param>
-	void SetLockOnEnemyPos(VECTOR lockOnEnemyPos) { m_lockOnEnemyPos = lockOnEnemyPos; }
+	/// <returns>ロックオンしている敵座標</returns>
+	VECTOR GetLockOnEnemyPos() { return m_lockOnEnemyPos; }
+
+	/// <summary>
+	/// ロックオン状態かどうかの取得
+	/// </summary>
+	/// <returns>ロックオン状態かどうか</returns>
+	bool IsLockOn() { return m_isLockOn; }
 
 private:	// 関数
 	/// <summary>

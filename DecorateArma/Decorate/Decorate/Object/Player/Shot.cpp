@@ -1,5 +1,8 @@
 ﻿#include "Shot.h"
 
+#include "Player.h"
+
+#include "../Camera.h"
 #include "../Model.h"
 
 #include "../../Utility/CollisionShape.h"
@@ -30,11 +33,12 @@ namespace
 	constexpr VECTOR kBulletScale = { 0.4f,0.4f,0.4f };		// 弾のスケール
 }
 
-Shot::Shot():
+Shot::Shot(Player* pPlayer):
 	m_sinCount(0.0f),
 	m_sinPosY(0.0f),
 	m_pos{0.0f,0.0f,0.0f},
 	m_cameraRotMtx(MGetRotY(0)),
+	m_pPlayer(pPlayer),
 	m_pModel(std::make_shared<Model>(kFileName)),
 	m_pBulletIntervalTime(std::make_shared<Time>(kBulletIntervalTime))
 {
@@ -129,10 +133,8 @@ void Shot::OnAttack(CharacterBase* pEnemy)
 		// 当たっていたら処理をする
 		if (bullet.coll->IsCollide(pEnemy->GetCollShape()) && bullet.isExist)
 		{
-			
 			// 弾を消す
-			bullet.isExist = false;
-			
+			bullet.isExist = false;	
 		}
 		else
 		{
@@ -184,22 +186,28 @@ void Shot::MakeBullet()
 				{
 					// 存在フラグを立てる
 					bullet.isExist = true;
+					// 位置の決定
+					bullet.pos = m_pos;
+					bullet.pos.y += kBulletStartPosHeight;
+					// モデル座標更新
+					bullet.model->SetPos(bullet.pos);
 
 					// カメラがロックオン状態だった時
-					if (false)
+					if (m_pPlayer->GetCamera()->IsLockOn())
 					{
-						// ロックオンしている敵に向けて撃つ
+						/*ロックオンしている敵に向けて撃つ*/
 
+						// ターゲット座標取得
+						VECTOR targetPos = m_pPlayer->GetCamera()->GetLockOnEnemyPos();
+						// 進む方向の決定
+						bullet.direction = VNorm(VSub(targetPos, bullet.pos));
 					}
 					// 通常時
 					else
-					{
-						// 位置の決定
-						bullet.pos = m_pos;
-						bullet.pos.y += kBulletStartPosHeight;
-						// モデル座標更新
-						bullet.model->SetPos(bullet.pos);
-						// 進む方向の決定(カメラから見て前に飛ばす)	
+					{		
+						/*カメラから見て前に飛ばす*/
+
+						// 進む方向の決定
 						bullet.direction = VGet(-m_cameraRotMtx.m[2][0],
 							-m_cameraRotMtx.m[2][1],
 							-m_cameraRotMtx.m[2][2]);

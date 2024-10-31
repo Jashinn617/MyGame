@@ -9,6 +9,7 @@ class Model;
 class Time;
 class CollisionShape;
 class CharacterBase;
+class Player;
 
 /// <summary>
 /// プレイヤーに追従する遠距離攻撃武器
@@ -19,7 +20,7 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	Shot();
+	Shot(Player* pPlayer);
 
 	/// <summary>
 	/// デストラクタ
@@ -52,6 +53,9 @@ public:
 
 private:	// 構造体
 
+	/// <summary>
+	/// 弾情報
+	/// </summary>
 	struct Bullet
 	{
 		bool isExist;								// 存在フラグ
@@ -74,15 +78,13 @@ private:	// 関数
 	void MakeBullet();
 
 private:
-	float m_sinCount;		// 上下移動カウント
-	float m_sinPosY;		// サイン計算に使うY座標
-	VECTOR m_pos;			// 座標
-	MATRIX m_cameraRotMtx;	// カメラの角度行列
-
-	std::vector<Bullet> m_bullet;	// 弾構造体
-
-	std::shared_ptr<Model> m_pModel;				// 武器本体モデル
+	float m_sinCount;								// 上下移動カウント
+	float m_sinPosY;								// サイン計算に使うY座標
+	VECTOR m_pos;									// 座標
+	MATRIX m_cameraRotMtx;							// カメラの角度行列
+	std::vector<Bullet> m_bullet;					// 弾構造体
+	Player* m_pPlayer;								// プレイヤーポインタ
+	std::shared_ptr<Model> m_pModel;				// 武器本体モデルポインタ
 	std::shared_ptr<Time> m_pBulletIntervalTime;	// 次の球が発射されるまでの時間
-
 };
 

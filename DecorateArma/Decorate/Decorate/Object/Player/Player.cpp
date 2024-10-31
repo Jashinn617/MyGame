@@ -68,7 +68,7 @@ Player::Player() :
 	m_moveDirection{ 0.0f,0.0f,0.0f },
 	m_pState(std::make_shared<PlayerState>(this)),
 	m_pCamera(std::make_shared<Camera>()),
-	m_pShot(std::make_shared<Shot>()),
+	m_pShot(std::make_shared<Shot>(this)),
 	m_pAttackStanTime(std::make_shared<Time>(kAttackStanTime))
 {
 	// アニメーションロード
