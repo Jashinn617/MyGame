@@ -85,11 +85,6 @@ public:	// 継承用関数
 	virtual void StageClear() {/*処理無し*/ };
 
 	/// <summary>
-	/// 攻撃処理
-	/// </summary>
-	virtual void OnAttack() {/*処理無し*/ };
-
-	/// <summary>
 	/// 自身の当たり判定の情報の取得
 	/// </summary>
 	/// <returns>当たり判定情報</returns>

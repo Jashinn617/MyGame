@@ -42,6 +42,8 @@ void Collision::UpdateCollision(ObjectBase* my, ObjectBase* target)
 			dynamic_cast<CharacterBase*>(my)->MoveCollCharacter(dynamic_cast<CharacterBase*>(target));
 			// ショット衝突判定
 			dynamic_cast<Player*>(my)->GetShot()->OnAttack(dynamic_cast<CharacterBase*>(target));
+			// 攻撃衝突判定
+			dynamic_cast<Player*>(my)->OnAttack(dynamic_cast<CharacterBase*>(target));
 			// 強攻撃衝突判定
 			dynamic_cast<Player*>(my)->OnHardAttack(dynamic_cast<CharacterBase*>(target));
 

@@ -24,30 +24,30 @@ namespace
 {
 	const char* const kFileName = "Data/Model/Player/Player.mv1";	// プレイヤーモデルファイルパス
 
-	constexpr int kHardAttackRate = 3;			// 強攻撃時の攻撃力の倍率
-	constexpr float kMoveSpeedDashRate = 1.2f;	// ダッシュ時速度
-	constexpr float kAccelerationRate = 0.5f;	// 加速度
-	constexpr float kJumpMaxSpeed = 8.0f;		// ジャンプ時の最大速度
-	constexpr float kGravity = 0.8f;			// 重力
-	constexpr float kFallMaxSpeed = -15.0f;		// 最大落下速度
-	constexpr float kNowVecNum = 0.8f;			// 現在の方向
-	constexpr float kNextVecNum = 0.2f;			// 進みたい方向
-	constexpr float kMinJumpRiseNum = 1.0f;		// 上昇中と判断される最低値
-	constexpr float kAngleSpeed = 0.02f;		// 回転速度
-
-
+	constexpr int kAttackStanTime = 20;						// 攻撃硬直時間
+	constexpr int kattackInvokeTime = 30;					// 強攻撃発動時間
+	constexpr int kHardAttackRate = 3;						// 強攻撃時の攻撃力倍率
+	constexpr float kMoveSpeedDashRate = 1.2f;				// ダッシュ時速度
+	constexpr float kAccelerationRate = 0.5f;				// 加速度
+	constexpr float kJumpMaxSpeed = 8.0f;					// ジャンプ時の最大速度
+	constexpr float kGravity = 0.8f;						// 重力
+	constexpr float kFallMaxSpeed = -15.0f;					// 最大落下速度
+	constexpr float kNowVecNum = 0.8f;						// 現在の方向
+	constexpr float kNextVecNum = 0.2f;						// 進みたい方向
+	constexpr float kMinJumpRiseNum = 1.0f;					// 上昇中と判断される最低値
+	constexpr float kAngleSpeed = 0.02f;					// 回転速度
+	constexpr float kAttackDistance = 30.0f;				// 攻撃距離
 	constexpr float kHeight = 140.0f;						// 高さ
 	constexpr float kSize = 50.0f;							// サイズ
-	constexpr float kTopPos = 60.0f;						// 頭の高さ
-	constexpr float kBottomPos = 0.0f;						// 足元の座標
-	constexpr float kCapsuleRadius = 15.0f;					// カプセルの半径
-	constexpr float kSwordCapsuleRadius = 8.0f;				// 剣のカプセルの半径
-	constexpr float kHardRadius = 70.0f;					// 強攻撃の当たり判定半径
-	constexpr float kHardHeight = -10.0f;					// 強攻撃の当たり判定高さ
+	constexpr float kTopPos = 60.0f;						// 頭高さ
+	constexpr float kBottomPos = 0.0f;						// 足元座標
+	constexpr float kCapsuleRadius = 15.0f;					// カプセル半径
+	constexpr float kAttackRadius = 35.0f;					// 攻撃判定半径
+	constexpr float kAttackHeight = 50.0f;					// 攻撃判定高さ
+	constexpr float kHardRadius = 70.0f;					// 強攻撃当たり判定半径
+	constexpr float kHardHeight = -10.0f;					// 強攻撃当たり判定高さ
 	constexpr VECTOR kScaleVec = { 0.5f,0.6f,0.5f };		// スケール
 	
-	constexpr int kAttackStanTime = 22;		// 攻撃硬直時間
-
 	/// <summary>
 	/// アニメーション切り替え速度
 	/// </summary>
@@ -68,13 +68,17 @@ namespace
 
 Player::Player() :
 	m_attackCount(0),
+	m_isColl(false),
 	m_isAttack(false),
 	m_isHardAttack(false),
 	m_isNextAttack(false),
+	m_isLockOn(false),
 	m_moveDirection{ 0.0f,0.0f,0.0f },
+	m_attackPos{0.0f,0.0f,0.0f},
 	m_pState(std::make_shared<PlayerState>(this)),
 	m_pCamera(std::make_shared<Camera>()),
-	m_pAttackStanTime(std::make_shared<Time>(kAttackStanTime)),
+	m_attackStanTime(std::make_shared<Time>(kAttackStanTime)),
+	m_attackInvokeTime(std::make_shared<Time>(kattackInvokeTime)),
 	m_animSpeed(AnimSpeed::Idle)
 {
 	// アニメーションロード
@@ -124,9 +128,9 @@ Player::Player() :
 	// プレイヤー
 	m_pCollShape = std::make_shared<CollisionShape>(m_characterInfo.topPos, m_characterInfo.bottomPos, kCapsuleRadius);
 	// 剣
-	m_swordCol = std::make_shared<CollisionShape>(m_swordTopPos, m_swordBottomPos, kSwordCapsuleRadius);
+	m_attackColl = std::make_shared<CollisionShape>(m_attackPos, kAttackRadius, kAttackHeight);
 	// 強攻撃
-	m_hardAtkCol = std::make_shared<CollisionShape>(m_characterInfo.topPos, kHardRadius, kHardHeight);
+	m_hardAtkColl = std::make_shared<CollisionShape>(m_characterInfo.topPos, kHardRadius, kHardHeight);
 
 
 	// モデルの頂点タイプの取得
@@ -179,8 +183,7 @@ void Player::Update()
 	// フレーム座標の更新
 	m_characterInfo.topPos = MV1GetFramePosition(m_pModel->GetModelHandle(), m_topFrameIndex);
 	m_characterInfo.bottomPos = MV1GetFramePosition(m_pModel->GetModelHandle(), m_bottomFrameIndex);
-	m_swordTopPos = MV1GetFramePosition(m_pModel->GetModelHandle(), m_swordTopFrameIndex);
-	m_swordBottomPos = MV1GetFramePosition(m_pModel->GetModelHandle(), m_swordBottomFrameIndex);
+	AttackPosUpdate(m_angle);
 }
 
 void Player::Draw(std::shared_ptr<ToonShader> pToonShader)
@@ -204,8 +207,8 @@ void Player::Draw(std::shared_ptr<ToonShader> pToonShader)
 
 	// 当たり判定の描画
 	m_pCollShape->DebugDraw(0xff0000);
-	m_swordCol->DebugDraw(0x0000ff);
-	m_hardAtkCol->DebugDraw(0xff00ff);
+	m_attackColl->DebugDraw(0x0000ff);
+	m_hardAtkColl->DebugDraw(0xff00ff);
 }
 
 void Player::Draw2D()
@@ -224,10 +227,6 @@ void Player::Draw2D()
 }
 
 void Player::OnDamage(VECTOR targetPos, int damagePoint)
-{
-}
-
-void Player::OnAttack()
 {
 }
 
@@ -376,7 +375,7 @@ void Player::InitState()
 	{
 	case PlayerState::StateKind::Attack:
 
-		m_pAttackStanTime->Reset();		// 硬直時間のリセット
+		m_attackStanTime->Reset();		// 硬直時間のリセット
 		m_attackCount = 0;				// 攻撃回数のリセット
 
 		//	攻撃フラグを立てる
@@ -409,16 +408,39 @@ void Player::InitState()
 	}
 }
 
+void Player::OnAttack(CharacterBase* pEnemy)
+{
+	// 攻撃中以外は処理をしない
+	if (!m_isAttack && m_isColl) return;
+	// 当たり判定は少し時間が経過してから取る
+	if (m_attackInvokeTime->Update())
+	{
+		// 衝突判定
+		if (m_attackColl->IsCollide(pEnemy->GetCollShape()))
+		{
+			// 当たっていたらダメージを与える
+			pEnemy->OnDamage(m_characterInfo.pos, m_statusData.meleeAtk);
+			m_isColl = true;
+		}
+	}
+}
+
+
 void Player::OnHardAttack(CharacterBase* pEnemy)
 {
-	// 強攻撃をしていなかったら何もしない
-	if (!m_isHardAttack) return;
+	// 強攻撃中以外は処理をしない
+	if (!m_isHardAttack && m_isColl) return;
 
-	// 衝突判定
-	if (m_hardAtkCol->IsCollide(pEnemy->GetCollShape()))
+	// 当たり判定は少し時間が経過してから取る
+	if (m_attackInvokeTime->Update())
 	{
-		// 当たっていたらダメージを与える
-		pEnemy->OnDamage(m_characterInfo.pos, m_statusData.meleeAtk * kHardAttackRate);
+		// 衝突判定
+		if (m_hardAtkColl->IsCollide(pEnemy->GetCollShape()))
+		{
+			// 当たっていたらダメージを与える
+			pEnemy->OnDamage(m_characterInfo.pos, m_statusData.meleeAtk * kHardAttackRate);
+			m_isColl = true;
+		}
 	}
 }
 
@@ -517,7 +539,7 @@ void Player::UpdateAttack()
 		break;
 	}
 
-	if (m_pAttackStanTime->Update())
+	if (m_attackStanTime->Update())
 	{
 		// 攻撃中に攻撃ボタンが押された場合
 		if (Pad::IsTrigger(PAD_INPUT_3) && !m_isNextAttack)
@@ -530,26 +552,33 @@ void Player::UpdateAttack()
 	// アニメーションが終わった段階で次に攻撃するフラグが立っていなかった場合
 	if (m_pModel->IsAnimEnd() && !m_isNextAttack)
 	{
+		m_isColl = false;
 		// 攻撃を終了する
 		m_isAttack = false;
 		// 硬直時間をリセットする
-		m_pAttackStanTime->Reset();
+		m_attackStanTime->Reset();
 		// 攻撃カウントをリセットする
 		m_attackCount = 0;
 		// ステイトを終了する
 		m_pState->EndState();
+		// 発動時間リセット
+		m_attackInvokeTime->Reset();
+		
 	}
 	// アニメーションが終わった段階で次に攻撃するフラグが立っていた場合
 	if (m_pModel->IsAnimEnd() && m_isNextAttack)
 	{
+		m_isColl = false;
 		// 攻撃判定の初期化
 		m_isResetAttack = true;
 		// 硬直時間のリセット
-		m_pAttackStanTime->Reset();
+		m_attackStanTime->Reset();
 		// 次の攻撃をするフラグをfalseにする
 		m_isNextAttack = false;
 		// 攻撃カウントを増やす
 		m_attackCount++;
+		// 発動時間リセット
+		m_attackInvokeTime->Reset();
 		// SEを鳴らす
 	}
 }
@@ -566,7 +595,21 @@ void Player::UpdateHardAttack()
 	// アニメーションが終わった場合
 	if (m_pModel->IsAnimEnd())
 	{
+		// ステイト終了
 		m_pState->EndState();
+		// 強攻撃フラグをfalseにする
 		m_isHardAttack = false;
+		// 発動時間リセット
+		m_attackInvokeTime->Reset();
 	}
+}
+
+void Player::AttackPosUpdate(float angle)
+{
+	// 向いている方向を出す
+	VECTOR vec = VGet(sinf(angle + DX_PI_F), 0.0f, cosf(angle + DX_PI_F));
+	// 前に出す
+	vec = VScale(vec, kAttackDistance);
+	// 出したベクトルを現在位置に足す
+	m_attackPos = VAdd(m_characterInfo.bottomPos, vec);
 }
