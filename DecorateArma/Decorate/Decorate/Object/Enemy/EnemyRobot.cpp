@@ -10,11 +10,11 @@
 
 namespace
 {
-	constexpr float kSize = 10.0f;						// サイズ
-	constexpr float kHeight = 20.0f;					// 高さ
 	constexpr float kCapsuleRadius = 30.0f;				// カプセルの半径
 	constexpr float kRotSpeed = 9.0f;					// 回転速度
 	constexpr VECTOR kModelScale = { 0.2f,0.3f,0.2f };	// モデルスケール
+	constexpr float kSearchRadius = 600.0f;				// 索敵範囲の半径
+	constexpr float kSearchHeight = 70.0f;				// 索敵範囲の高さ
 }
 
 EnemyRobot::EnemyRobot(VECTOR pos)
@@ -33,6 +33,9 @@ EnemyRobot::EnemyRobot(VECTOR pos)
 
 	// 回転速度設定
 	m_moveData.rotSpeed = kRotSpeed;
+
+	// 索敵範囲設定
+	m_pSearchRange = std::make_shared<CollisionShape>(m_characterInfo.pos, kSearchRadius, kSearchHeight);
 }
 
 EnemyRobot::~EnemyRobot()

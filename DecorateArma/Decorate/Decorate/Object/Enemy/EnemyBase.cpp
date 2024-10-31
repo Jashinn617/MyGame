@@ -9,6 +9,7 @@
 using namespace CharacterData;
 
 EnemyBase::EnemyBase():
+	m_isFinding(false),
 	m_moveDirection{0.0f,0.0f,0.0f},
 	m_enemyToPlayer{0.0f,0.0f,0.0f},
 	m_attackType(AttackType::Melee)
@@ -33,6 +34,7 @@ EnemyBase::EnemyBase():
 }
 
 EnemyBase::EnemyBase(VECTOR pos):
+	m_isFinding(false),
 	m_moveDirection{ 0.0f,0.0f,0.0f },
 	m_enemyToPlayer{ 0.0f,0.0f,0.0f },
 	m_attackType(AttackType::Melee)
@@ -88,6 +90,7 @@ void EnemyBase::Draw(std::shared_ptr<ToonShader> pToonShader)
 	m_pModel->Draw();
 
 	m_pCollShape->DebugDraw(0x00ff00);
+	m_pSearchRange->DebugDraw(0x000000);
 }
 
 void EnemyBase::Draw2D()
@@ -112,6 +115,23 @@ void EnemyBase::OnDamage(VECTOR targetPos, int damagePoint)
 
 void EnemyBase::OnDead()
 {
+}
+
+void EnemyBase::IsSearchRange(CharacterBase* pPlayer)
+{
+	// 衝突判定
+	if (m_pSearchRange->IsCollide(pPlayer->GetCollShape()))
+	{
+		// 発見SEを鳴らす
+
+		// 当たっていたら発見状態になる
+		m_isFinding = true;
+	}
+	else
+	{
+		// 当たっていなかったら通常の行動に戻る
+		m_isFinding = false;
+	}
 }
 
 void EnemyBase::UpdateAngle()

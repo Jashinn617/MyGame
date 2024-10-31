@@ -51,7 +51,7 @@ void Collision::UpdateCollision(ObjectBase* my, ObjectBase* target)
 		}
 	}
 
-	// ターゲットのオブジェクトタイプがエネミーの場合
+	// オブジェクトタイプがエネミーの場合
 	if (my->GetColType() == ObjectBase::ColType::Enemy)
 	{
 		// ターゲットのオブジェクトがフィールドの場合
@@ -64,12 +64,16 @@ void Collision::UpdateCollision(ObjectBase* my, ObjectBase* target)
 		// ターゲットのオブジェクトがプレイヤーの場合
 		if (target->GetColType() == ObjectBase::ColType::Player)
 		{
+			// キャラクター同士衝突判定
 			dynamic_cast<CharacterBase*>(my)->MoveCollCharacter(dynamic_cast<CharacterBase*>(target));
+			// 索敵範囲衝突判定
+			dynamic_cast<EnemyBase*>(my)->IsSearchRange(dynamic_cast<CharacterBase*>(target));
+
 			return;
 		}
 	}
 
-	// ターゲットのオブジェクトタイプがアイテムの場合
+	// オブジェクトタイプがアイテムの場合
 	if (my->GetColType() == ObjectBase::ColType::Item)
 	{
 

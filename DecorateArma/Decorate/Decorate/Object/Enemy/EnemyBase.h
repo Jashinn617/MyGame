@@ -77,6 +77,12 @@ public:	// 関数
 	void OnDead();
 
 	/// <summary>
+/// 索敵範囲に入っているかどうかを調べる
+/// </summary>
+/// <param name="pPlayer">プレイヤーポインタ</param>
+	void IsSearchRange(CharacterBase* pPlayer);
+
+	/// <summary>
 	/// 存在するかどうか
 	/// </summary>
 	/// <returns>存在フラグ</returns>
@@ -144,8 +150,10 @@ protected:	// メンバ関数
 	virtual void UpdateDeadState();
 
 protected:	// 変数
-	VECTOR m_moveDirection;					// 移動方向ベクトル
-	VECTOR m_enemyToPlayer;					// 敵からプレイヤーまでのベクトル
-	AttackType m_attackType;				// 攻撃タイプ
-	void(EnemyBase::* m_updateFunc)();		// メンバ関数ポインタ
+	bool m_isFinding;								// プレイヤー発見状態かどうか
+	VECTOR m_moveDirection;							// 移動方向ベクトル
+	VECTOR m_enemyToPlayer;							// 敵からプレイヤーまでのベクトル
+	AttackType m_attackType;						// 攻撃タイプ
+	std::shared_ptr<CollisionShape> m_pSearchRange;	// 索敵範囲
+	void(EnemyBase::* m_updateFunc)();				// メンバ関数ポインタ
 };
