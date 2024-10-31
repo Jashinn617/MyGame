@@ -410,8 +410,8 @@ void Player::InitState()
 
 void Player::OnAttack(CharacterBase* pEnemy)
 {
-	// 攻撃中以外は処理をしない
-	if (!m_isAttack && m_isColl) return;
+	// 攻撃中以外または衝突中は処理をしない
+	if (!m_isAttack || m_isColl) return;
 	// 当たり判定は少し時間が経過してから取る
 	if (m_attackInvokeTime->Update())
 	{
@@ -425,11 +425,10 @@ void Player::OnAttack(CharacterBase* pEnemy)
 	}
 }
 
-
 void Player::OnHardAttack(CharacterBase* pEnemy)
 {
-	// 強攻撃中以外は処理をしない
-	if (!m_isHardAttack && m_isColl) return;
+	// 強攻撃中以外または衝突中は処理をしない
+	if (!m_isHardAttack || m_isColl) return;
 
 	// 当たり判定は少し時間が経過してから取る
 	if (m_attackInvokeTime->Update())
@@ -552,6 +551,7 @@ void Player::UpdateAttack()
 	// アニメーションが終わった段階で次に攻撃するフラグが立っていなかった場合
 	if (m_pModel->IsAnimEnd() && !m_isNextAttack)
 	{
+		// 衝突フラグをfalseにする
 		m_isColl = false;
 		// 攻撃を終了する
 		m_isAttack = false;
@@ -568,6 +568,7 @@ void Player::UpdateAttack()
 	// アニメーションが終わった段階で次に攻撃するフラグが立っていた場合
 	if (m_pModel->IsAnimEnd() && m_isNextAttack)
 	{
+		// 衝突フラグをfalseにする
 		m_isColl = false;
 		// 攻撃判定の初期化
 		m_isResetAttack = true;

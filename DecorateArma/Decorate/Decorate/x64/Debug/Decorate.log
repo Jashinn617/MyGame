@@ -1,4 +1,4 @@
 ﻿  Player.cpp
-C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\Decorate\Object\Player\Player.cpp(264,56): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\Decorate\Object\Player\Player.cpp(270,21): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-  Decorate.vcxproj -> C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\x64\Debug\Decorate.exe
+C:\Users\中山　七草\Documents\GitHub\MyGame\DecorateArma\Decorate\Decorate\Object\Player\Player.cpp(264,56): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\中山　七草\Documents\GitHub\MyGame\DecorateArma\Decorate\Decorate\Object\Player\Player.cpp(270,21): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+  Decorate.vcxproj -> C:\Users\中山　七草\Documents\GitHub\MyGame\DecorateArma\Decorate\x64\Debug\Decorate.exe
