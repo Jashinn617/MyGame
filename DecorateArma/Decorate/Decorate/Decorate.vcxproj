@@ -147,7 +147,6 @@
     <ClCompile Include="Object\Player\Shot.cpp" />
     <ClCompile Include="Common\Spawn.cpp" />
     <ClCompile Include="Utility\Collision.cpp" />
-    <ClCompile Include="Utility\Capsule.cpp" />
     <ClCompile Include="Common\CsvLoad.cpp" />
     <ClCompile Include="Object\ObjectManager.cpp" />
     <ClCompile Include="Utility\Time.cpp" />
@@ -157,7 +156,6 @@
     <ClCompile Include="Object\Player\Player.cpp" />
     <ClCompile Include="Object\Player\PlayerState.cpp" />
     <ClCompile Include="Utility\Box.cpp" />
-    <ClCompile Include="Utility\Sphere.cpp" />
     <ClCompile Include="Object\CharacterBase.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Object\ObjectBase.cpp" />
@@ -178,7 +176,6 @@
     <ClInclude Include="Object\Player\Shot.h" />
     <ClInclude Include="Common\Spawn.h" />
     <ClInclude Include="Utility\Collision.h" />
-    <ClInclude Include="Utility\Capsule.h" />
     <ClInclude Include="Common\CsvLoad.h" />
     <ClInclude Include="Object\ObjectManager.h" />
     <ClInclude Include="Utility\Time.h" />
@@ -188,7 +185,6 @@
     <ClInclude Include="Object\Player\Player.h" />
     <ClInclude Include="Object\Player\PlayerState.h" />
     <ClInclude Include="Utility\Box.h" />
-    <ClInclude Include="Utility\Sphere.h" />
     <ClInclude Include="Object\CharacterBase.h" />
     <ClInclude Include="Utility\CharacterData.h" />
     <ClInclude Include="Object\ObjectBase.h" />

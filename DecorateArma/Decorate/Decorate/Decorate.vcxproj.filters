@@ -96,9 +96,6 @@
     <ClCompile Include="Object\Camera.cpp">
       <Filter>ソース ファイル\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Utility\Sphere.cpp">
-      <Filter>ソース ファイル\Utility</Filter>
-    </ClCompile>
     <ClCompile Include="Object\Player\Player.cpp">
       <Filter>ソース ファイル\Object\Player</Filter>
     </ClCompile>
@@ -118,9 +115,6 @@
       <Filter>ソース ファイル\Object</Filter>
     </ClCompile>
     <ClCompile Include="Utility\MoveDirectionVec.cpp">
-      <Filter>ソース ファイル\Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="Utility\Capsule.cpp">
       <Filter>ソース ファイル\Utility</Filter>
     </ClCompile>
     <ClCompile Include="Utility\Collision.cpp">
@@ -185,9 +179,6 @@
     <ClInclude Include="Utility\Box.h">
       <Filter>ヘッダー ファイル\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Utility\Sphere.h">
-      <Filter>ヘッダー ファイル\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="Object\Camera.h">
       <Filter>ヘッダー ファイル\Object</Filter>
     </ClInclude>
@@ -214,9 +205,6 @@
     </ClInclude>
     <ClInclude Include="Common\CsvLoad.h">
       <Filter>ヘッダー ファイル\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Utility\Capsule.h">
-      <Filter>ヘッダー ファイル\Utility</Filter>
     </ClInclude>
     <ClInclude Include="Utility\Collision.h">
       <Filter>ヘッダー ファイル\Utility</Filter>

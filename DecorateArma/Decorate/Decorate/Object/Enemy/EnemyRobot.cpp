@@ -4,8 +4,7 @@
 
 #include "../../Common/CsvLoad.h"
 
-#include "../../Utility/Sphere.h"
-#include "../../Utility/Capsule.h"
+#include "../../Utility/CollisionShape.h"
 
 #include <cassert>
 
@@ -59,7 +58,7 @@ void EnemyRobot::Init()
 		m_bottomFrameIndex);
 
 	// 当たり判定カプセルポインタ作成
-	m_pCapsule = std::make_shared<Capsule>(m_characterInfo.topPos,
+	m_pCollShape = std::make_shared<CollisionShape>(m_characterInfo.topPos,
 		m_characterInfo.bottomPos, kCapsuleRadius);
 
 	// アニメーション設定

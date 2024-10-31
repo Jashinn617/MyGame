@@ -5,8 +5,8 @@
 
 #include <memory>
 
-class Sphere;
 class LockOnTarget;
+class CollisionShape;
 
 /// <summary>
 /// カメラ
@@ -59,10 +59,10 @@ public:
 	float GetCameraAngleX() { return m_angleH; }
 
 	/// <summary>
-	/// 当たり判定の球の取得
+	/// 当たり判定の図形の取得
 	/// </summary>
-	/// <returns>カメラの当たり判定の球ポインタ</returns>
-	const std::shared_ptr<Sphere> GetCircle() const { return m_pSphere; }
+	/// <returns>当たり判定図形ポインタ</returns>
+	const std::shared_ptr<CollisionShape> GetCircle() const { return m_pCollShape; }
 
 	/// <summary>
 	/// 座標の取得
@@ -117,16 +117,16 @@ private:	// 関数
 	void FixPosInternal();
 
 private:	// 変数
-	float m_angleH;						// 水平角度
-	float m_angleV;						// 垂直角度
-	float m_cameraToTargetLenght;		// カメラからターゲットまでの距離
-	VECTOR m_pos;						// 座標
-	VECTOR m_nextPos;					// 次の座標
-	VECTOR m_prevPos;					// 前の座標
-	VECTOR m_targetPos;					// カメラからターゲットの座標
-	MATRIX m_rotX;						// 回転用行列X
-	MATRIX m_rotY;						// 回転用行列Y
-	std::shared_ptr<Sphere> m_pSphere;	// 当たり判定ポインタ
+	float m_angleH;									// 水平角度
+	float m_angleV;									// 垂直角度
+	float m_cameraToTargetLenght;					// カメラからターゲットまでの距離
+	VECTOR m_pos;									// 座標
+	VECTOR m_nextPos;								// 次の座標
+	VECTOR m_prevPos;								// 前の座標
+	VECTOR m_targetPos;								// カメラからターゲットの座標
+	MATRIX m_rotX;									// 回転用行列X
+	MATRIX m_rotY;									// 回転用行列Y
+	std::shared_ptr<CollisionShape> m_pCollShape;	// 当たり判定ポインタ
 
 private:	// ロックオン用変数
 	bool m_isLockOn;								// ロックオンしているかどうか

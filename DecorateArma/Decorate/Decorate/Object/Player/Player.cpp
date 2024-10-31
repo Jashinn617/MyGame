@@ -10,8 +10,7 @@
 #include "../../Shader/SetVertexShader.h"
 #include "../../Shader/ToonShader.h"
 
-#include "../../Utility/Sphere.h"
-#include "../../Utility/Capsule.h"
+#include "../../Utility/CollisionShape.h"
 #include "../../Utility/MoveDirectionVec.h"
 #include "../../Utility/Time.h"
 #include "../../Utility/Pad.h"
@@ -114,8 +113,8 @@ Player::Player() :
 
 
 	// 当たり判定ポインタ作成
-	m_pSphere = std::make_shared<Sphere>(m_characterInfo.pos, m_objSize, kHeight * 0.5f);
-	m_pCapsule = std::make_shared<Capsule>(m_characterInfo.topPos, m_characterInfo.bottomPos, kCapsuleRadius);
+	//m_pSphere = std::make_shared<Sphere>(m_characterInfo.pos, m_objSize, kHeight * 0.5f);
+	m_pCollShape = std::make_shared<CollisionShape>(m_characterInfo.topPos, m_characterInfo.bottomPos, kCapsuleRadius);
 
 
 	// モデルの頂点タイプの取得
@@ -190,7 +189,7 @@ void Player::Draw(std::shared_ptr<ToonShader> pToonShader)
 	m_pShot->Draw();
 
 	// 当たり判定の描画
-	m_pCapsule->DebugDraw(0xff0000);
+	m_pCollShape->DebugDraw(0xff0000);
 }
 
 void Player::Draw2D()

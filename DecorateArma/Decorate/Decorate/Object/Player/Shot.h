@@ -7,7 +7,7 @@
 
 class Model;
 class Time;
-class Sphere;
+class CollisionShape;
 
 /// <summary>
 /// プレイヤーに追従する遠距離攻撃武器
@@ -43,12 +43,12 @@ private:	// 構造体
 
 	struct Bullet
 	{
-		bool isExist;						// 存在フラグ
-		VECTOR pos;							// 座標
-		VECTOR direction;					// 進む方向
-		std::shared_ptr<Time> vanishTime;	// 消えるまでの時間
-		std::shared_ptr<Sphere> coll;		// 当たり判定
-		std::shared_ptr<Model> model;		// モデル
+		bool isExist;								// 存在フラグ
+		VECTOR pos;									// 座標
+		VECTOR direction;							// 進む方向
+		std::shared_ptr<Time> vanishTime;			// 消えるまでの時間
+		std::shared_ptr<CollisionShape> coll;		// 当たり判定
+		std::shared_ptr<Model> model;				// モデル
 	};
 
 private:	// 関数

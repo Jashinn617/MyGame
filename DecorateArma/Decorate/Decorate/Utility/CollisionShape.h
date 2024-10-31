@@ -77,6 +77,42 @@ public:	// 関数
 	/// <returns>半径</returns>
 	float GetRadius()const { return m_radius; }
 
+	/// <summary>
+	/// 図形タイプの取得
+	/// </summary>
+	/// <returns>図形タイプ</returns>
+	ShapeType GetShapeType()const { return m_shapeType; }
+
+private:	// 関数
+
+	/// <summary>
+	/// 球同士の衝突判定
+	/// </summary>
+	/// <param name="target">相手の当たり判定図形</param>
+	/// <returns>当たっているかどうか</returns>
+	bool SphereToSphereCollide(const std::shared_ptr<CollisionShape> target)const;
+
+	/// <summary>
+	/// カプセル同士の衝突判定
+	/// </summary>
+	/// <param name="target">相手の当たり判定図形</param>
+	/// <returns>当たっているかどうか</returns>
+	bool CapsuleToCapsuleCollide(const std::shared_ptr<CollisionShape> target)const;
+
+	/// <summary>
+	/// カプセルと球の衝突判定
+	/// </summary>
+	/// <param name="target">相手の当たり判定図形</param>
+	/// <returns>当たっているかどうか</returns>
+	bool CapsuleToSphereCollide(const std::shared_ptr<CollisionShape> target)const;
+
+	/// <summary>
+	/// 球とカプセルの衝突判定
+	/// </summary>
+	/// <param name="target">相手の当たり判定図形</param>
+	/// <returns>当たっているかどうか</returns>
+	bool SphereToCapsuleCollide(const std::shared_ptr<CollisionShape> target)const;
+
 private:	// 変数
 	const float m_radius;			// 半径
 	const float m_height;			// 高さ

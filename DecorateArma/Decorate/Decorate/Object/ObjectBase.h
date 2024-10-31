@@ -140,19 +140,19 @@ public:	// 継承用以外のパブリック関数
 	void MoveCollField(ObjectBase* pField);
 
 protected:	// 変数
-	int m_modelH;									// モデルハンドル
-	int m_topFrameIndex;							// モデルの頂点のフレーム番号
-	int m_bottomFrameIndex;							// モデルの底辺のフレーム番号
-	float m_objSize;								// オブジェクトサイズ
-	float m_angle;									// キャラクターの向き
-	float m_moveSpeed;								// 移動スピード
-	bool m_isDamage;								// 攻撃を受けたかどうか
-	std::shared_ptr<Model> m_pModel;				// モデルクラスポインタ
+	int m_modelH;										// モデルハンドル
+	int m_topFrameIndex;								// モデルの頂点のフレーム番号
+	int m_bottomFrameIndex;								// モデルの底辺のフレーム番号
+	float m_objSize;									// オブジェクトサイズ
+	float m_angle;										// キャラクターの向き
+	float m_moveSpeed;									// 移動スピード
+	bool m_isDamage;									// 攻撃を受けたかどうか
+	std::vector<int> m_vertexShaderType;				// 頂点シェーダタイプ
+	std::vector<int> m_vertexShaderH;					// 頂点シェーダハンドル
+	ObjectManager* m_pObjectManager;					// オブジェクトマネージャーポインタ
+	CharacterData::CharacterInfo m_characterInfo;		// キャラクター情報
+	std::shared_ptr<Model> m_pModel;					// モデルクラスポインタ
 	std::shared_ptr<SetVertexShader> m_pVertexShader;	// 頂点シェーダポインタ
-	std::vector<int> m_vertexShaderType;			// 頂点シェーダタイプ
-	std::vector<int> m_vertexShaderH;				// 頂点シェーダハンドル
-	ObjectManager* m_pObjectManager;				// オブジェクトマネージャーポインタ
-	CharacterData::CharacterInfo m_characterInfo;	// キャラクター情報
 
 private:	 // 関数
 	/// <summary>

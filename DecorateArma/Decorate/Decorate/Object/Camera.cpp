@@ -4,7 +4,7 @@
 #include "Model.h"
 #include "LockOnTarget.h"
 
-#include "../Utility/Sphere.h"
+#include "../Utility/CollisionShape.h"
 
 namespace
 {
@@ -44,7 +44,7 @@ Camera::Camera():
 	m_targetPos{0.0f,0.0f,0.0f},
 	m_rotX(MGetRotX(m_angleV)),
 	m_rotY(MGetRotY(m_angleH)),
-	m_pSphere(std::make_shared<Sphere>(m_nextPos,kSize,0.0f)),
+	m_pCollShape(std::make_shared<CollisionShape>(m_nextPos,kSize,0.0f)),
 	m_isLockOn(false),
 	m_pLockOnTarget(std::make_shared<LockOnTarget>()),
 	m_isMove(false),
@@ -127,7 +127,7 @@ void Camera::ColUpdate(ObjectBase* pField)
 	// 検出する範囲は移動距離も考慮する
 	m_hitDim = MV1CollCheck_Capsule(pField->GetModel()->GetModelHandle(),
 		-1, m_nextPos, m_prevPos,
-		m_pSphere->GetRadius());
+		m_pCollShape->GetRadius());
 
 	if (m_hitDim.HitNum == 0)
 	{
@@ -142,7 +142,7 @@ void Camera::ColUpdate(ObjectBase* pField)
 
 		m_hitDim = MV1CollCheck_Capsule(pField->GetModel()->GetModelHandle(),
 			-1, m_nextPos, m_prevPos,
-			m_pSphere->GetRadius());
+			m_pCollShape->GetRadius());
 	}
 
 	for (int i = 0; i < m_hitDim.HitNum; i++)
@@ -282,7 +282,7 @@ void Camera::FixPos()
 			m_pPoly = m_pPolyIndex[i];
 
 			// ポリゴンとプレイヤーが当たっていなかったら次のカウントへ
-			if (!HitCheck_Capsule_Triangle(m_nextPos, m_prevPos, m_pSphere->GetRadius(),
+			if (!HitCheck_Capsule_Triangle(m_nextPos, m_prevPos, m_pCollShape->GetRadius(),
 				m_pPoly->Position[0], m_pPoly->Position[1],
 				m_pPoly->Position[2])) continue;
 
@@ -297,7 +297,7 @@ void Camera::FixPos()
 				UpdatePos();
 
 				// ポリゴンとプレイヤーが当たっていなかったらループから抜ける
-				if (!HitCheck_Capsule_Triangle(m_nextPos, m_prevPos, m_pSphere->GetRadius(),
+				if (!HitCheck_Capsule_Triangle(m_nextPos, m_prevPos, m_pCollShape->GetRadius(),
 					m_pPoly->Position[0], m_pPoly->Position[1],
 					m_pPoly->Position[2]))
 				{
@@ -313,7 +313,7 @@ void Camera::FixPos()
 				m_pPoly = m_pPolyIndex[j];
 
 				// 当たっていたらループから抜ける
-				if (!HitCheck_Capsule_Triangle(m_nextPos, m_prevPos, m_pSphere->GetRadius(),
+				if (!HitCheck_Capsule_Triangle(m_nextPos, m_prevPos, m_pCollShape->GetRadius(),
 					m_pPoly->Position[0], m_pPoly->Position[1], m_pPoly->Position[2]))
 				{
 					isHitWallPolygom = true;
@@ -338,7 +338,7 @@ void Camera::FixPos()
 			m_pPoly = m_pPolyIndex[i];
 
 			// ポリゴンに当たっていたあr当たったフラグを立てたうえでループから抜ける
-			if (HitCheck_Capsule_Triangle(m_nextPos, m_prevPos, m_pSphere->GetRadius(),
+			if (HitCheck_Capsule_Triangle(m_nextPos, m_prevPos, m_pCollShape->GetRadius(),
 				m_pPoly->Position[0], m_pPoly->Position[1], m_pPoly->Position[2]))
 			{
 				m_isPolyHit = true;
@@ -372,7 +372,7 @@ void Camera::FixPosInternal()
 			{
 				// 当たったらループから抜ける
 				m_pPoly = m_pPolyIndex[k];
-				if (HitCheck_Capsule_Triangle(m_nextPos, m_prevPos, m_pSphere->GetRadius(),
+				if (HitCheck_Capsule_Triangle(m_nextPos, m_prevPos, m_pCollShape->GetRadius(),
 					m_pPoly->Position[0], m_pPoly->Position[1], m_pPoly->Position[2]))
 				{
 					isHitWall = true;

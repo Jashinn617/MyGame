@@ -1,8 +1,7 @@
 ﻿#pragma once
 #include "ObjectBase.h"
 
-class Sphere;
-class Capsule;
+class CollisionShape;
 
 /// <summary>
 /// オブジェクトの中でもキャラクターの基底クラス
@@ -106,10 +105,10 @@ public:
 	void UpdateGravity();
 
 	/// <summary>
-	/// カプセルの当たり判定ポインタの取得
+	/// 当たり判定用図形ポインタの取得
 	/// </summary>
-	/// <returns>カプセルの当たり判定ポインタ</returns>
-	const std::shared_ptr<Capsule> GetCapsule()const { return m_pCapsule; }
+	/// <returns>当たり判定用図形ポインタ</returns>
+	const std::shared_ptr<CollisionShape> GetCollShape()const { return m_pCollShape; }
 
 	/// <summary>
 	/// 角度の更新
@@ -160,12 +159,11 @@ protected:	// 関数
 	void SmoothAngle(float& nowAngle, float nextAngle);
 
 protected:	// 変数
-	float m_jumpPower;						// ジャンプ力
-	bool m_isJump;							// ジャンプ中かどうか
-	bool m_isDead;							// 死んだかどうか
-	bool m_isResetAttack;				// 攻撃判定の初期化(一度攻撃の当たった敵のもう一度当てる為)
-	std::shared_ptr<Sphere> m_pSphere;		// 当たり判定用の球のポインタ
-	std::shared_ptr<Capsule> m_pCapsule;	// 当たり判定用のカプセルのポインタ
+	float m_jumpPower;								// ジャンプ力
+	bool m_isJump;									// ジャンプ中かどうか
+	bool m_isDead;									// 死んだかどうか
+	bool m_isResetAttack;							// 攻撃判定の初期化(一度攻撃の当たった敵のもう一度当てる為)
+	std::shared_ptr<CollisionShape> m_pCollShape;	// 当たり判定用図形のポインタ
 
 	StatusData m_statusData{};			// ステータス情報
 	MoveStatusData m_moveData{};		// 移動情報

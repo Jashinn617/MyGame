@@ -1,5 +1,6 @@
 ﻿#include "CharacterBase.h"
-#include "../Utility/Capsule.h"
+
+#include "../Utility/CollisionShape.h"
 
 namespace
 {
@@ -20,7 +21,7 @@ CharacterBase::CharacterBase():
 	m_isJump(false),
 	m_isDead(false),
 	m_isResetAttack(false),
-	m_pSphere(nullptr)
+	m_pCollShape(nullptr)
 {
 	/*処理無し*/
 }
@@ -45,7 +46,7 @@ void CharacterBase::MoveCollCharacter(CharacterBase* pTarget)
 
 	// オブジェクト同士の当たり判定をする
 	// オブジェクト同士が当たっていなかった場合は何もしない
-	if (!GetCapsule()->IsCollide(pTarget->GetCapsule()))return;
+	if (!GetCollShape()->IsCollide(pTarget->GetCollShape()))return;
 
 	// 移動前の座標を保存する(座標 - 移動ベクトル)
 	VECTOR prevPos = VSub(m_characterInfo.pos, m_characterInfo.vec);
@@ -68,7 +69,7 @@ void CharacterBase::MoveCollCharacter(CharacterBase* pTarget)
 	for (int i = 0; i < kMaxColHitTryNum; i++)
 	{
 		// 相手と当たっていなかったら終わる
-		if (!GetCapsule()->IsCollide(pTarget->GetCapsule()))return;
+		if (!GetCollShape()->IsCollide(pTarget->GetCollShape()))return;
 
 		// 相手とのベクトルの計算
 		VECTOR move = VSub(m_characterInfo.pos, pTarget->GetInfo().pos);

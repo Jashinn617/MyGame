@@ -3,7 +3,8 @@
 #include "../ObjectManager.h"
 #include "../Player/Player.h"
 #include "../Model.h"
-#include "../../Utility/Capsule.h"
+
+#include "../../Utility/CollisionShape.h"
 
 using namespace CharacterData;
 
@@ -76,7 +77,7 @@ void EnemyBase::Draw(std::shared_ptr<ToonShader> pToonShader)
 {
 	m_pModel->Draw();
 
-	m_pCapsule->DebugDraw(0x00ff00);
+	m_pCollShape->DebugDraw(0x00ff00);
 }
 
 void EnemyBase::Draw2D()

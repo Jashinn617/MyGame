@@ -2,8 +2,8 @@
 
 #include "../Model.h"
 
+#include "../../Utility/CollisionShape.h"
 #include "../../Utility/Time.h"
-#include "../../Utility/Sphere.h"
 #include "../../Utility/Pad.h"
 
 #include <cmath>
@@ -53,7 +53,7 @@ Shot::Shot():
 		// 消えるまでの時間の生成
 		bullet.vanishTime = std::make_shared<Time>(kBulletVanishTime);
 		// 当たり判定の生成
-		bullet.coll = std::make_shared<Sphere>(bullet.pos, kBulletRadius, kBulletRadius);
+		bullet.coll = std::make_shared<CollisionShape>(bullet.pos, kBulletRadius, kBulletRadius);
 		// モデルの生成
 		bullet.model = std::make_shared<Model>(bulletH);
 		// 弾のスケールの設定
