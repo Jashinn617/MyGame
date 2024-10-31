@@ -20,7 +20,9 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	Shot(Player* pPlayer);
+	/// <param name="pPlayer">プレイヤーポインタ</param>
+	/// <param name="atkPoint">攻撃力</param>
+	Shot(Player* pPlayer, int atkPoint);
 
 	/// <summary>
 	/// デストラクタ
@@ -78,6 +80,7 @@ private:	// 関数
 	void MakeBullet();
 
 private:
+	int m_atkPoint;									// 攻撃力
 	float m_sinCount;								// 上下移動カウント
 	float m_sinPosY;								// サイン計算に使うY座標
 	VECTOR m_pos;									// 座標

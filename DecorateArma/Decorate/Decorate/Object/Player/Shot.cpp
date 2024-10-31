@@ -27,13 +27,15 @@ namespace
 	constexpr int kBulletNum = 50;							// 弾数
 	constexpr int kBulletVanishTime = 50;					// 弾が消えるまでの時間
 	constexpr int kBulletIntervalTime = 5;					// 次の球が発射されるまでの時間
+	constexpr float kEnemyHeight = 50.0f;					// ロックオンした敵に当てる弾の高さ調整
 	constexpr float kBulletRadius = 10;						// 弾の半径
 	constexpr float kBulletSpeed = 15.0f;					// 弾の速度
 	constexpr float kBulletStartPosHeight = 5.0f;			// 弾を発射する高さ
 	constexpr VECTOR kBulletScale = { 0.4f,0.4f,0.4f };		// 弾のスケール
 }
 
-Shot::Shot(Player* pPlayer):
+Shot::Shot(Player* pPlayer, int atkPoint):
+	m_atkPoint(atkPoint),
 	m_sinCount(0.0f),
 	m_sinPosY(0.0f),
 	m_pos{0.0f,0.0f,0.0f},
@@ -133,6 +135,9 @@ void Shot::OnAttack(CharacterBase* pEnemy)
 		// 当たっていたら処理をする
 		if (bullet.coll->IsCollide(pEnemy->GetCollShape()) && bullet.isExist)
 		{
+			// ダメージを与える
+			pEnemy->OnDamage(m_pos, m_atkPoint);
+
 			// 弾を消す
 			bullet.isExist = false;	
 		}
@@ -199,6 +204,9 @@ void Shot::MakeBullet()
 
 						// ターゲット座標取得
 						VECTOR targetPos = m_pPlayer->GetCamera()->GetLockOnEnemyPos();
+						// 高さ調整
+						targetPos.y += kEnemyHeight;
+
 						// 進む方向の決定
 						bullet.direction = VNorm(VSub(targetPos, bullet.pos));
 					}

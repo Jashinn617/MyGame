@@ -63,12 +63,20 @@ void ObjectManager::Update()
 		// オブジェクトが存在していない場合
 		if (!obj->GetInfo().isExist)
 		{
-			// ポインタを解放する
-			delete obj;
-			obj = nullptr;
-			it = m_pObject.erase(it);
-			// イテレータを進める
-			it++;
+			// プレイヤー以外
+			if (obj->GetColType() != ObjectBase::ColType::Player)
+			{
+				// ロックオンされていた場合
+				if (m_pLockOnEnemy == obj)
+				{
+					m_pLockOnEnemy = nullptr;
+				}
+
+				// ポインタを解放する
+				delete obj;
+				obj = nullptr;
+				it = m_pObject.erase(it);
+			}			
 		}
 		else
 		{

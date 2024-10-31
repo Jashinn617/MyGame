@@ -68,13 +68,14 @@ Player::Player() :
 	m_moveDirection{ 0.0f,0.0f,0.0f },
 	m_pState(std::make_shared<PlayerState>(this)),
 	m_pCamera(std::make_shared<Camera>()),
-	m_pShot(std::make_shared<Shot>(this)),
 	m_pAttackStanTime(std::make_shared<Time>(kAttackStanTime))
 {
 	// アニメーションロード
 	CsvLoad::GetInstance().AnimLoad(m_animData, "Player");
 	// ステータス情報初期化
 	CsvLoad::GetInstance().StatusLoad(m_statusData, "Player");
+	// ショット作成
+	m_pShot = std::make_shared<Shot>(this, m_statusData.shotAtk);
 
 	/*移動速度初期化*/
 	m_moveData.walkSpeed = m_statusData.spd;
@@ -207,7 +208,7 @@ void Player::Draw2D()
 #endif // _DEBUG
 }
 
-void Player::OnDamage(VECTOR targetPos)
+void Player::OnDamage(VECTOR targetPos, int damagePoint)
 {
 }
 
@@ -275,13 +276,8 @@ void Player::UpdateCamera()
 		}
 	}
 
-	// ロックオンされていた敵が消えた場合
-	if (m_pObjectManager->GetLockOnEnemy() == nullptr)
-	{
-		// ロックオン状態を解除する
-		m_isLockOn = false;
-	}
-	else	// そうでなかった場合
+	// ロックオンされていた敵が消えたらロックオンを解除する
+	if (m_pObjectManager->GetLockOnEnemy() != nullptr)
 	{
 		// 存在フラグが立っていなかった場合
 		if (!m_pObjectManager->GetLockOnEnemy()->GetInfo().isExist)
@@ -289,6 +285,11 @@ void Player::UpdateCamera()
 			// ロックオン状態を解除する
 			m_isLockOn = false;
 		}
+	}
+	else
+	{
+		// ロックオン状態を解除する
+		m_isLockOn = false;
 	}
 
 	// ロックオン状態の場合

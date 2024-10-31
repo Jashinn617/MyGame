@@ -15,10 +15,11 @@ public:	// 構造体
 	/// </summary>
 	struct StatusData
 	{
-		int hp = 0;		// 体力
-		int atk = 0;		// 攻撃力
-		int def = 0;		// 防御力
-		float spd = 0.0f;	// 速度
+		int hp = 0;				// 体力
+		int meleeAtk = 0;		// 近距離攻撃力
+		int shotAtk = 0;		// 遠距離攻撃力
+		int def = 0;			// 防御力
+		float spd = 0.0f;		// 速度
 	};
 
 	/// <summary>
@@ -86,7 +87,8 @@ public:
 	/// ダメージ処理
 	/// </summary>
 	/// <param name="targetPos">攻撃を当てた相手の座標</param>
-	virtual void OnDamage(VECTOR targetPos) {/*処理無し*/ }
+	/// <param name="damagePoint">ダメージ量</param>
+	virtual void OnDamage(VECTOR targetPos,int damagePoint) {/*処理無し*/ }
 
 	/// <summary>
 	/// キャラクター同士の当たり判定を考慮した移動処理

@@ -126,9 +126,10 @@ void CsvLoad::StatusLoad(CharacterBase::StatusData& data, const char* characterN
 
 		// strvec[0]	: キャラ名	string
 		// strvec[1]	: HP		int
-		// strvec[2]	: ATK		int
-		// strvec[3]	: DEF		int
-		// strvec[4]	: SPD		float
+		// strvec[2]	: MATK		int
+		// strvec[3]	: SATK		int
+		// strvec[4]	: DEF		int
+		// strvec[5]	: SPD		float
 
 		//参照したいキャラが見つかっていたら処理をやめる
 		const char* str = strvec[0].c_str();
@@ -142,7 +143,8 @@ void CsvLoad::StatusLoad(CharacterBase::StatusData& data, const char* characterN
 
 	// ステータス情報をステータスデータに入れる
 	data.hp = stoi(strvec[1]);
-	data.atk = stoi(strvec[2]);
-	data.def = stoi(strvec[3]);
-	data.spd = stof(strvec[4]);
+	data.meleeAtk = stoi(strvec[2]);
+	data.shotAtk = stoi(strvec[3]);
+	data.def = stoi(strvec[4]);
+	data.spd = stof(strvec[5]);
 }

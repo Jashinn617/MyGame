@@ -67,8 +67,9 @@ public:	// 関数
 	/// <summary>
 	/// ダメージ処理
 	/// </summary>
-	/// <param name="targetPos"></param>
-	void OnDamage(VECTOR targetPos) override final;
+	/// <param name="targetPos">攻撃を当てた相手の座標</param>
+	/// <param name="damagePoint">ダメージ量</param>
+	void OnDamage(VECTOR targetPos, int damagePoint) override final;
 
 	/// <summary>
 	/// 死亡処理
@@ -116,8 +117,35 @@ protected:	// 関数
 	/// <returns>移動値</returns>
 	virtual VECTOR UpdateMove();
 
+protected:	// 状態遷移関数
+	/// <summary>
+	/// ステイト更新
+	/// </summary>
+	virtual void UpdateStateTransition();
+
+	/// <summary>
+	/// 死亡状態に変更する条件があっているかどうか返す
+	/// </summary>
+	/// <returns>条件があっているかどうか</returns>
+	virtual bool StateTransitionDead();
+
+protected:	// メンバ関数
+	/// <summary>
+	/// 待機更新
+	/// </summary>
+	virtual void UpdateIdleState();
+	/// <summary>
+	/// 移動更新
+	/// </summary>
+	virtual void UpdateMoveState();
+	/// <summary>
+	/// 死亡更新
+	/// </summary>
+	virtual void UpdateDeadState();
+
 protected:	// 変数
-	VECTOR m_moveDirection;		// 移動方向ベクトル
-	VECTOR m_enemyToPlayer;		// 敵からプレイヤーまでのベクトル
-	AttackType m_attackType;	// 攻撃タイプ
+	VECTOR m_moveDirection;					// 移動方向ベクトル
+	VECTOR m_enemyToPlayer;					// 敵からプレイヤーまでのベクトル
+	AttackType m_attackType;				// 攻撃タイプ
+	void(EnemyBase::* m_updateFunc)();		// メンバ関数ポインタ
 };

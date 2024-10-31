@@ -50,8 +50,9 @@ public:		// 関数
 	/// <summary>
 	/// ダメージ処理
 	/// </summary>
-	/// <param name="targetPos">相手の座標</param>
-	void OnDamage(VECTOR targetPos) override final;
+	/// <param name="targetPos">攻撃を当てた相手の座標</param>
+	/// <param name="damagePoint">ダメージ量</param>
+	void OnDamage(VECTOR targetPos, int damagePoint) override final;
 
 	/// <summary>
 	/// 攻撃処理
