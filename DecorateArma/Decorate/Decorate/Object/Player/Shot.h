@@ -8,6 +8,7 @@
 class Model;
 class Time;
 class CollisionShape;
+class CharacterBase;
 
 /// <summary>
 /// プレイヤーに追従する遠距離攻撃武器
@@ -37,6 +38,16 @@ public:
 	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// 攻撃処理
+	/// </summary>
+	/// <param name="pEnemy">敵ポインタ</param>
+	void OnAttack(CharacterBase* pEnemy);
+
+	/// <summary>
+	/// カメラ角度行列の取得
+	/// </summary>
+	/// <param name="rotMtx">カメラ角度行列</param>
 	void SetCameraRot(MATRIX rotMtx) { m_cameraRotMtx = rotMtx; }
 
 private:	// 構造体
@@ -52,7 +63,6 @@ private:	// 構造体
 	};
 
 private:	// 関数
-
 	/// <summary>
 	/// 弾更新
 	/// </summary>

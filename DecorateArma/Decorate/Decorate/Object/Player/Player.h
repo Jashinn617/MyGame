@@ -82,6 +82,12 @@ public:		// 関数
 	const std::shared_ptr<Camera> GetCamera()const { return m_pCamera; }
 
 	/// <summary>
+	/// ショット取得
+	/// </summary>
+	/// <returns>ショットポインタ</returns>
+	const std::shared_ptr<Shot> GetShot()const { return m_pShot; }
+
+	/// <summary>
 	/// ステイトごとの初期化
 	/// </summary>
 	void InitState();
@@ -128,9 +134,9 @@ private:	// 変数
 
 	VECTOR m_moveDirection;
 
-	std::shared_ptr<PlayerState> m_pState;	// ステイトポインタ
-	std::shared_ptr<Camera> m_pCamera;		// カメラポインタ
-	std::shared_ptr<Shot> m_pShot;			// ショット
+	std::shared_ptr<PlayerState> m_pState;		// ステイトポインタ
+	std::shared_ptr<Camera> m_pCamera;			// カメラポインタ
+	std::shared_ptr<Shot> m_pShot;				// ショット
 
 	std::shared_ptr<Time> m_pAttackStanTime;	// 攻撃硬直時間
 };

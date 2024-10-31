@@ -30,10 +30,10 @@ public:	// 関数
 	/// <summary>
 	/// コンストラクタ(球)
 	/// </summary>
-	/// <param name="center">中心座標</param>
+	/// <param name="pos">座標</param>
 	/// <param name="radius">半径</param>
 	/// <param name="height">高さ</param>
-	CollisionShape(const VECTOR& center, float radius, float height);
+	CollisionShape(const VECTOR& pos, float radius, float height);
 
 	/// <summary>
 	/// デストラクタ
@@ -57,7 +57,7 @@ public:	// 関数
 	/// 球の中心座標の取得
 	/// </summary>
 	/// <returns>円の中心</returns>
-	const VECTOR& GetCenter() const { return *m_center; }
+	const VECTOR& GetCenter() const { return *m_pos; }
 
 	/// <summary>
 	/// 判定始点の取得
@@ -116,7 +116,7 @@ private:	// 関数
 private:	// 変数
 	const float m_radius;			// 半径
 	const float m_height;			// 高さ
-	const VECTOR* m_center;			// 中心座標
+	const VECTOR* m_pos;			// 中心座標
 	const VECTOR* topPos;			// 判定始点
 	const VECTOR* bottomPos;		// 判定終点
 

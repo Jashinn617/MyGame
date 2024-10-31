@@ -5,6 +5,7 @@
 #include "../../Utility/CollisionShape.h"
 #include "../../Utility/Time.h"
 #include "../../Utility/Pad.h"
+#include "../CharacterBase.h"
 
 #include <cmath>
 
@@ -23,10 +24,10 @@ namespace
 	constexpr int kBulletNum = 50;							// 弾数
 	constexpr int kBulletVanishTime = 50;					// 弾が消えるまでの時間
 	constexpr int kBulletIntervalTime = 5;					// 次の球が発射されるまでの時間
-	constexpr float kBulletRadius = 2;						// 弾の半径
+	constexpr float kBulletRadius = 10;						// 弾の半径
 	constexpr float kBulletSpeed = 15.0f;					// 弾の速度
 	constexpr float kBulletStartPosHeight = 5.0f;			// 弾を発射する高さ
-	constexpr VECTOR kBulletScale = { 0.2f,0.2f,0.2f };		// 弾のスケール
+	constexpr VECTOR kBulletScale = { 0.4f,0.4f,0.4f };		// 弾のスケール
 }
 
 Shot::Shot():
@@ -53,7 +54,7 @@ Shot::Shot():
 		// 消えるまでの時間の生成
 		bullet.vanishTime = std::make_shared<Time>(kBulletVanishTime);
 		// 当たり判定の生成
-		bullet.coll = std::make_shared<CollisionShape>(bullet.pos, kBulletRadius, kBulletRadius);
+		bullet.coll = std::make_shared<CollisionShape>(bullet.pos, kBulletRadius, 0.0f);
 		// モデルの生成
 		bullet.model = std::make_shared<Model>(bulletH);
 		// 弾のスケールの設定
@@ -121,6 +122,25 @@ void Shot::Draw()
 #endif // _DEBUG
 }
 
+void Shot::OnAttack(CharacterBase* pEnemy)
+{
+	for (auto& bullet : m_bullet)
+	{
+		// 当たっていたら処理をする
+		if (bullet.coll->IsCollide(pEnemy->GetCollShape()) && bullet.isExist)
+		{
+			
+			// 弾を消す
+			bullet.isExist = false;
+			
+		}
+		else
+		{
+			continue;
+		}
+	}
+}
+
 void Shot::UpdateBullet()
 {
 	// 存在していなかったら発射する
@@ -164,16 +184,26 @@ void Shot::MakeBullet()
 				{
 					// 存在フラグを立てる
 					bullet.isExist = true;
-					// 位置の決定
-					bullet.pos = m_pos;
-					bullet.pos.y += kBulletStartPosHeight;
-					// モデル座標更新
-					bullet.model->SetPos(bullet.pos);
-					// 進む方向の決定(カメラから見て前に飛ばす)	
-					bullet.direction= VGet(-m_cameraRotMtx.m[2][0], 
-						-m_cameraRotMtx.m[2][1],
-						-m_cameraRotMtx.m[2][2]);
 
+					// カメラがロックオン状態だった時
+					if (false)
+					{
+						// ロックオンしている敵に向けて撃つ
+
+					}
+					// 通常時
+					else
+					{
+						// 位置の決定
+						bullet.pos = m_pos;
+						bullet.pos.y += kBulletStartPosHeight;
+						// モデル座標更新
+						bullet.model->SetPos(bullet.pos);
+						// 進む方向の決定(カメラから見て前に飛ばす)	
+						bullet.direction = VGet(-m_cameraRotMtx.m[2][0],
+							-m_cameraRotMtx.m[2][1],
+							-m_cameraRotMtx.m[2][2]);
+					}
 					break;
 				}
 			}

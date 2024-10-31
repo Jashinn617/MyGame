@@ -2,6 +2,7 @@
 
 #include "../Object/ObjectBase.h"
 #include "../Object/Player/Player.h"
+#include "../Object/Player/Shot.h"
 #include "../Object/Enemy/EnemyBase.h"
 #include "../Object/Camera.h"
 
@@ -38,6 +39,8 @@ void Collision::UpdateCollision(ObjectBase* my, ObjectBase* target)
 		if (target->GetColType() == ObjectBase::ColType::Enemy)
 		{
 			dynamic_cast<CharacterBase*>(my)->MoveCollCharacter(dynamic_cast<CharacterBase*>(target));
+			dynamic_cast<Player*>(my)->GetShot()->OnAttack(dynamic_cast<CharacterBase*>(target));
+
 			return;
 		}
 	}

@@ -3,7 +3,7 @@
 CollisionShape::CollisionShape(const VECTOR& topPos, const VECTOR& bottomPos, float radius):
 	m_radius(radius),
 	m_height(0.0f),
-	m_center(nullptr),
+	m_pos(nullptr),
 	topPos(&topPos),
 	bottomPos(&bottomPos),
 	m_shapeType(ShapeType::Capsule)
@@ -11,10 +11,10 @@ CollisionShape::CollisionShape(const VECTOR& topPos, const VECTOR& bottomPos, fl
 	/*処理無し*/
 }
 
-CollisionShape::CollisionShape(const VECTOR& center, float radius, float height):
+CollisionShape::CollisionShape(const VECTOR& pos, float radius, float height):
 	m_radius(radius),
 	m_height(height),
-	m_center(&center),
+	m_pos(&pos),
 	topPos(nullptr),
 	bottomPos(nullptr),
 	m_shapeType(ShapeType::Sphere)
@@ -36,7 +36,7 @@ void CollisionShape::DebugDraw(unsigned int color)
 	{
 	case CollisionShape::ShapeType::Sphere:	// 球
 		// 中央座標の取得
-		VECTOR center = VAdd(*m_center, VGet(0.0f, m_height, 0.0f));
+		VECTOR center = VAdd(*m_pos, VGet(0.0f, m_height, 0.0f));
 		// 描画
 		DrawSphere3D(center, m_radius, 32, color, color, false);
 		break;
@@ -85,9 +85,9 @@ bool CollisionShape::IsCollide(const std::shared_ptr<CollisionShape> target) con
 bool CollisionShape::SphereToSphereCollide(const std::shared_ptr<CollisionShape> target) const
 {
 	// 真ん中の座標
-	VECTOR center = VAdd(*m_center, VGet(0.0f, m_height, 0.0f));
+	VECTOR center = VAdd(*m_pos, VGet(0.0f, m_height, 0.0f));
 	// 相手の真ん中の座標
-	VECTOR targetCenter = VAdd(*target->m_center, VGet(0.0f, target->m_height, 0.0f));
+	VECTOR targetCenter = VAdd(*target->m_pos, VGet(0.0f, target->m_height, 0.0f));
 
 	// 相手の中心と自分の中心の距離の計算
 	float distance = static_cast<float>(fabs(VSize(VSub(targetCenter, center))));
@@ -115,6 +115,6 @@ bool CollisionShape::CapsuleToSphereCollide(const std::shared_ptr<CollisionShape
 bool CollisionShape::SphereToCapsuleCollide(const std::shared_ptr<CollisionShape> target) const
 {
 	// 判定
-	return HitCheck_Sphere_Capsule(*m_center, m_radius,
+	return HitCheck_Sphere_Capsule(*m_pos, m_radius,
 		target->GetTopPos(), target->GetBottomPos(), target->GetRadius());
 }
