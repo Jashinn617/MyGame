@@ -1,36 +1,36 @@
-#pragma once
+ï»¿#pragma once
 #include "DxLib.h"
 
 /// <summary>
-/// ƒQ[ƒ€‘S‘Ì‚Åg‚¤’è”‚ğ’è‹`‚·‚é‚µ‚Ä‚¨‚­namespace
+/// ã‚²ãƒ¼ãƒ å…¨ä½“ã§ä½¿ã†å®šæ•°ã‚’å®šç¾©ã™ã‚‹ã—ã¦ãŠãnamespace
 /// </summary>
 namespace Game
 {
-	const char* const kTitleText = "Temporary";			// ƒEƒBƒ“ƒhƒE–¼
+	const char* const kTitleText = "Temporary";			// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦å
 
 #ifdef _DEBUG
-	constexpr bool kWindowMode = true;					// ƒEƒBƒ“ƒhƒEƒ‚[ƒh‚É‚·‚é
+	constexpr bool kWindowMode = true;					// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ¢ãƒ¼ãƒ‰ã«ã™ã‚‹
 #else
-	constexpr bool kWindowMode = false;					// ƒtƒ‹ƒXƒNƒŠ[ƒ“
+	constexpr bool kWindowMode = false;					// ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³
 #endif // _DEBUG
 
-	constexpr int kScreenWidth = 1920;					// ‰æ–Ê‰¡ƒTƒCƒY
-	constexpr int kScreenHeight = 1080;					// ‰æ–ÊcƒTƒCƒY
-	constexpr int kClorDepth = 32;						// ƒJƒ‰[ƒrƒbƒg”
+	constexpr int kScreenWidth = 1920;					// ç”»é¢æ¨ªã‚µã‚¤ã‚º
+	constexpr int kScreenHeight = 1080;					// ç”»é¢ç¸¦ã‚µã‚¤ã‚º
+	constexpr int kClorDepth = 32;						// ã‚«ãƒ©ãƒ¼ãƒ“ãƒƒãƒˆæ•°
 
-	constexpr float kStandardTimePer1Frame = 16666.6f;				// 1ƒtƒŒ[ƒ€‚ ‚½‚è‚Ì•W€ŠÔ(Œ»İ60fps)
-	constexpr float kFov = 60.0f * DX_PI_F / 180.0f;				// ƒJƒƒ‰‚Ì‹–ìŠp
-	constexpr float kAspect = static_cast<float>(kScreenWidth) / static_cast<float>(kScreenHeight);	// ƒAƒXƒyƒNƒg”ä
+	constexpr float kStandardTimePer1Frame = 16666.6f;				// 1ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ãŸã‚Šã®æ¨™æº–æ™‚é–“(ç¾åœ¨60fps)
+	constexpr float kFov = 60.0f * DX_PI_F / 180.0f;				// ã‚«ãƒ¡ãƒ©ã®è¦–é‡è§’
+	constexpr float kAspect = static_cast<float>(kScreenWidth) / static_cast<float>(kScreenHeight);	// ã‚¢ã‚¹ãƒšã‚¯ãƒˆæ¯”
 	
-	constexpr VECTOR kLightPos = { -1000.0f,2000.0f,-1000.0f };		// ƒ‰ƒCƒgÀ•W
-	constexpr VECTOR kLightDirection = { -1.0f,-1.0f,-1.0f };		// ƒ‰ƒCƒg•ûŒü
+	constexpr VECTOR kLightPos = { -1000.0f,2000.0f,-1000.0f };		// ãƒ©ã‚¤ãƒˆåº§æ¨™
+	constexpr VECTOR kLightDirection = { -1.0f,-1.0f,-1.0f };		// ãƒ©ã‚¤ãƒˆæ–¹å‘
 
-	/*ƒXƒe[ƒW‚Ìí—Ş*/
+	/*ã‚¹ãƒ†ãƒ¼ã‚¸ã®ç¨®é¡*/
 	enum class StageKind
 	{
-		StageTest,		// ƒeƒXƒg—pƒXƒe[ƒW
-		Stage1,		// ƒXƒe[ƒW1
+		StageTest,		// ãƒ†ã‚¹ãƒˆç”¨ã‚¹ãƒ†ãƒ¼ã‚¸
+		Stage1,		// ã‚¹ãƒ†ãƒ¼ã‚¸1
 
-		StageNum,	// ƒXƒe[ƒW”
+		StageNum,	// ã‚¹ãƒ†ãƒ¼ã‚¸æ•°
 	};
 }

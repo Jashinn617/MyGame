@@ -207,8 +207,15 @@ void Player::Draw(std::shared_ptr<ToonShader> pToonShader)
 
 	// 当たり判定の描画
 	m_pCollShape->DebugDraw(0xff0000);
-	m_attackColl->DebugDraw(0x0000ff);
-	m_hardAtkColl->DebugDraw(0xff00ff);
+
+	if (m_isAttack)
+	{
+		m_attackColl->DebugDraw(0x0000ff);
+	}
+	if (m_isHardAttack)
+	{
+		m_hardAtkColl->DebugDraw(0xff00ff);
+	}
 }
 
 void Player::Draw2D()

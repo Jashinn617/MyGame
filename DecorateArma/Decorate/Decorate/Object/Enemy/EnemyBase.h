@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "../CharacterBase.h"
 
+class Time;
+
 /// <summary>
 /// 敵キャラクター基底クラス
 /// </summary>
@@ -77,10 +79,16 @@ public:	// 関数
 	void OnDead();
 
 	/// <summary>
-/// 索敵範囲に入っているかどうかを調べる
-/// </summary>
-/// <param name="pPlayer">プレイヤーポインタ</param>
-	void IsSearchRange(CharacterBase* pPlayer);
+	/// 索敵範囲に入っているかどうかを調べる
+	/// </summary>
+	/// <param name="pPlayer">プレイヤーポインタ</param>
+	void OnSearch(CharacterBase* pPlayer);
+
+	/// <summary>
+	/// 近距離攻撃
+	/// </summary>
+	/// <param name="pPlayer">プレイヤーポインタ</param>
+	void OnMeleeAttack(CharacterBase* pPlayer);
 
 	/// <summary>
 	/// 存在するかどうか
@@ -135,6 +143,18 @@ protected:	// 状態遷移関数
 	/// <returns>条件があっているかどうか</returns>
 	virtual bool StateTransitionDead();
 
+	/// <summary>
+	/// 近距離攻撃状態に変更する条件があっているかどうかを返す
+	/// </summary>
+	/// <returns>条件があっているかどうか</returns>
+	virtual bool StateTransitionMeleeAttack();
+
+	/// <summary>
+	/// 遠距離攻撃状態に変更する条件があっているかどうかを返す
+	/// </summary>
+	/// <returns>条件があっているかどうか</returns>
+	virtual bool StateTransitionShotAttack();
+
 protected:	// メンバ関数
 	/// <summary>
 	/// 待機更新
@@ -148,12 +168,41 @@ protected:	// メンバ関数
 	/// 死亡更新
 	/// </summary>
 	virtual void UpdateDeadState();
+	/// <summary>
+	/// 近距離攻撃更新
+	/// </summary>
+	virtual void UpdateMeleeAttackState();
+	/// <summary>
+	/// 遠距離攻撃更新
+	/// </summary>
+	virtual void UpdateShotAttackState();
+
+protected:	// 構造体
+	/// <summary>
+	/// 近距離攻撃当たり判定座標
+	/// </summary>
+	struct MeleeAttackPos
+	{
+		int rightTopFrameIndex;
+		int rightBottomFrameIndex;
+		int leftTopFrameIndex;
+		int leftBottomFrameIndex;
+		VECTOR rightTop;
+		VECTOR rightBottom;
+		VECTOR leftTop;
+		VECTOR leftBottom;
+	};
 
 protected:	// 変数
-	bool m_isFinding;								// プレイヤー発見状態かどうか
-	VECTOR m_moveDirection;							// 移動方向ベクトル
-	VECTOR m_enemyToPlayer;							// 敵からプレイヤーまでのベクトル
-	AttackType m_attackType;						// 攻撃タイプ
-	std::shared_ptr<CollisionShape> m_pSearchRange;	// 索敵範囲
-	void(EnemyBase::* m_updateFunc)();				// メンバ関数ポインタ
+	bool m_isAttack;									// 攻撃中かどうか
+	bool m_isFinding;									// プレイヤー発見状態かどうか
+	VECTOR m_moveDirection;								// 移動方向ベクトル
+	VECTOR m_enemyToPlayer;								// 敵からプレイヤーまでのベクトル
+	AttackType m_attackType;							// 攻撃タイプ
+	MeleeAttackPos m_melleAttack;						// 近距離攻撃当たり判定座標
+	std::shared_ptr<CollisionShape> m_pSearchRange;		// 索敵範囲
+	std::shared_ptr<CollisionShape> m_pRightHandColl;	// 右手の当たり判定
+	std::shared_ptr<CollisionShape> m_pLeftHandColl;	// 左手の当たり判定
+	std::shared_ptr<Time> m_pAttackInterval;			// 攻撃間隔
+	void(EnemyBase::* m_updateFunc)();					// メンバ関数ポインタ
 };

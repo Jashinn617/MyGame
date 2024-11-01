@@ -10,7 +10,7 @@
 // プログラムは WinMain から始まります
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	// ゲームバーのタイトル設定
+	// ウィンドウに表示するタイトル名設定
 	SetWindowText(Game::kTitleText);
 
 	// ウィンドウモードの設定
@@ -19,15 +19,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// スクリーンサイズの設定
 	SetGraphMode(Game::kScreenWidth, Game::kScreenHeight, Game::kClorDepth);
 
-	// 描画先を裏画面にする
-	SetDrawScreen(DX_SCREEN_BACK);
-
 	// ＤＸライブラリ初期化処理
 	if (DxLib_Init() == -1)
 	{
 		// エラーが起きたら直ちに終了
 		return -1;
 	}
+
+	// 描画先を裏画面にする
+	SetDrawScreen(DX_SCREEN_BACK);
 
 	// Effekseerの初期化
 	Effekseer_Init(8000);
@@ -43,8 +43,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// Zバッファへの書き込みを行う
 	SetWriteZBuffer3D(true);
 
-	// ポリゴンの裏側を描画する
-	SetUseBackCulling(false);
+	// ポリゴンの裏側を描画しない
+	SetUseBackCulling(true);
 
 	// エフェクトのロード
 
@@ -95,7 +95,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 
 		// fpsを固定する
-		while (GetNowHiPerformanceCount() - time < static_cast<int>(Game::kStandardTimePer1Frame)){}
+		while (GetNowHiPerformanceCount() - time < static_cast<int>(Game::kStandardTimePer1Frame)) {}
 	}
 
 	// Effekseer終了処理

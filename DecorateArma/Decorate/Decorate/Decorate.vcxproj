@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Object\Enemy\EShot.cpp" />
     <ClCompile Include="Utility\CollisionShape.cpp" />
     <ClCompile Include="Object\LockOnTarget.cpp" />
     <ClCompile Include="Object\Enemy\EnemyRobot.cpp" />
@@ -168,6 +169,7 @@
     <ClCompile Include="Shader\SetVertexShader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Object\Enemy\EShot.h" />
     <ClInclude Include="Utility\CollisionShape.h" />
     <ClInclude Include="Object\LockOnTarget.h" />
     <ClInclude Include="Object\Enemy\EnemyRobot.h" />

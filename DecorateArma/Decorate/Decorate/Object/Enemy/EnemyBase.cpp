@@ -5,15 +5,30 @@
 #include "../Model.h"
 
 #include "../../Utility/CollisionShape.h"
+#include "../../Utility/Time.h"
 
 using namespace CharacterData;
 
 EnemyBase::EnemyBase():
+	m_isAttack(false),
 	m_isFinding(false),
 	m_moveDirection{0.0f,0.0f,0.0f},
 	m_enemyToPlayer{0.0f,0.0f,0.0f},
-	m_attackType(AttackType::Melee)
+	m_attackType(AttackType::Melee),
+	m_pSearchRange(nullptr),
+	m_pRightHandColl(nullptr),
+	m_pLeftHandColl(nullptr)
 {
+	// 近距離攻撃当たり判定座標初期化
+	m_melleAttack.rightTopFrameIndex = -1;
+	m_melleAttack.rightBottomFrameIndex = -1;
+	m_melleAttack.leftTopFrameIndex = -1;
+	m_melleAttack.leftBottomFrameIndex = -1;
+	m_melleAttack.rightTop = VGet(0.0f, 0.0f, 0.0f);
+	m_melleAttack.rightBottom = VGet(0.0f, 0.0f, 0.0f);
+	m_melleAttack.leftTop = VGet(0.0f, 0.0f, 0.0f);
+	m_melleAttack.leftBottom = VGet(0.0f, 0.0f, 0.0f);
+	// キャラクター情報初期化
 	m_characterInfo.vec = VGet(0.0f, 0.0f, 0.0f);
 	m_characterInfo.topPos = VGet(0.0f, 0.0f, 0.0f);
 	m_characterInfo.bottomPos = VGet(0.0f, 0.0f, 0.0f);
@@ -34,11 +49,25 @@ EnemyBase::EnemyBase():
 }
 
 EnemyBase::EnemyBase(VECTOR pos):
+	m_isAttack(false),
 	m_isFinding(false),
 	m_moveDirection{ 0.0f,0.0f,0.0f },
 	m_enemyToPlayer{ 0.0f,0.0f,0.0f },
-	m_attackType(AttackType::Melee)
+	m_attackType(AttackType::Melee),
+	m_pSearchRange(nullptr),
+	m_pRightHandColl(nullptr),
+	m_pLeftHandColl(nullptr)
 {
+	// 近距離攻撃当たり判定座標初期化
+	m_melleAttack.rightTopFrameIndex = -1;
+	m_melleAttack.rightBottomFrameIndex = -1;
+	m_melleAttack.leftTopFrameIndex = -1;
+	m_melleAttack.leftBottomFrameIndex = -1;
+	m_melleAttack.rightTop = VGet(0.0f, 0.0f, 0.0f);
+	m_melleAttack.rightBottom = VGet(0.0f, 0.0f, 0.0f);
+	m_melleAttack.leftTop = VGet(0.0f, 0.0f, 0.0f);
+	m_melleAttack.leftBottom = VGet(0.0f, 0.0f, 0.0f);
+	// キャラクター情報初期化
 	m_characterInfo.pos = pos;
 	m_characterInfo.vec = VGet(0.0f, 0.0f, 0.0f);
 	m_characterInfo.rot = VGet(0.0f, 0.0f, 0.0f);
@@ -83,6 +112,10 @@ void EnemyBase::Update()
 	// 座標設定
 	m_characterInfo.topPos = MV1GetFramePosition(m_pModel->GetModelHandle(), m_topFrameIndex);
 	m_characterInfo.bottomPos = MV1GetFramePosition(m_pModel->GetModelHandle(), m_bottomFrameIndex);
+	m_melleAttack.rightTop = MV1GetFramePosition(m_pModel->GetModelHandle(), m_melleAttack.rightTopFrameIndex);
+	m_melleAttack.rightBottom= MV1GetFramePosition(m_pModel->GetModelHandle(), m_melleAttack.rightBottomFrameIndex);
+	m_melleAttack.leftTop= MV1GetFramePosition(m_pModel->GetModelHandle(), m_melleAttack.leftTopFrameIndex);
+	m_melleAttack.leftBottom= MV1GetFramePosition(m_pModel->GetModelHandle(), m_melleAttack.leftBottomFrameIndex);
 }
 
 void EnemyBase::Draw(std::shared_ptr<ToonShader> pToonShader)
@@ -91,6 +124,8 @@ void EnemyBase::Draw(std::shared_ptr<ToonShader> pToonShader)
 
 	m_pCollShape->DebugDraw(0x00ff00);
 	m_pSearchRange->DebugDraw(0x000000);
+	m_pRightHandColl->DebugDraw(0xff00ff);
+	m_pLeftHandColl->DebugDraw(0xff00ff);
 }
 
 void EnemyBase::Draw2D()
@@ -117,7 +152,7 @@ void EnemyBase::OnDead()
 {
 }
 
-void EnemyBase::IsSearchRange(CharacterBase* pPlayer)
+void EnemyBase::OnSearch(CharacterBase* pPlayer)
 {
 	// 衝突判定
 	if (m_pSearchRange->IsCollide(pPlayer->GetCollShape()))
@@ -131,6 +166,22 @@ void EnemyBase::IsSearchRange(CharacterBase* pPlayer)
 	{
 		// 当たっていなかったら通常の行動に戻る
 		m_isFinding = false;
+	}
+}
+
+void EnemyBase::OnMeleeAttack(CharacterBase* pPlayer)
+{
+	// 攻撃中でないときは判定しない
+	if (!m_isAttack) return;
+
+	// 衝突判定
+	if (m_pRightHandColl->IsCollide(pPlayer->GetCollShape()))
+	{
+		if (m_pLeftHandColl->IsCollide(pPlayer->GetCollShape()))
+		{
+			// 右手か左手どちらか当たってたらダメージを与える
+			pPlayer->OnDamage(m_characterInfo.pos, m_statusData.meleeAtk);
+		}
 	}
 }
 
@@ -180,7 +231,6 @@ void EnemyBase::UpdateStateTransition()
 	if (m_updateFunc == &EnemyBase::UpdateIdleState)return;
 	if (m_updateFunc == &EnemyBase::UpdateDeadState)return;
 
-
 	// どれでもなかった場合は移動状態になる
 	m_updateFunc = &EnemyBase::UpdateMoveState;
 }
@@ -192,6 +242,20 @@ bool EnemyBase::StateTransitionDead()
 
 	m_updateFunc = &EnemyBase::UpdateDeadState;
 	return true;
+}
+
+bool EnemyBase::StateTransitionMeleeAttack()
+{
+
+
+	
+
+	return false;
+}
+
+bool EnemyBase::StateTransitionShotAttack()
+{
+	return false;
 }
 
 void EnemyBase::UpdateIdleState()
@@ -216,4 +280,36 @@ void EnemyBase::UpdateDeadState()
 
 	// 存在を消す
 	m_characterInfo.isExist = false;
+}
+
+void EnemyBase::UpdateMeleeAttackState()
+{
+	// 攻撃中は移動をしない
+	m_moveSpeed = 0.0f;
+
+	// 攻撃間隔時間は攻撃しない
+	if (!m_pAttackInterval->Update())
+	{
+		// アニメーション再生
+		m_pModel->ChangeAnim(m_animData.idle, true, false, 1);
+		UpdateMoveDirection();
+		UpdateAngle();
+		return;
+	}
+
+	// アニメーション再生
+	m_pModel->ChangeAnim(m_animData.attack1, false, false, 2);
+	m_isAttack = true;
+
+	// 攻撃が終わったら移動状態になる
+	if (m_pModel->IsAnimEnd())
+	{
+		m_pModel->ChangeAnim(m_animData.walk, true, false, 1);
+		m_updateFunc = &EnemyBase::UpdateMoveState;
+		m_isAttack = false;
+	}
+}
+
+void EnemyBase::UpdateShotAttackState()
+{
 }
