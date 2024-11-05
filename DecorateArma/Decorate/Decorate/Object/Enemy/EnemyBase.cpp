@@ -17,7 +17,8 @@ EnemyBase::EnemyBase():
 	m_attackType(AttackType::Melee),
 	m_pSearchRange(nullptr),
 	m_pRightHandColl(nullptr),
-	m_pLeftHandColl(nullptr)
+	m_pLeftHandColl(nullptr),
+	m_pAttackInterval(nullptr)
 {
 	// 近距離攻撃当たり判定座標初期化
 	m_melleAttack.rightTopFrameIndex = -1;

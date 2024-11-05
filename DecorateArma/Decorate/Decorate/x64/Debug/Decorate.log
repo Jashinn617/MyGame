@@ -1,3 +1,5 @@
-﻿  EnemyBase.cpp
-C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\Decorate\Object\Enemy\EnemyBase.cpp(185,18): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
+﻿  EnemyRobot.cpp
+  ObjectManager.cpp
+C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\Decorate\Object\ObjectManager.cpp(161,28): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
+  コードを生成中...
   Decorate.vcxproj -> C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\x64\Debug\Decorate.exe

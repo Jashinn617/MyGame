@@ -183,14 +183,14 @@ protected:	// 構造体
 	/// </summary>
 	struct MeleeAttackPos
 	{
-		int rightTopFrameIndex;
-		int rightBottomFrameIndex;
-		int leftTopFrameIndex;
-		int leftBottomFrameIndex;
-		VECTOR rightTop;
-		VECTOR rightBottom;
-		VECTOR leftTop;
-		VECTOR leftBottom;
+		int rightTopFrameIndex;			// 右手頂点フレーム番号
+		int rightBottomFrameIndex;		// 右手底辺フレーム番号
+		int leftTopFrameIndex;			// 左手頂点フレーム番号
+		int leftBottomFrameIndex;		// 左手底辺フレーム番号
+		VECTOR rightTop;				// 右手頂点座標
+		VECTOR rightBottom;				// 右手底辺座標
+		VECTOR leftTop;					// 左手頂点座標
+		VECTOR leftBottom;				// 左手底辺座標
 	};
 
 protected:	// 変数

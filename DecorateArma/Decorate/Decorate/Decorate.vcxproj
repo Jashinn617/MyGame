@@ -139,6 +139,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="UI\HpBar\HpBarEnemy.cpp" />
+    <ClCompile Include="UI\HpBar\HpBarBase.cpp" />
     <ClCompile Include="Object\Enemy\EShot.cpp" />
     <ClCompile Include="Utility\CollisionShape.cpp" />
     <ClCompile Include="Object\LockOnTarget.cpp" />
@@ -169,6 +171,8 @@
     <ClCompile Include="Shader\SetVertexShader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="UI\HpBar\HpBarEnemy.h" />
+    <ClInclude Include="UI\HpBar\HpBarBase.h" />
     <ClInclude Include="Object\Enemy\EShot.h" />
     <ClInclude Include="Utility\CollisionShape.h" />
     <ClInclude Include="Object\LockOnTarget.h" />
