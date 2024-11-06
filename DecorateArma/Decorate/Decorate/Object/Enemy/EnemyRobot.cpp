@@ -13,14 +13,14 @@
 
 namespace
 {
-	constexpr int kAttackInterval = 35;						// 攻撃感覚
+	constexpr int kAttackInterval = 80;						// 攻撃感覚
 	constexpr float kCapsuleRadius = 30.0f;					// カプセルの半径
 	constexpr float kRotSpeed = 9.0f;						// 回転速度
 	constexpr VECTOR kModelScale = { 0.15f,0.2f,0.15f };	// モデルスケール
 	constexpr float kSearchRadius = 500.0f;					// 索敵範囲の半径
 	constexpr float kSearchHeight = 70.0f;					// 索敵範囲の高さ
 	constexpr float kHandRadius = 10.0f;					// 腕の当たり判定の半径
-	constexpr float kAttackRange = 30.0f;					// 攻撃射程
+	constexpr float kAttackRange = 100.0f;					// 攻撃射程
 }
 
 EnemyRobot::EnemyRobot(VECTOR pos)
@@ -92,14 +92,14 @@ void EnemyRobot::Init()
 		m_melleAttack.leftTopFrameIndex);
 	// 右手当たり判定底辺座標取得
 	m_melleAttack.rightBottomFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(),
-		"minigun_end");
+		"iktargetleft_end");
 	assert(m_melleAttack.rightBottomFrameIndex != -1);
 	assert(m_melleAttack.rightBottomFrameIndex != -2);
 	m_melleAttack.rightBottom = MV1GetFramePosition(m_pModel->GetModelHandle(),
 		m_melleAttack.rightBottomFrameIndex);
 	// 左手当たり判定底辺座標取得
 	m_melleAttack.leftBottomFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(),
-		"handdown.001_end");
+		"iktargetright_end");
 	assert(m_melleAttack.leftBottomFrameIndex != -1);
 	assert(m_melleAttack.leftBottomFrameIndex != -2);
 	m_melleAttack.leftBottom = MV1GetFramePosition(m_pModel->GetModelHandle(),

@@ -211,7 +211,7 @@ void EnemyBase::InitMoveSpeed(float moveSpeed)
 void EnemyBase::UpdateAngle()
 {
 	// 向きたい方向
-	float nextAngle = atan2(m_moveDirection.x, m_moveDirection.z);
+	float nextAngle = atan2(-m_moveDirection.x, -m_moveDirection.z);
 
 	// 滑らかに指定した方向に向くための関数
 	SmoothAngle(m_angle, nextAngle);
@@ -279,7 +279,6 @@ bool EnemyBase::StateTransitionMeleeAttack()
 
 	// プレイヤーから敵までの方向ベクトルを求める
 	m_enemyToPlayer = VSub(m_pObjectManager->GetPlayer()->GetInfo().pos, m_characterInfo.pos);
-
 	// プレイヤーが攻撃範囲内に入ったら攻撃状態に移行する
 	if (VSize(m_enemyToPlayer) < m_attackRange)
 	{

@@ -245,6 +245,18 @@ void Player::Draw2D()
 
 void Player::OnDamage(VECTOR targetPos, int damagePoint)
 {
+	// HPを減らす
+	m_statusData.hp -= damagePoint;
+
+	// HPが0以下になって死亡状態でなかった場合
+	if (m_statusData.hp <= 0 && !m_isDead)
+	{
+		// 死亡する
+		m_isDead = true;
+	}
+
+	// ダメージを受けた状態にする
+	m_isDamage = true;
 }
 
 void Player::EndJump()
