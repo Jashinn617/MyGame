@@ -19,5 +19,12 @@ public:		// 関数
 	~EnemyRobot();
 
 	void Init() override final;
+
+private:	// 関数
+	/// <summary>
+	/// 角度更新
+	/// (モデルの前後が逆のため、反転した向きを出している)
+	/// </summary>
+	void UpdateAngle() override final;
 };
 

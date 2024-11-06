@@ -16,7 +16,7 @@ class Player;
 /// </summary>
 class Shot
 {
-public:
+public:		// 関数
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
@@ -54,7 +54,6 @@ public:
 	void SetCameraRot(MATRIX rotMtx) { m_cameraRotMtx = rotMtx; }
 
 private:	// 構造体
-
 	/// <summary>
 	/// 弾情報
 	/// </summary>
@@ -79,7 +78,7 @@ private:	// 関数
 	/// </summary>
 	void MakeBullet();
 
-private:
+private:		// 変数
 	int m_atkPoint;									// 攻撃力
 	float m_sinCount;								// 上下移動カウント
 	float m_sinPosY;								// サイン計算に使うY座標

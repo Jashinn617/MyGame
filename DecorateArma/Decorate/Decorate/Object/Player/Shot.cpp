@@ -11,6 +11,7 @@
 #include "../CharacterBase.h"
 
 #include <cmath>
+#include <cassert>
 
 namespace
 {
@@ -24,14 +25,14 @@ namespace
 	constexpr float kSinSwing = 4.0f;							// 昇降幅
 	constexpr VECTOR kScaleVec = { 0.01f,0.05f,0.01f };			// スケール
 
-	constexpr int kBulletNum = 50;							// 弾数
-	constexpr int kBulletVanishTime = 50;					// 弾が消えるまでの時間
-	constexpr int kBulletIntervalTime = 5;					// 次の球が発射されるまでの時間
+	constexpr int kNum = 50;							// 弾数
+	constexpr int kVanishTime = 50;					// 弾が消えるまでの時間
+	constexpr int kIntervalTime = 5;					// 次の球が発射されるまでの時間
 	constexpr float kEnemyHeight = 50.0f;					// ロックオンした敵に当てる弾の高さ調整
-	constexpr float kBulletRadius = 10;						// 弾の半径
-	constexpr float kBulletSpeed = 15.0f;					// 弾の速度
-	constexpr float kBulletStartPosHeight = 5.0f;			// 弾を発射する高さ
-	constexpr VECTOR kBulletScale = { 0.4f,0.4f,0.4f };		// 弾のスケール
+	constexpr float kRadius = 10;						// 弾の半径
+	constexpr float kSpeed = 15.0f;					// 弾の速度
+	constexpr float kStartPosHeight = 5.0f;			// 弾を発射する高さ
+	constexpr VECTOR kScale = { 0.4f,0.4f,0.4f };		// 弾のスケール
 }
 
 Shot::Shot(Player* pPlayer, int atkPoint):
@@ -42,13 +43,14 @@ Shot::Shot(Player* pPlayer, int atkPoint):
 	m_cameraRotMtx(MGetRotY(0)),
 	m_pPlayer(pPlayer),
 	m_pModel(std::make_shared<Model>(kFileName)),
-	m_pBulletIntervalTime(std::make_shared<Time>(kBulletIntervalTime))
+	m_pBulletIntervalTime(std::make_shared<Time>(kIntervalTime))
 {
 	// 弾のモデルハンドルの取得
 	int bulletH = MV1LoadModel(kBulletFileName);
+	assert(bulletH != -1);
 
 	// 弾の生成
-	m_bullet.resize(kBulletNum);
+	m_bullet.resize(kNum);
 	for (auto& bullet : m_bullet)
 	{
 		// 存在フラグ初期化
@@ -58,13 +60,13 @@ Shot::Shot(Player* pPlayer, int atkPoint):
 		// 進む向きの初期化
 		bullet.direction = VGet(0.0f, 0.0f,0.0f);
 		// 消えるまでの時間の生成
-		bullet.vanishTime = std::make_shared<Time>(kBulletVanishTime);
+		bullet.vanishTime = std::make_shared<Time>(kVanishTime);
 		// 当たり判定の生成
-		bullet.coll = std::make_shared<CollisionShape>(bullet.pos, kBulletRadius, 0.0f);
+		bullet.coll = std::make_shared<CollisionShape>(bullet.pos, kRadius, 0.0f);
 		// モデルの生成
 		bullet.model = std::make_shared<Model>(bulletH);
 		// 弾のスケールの設定
-		bullet.model->SetScale(kBulletScale);
+		bullet.model->SetScale(kScale);
 	}
 
 	// モデルスケール設定
@@ -164,9 +166,9 @@ void Shot::UpdateBullet()
 			else
 			{
 				// 弾を撃つ
-				bullet.pos.x += bullet.direction.x * kBulletSpeed;
-				bullet.pos.y += bullet.direction.y * kBulletSpeed;
-				bullet.pos.z += bullet.direction.z * kBulletSpeed;
+				bullet.pos.x += bullet.direction.x * kSpeed;
+				bullet.pos.y += bullet.direction.y * kSpeed;
+				bullet.pos.z += bullet.direction.z * kSpeed;
 
 				// モデル座標更新
 				bullet.model->SetPos(bullet.pos);
@@ -193,7 +195,7 @@ void Shot::MakeBullet()
 					bullet.isExist = true;
 					// 位置の決定
 					bullet.pos = m_pos;
-					bullet.pos.y += kBulletStartPosHeight;
+					bullet.pos.y += kStartPosHeight;
 					// モデル座標更新
 					bullet.model->SetPos(bullet.pos);
 

@@ -20,7 +20,8 @@ namespace
 	constexpr float kSearchRadius = 500.0f;					// 索敵範囲の半径
 	constexpr float kSearchHeight = 70.0f;					// 索敵範囲の高さ
 	constexpr float kHandRadius = 10.0f;					// 腕の当たり判定の半径
-	constexpr float kAttackRange = 100.0f;					// 攻撃射程
+	constexpr float kMeleeAttackRange = 100.0f;				// 近距離攻撃射程
+	constexpr float kShotAttackRange = 500.0f;				// 遠距離攻撃射程
 }
 
 EnemyRobot::EnemyRobot(VECTOR pos)
@@ -40,10 +41,11 @@ EnemyRobot::EnemyRobot(VECTOR pos)
 	m_moveData.rotSpeed = kRotSpeed;
 
 	// 攻撃範囲設定
-	m_attackRange = kAttackRange;
+	m_meleeAttackRange = kMeleeAttackRange;
+	m_shotAttackRange = kShotAttackRange;
 
 	// 攻撃タイプ設定
-	m_attackType = AttackType::Melee;
+	m_attackType = AttackType::Shot;
 
 	// 索敵範囲設定
 	m_pSearchRange = std::make_shared<CollisionShape>(m_characterInfo.pos, kSearchRadius, kSearchHeight);
@@ -123,4 +125,13 @@ void EnemyRobot::Init()
 	m_pModel->SetRot(m_characterInfo.rot);
 	// 座標初期化
 	m_pModel->SetPos(m_characterInfo.pos);
+}
+
+void EnemyRobot::UpdateAngle()
+{
+	// 向きたい方向
+	float nextAngle = atan2(-m_moveDirection.x, -m_moveDirection.z);
+
+	// 滑らかに指定した方向に向くための関数
+	SmoothAngle(m_angle, nextAngle);
 }

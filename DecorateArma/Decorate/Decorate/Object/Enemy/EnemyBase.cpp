@@ -18,7 +18,8 @@ namespace
 }
 
 EnemyBase::EnemyBase():
-	m_attackRange(0.0f),
+	m_meleeAttackRange(0.0f),
+	m_shotAttackRange(0.0f),
 	m_isAttack(false),
 	m_isFinding(false),
 	m_moveDirection{0.0f,0.0f,0.0f},
@@ -59,7 +60,8 @@ EnemyBase::EnemyBase():
 }
 
 EnemyBase::EnemyBase(VECTOR pos):
-	m_attackRange(0.0f),
+	m_meleeAttackRange(0.0f),
+	m_shotAttackRange(0.0f),
 	m_isAttack(false),
 	m_isFinding(false),
 	m_moveDirection{ 0.0f,0.0f,0.0f },
@@ -211,7 +213,7 @@ void EnemyBase::InitMoveSpeed(float moveSpeed)
 void EnemyBase::UpdateAngle()
 {
 	// 向きたい方向
-	float nextAngle = atan2(-m_moveDirection.x, -m_moveDirection.z);
+	float nextAngle = atan2(m_moveDirection.x, m_moveDirection.z);
 
 	// 滑らかに指定した方向に向くための関数
 	SmoothAngle(m_angle, nextAngle);
@@ -280,7 +282,7 @@ bool EnemyBase::StateTransitionMeleeAttack()
 	// プレイヤーから敵までの方向ベクトルを求める
 	m_enemyToPlayer = VSub(m_pObjectManager->GetPlayer()->GetInfo().pos, m_characterInfo.pos);
 	// プレイヤーが攻撃範囲内に入ったら攻撃状態に移行する
-	if (VSize(m_enemyToPlayer) < m_attackRange)
+	if (VSize(m_enemyToPlayer) < m_meleeAttackRange)
 	{
 		// 攻撃間隔のリセット
 		m_pAttackInterval->Reset();
@@ -298,6 +300,27 @@ bool EnemyBase::StateTransitionMeleeAttack()
 
 bool EnemyBase::StateTransitionShotAttack()
 {
+	// 攻撃タイプが遠距離以外だった場合は何もしない
+	if (m_attackType != AttackType::Shot) return false;
+	// 攻撃中だったらtrueを返す
+	if (m_updateFunc == &EnemyBase::UpdateShotAttackState) return true;
+
+	// プレイヤーから敵までの方向ベクトルを求める
+	m_enemyToPlayer = VSub(m_pObjectManager->GetPlayer()->GetInfo().pos, m_characterInfo.pos);
+	// プレイヤーが攻撃範囲内に入ったら攻撃状態に移行する
+	if (VSize(m_enemyToPlayer) < m_shotAttackRange)
+	{
+		// 攻撃間隔のリセット
+		m_pAttackInterval->Reset();
+		// 攻撃フラグを立てる
+		m_isAttack = true;
+		// 攻撃状態に遷移する
+		m_updateFunc = &EnemyBase::UpdateShotAttackState;
+		
+		return true;
+	}
+
+	// どの条件にも当てはまらなければfalseを返す
 	return false;
 }
 
@@ -360,4 +383,29 @@ void EnemyBase::UpdateMeleeAttackState()
 
 void EnemyBase::UpdateShotAttackState()
 {
+	// 攻撃中は移動をしない
+	m_moveSpeed = 0.0f;
+
+	// 攻撃間隔時間は攻撃しない
+	if (!m_pAttackInterval->Update())
+	{
+		// アニメーション再生
+		m_pModel->ChangeAnim(m_animData.idle, true, false, 1);
+		UpdateMoveDirection();
+		UpdateAngle();
+		return;
+	}
+
+	// アニメーション再生
+	// アニメーション再生
+	m_pModel->ChangeAnim(m_animData.attack2, false, false, 2);
+	m_isAttack = true;
+
+	// 攻撃が終わったら移動状態になる
+	if (m_pModel->IsAnimEnd())
+	{
+		m_pModel->ChangeAnim(m_animData.walk, true, false, 1);
+		m_updateFunc = &EnemyBase::UpdateMoveState;
+		m_isAttack = false;
+	}
 }

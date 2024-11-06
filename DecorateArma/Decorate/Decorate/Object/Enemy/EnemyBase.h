@@ -2,6 +2,7 @@
 #include "../CharacterBase.h"
 
 class Time;
+class EShot;
 
 /// <summary>
 /// 敵キャラクター基底クラス
@@ -124,7 +125,7 @@ protected:	// 関数
 	/// <summary>
 	/// 角度更新
 	/// </summary>
-	void UpdateAngle();
+	virtual void UpdateAngle();
 
 	/// <summary>
 	/// 移動方向更新
@@ -200,7 +201,8 @@ protected:	// 構造体
 	};
 
 protected:	// 変数
-	float m_attackRange;								// 攻撃範囲
+	float m_meleeAttackRange;							// 近距離攻撃範囲
+	float m_shotAttackRange;							// 遠距離攻撃範囲
 	bool m_isAttack;									// 攻撃中かどうか
 	bool m_isFinding;									// プレイヤー発見状態かどうか
 	VECTOR m_moveDirection;								// 移動方向ベクトル
@@ -211,5 +213,6 @@ protected:	// 変数
 	std::shared_ptr<CollisionShape> m_pRightHandColl;	// 右手の当たり判定
 	std::shared_ptr<CollisionShape> m_pLeftHandColl;	// 左手の当たり判定
 	std::shared_ptr<Time> m_pAttackInterval;			// 攻撃間隔
+	std::shared_ptr<EShot> m_pShot;						// 遠距離攻撃
 	void(EnemyBase::* m_updateFunc)();					// メンバ関数ポインタ
 };
