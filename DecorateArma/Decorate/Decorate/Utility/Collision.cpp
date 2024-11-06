@@ -73,6 +73,13 @@ void Collision::UpdateCollision(ObjectBase* my, ObjectBase* target)
 
 			return;
 		}
+
+		// ターゲットのオブジェクトがエネミーの場合
+		if (target->GetColType() == ObjectBase::ColType::Enemy)
+		{
+			// キャラクター同士衝突判定
+			dynamic_cast<CharacterBase*>(my)->MoveCollCharacter(dynamic_cast<CharacterBase*>(target));
+		}
 	}
 
 	// オブジェクトタイプがアイテムの場合

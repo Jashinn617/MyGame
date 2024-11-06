@@ -116,6 +116,12 @@ public:	// 関数
 
 protected:	// 関数
 	/// <summary>
+	/// 移動速度初期化
+	/// </summary>
+	/// <param name="moveSpeed">移動速度</param>
+	void InitMoveSpeed(float moveSpeed);
+
+	/// <summary>
 	/// 角度更新
 	/// </summary>
 	void UpdateAngle();
@@ -194,6 +200,7 @@ protected:	// 構造体
 	};
 
 protected:	// 変数
+	float m_attackRange;								// 攻撃範囲
 	bool m_isAttack;									// 攻撃中かどうか
 	bool m_isFinding;									// プレイヤー発見状態かどうか
 	VECTOR m_moveDirection;								// 移動方向ベクトル

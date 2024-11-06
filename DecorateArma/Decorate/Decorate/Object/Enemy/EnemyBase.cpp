@@ -11,7 +11,14 @@
 
 using namespace CharacterData;
 
+namespace
+{
+	constexpr float kDashSpeedRate = 2.0f;	// ダッシュ速度倍率
+	constexpr float kAccRate = 0.5f;		// 加速度倍率
+}
+
 EnemyBase::EnemyBase():
+	m_attackRange(0.0f),
 	m_isAttack(false),
 	m_isFinding(false),
 	m_moveDirection{0.0f,0.0f,0.0f},
@@ -52,6 +59,7 @@ EnemyBase::EnemyBase():
 }
 
 EnemyBase::EnemyBase(VECTOR pos):
+	m_attackRange(0.0f),
 	m_isAttack(false),
 	m_isFinding(false),
 	m_moveDirection{ 0.0f,0.0f,0.0f },
@@ -112,7 +120,7 @@ void EnemyBase::Update()
 	// モデル角度更新
 	m_pModel->SetRot(VGet(0.0f, m_angle + DX_PI_F, 0.0f));
 
-	// 座標設定
+	// 座標更新
 	m_characterInfo.topPos = MV1GetFramePosition(m_pModel->GetModelHandle(), m_topFrameIndex);
 	m_characterInfo.bottomPos = MV1GetFramePosition(m_pModel->GetModelHandle(), m_bottomFrameIndex);
 	m_melleAttack.rightTop = MV1GetFramePosition(m_pModel->GetModelHandle(), m_melleAttack.rightTopFrameIndex);
@@ -193,6 +201,13 @@ void EnemyBase::OnMeleeAttack(CharacterBase* pPlayer)
 	}
 }
 
+void EnemyBase::InitMoveSpeed(float moveSpeed)
+{
+	m_moveData.walkSpeed = moveSpeed;
+	m_moveData.dashSpeed = moveSpeed * kDashSpeedRate;
+	m_moveData.acc = moveSpeed * kAccRate;
+}
+
 void EnemyBase::UpdateAngle()
 {
 	// 向きたい方向
@@ -239,6 +254,9 @@ void EnemyBase::UpdateStateTransition()
 	if (m_updateFunc == &EnemyBase::UpdateIdleState)return;
 	if (m_updateFunc == &EnemyBase::UpdateDeadState)return;
 
+	// 攻撃状態になったら処理を終了する
+	if (StateTransitionMeleeAttack())return;
+
 	// どれでもなかった場合は移動状態になる
 	m_updateFunc = &EnemyBase::UpdateMoveState;
 }
@@ -254,10 +272,28 @@ bool EnemyBase::StateTransitionDead()
 
 bool EnemyBase::StateTransitionMeleeAttack()
 {
+	// 攻撃タイプが近距離以外だった場合は何もしない
+	if (m_attackType != AttackType::Melee) return false;
+	// 攻撃中だったらtrueを返す
+	if (m_updateFunc == &EnemyBase::UpdateMeleeAttackState) return true;
 
+	// プレイヤーから敵までの方向ベクトルを求める
+	m_enemyToPlayer = VSub(m_pObjectManager->GetPlayer()->GetInfo().pos, m_characterInfo.pos);
 
+	// プレイヤーが攻撃範囲内に入ったら攻撃状態に移行する
+	if (VSize(m_enemyToPlayer) < m_attackRange)
+	{
+		// 攻撃間隔のリセット
+		m_pAttackInterval->Reset();
+		// 攻撃フラグを立てる
+		m_isAttack = true;
+		// 攻撃状態に遷移する
+		m_updateFunc = &EnemyBase::UpdateMeleeAttackState;
+		
+		return true;
+	}
 	
-
+	// どの条件にも当てはまらなければfalseを返す
 	return false;
 }
 
@@ -271,6 +307,11 @@ void EnemyBase::UpdateIdleState()
 	// アニメーション再生
 	m_pModel->ChangeAnim(m_animData.idle, true, false, 1);
 
+	// 索敵範囲に入ったら移動状態になる
+	if (m_isFinding)
+	{
+		m_updateFunc = &EnemyBase::UpdateMoveState;
+	}
 }
 
 void EnemyBase::UpdateMoveState()

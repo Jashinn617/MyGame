@@ -15,6 +15,9 @@
 #include "../../Utility/Time.h"
 #include "../../Utility/Pad.h"
 
+#include "../../UI/HpBar/HpBarBase.h"
+#include "../../UI/HpBar/HpBarPlayer.h"
+
 #include "../../Common/CsvLoad.h"
 
 #include <cassert>
@@ -132,6 +135,9 @@ Player::Player() :
 	// 強攻撃
 	m_hardAtkColl = std::make_shared<CollisionShape>(m_characterInfo.topPos, kHardRadius, kHardHeight);
 
+	// HPバー作成
+	m_pHpBar = std::make_shared<HpBarPlayer>(m_statusData.hp);
+
 
 	// モデルの頂点タイプの取得
 	//for (int i = 0; i < MV1GetTriangleListNum(m_pModel->GetModelHandle()); i++)
@@ -161,14 +167,15 @@ void Player::Update()
 	// 重力による落下処理
 	UpdateGravity();
 
-	// ダメージ処理
-
 	// アニメーション更新
 	m_pModel->Update(static_cast<int>(m_animSpeed));
 	// モデル座標の設定
 	m_pModel->SetPos(m_characterInfo.pos);
 	// モデル回転の設定
 	m_pModel->SetRot(VGet(0.0f, m_angle, 0.0f));
+
+	// HPバー更新
+	m_pHpBar->Update();
 
 	// カメラ更新
 	UpdateCamera();
@@ -220,6 +227,9 @@ void Player::Draw(std::shared_ptr<ToonShader> pToonShader)
 
 void Player::Draw2D()
 {
+	// HPバー描画
+	m_pHpBar->Draw();
+
 	// カメラ2D部分の描画
 	m_pCamera->Draw();
 
@@ -428,26 +438,25 @@ void Player::OnAttack(CharacterBase* pEnemy)
 			// 当たっていたらダメージを与える
 			pEnemy->OnDamage(m_characterInfo.pos, m_statusData.meleeAtk);
 			m_isColl = true;
+			m_isAttack = true;
+			// 硬直時間のリセット
+			m_attackInvokeTime->Reset();
 		}
 	}
 }
 
 void Player::OnHardAttack(CharacterBase* pEnemy)
 {
-	// 強攻撃中以外または衝突中は処理をしない
-	if (!m_isHardAttack || m_isColl) return;
+	// 強攻撃中以外は処理をしない
+	if (!m_isHardAttack) return;
 
-	// 当たり判定は少し時間が経過してから取る
-	if (m_attackInvokeTime->Update())
-	{
 		// 衝突判定
 		if (m_hardAtkColl->IsCollide(pEnemy->GetCollShape()))
 		{
 			// 当たっていたらダメージを与える
 			pEnemy->OnDamage(m_characterInfo.pos, m_statusData.meleeAtk * kHardAttackRate);
-			m_isColl = true;
+			m_isHardAttack = true;
 		}
-	}
 }
 
 void Player::UpdateState()
@@ -607,8 +616,6 @@ void Player::UpdateHardAttack()
 		m_pState->EndState();
 		// 強攻撃フラグをfalseにする
 		m_isHardAttack = false;
-		// 発動時間リセット
-		m_attackInvokeTime->Reset();
 	}
 }
 

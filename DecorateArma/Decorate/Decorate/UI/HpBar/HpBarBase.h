@@ -1,6 +1,10 @@
 ﻿#pragma once
 #include "DxLib.h"
 
+#include <memory>
+
+class Time;
+
 /// <summary>
 /// HPバーの基底クラス
 /// </summary>
@@ -23,7 +27,15 @@ public:	// 関数
 	virtual void Draw() = 0;
 
 protected:	// 変数
-	const int* m_hp = 0;	// 体力
-	int m_maxHp = 0;		// 最大体力
+	const int* m_hp = 0;					// 体力
+	int m_maxHp = 0;						// 最大体力
+	int m_hpH;								// 通常時HPバー画像ハンドル
+	int m_hpDecreaseH;						// 減少時HPバー画像ハンドル
+	int m_hpEmptyH;							// 減少後HPバー画像ハンドル
+	int m_graphSizeX;						// 画像Xサイズ
+	int m_graphSizeY;						// 画像Yサイズ
+	int m_decreaseHp;						// 体力減少値
+	float m_oneHpLenght;					// １体力分の画像の長さ
+	std::shared_ptr<Time> m_pDecreaseTime;	// 体力減少にかかる時間
 };
 

@@ -61,6 +61,18 @@
     <Filter Include="ヘッダー ファイル\Object\Enemy">
       <UniqueIdentifier>{61e523d6-a83b-4478-900c-3683f79ba082}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\UI">
+      <UniqueIdentifier>{11e4a820-a260-475f-928f-2504e2bc30b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\UI\HpBar">
+      <UniqueIdentifier>{f08d8b16-06c2-42fd-803a-ac243c048c92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\UI">
+      <UniqueIdentifier>{4f5743df-1ea0-41b1-a33a-39fcc3fa8923}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\UI\HpBar">
+      <UniqueIdentifier>{94f1ca0f-9581-45d7-ae96-bcc4fe1f6db5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -144,14 +156,17 @@
     <ClCompile Include="Common\Spawn.cpp">
       <Filter>ソース ファイル\Common</Filter>
     </ClCompile>
-    <ClCompile Include="Object\Enemy\EShot.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="UI\HpBar\HpBarBase.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\UI\HpBar</Filter>
     </ClCompile>
     <ClCompile Include="UI\HpBar\HpBarEnemy.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\UI\HpBar</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Enemy\EShot.cpp">
+      <Filter>ソース ファイル\Object\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\HpBar\HpBarPlayer.cpp">
+      <Filter>ソース ファイル\UI\HpBar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -239,14 +254,17 @@
     <ClInclude Include="Common\Spawn.h">
       <Filter>ヘッダー ファイル\Common</Filter>
     </ClInclude>
-    <ClInclude Include="Object\Enemy\EShot.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="UI\HpBar\HpBarBase.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\UI\HpBar</Filter>
     </ClInclude>
     <ClInclude Include="UI\HpBar\HpBarEnemy.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\UI\HpBar</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Enemy\EShot.h">
+      <Filter>ヘッダー ファイル\Object\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\HpBar\HpBarPlayer.h">
+      <Filter>ヘッダー ファイル\UI\HpBar</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

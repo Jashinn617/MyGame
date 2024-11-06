@@ -17,9 +17,10 @@ namespace
 	constexpr float kCapsuleRadius = 30.0f;					// カプセルの半径
 	constexpr float kRotSpeed = 9.0f;						// 回転速度
 	constexpr VECTOR kModelScale = { 0.15f,0.2f,0.15f };	// モデルスケール
-	constexpr float kSearchRadius = 700.0f;					// 索敵範囲の半径
+	constexpr float kSearchRadius = 500.0f;					// 索敵範囲の半径
 	constexpr float kSearchHeight = 70.0f;					// 索敵範囲の高さ
 	constexpr float kHandRadius = 10.0f;					// 腕の当たり判定の半径
+	constexpr float kAttackRange = 30.0f;					// 攻撃射程
 }
 
 EnemyRobot::EnemyRobot(VECTOR pos)
@@ -32,11 +33,17 @@ EnemyRobot::EnemyRobot(VECTOR pos)
 	// アニメーション設定
 	CsvLoad::GetInstance().AnimLoad(m_animData, "Robot");
 
-	// 攻撃タイプ
-	m_attackType = AttackType::Mulch;
+	// 移動速度設定
+	InitMoveSpeed(m_statusData.spd);
 
 	// 回転速度設定
 	m_moveData.rotSpeed = kRotSpeed;
+
+	// 攻撃範囲設定
+	m_attackRange = kAttackRange;
+
+	// 攻撃タイプ設定
+	m_attackType = AttackType::Melee;
 
 	// 索敵範囲設定
 	m_pSearchRange = std::make_shared<CollisionShape>(m_characterInfo.pos, kSearchRadius, kSearchHeight);
