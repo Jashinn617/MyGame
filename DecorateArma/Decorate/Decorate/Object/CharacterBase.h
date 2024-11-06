@@ -2,6 +2,7 @@
 #include "ObjectBase.h"
 
 class CollisionShape;
+class HpBarBase;
 
 /// <summary>
 /// オブジェクトの中でもキャラクターの基底クラス
@@ -166,6 +167,7 @@ protected:	// 変数
 	bool m_isDead;									// 死んだかどうか
 	bool m_isResetAttack;							// 攻撃判定の初期化(一度攻撃の当たった敵のもう一度当てる為)
 	std::shared_ptr<CollisionShape> m_pCollShape;	// 当たり判定用図形のポインタ
+	std::shared_ptr<HpBarBase> m_pHpBar;			// HPバーポインタ
 
 	StatusData m_statusData{};			// ステータス情報
 	MoveStatusData m_moveData{};		// 移動情報

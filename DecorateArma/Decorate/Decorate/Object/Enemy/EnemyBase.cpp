@@ -7,6 +7,8 @@
 #include "../../Utility/CollisionShape.h"
 #include "../../Utility/Time.h"
 
+#include "../../UI/HpBar/HpBarBase.h"
+
 using namespace CharacterData;
 
 EnemyBase::EnemyBase():
@@ -117,6 +119,9 @@ void EnemyBase::Update()
 	m_melleAttack.rightBottom= MV1GetFramePosition(m_pModel->GetModelHandle(), m_melleAttack.rightBottomFrameIndex);
 	m_melleAttack.leftTop= MV1GetFramePosition(m_pModel->GetModelHandle(), m_melleAttack.leftTopFrameIndex);
 	m_melleAttack.leftBottom= MV1GetFramePosition(m_pModel->GetModelHandle(), m_melleAttack.leftBottomFrameIndex);
+
+	// HPバー更新
+	m_pHpBar->Update();
 }
 
 void EnemyBase::Draw(std::shared_ptr<ToonShader> pToonShader)
@@ -131,6 +136,8 @@ void EnemyBase::Draw(std::shared_ptr<ToonShader> pToonShader)
 
 void EnemyBase::Draw2D()
 {
+	// HPバー描画
+	m_pHpBar->Draw();
 }
 
 void EnemyBase::OnDamage(VECTOR targetPos, int damagePoint)

@@ -7,6 +7,8 @@
 #include "../../Utility/CollisionShape.h"
 #include "../../Utility/Time.h"
 
+#include "../../UI/HpBar/HpBarEnemy.h"
+
 #include <cassert>
 
 namespace
@@ -41,6 +43,9 @@ EnemyRobot::EnemyRobot(VECTOR pos)
 
 	// 攻撃間隔
 	m_pAttackInterval = std::make_shared<Time>(kAttackInterval);
+
+	// HPバーポインタ作成
+	m_pHpBar = std::make_shared<HpBarEnemy>(m_statusData.hp, m_characterInfo.pos);
 }
 
 EnemyRobot::~EnemyRobot()

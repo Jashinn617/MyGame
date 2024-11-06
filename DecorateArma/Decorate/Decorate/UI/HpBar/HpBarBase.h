@@ -23,5 +23,7 @@ public:	// 関数
 	virtual void Draw() = 0;
 
 protected:	// 変数
+	const int* m_hp = 0;	// 体力
+	int m_maxHp = 0;		// 最大体力
 };
 

@@ -30,12 +30,11 @@ public:	// 関数
 
 private:	// 変数
 	int m_hpH;				// 通常時HPバー画像ハンドル
-	int m_hpDecreaseH;		// 減少時HPバー画像ハンドル
 	int m_hpEmptyH;			// 減少後HPバー画像ハンドル
 	int m_graphSizeX;		// 画像Xサイズ
 	int m_graphSizeY;		// 画像Yサイズ
-	int m_decreaseHp;		// 体力減少
-	float m_hpLenght;		// 体力分の画像の長さ
+	int m_decreaseHp;		// 体力減少値
+	float m_oneHpLenght;	// １体力分の画像の長さ
 	const VECTOR* m_pos;	// 敵座標
 };
 
