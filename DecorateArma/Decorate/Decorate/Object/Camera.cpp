@@ -242,7 +242,7 @@ void Camera::LockOnUpdate(VECTOR targetPos)
 	VECTOR lockOnCameraVec = VAdd(VScale(playerToCameraVec, kPrevCameraTargetLockOnFollowSpeed),
 		VScale(playerToEnemyVec, kCameraTargetLockOnFollowSpeed));
 	// カメラを少し傾ける
-	m_angleH = atan2(-lockOnCameraVec.z, lockOnCameraVec.x) + kLockOnAngleH;
+	m_angleH = static_cast<float>(atan2(-lockOnCameraVec.z, lockOnCameraVec.x) + kLockOnAngleH);
 	m_angleV = (m_angleV * kPrevCameraFollowSpeed) + (kLockOnAngleV * kCameraFollowSpeed);
 
 	// カメラ座標を出す

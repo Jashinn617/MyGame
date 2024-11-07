@@ -168,7 +168,7 @@ void Player::Update()
 	UpdateGravity();
 
 	// アニメーション更新
-	m_pModel->Update(static_cast<int>(m_animSpeed));
+	m_pModel->Update(static_cast<float>(m_animSpeed));
 	// モデル座標の設定
 	m_pModel->SetPos(m_characterInfo.pos);
 	// モデル回転の設定
@@ -290,13 +290,13 @@ void Player::UpdateAngle()
 		VECTOR enemyToPlayer = VSub(m_pObjectManager->GetLockOnEnemy()->GetInfo().pos, m_characterInfo.pos);
 
 		// 目標角度の計算
-		nextAngle = atan2(-enemyToPlayer.z, enemyToPlayer.x) - DX_PI_F * 0.5f;
+		nextAngle = static_cast<float>(atan2(-enemyToPlayer.z, enemyToPlayer.x) - DX_PI_F * 0.5f);
 	}
 	else
 	{
 		// 目標角度の計算(ベクトル(z,x)の角度 + 90°+ カメラ角度)
-		nextAngle = atan2(static_cast<double>(m_moveDirection.z), static_cast<double>(m_moveDirection.x))
-			+ DX_PI_F * 0.5f + m_pCamera->GetCameraAngleX();
+		nextAngle = static_cast<float>(atan2(static_cast<double>(m_moveDirection.z), static_cast<double>(m_moveDirection.x))
+			+ DX_PI_F * 0.5f + m_pCamera->GetCameraAngleX());
 	}
 
 	// 角度を滑らかに変更する

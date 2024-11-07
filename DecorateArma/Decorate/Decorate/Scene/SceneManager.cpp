@@ -129,14 +129,14 @@ void SceneManager::Draw()
 	float rate = m_updateTime / Game::kStandardTimePer1Frame;
 	float width = Game::kScreenWidth * rate;
 	// 描画
-	DrawBox(kBarPosX, kUpdateBarPosY, static_cast<int>(width), Game::kScreenHeight, kUpdateBarColor, true);
-	DrawFormatString(kStringPosX, kUpdateBarPosY, kStringColor, "更新処理");
+	DrawBox(static_cast<int>(kBarPosX), static_cast<int>(kUpdateBarPosY), static_cast<int>(width), Game::kScreenHeight, kUpdateBarColor, true);
+	DrawFormatString(static_cast<int>(kStringPosX), static_cast<int>(kUpdateBarPosY), kStringColor, "更新処理");
 	// 描画処理バー
 	rate = (m_updateTime + m_drawTime) / Game::kStandardTimePer1Frame;
 	width = Game::kScreenWidth * rate;
 	// 描画
-	DrawBox(kBarPosX, kDrawBarPosY, static_cast<int>(width), Game::kScreenHeight, kDrawBarColor, true);
-	DrawFormatString(kStringPosX, kDrawBarPosY, kStringColor, "描画処理");
+	DrawBox(static_cast<int>(kBarPosX), static_cast<int>(kDrawBarPosY), static_cast<int>(width), Game::kScreenHeight, kDrawBarColor, true);
+	DrawFormatString(static_cast<int>(kStringPosX), static_cast<int>(kDrawBarPosY), kStringColor, "描画処理");
 #endif // _DEBUG
 }
 

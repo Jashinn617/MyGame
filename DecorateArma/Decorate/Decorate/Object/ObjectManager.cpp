@@ -158,7 +158,7 @@ void ObjectManager::InitLockOnEnemy()
 		VECTOR enemyToPlayerVec = VSub(GetPlayer()->GetInfo().pos, obj->GetInfo().pos);
 
 		// 敵からプレイヤーまでの角度を求める
-		float enemyToPlayerAngle = atan2(enemyToPlayerVec.x, enemyToPlayerVec.z);
+		float enemyToPlayerAngle = static_cast<float>(atan2(enemyToPlayerVec.x, enemyToPlayerVec.z));
 		// カメラの角度と敵からプレイヤーまでの角度の差を求める
 		float differenceAngle = cameraAngle - enemyToPlayerAngle;
 

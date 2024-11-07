@@ -33,7 +33,7 @@ public:		// 関数
 	/// 更新
 	/// </summary>
 	/// <param name="animSpeed">アニメーション速度(基本は1)</param>
-	void Update(int animSpeed = 1);
+	void Update(float animSpeed = 1.0f);
 
 	/// <summary>
 	/// 描画
@@ -133,11 +133,11 @@ private:	// 関数
 
 private:	// 変数
 	int m_modelH;					// モデルハンドル
-	int m_animFrame;				// アニメーションフレーム
 	int m_animChangeFrame;			// 現在の切り替えフレーム数
 	int m_animChangeFrameTotal;		// 切り替えにかける総フレーム数
 	int m_animChangeSpeed;			// アニメーションの変更速度
 	int m_colFrameIndex;			// 当たり判定として使用するフレームのインデックス
+	float m_animFrame;				// アニメーションフレーム
 	bool m_isUseCol;				// 当たり判定の情報を使用するかどうか
 	bool m_isUpdateCol;				// 当たり判定の情報をマイフレーム更新するかどうか
 	VECTOR m_pos;					// 座標

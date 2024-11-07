@@ -66,7 +66,7 @@ Model::~Model()
 	MV1DeleteModel(m_modelH);
 }
 
-void Model::Update(int animSpeed)
+void Model::Update(float animSpeed)
 {
 	// アニメーションを進める
 	m_animFrame += animSpeed;

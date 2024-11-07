@@ -130,7 +130,7 @@ void EnemyRobot::Init()
 void EnemyRobot::UpdateAngle()
 {
 	// 向きたい方向
-	float nextAngle = atan2(-m_moveDirection.x, -m_moveDirection.z);
+	float nextAngle = static_cast<float>(atan2(-m_moveDirection.x, -m_moveDirection.z));
 
 	// 滑らかに指定した方向に向くための関数
 	SmoothAngle(m_angle, nextAngle);

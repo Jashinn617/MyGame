@@ -6,9 +6,9 @@
 
 namespace
 {
-	const char* const kHpFileName = "Data/Image/HpBar/Player/UI-03.png";			// 通常時HPバー画像ファイルパス
-	const char* const kHpDecreaseFineName = "Data/Image/HpBar/Player/UI-7.png";		// 減少時HPバー画像ファイルパス
-	const char* const kHpEmptyFineName = "Data/Image/HpBar/Player/UI-9.png";		// 減少後HPバー画像ファイルパス
+	const char* const kHpFileName = "Data/Image/HpBar/Player/a.png";			// 通常時HPバー画像ファイルパス
+	const char* const kHpDecreaseFineName = "Data/Image/HpBar/Player/c.png";		// 減少時HPバー画像ファイルパス
+	const char* const kHpEmptyFineName = "Data/Image/HpBar/Player/b.png";		// 減少後HPバー画像ファイルパス
 
 	constexpr int kHpBarDecrease = 1;			// HPバーの減少量
 	constexpr int kHpBarDecreaseTime = 30;		// HPバーが減るまでにかかる時間
