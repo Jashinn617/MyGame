@@ -155,6 +155,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Object\Player\Gear.cpp" />
+    <ClCompile Include="Scene\SceneGear.cpp" />
     <ClCompile Include="UI\HpBar\HpBarPlayer.cpp" />
     <ClCompile Include="UI\HpBar\HpBarEnemy.cpp" />
     <ClCompile Include="UI\HpBar\HpBarBase.cpp" />
@@ -188,6 +190,8 @@
     <ClCompile Include="Shader\SetVertexShader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Object\Player\Gear.h" />
+    <ClInclude Include="Scene\SceneGear.h" />
     <ClInclude Include="UI\HpBar\HpBarPlayer.h" />
     <ClInclude Include="UI\HpBar\HpBarEnemy.h" />
     <ClInclude Include="UI\HpBar\HpBarBase.h" />

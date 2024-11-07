@@ -1,84 +1,85 @@
-#pragma once
+ï»¿#pragma once
 #include "SceneBase.h"
 
 #include <array>
 #include <string>
 
 /// <summary>
-/// ƒfƒoƒbƒOê—pƒV[ƒ“
-/// ŠeƒV[ƒ“‚É”ò‚ÔƒNƒ‰ƒX
+/// ãƒ‡ãƒãƒƒã‚°å°‚ç”¨ã‚·ãƒ¼ãƒ³
+/// å„ã‚·ãƒ¼ãƒ³ã«é£›ã¶ã‚¯ãƒ©ã‚¹
 /// </summary>
 class SceneDebug : public SceneBase
 {
-public:		// —ñ‹“Œ^
+public:		// åˆ—æŒ™å‹
 	/// <summary>
-	/// ƒV[ƒ“‚Ìƒ^ƒCƒv
+	/// ã‚·ãƒ¼ãƒ³ã®ã‚¿ã‚¤ãƒ—
 	/// </summary>
 	enum class SceneType
 	{
-		Debug,		// ƒfƒoƒbƒO
-		Test,		// ƒeƒXƒg
-		Title,		// ƒ^ƒCƒgƒ‹
-		Select,		// ƒZƒŒƒNƒg
-		Stage1,		// ƒXƒe[ƒW1
-		Clear,		// ƒNƒŠƒA
-		GameOver,	// ƒQ[ƒ€ƒI[ƒo[
+		Debug,		// ãƒ‡ãƒãƒƒã‚°
+		Test,		// ãƒ†ã‚¹ãƒˆ
+		Title,		// ã‚¿ã‚¤ãƒˆãƒ«
+		Select,		// ã‚»ãƒ¬ã‚¯ãƒˆ
+		Gear,		// è£…å‚™å“
+		Stage1,		// ã‚¹ãƒ†ãƒ¼ã‚¸1
+		Clear,		// ã‚¯ãƒªã‚¢
+		GameOver,	// ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼
 
-		SceneNum,	// ƒV[ƒ“”
+		SceneNum,	// ã‚·ãƒ¼ãƒ³æ•°
 	};
 
-public:		// ŠÖ”
+public:		// é–¢æ•°
 	/// <summary>
-	/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
 	SceneDebug();
 
 	/// <summary>
-	/// ƒfƒXƒgƒ‰ƒNƒ^
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
-	~SceneDebug() {/*ˆ—–³‚µ*/ }
+	~SceneDebug() {/*å‡¦ç†ç„¡ã—*/ }
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
-	virtual void Init() override final {/*ˆ—–³‚µ*/ }
+	virtual void Init() override final {/*å‡¦ç†ç„¡ã—*/ }
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
-	/// <returns>Ÿ‚ÌƒV[ƒ“</returns>
+	/// <returns>æ¬¡ã®ã‚·ãƒ¼ãƒ³</returns>
 	virtual std::shared_ptr<SceneBase> Update() override final;
 
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
 	virtual void Draw() override final;
 
 	/// <summary>
-	/// I—¹ˆ—
+	/// çµ‚äº†å‡¦ç†
 	/// </summary>
-	virtual void End() override final {/*ˆ—–³‚µ*/ }
+	virtual void End() override final {/*å‡¦ç†ç„¡ã—*/ }
 
 	/// <summary>
-	/// ƒV[ƒ“‚Ìí—Ş‚Ìæ“¾
+	/// ã‚·ãƒ¼ãƒ³ã®ç¨®é¡ã®å–å¾—
 	/// </summary>
-	/// <returns>ƒV[ƒ“‚Ìí—Ş</returns>
+	/// <returns>ã‚·ãƒ¼ãƒ³ã®ç¨®é¡</returns>
 	virtual SceneKind GetSceneKind() override final { return SceneKind::Debug; }
 
-private:	// ŠÖ”
+private:	// é–¢æ•°
 	/// <summary>
-	/// ƒJ[ƒ\ƒ‹XV
+	/// ã‚«ãƒ¼ã‚½ãƒ«æ›´æ–°
 	/// </summary>
 	void UpdateCursor();
 
 	/// <summary>
-	/// Ÿ‚ÌƒV[ƒ“‚ÉˆÚ“®‚·‚éˆ—
+	/// æ¬¡ã®ã‚·ãƒ¼ãƒ³ã«ç§»å‹•ã™ã‚‹å‡¦ç†
 	/// </summary>
-	/// <returns>Ÿ‚ÌƒV[ƒ“</returns>
+	/// <returns>æ¬¡ã®ã‚·ãƒ¼ãƒ³</returns>
 	std::shared_ptr<SceneBase> MoveNextScene();
 
-private:	// •Ï”
-	int m_cursorCount;		// ƒJ[ƒ\ƒ‹ƒJƒEƒ“ƒg
-	std::array<std::string, static_cast<int>(SceneType::SceneNum)> m_sceneString;	// ƒV[ƒ“ˆÚ“®—p‚Ég‚¤•¶š
+private:	// å¤‰æ•°
+	int m_cursorCount;		// ã‚«ãƒ¼ã‚½ãƒ«ã‚«ã‚¦ãƒ³ãƒˆ
+	std::array<std::string, static_cast<int>(SceneType::SceneNum)> m_sceneString;	// ã‚·ãƒ¼ãƒ³ç§»å‹•ç”¨ã«ä½¿ã†æ–‡å­—
 };
 

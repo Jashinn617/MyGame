@@ -1,47 +1,49 @@
-#include "DxLib.h"
+ï»¿#include "DxLib.h"
 
 #include "SceneDebug.h"
 #include "SceneStage.h"
+#include "SceneGear.h"
 
 #include "../Utility/Pad.h"
 #include "../Utility/Game.h"
 
 namespace
 {
-	constexpr float kCursorPosX = Game::kScreenWidth * 0.2f;								// ‰Šú‚ÌƒJ[ƒ\ƒ‹À•WX
-	constexpr float kCursorPosY = Game::kScreenHeight * 0.2f;								// ‰Šú‚ÌƒJ[ƒ\ƒ‹À•WY
-	constexpr float kSceneDescriptionPosX = Game::kScreenWidth * 0.1f;						// ƒV[ƒ“à–¾—p•¶šÀ•WX
-	constexpr float kSceneDescriptionPosY = Game::kScreenHeight * 0.05f;					// ƒV[ƒ“à–¾—p•¶šÀ•WY
+	constexpr float kCursorPosX = Game::kScreenWidth * 0.2f;								// åˆæœŸã®ã‚«ãƒ¼ã‚½ãƒ«åº§æ¨™X
+	constexpr float kCursorPosY = Game::kScreenHeight * 0.2f;								// åˆæœŸã®ã‚«ãƒ¼ã‚½ãƒ«åº§æ¨™Y
+	constexpr float kSceneDescriptionPosX = Game::kScreenWidth * 0.1f;						// ã‚·ãƒ¼ãƒ³èª¬æ˜ç”¨æ–‡å­—åº§æ¨™X
+	constexpr float kSceneDescriptionPosY = Game::kScreenHeight * 0.05f;					// ã‚·ãƒ¼ãƒ³èª¬æ˜ç”¨æ–‡å­—åº§æ¨™Y
 
-	constexpr float kCursorMove = Game::kScreenHeight * 0.03f;		// ƒJ[ƒ\ƒ‹‚ÌˆÚ“®—Ê
+	constexpr float kCursorMove = Game::kScreenHeight * 0.03f;		// ã‚«ãƒ¼ã‚½ãƒ«ã®ç§»å‹•é‡
 
-	constexpr unsigned int kNormalStringColor = 0xffffff;			// ’Êí‚Ì•¶šF
-	constexpr unsigned int kSelectStringColor = 0xff0000;			// ‘I‘ğ’†‚Ì•¶šF
-	constexpr unsigned int kSceneDescriptionStringColor = 0x00ffff;	// ƒV[ƒ“à–¾—p•¶šF
+	constexpr unsigned int kNormalStringColor = 0xffffff;			// é€šå¸¸ã®æ–‡å­—è‰²
+	constexpr unsigned int kSelectStringColor = 0xff0000;			// é¸æŠä¸­ã®æ–‡å­—è‰²
+	constexpr unsigned int kSceneDescriptionStringColor = 0x00ffff;	// ã‚·ãƒ¼ãƒ³èª¬æ˜ç”¨æ–‡å­—è‰²
 }
 
 SceneDebug::SceneDebug():
 	m_cursorCount(0)
 {
-	// ˆÚ“®—p•¶š‚Ìİ’è
-	m_sceneString[static_cast<int>(SceneType::Debug)] = "Debug";		// ƒfƒoƒbƒO
-	m_sceneString[static_cast<int>(SceneType::Test)] = "Test";			// ƒeƒXƒg
-	m_sceneString[static_cast<int>(SceneType::Title)] = "Title";		// ƒ^ƒCƒgƒ‹
-	m_sceneString[static_cast<int>(SceneType::Select)] = "Select";		// ƒZƒŒƒNƒg
-	m_sceneString[static_cast<int>(SceneType::Stage1)] = "Stage1";		// ƒXƒe[ƒW1
-	m_sceneString[static_cast<int>(SceneType::Clear)] = "Clear";		// ƒNƒŠƒA
-	m_sceneString[static_cast<int>(SceneType::GameOver)] = "GameOver";	// ƒQ[ƒ€ƒI[ƒo[
+	// ç§»å‹•ç”¨æ–‡å­—ã®è¨­å®š
+	m_sceneString[static_cast<int>(SceneType::Debug)] = "Debug";		// ãƒ‡ãƒãƒƒã‚°
+	m_sceneString[static_cast<int>(SceneType::Test)] = "Test";			// ãƒ†ã‚¹ãƒˆ
+	m_sceneString[static_cast<int>(SceneType::Title)] = "Title";		// ã‚¿ã‚¤ãƒˆãƒ«
+	m_sceneString[static_cast<int>(SceneType::Gear)] = "Gear";			// è£…å‚™
+	m_sceneString[static_cast<int>(SceneType::Select)] = "Select";		// ã‚»ãƒ¬ã‚¯ãƒˆ
+	m_sceneString[static_cast<int>(SceneType::Stage1)] = "Stage1";		// ã‚¹ãƒ†ãƒ¼ã‚¸1
+	m_sceneString[static_cast<int>(SceneType::Clear)] = "Clear";		// ã‚¯ãƒªã‚¢
+	m_sceneString[static_cast<int>(SceneType::GameOver)] = "GameOver";	// ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼
 }
 
 std::shared_ptr<SceneBase> SceneDebug::Update()
 {
-	// ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½ê‡A‘I‘ğ‚³‚ê‚½ƒV[ƒ“‚É‘JˆÚ‚·‚é
+	// ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸå ´åˆã€é¸æŠã•ã‚ŒãŸã‚·ãƒ¼ãƒ³ã«é·ç§»ã™ã‚‹
 	if (Pad::IsTrigger(PAD_INPUT_1))
 	{
 		return MoveNextScene();
 	}
 
-	// ƒJ[ƒ\ƒ‹XV
+	// ã‚«ãƒ¼ã‚½ãƒ«æ›´æ–°
 	UpdateCursor();
 
 	return shared_from_this();
@@ -49,88 +51,91 @@ std::shared_ptr<SceneBase> SceneDebug::Update()
 
 void SceneDebug::Draw()
 {
-	// •¶š•`‰æ
+	// æ–‡å­—æç”»
 	for (int i = 0; i < static_cast<int>(m_sceneString.size()); i++)
 	{
-		if (m_cursorCount == i)	// ‚»‚Ì•¶š‚ğ‘I‘ğ’†‚¾‚Á‚½ê‡
+		if (m_cursorCount == i)	// ãã®æ–‡å­—ã‚’é¸æŠä¸­ã ã£ãŸå ´åˆ
 		{
-			// ‘I‘ğ’†‚Ì•¶šF‚É‚·‚é
+			// é¸æŠä¸­ã®æ–‡å­—è‰²ã«ã™ã‚‹
 			DrawString(static_cast<int>(kCursorPosX),
-				static_cast<int>(kCursorPosY + (i * kCursorMove)),	// À•W
-				m_sceneString[i].c_str(),							// •¶š
-				kSelectStringColor);								// F
+				static_cast<int>(kCursorPosY + (i * kCursorMove)),	// åº§æ¨™
+				m_sceneString[i].c_str(),							// æ–‡å­—
+				kSelectStringColor);								// è‰²
 		}
-		else	// ‘I‘ğ’†‚Å–³‚©‚Á‚½
+		else	// é¸æŠä¸­ã§ç„¡ã‹ã£ãŸæ™‚
 		{
-			// ’Êí‚Ì•¶šF‚É‚·‚é
+			// é€šå¸¸ã®æ–‡å­—è‰²ã«ã™ã‚‹
 			DrawString(static_cast<int>(kCursorPosX),
-				static_cast<int>(kCursorPosY + (i * kCursorMove)),	// À•W
-				m_sceneString[i].c_str(),							// •¶š
-				kNormalStringColor);								// F
+				static_cast<int>(kCursorPosY + (i * kCursorMove)),	// åº§æ¨™
+				m_sceneString[i].c_str(),							// æ–‡å­—
+				kNormalStringColor);								// è‰²
 		}
 	}
 
-	// ƒV[ƒ“–¼•`‰æ
+	// ã‚·ãƒ¼ãƒ³åæç”»
 	DrawFormatString(static_cast<int>(kSceneDescriptionPosX), 0,
 		kSceneDescriptionStringColor, "DebugScene");
-	// ƒV[ƒ“à–¾•`‰æ
+	// ã‚·ãƒ¼ãƒ³èª¬æ˜æç”»
 	DrawFormatString(static_cast<int>(kSceneDescriptionPosX),
 		static_cast<int>(kSceneDescriptionPosY),
-		kSceneDescriptionStringColor, "ƒV[ƒ“‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢(A‚ÅŒˆ’è)");
+		kSceneDescriptionStringColor, "ã‚·ãƒ¼ãƒ³ã‚’é¸æŠã—ã¦ãã ã•ã„(Aã§æ±ºå®š)");
 }
 
 void SceneDebug::UpdateCursor()
 {
-	// ƒJ[ƒ\ƒ‹ˆÚ“®
-	if (Pad::IsTrigger(PAD_INPUT_UP))	// ãƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½ê‡
+	// ã‚«ãƒ¼ã‚½ãƒ«ç§»å‹•
+	if (Pad::IsTrigger(PAD_INPUT_UP))	// ä¸Šãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸå ´åˆ
 	{
-		// ƒJ[ƒ\ƒ‹ƒJƒEƒ“ƒg‚ğŒ¸‚ç‚·
+		// ã‚«ãƒ¼ã‚½ãƒ«ã‚«ã‚¦ãƒ³ãƒˆã‚’æ¸›ã‚‰ã™
 		m_cursorCount--;
-		// ƒJƒEƒ“ƒg‚ª0‚æ‚è¬‚³‚­‚È‚Á‚½‚çƒJ[ƒ\ƒ‹‚ªƒ‹[ƒv‚·‚é‚æ‚¤‚É‚·‚é
+		// ã‚«ã‚¦ãƒ³ãƒˆãŒ0ã‚ˆã‚Šå°ã•ããªã£ãŸã‚‰ã‚«ãƒ¼ã‚½ãƒ«ãŒãƒ«ãƒ¼ãƒ—ã™ã‚‹ã‚ˆã†ã«ã™ã‚‹
 		if (m_cursorCount < 0)m_cursorCount = static_cast<int>(m_sceneString.size() - 1);
 	}
-	else if (Pad::IsTrigger(PAD_INPUT_DOWN))		// ‰ºƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½ê‡
+	else if (Pad::IsTrigger(PAD_INPUT_DOWN))		// ä¸‹ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸå ´åˆ
 	{
-		// ƒJ[ƒ\ƒ‹ƒJƒEƒ“ƒg‚ğ‘‚â‚·
+		// ã‚«ãƒ¼ã‚½ãƒ«ã‚«ã‚¦ãƒ³ãƒˆã‚’å¢—ã‚„ã™
 		m_cursorCount++;
-		// ƒJ[ƒ\ƒ‹‚ª•¶š—ñ‚Ì”‚æ‚è‘å‚«‚­‚È‚Á‚½‚çƒ‹[ƒv‚·‚é‚æ‚¤‚É‚·‚é
+		// ã‚«ãƒ¼ã‚½ãƒ«ãŒæ–‡å­—åˆ—ã®æ•°ã‚ˆã‚Šå¤§ãããªã£ãŸã‚‰ãƒ«ãƒ¼ãƒ—ã™ã‚‹ã‚ˆã†ã«ã™ã‚‹
 		if (m_cursorCount > static_cast<int>(m_sceneString.size() - 1))m_cursorCount = 0;
 	}
 }
 
 std::shared_ptr<SceneBase> SceneDebug::MoveNextScene()
 {
-	// Ÿ‚ÌƒV[ƒ“‚Ìİ’è
+	// æ¬¡ã®ã‚·ãƒ¼ãƒ³ã®è¨­å®š
 	std::shared_ptr<SceneBase> nextScene = nullptr;
 
-	// ‘I‘ğ‚³‚ê‚½ƒV[ƒ“‚É‘JˆÚ‚·‚é
+	// é¸æŠã•ã‚ŒãŸã‚·ãƒ¼ãƒ³ã«é·ç§»ã™ã‚‹
 	switch (m_cursorCount)
 	{
-	case static_cast<int>(SceneType::Debug):	// ƒfƒoƒbƒO
+	case static_cast<int>(SceneType::Debug):	// ãƒ‡ãƒãƒƒã‚°
 			nextScene = std::make_shared<SceneDebug>();
 			break;
-	case static_cast<int>(SceneType::Test):		// ƒeƒXƒg
+	case static_cast<int>(SceneType::Test):		// ãƒ†ã‚¹ãƒˆ
 		nextScene = std::make_shared<SceneStage>(Game::StageKind::StageTest);
 		break;
-	case static_cast<int>(SceneType::Title):	// ƒ^ƒCƒgƒ‹
+	case static_cast<int>(SceneType::Title):	// ã‚¿ã‚¤ãƒˆãƒ«
 		return shared_from_this();
 		break;
-	case static_cast<int>(SceneType::Select):	// ƒZƒŒƒNƒg
+	case static_cast<int>(SceneType::Gear):	// è£…å‚™å“
+		nextScene = std::make_shared<SceneGear>();
+		break;
+	case static_cast<int>(SceneType::Select):	// ã‚»ãƒ¬ã‚¯ãƒˆ
 		return shared_from_this();
 		break;
-	case static_cast<int>(SceneType::Stage1):	// ƒXƒe[ƒW1
+	case static_cast<int>(SceneType::Stage1):	// ã‚¹ãƒ†ãƒ¼ã‚¸1
 		nextScene = std::make_shared<SceneStage>(Game::StageKind::Stage1);
 		break;
-	case static_cast<int>(SceneType::Clear):	// ƒNƒŠƒA
+	case static_cast<int>(SceneType::Clear):	// ã‚¯ãƒªã‚¢
 		return shared_from_this();
 		break;
-	case static_cast<int>(SceneType::GameOver):	// ƒQ[ƒ€ƒI[ƒo[
+	case static_cast<int>(SceneType::GameOver):	// ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼
 		return shared_from_this();
 		break;
-	default:	// ‰½‚à‘I‘ğ‚³‚ê‚Ä‚¢‚È‚©‚Á‚½ê‡‚ÍƒV[ƒ“‘JˆÚ‚ğs‚í‚È‚¢‚æ‚¤‚É‚·‚é
+	default:	// ä½•ã‚‚é¸æŠã•ã‚Œã¦ã„ãªã‹ã£ãŸå ´åˆã¯ã‚·ãƒ¼ãƒ³é·ç§»ã‚’è¡Œã‚ãªã„ã‚ˆã†ã«ã™ã‚‹
 		return shared_from_this();
 		break;
 	}
-	// ƒV[ƒ“‚ğ•Ô‚·
+	// ã‚·ãƒ¼ãƒ³ã‚’è¿”ã™
 	return nextScene;
 }

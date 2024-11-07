@@ -1,61 +1,62 @@
-#pragma once
+ï»¿#pragma once
 #include "DxLib.h"
 
 #include <memory>
 
 /// <summary>
-/// ŠeƒV[ƒ“‚ÌŠî’êƒNƒ‰ƒX
+/// å„ã‚·ãƒ¼ãƒ³ã®åŸºåº•ã‚¯ãƒ©ã‚¹
 /// </summary>
 class SceneBase: public std::enable_shared_from_this<SceneBase>
 {
-public:	// —ñ‹“Œ^
+public:	// åˆ—æŒ™å‹
 
-	// ƒV[ƒ“‚Ìí—Ş
+	// ã‚·ãƒ¼ãƒ³ã®ç¨®é¡
 	enum class SceneKind
 	{
-		Debug,		// ƒfƒoƒbƒO
-		Title,		// ƒ^ƒCƒgƒ‹
-		Select,		// ƒZƒŒƒNƒg
-		Stage,		// ƒXƒe[ƒW
-		Clear,		// ƒNƒŠƒA
-		GameOver,	// ƒQ[ƒ€ƒI[ƒo[
+		Debug,		// ãƒ‡ãƒãƒƒã‚°
+		Title,		// ã‚¿ã‚¤ãƒˆãƒ«
+		Select,		// ã‚»ãƒ¬ã‚¯ãƒˆ
+		Gear,		// è£…å‚™
+		Stage,		// ã‚¹ãƒ†ãƒ¼ã‚¸
+		Clear,		// ã‚¯ãƒªã‚¢
+		GameOver,	// ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼
 	};
 
-public:	// ŠÖ”
+public:	// é–¢æ•°
 	/// <summary>
-	/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
-	SceneBase() {/*ˆ—–³‚µ*/ }
+	SceneBase() {/*å‡¦ç†ç„¡ã—*/ }
 
 	/// <summary>
-	/// ƒfƒXƒgƒ‰ƒNƒ^
+	/// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
-	~SceneBase(){/*ˆ—–³‚µ*/ }
+	~SceneBase(){/*å‡¦ç†ç„¡ã—*/ }
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	virtual void Init() = 0;
 
 	/// <summary>
-	/// XV
+	/// æ›´æ–°
 	/// </summary>
-	/// <returns>Ÿ‚ÌƒV[ƒ“</returns>
+	/// <returns>æ¬¡ã®ã‚·ãƒ¼ãƒ³</returns>
 	virtual std::shared_ptr<SceneBase> Update() = 0;
 
 	/// <summary>
-	/// •`‰æ
+	/// æç”»
 	/// </summary>
 	virtual void Draw() = 0;
 
 	/// <summary>
-	/// I—¹ˆ—
+	/// çµ‚äº†å‡¦ç†
 	/// </summary>
 	virtual void End() = 0;
 
 	/// <summary>
-	/// ƒV[ƒ“‚Ìí—Ş‚Ìæ“¾
+	/// ã‚·ãƒ¼ãƒ³ã®ç¨®é¡ã®å–å¾—
 	/// </summary>
-	/// <returns>ƒV[ƒ“‚Ìí—Ş</returns>
+	/// <returns>ã‚·ãƒ¼ãƒ³ã®ç¨®é¡</returns>
 	virtual SceneKind GetSceneKind() = 0;
 };

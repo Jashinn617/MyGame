@@ -88,6 +88,9 @@ Player::Player() :
 	CsvLoad::GetInstance().AnimLoad(m_animData, "Player");
 	// ステータス情報初期化
 	CsvLoad::GetInstance().StatusLoad(m_statusData, "Player");
+	// ステータス追加
+	CsvLoad::GetInstance().AddStatusLoad(m_statusData, "Player");
+
 	// ショット作成
 	m_pShot = std::make_shared<Shot>(this, m_statusData.shotAtk);
 
@@ -240,6 +243,11 @@ void Player::Draw2D()
 	DrawFormatString(0, 40, 0xffffff, "ジャンプ力：%f", m_jumpPower);
 	DrawFormatString(0, 180, 0xffffff, "攻撃カウント：%d", m_attackCount);
 	DrawFormatString(0, 200, 0xffffff, "次攻撃フラグ：%d", m_isAttack);
+
+	DrawFormatString(1200, 20, 0x000000, "HP:%d", m_statusData.hp);
+	DrawFormatString(1200, 40, 0x000000, "MATK:%d", m_statusData.meleeAtk);
+	DrawFormatString(1200, 80, 0x000000, "SATK:%d", m_statusData.shotAtk);
+	DrawFormatString(1200, 100, 0x000000, "DEF:%d", m_statusData.def);
 #endif // _DEBUG
 }
 

@@ -2,6 +2,8 @@
 
 #include "../Object/CharacterBase.h"
 
+#include "../Object/Player/Gear.h"
+
 #include "../Utility/CharacterData.h"
 
 using namespace CharacterData;
@@ -36,6 +38,19 @@ public:	// 関数
 	/// <param name="data">ステータスデータ</param>
 	/// <param name="characterName">キャラクター名</param>
 	void StatusLoad(CharacterBase::StatusData& data, const char* characterName);
+
+	/// <summary>
+	/// 追加するステータス値
+	/// </summary>
+	/// <param name="data">ステータスデータ</param>
+	/// <param name="characterName">キャラクター名</param>
+	void AddStatusLoad(CharacterBase::StatusData& data, const char* characterName);
+
+	/// <summary>
+	/// アイテムのロード
+	/// </summary>
+	/// <param name="data">アイテムデータ</param>
+	void ItemDataLoad(Gear::GearData& data);
 
 private:	// 関数
 	/// <summary>
