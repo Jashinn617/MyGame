@@ -47,10 +47,10 @@ public:	// 関数
 	void AddStatusLoad(CharacterBase::StatusData& data, const char* characterName);
 
 	/// <summary>
-	/// アイテムのロード
+	/// 装備品のロード
 	/// </summary>
-	/// <param name="data">アイテムデータ</param>
-	void ItemDataLoad(Gear::GearData& data);
+	/// <param name="data">装備品データ</param>
+	void GearDataLoad(Gear::GearData& data);
 
 private:	// 関数
 	/// <summary>

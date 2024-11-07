@@ -17,7 +17,8 @@ std::vector<std::string> Split(std::string& input, char delimiter)
 	std::istringstream stream(input);
 	std::string field;
 	std::vector<std::string> result;
-	while (getline(stream, field, delimiter)) {
+	while (getline(stream, field, delimiter)) 
+	{
 		result.push_back(field);
 	}
 	return result;
@@ -115,8 +116,6 @@ void CsvLoad::StatusLoad(CharacterBase::StatusData& data, const char* characterN
 	std::ifstream ifs("Data/CsvFile/Status.csv");
 	std::string line;
 
-	std::array<int, 6> statusData{};
-
 	std::vector<std::string>strVec;
 
 	while (getline(ifs, line))
@@ -155,8 +154,6 @@ void CsvLoad::AddStatusLoad(CharacterBase::StatusData& data, const char* charact
 	std::ifstream ifs("Data/CsvFile/AddStatus.csv");
 	std::string line;
 
-	std::array<int, 5> statusData{};
-
 	std::vector<std::string> strVec;
 
 	while (getline(ifs, line))
@@ -187,13 +184,11 @@ void CsvLoad::AddStatusLoad(CharacterBase::StatusData& data, const char* charact
 	data.def += stoi(strVec[4]);
 }
 
-void CsvLoad::ItemDataLoad(Gear::GearData& data)
+void CsvLoad::GearDataLoad(Gear::GearData& data)
 {
 	// ファイル情報の読み込み
-	std::ifstream ifs("Data/CsvFile/AddStatus.csv");
+	std::ifstream ifs("Data/CsvFile/Gear.csv");
 	std::string line;
-
-	std::array<int, 7> itemData{};
 
 	std::vector<std::string> strVec;
 
@@ -211,7 +206,7 @@ void CsvLoad::ItemDataLoad(Gear::GearData& data)
 		// strvec[6]	: 所持数		int
 	}
 
-	// ステータス情報をステータスデータに入れる
+	// 情報を装備品データに入れる
 	data.name = strVec[0];
 	data.upHp = stoi(strVec[1]);
 	data.upMAttack = stoi(strVec[2]);

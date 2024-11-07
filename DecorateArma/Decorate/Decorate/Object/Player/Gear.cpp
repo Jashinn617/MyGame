@@ -2,19 +2,22 @@
 
 #include "../../Common/CsvLoad.h"
 
+#include <cassert>
+
 namespace
 {
-	int gearKindNum = 15;	// 装備品の種類の数
+	int kMaxCost = 30;		// 最大コスト数
+	int kGearKindNum = 15;	// 装備品の種類の数
 }
 
 Gear::Gear()
 {
-	m_data.resize(gearKindNum);
+	m_data.resize(kGearKindNum);
 
 	for (int i = 0; i < m_data.size(); i++)
 	{
 		// 装備品情報のロード
-		CsvLoad::GetInstance().ItemDataLoad(m_data[i]);
+		CsvLoad::GetInstance().GearDataLoad(m_data[i]);
 	}
 }
 
@@ -24,5 +27,15 @@ Gear::~Gear()
 
 Gear::GearData Gear::GetGear(std::string gearName)
 {
-	return GearData();
+	for (int i = 0; i < m_data.size(); i++)
+	{
+		// 指定の装備品を見つけたらそれを返す
+		if (m_data[i].name == gearName)
+		{
+			return m_data[i];
+		}
+	}
+
+	// 指定した装備品がなければ止める
+	assert(false);
 }
