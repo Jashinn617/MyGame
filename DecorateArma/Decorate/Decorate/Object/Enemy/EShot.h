@@ -30,9 +30,7 @@ public:		// 関数
 	/// <summary>
 	/// 更新
 	/// </summary>
-	/// <param name="targetPos">ターゲット座標</param>
-	/// <param name="isAttack">攻撃中かどうか</param>
-	void Update(VECTOR targetPos, bool isAttack);
+	void Update();
 
 	/// <summary>
 	/// 描画
@@ -45,13 +43,12 @@ public:		// 関数
 	/// <param name="pPlayer">プレイヤーポインタ</param>
 	void OnAttack(CharacterBase* pPlayer);
 
-private:	// 関数
 	/// <summary>
 	/// 弾生成
 	/// </summary>
+	/// <param name="pos">自分の座標</param>
 	/// <param name="targetPos">ターゲット座標</param>
-	/// <param name="isAttack">攻撃中かどうか</param>
-	void Make(VECTOR targetPos, bool isAttack);
+	void Make(VECTOR pos, VECTOR targetPos);
 
 private:	// 構造体
 	/// <summary>
@@ -59,9 +56,9 @@ private:	// 構造体
 	/// </summary>
 	struct Bullet
 	{
-		bool isExist;								// 存在フラグ
-		VECTOR pos;									// 座標
-		VECTOR direction;							// 進む方向
+		bool isExist = false;						// 存在フラグ
+		VECTOR pos = VGet(0.0f,0.0f,0.0f);			// 座標
+		VECTOR direction = VGet(0.0f, 0.0f, 0.0f);	// 進む方向
 		std::shared_ptr<Time> vanishTime;			// 消えるまでの時間
 		std::shared_ptr<CollisionShape> coll;		// 当たり判定
 		std::shared_ptr<Model> model;				// モデル

@@ -152,7 +152,7 @@ void Shot::OnAttack(CharacterBase* pEnemy)
 
 void Shot::UpdateBullet()
 {
-	// 存在していなかったら発射する
+	// 存在していたら進める
 	for (auto& bullet : m_bullet)
 	{
 		if (bullet.isExist)

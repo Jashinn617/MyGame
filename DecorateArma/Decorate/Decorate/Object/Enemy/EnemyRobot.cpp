@@ -1,4 +1,5 @@
 ﻿#include "EnemyRobot.h"
+#include "EShot.h"
 
 #include "../Model.h"
 
@@ -17,7 +18,7 @@ namespace
 	constexpr float kCapsuleRadius = 30.0f;					// カプセルの半径
 	constexpr float kRotSpeed = 9.0f;						// 回転速度
 	constexpr VECTOR kModelScale = { 0.15f,0.2f,0.15f };	// モデルスケール
-	constexpr float kSearchRadius = 500.0f;					// 索敵範囲の半径
+	constexpr float kSearchRadius = 800.0f;					// 索敵範囲の半径
 	constexpr float kSearchHeight = 70.0f;					// 索敵範囲の高さ
 	constexpr float kHandRadius = 10.0f;					// 腕の当たり判定の半径
 	constexpr float kMeleeAttackRange = 100.0f;				// 近距離攻撃射程
@@ -55,6 +56,9 @@ EnemyRobot::EnemyRobot(VECTOR pos)
 
 	// HPバーポインタ作成
 	m_pHpBar = std::make_shared<HpBarEnemy>(m_statusData.hp, m_characterInfo.pos);
+
+	// 遠距離攻撃
+	m_pShot = std::make_shared<EShot>(m_statusData.shotAtk);
 }
 
 EnemyRobot::~EnemyRobot()

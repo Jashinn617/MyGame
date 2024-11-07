@@ -1,4 +1,5 @@
 ﻿#include "EnemyBase.h"
+#include "EShot.h"
 
 #include "../ObjectManager.h"
 #include "../Player/Player.h"
@@ -132,11 +133,24 @@ void EnemyBase::Update()
 
 	// HPバー更新
 	m_pHpBar->Update();
+
+	// 攻撃タイプが近距離以外だった場合
+	if (m_attackType != AttackType::Melee)
+	{
+		// ショット更新
+		m_pShot->Update();
+	}
 }
 
 void EnemyBase::Draw(std::shared_ptr<ToonShader> pToonShader)
 {
 	m_pModel->Draw();
+
+	// 攻撃タイプが近距離以外だった場合
+	if (m_attackType != AttackType::Melee)
+	{
+		m_pShot->Draw();
+	}	
 
 	m_pCollShape->DebugDraw(0x00ff00);
 	m_pSearchRange->DebugDraw(0x000000);
@@ -201,6 +215,13 @@ void EnemyBase::OnMeleeAttack(CharacterBase* pPlayer)
 			pPlayer->OnDamage(m_characterInfo.pos, m_statusData.meleeAtk);
 		}
 	}
+
+	// 遠距離攻撃判定
+	// 攻撃タイプが近距離以外だった場合
+	if (m_attackType != AttackType::Melee)
+	{
+		m_pShot->OnAttack(pPlayer);
+	}
 }
 
 void EnemyBase::InitMoveSpeed(float moveSpeed)
@@ -257,7 +278,8 @@ void EnemyBase::UpdateStateTransition()
 	if (m_updateFunc == &EnemyBase::UpdateDeadState)return;
 
 	// 攻撃状態になったら処理を終了する
-	if (StateTransitionMeleeAttack())return;
+	if (StateTransitionMeleeAttack()) return;
+	if (StateTransitionShotAttack()) return;
 
 	// どれでもなかった場合は移動状態になる
 	m_updateFunc = &EnemyBase::UpdateMoveState;
@@ -307,6 +329,7 @@ bool EnemyBase::StateTransitionShotAttack()
 
 	// プレイヤーから敵までの方向ベクトルを求める
 	m_enemyToPlayer = VSub(m_pObjectManager->GetPlayer()->GetInfo().pos, m_characterInfo.pos);
+
 	// プレイヤーが攻撃範囲内に入ったら攻撃状態に移行する
 	if (VSize(m_enemyToPlayer) < m_shotAttackRange)
 	{
@@ -397,9 +420,11 @@ void EnemyBase::UpdateShotAttackState()
 	}
 
 	// アニメーション再生
-	// アニメーション再生
 	m_pModel->ChangeAnim(m_animData.attack2, false, false, 2);
 	m_isAttack = true;
+	// 弾生成
+	m_pShot->Make(m_characterInfo.pos, m_pObjectManager->GetPlayer()->GetInfo().pos);
+	
 
 	// 攻撃が終わったら移動状態になる
 	if (m_pModel->IsAnimEnd())

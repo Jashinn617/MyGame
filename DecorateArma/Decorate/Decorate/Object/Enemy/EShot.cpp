@@ -10,14 +10,15 @@
 
 namespace
 {
-	const char* const kFileName = "Data/Model/Enemy/Shot.mv1";	// 弾モデルファイルパス
+	const char* const kFileName = "Data/Model/Enemy/Shot/Shot.mv1";	// 弾モデルファイルパス
 
-	constexpr int kNum = 50;						// 弾数
-	constexpr int kVanishTime = 50;					// 弾が消えるまでの時間
-	constexpr int kIntervalTime = 10;				// 次の球が発射されるまでの時間
+	constexpr int kNum = 10;						// 弾数
+	constexpr int kVanishTime = 100;				// 弾が消えるまでの時間
+	constexpr int kIntervalTime = 15;				// 次の球が発射されるまでの時間
 	constexpr float kRadius = 10;					// 弾の半径
-	constexpr float kSpeed = 5.0f;					// 弾の速度
-	constexpr float kStartPosHeight = 5.0f;			// 弾を発射する高さ
+	constexpr float kSpeed = 8.0f;					// 弾の速度
+	constexpr float kStartPosHeight = 70.0f;		// 弾を発射する高さ
+	constexpr float kTargetHeight = 90.0f;			// ターゲットの高さ
 	constexpr VECTOR kScale = { 0.4f,0.4f,0.4f };	// 弾のスケール
 }
 
@@ -56,9 +57,9 @@ EShot::~EShot()
 	/*処理無し*/
 }
 
-void EShot::Update(VECTOR targetPos, bool isAttack)
+void EShot::Update()
 {
-	// 存在していたら発射する
+	// 存在していたら進める
 	for (auto& bullet : m_bullet)
 	{
 		if (bullet.isExist)
@@ -81,9 +82,6 @@ void EShot::Update(VECTOR targetPos, bool isAttack)
 			}
 		}
 	}
-
-	// 弾生成
-	Make(targetPos, isAttack);
 }
 
 void EShot::Draw()
@@ -120,31 +118,32 @@ void EShot::OnAttack(CharacterBase* pPlayer)
 	}
 }
 
-void EShot::Make(VECTOR targetPos, bool isAttack)
+void EShot::Make(VECTOR pos, VECTOR targetPos)
 {
-	// 攻撃中でない場合は弾を出さない
-	if (!isAttack) return;
 	// 前の弾が発射されてから一定時間経ってないと弾を出さない
 	if (!m_pBulletIntervalTime->Update()) return;
 
 	// 存在していなかったら発射する
 	for (auto& bullet : m_bullet)
 	{
-		// 存在フラグを立てる
-		bullet.isExist = true;
-		// 位置の決定
-		bullet.pos = m_pos;
-		bullet.pos.y += kStartPosHeight;
-		// モデル座標更新
-		bullet.model->SetPos(bullet.pos);
+		if (!bullet.isExist)
+		{
+			// 存在フラグを立てる
+			bullet.isExist = true;
+			// 位置の決定
+			bullet.pos = pos;
+			bullet.pos.y += kStartPosHeight;
+			// モデル座標更新
+			bullet.model->SetPos(bullet.pos);
 
-		// 高さ調整
-		targetPos.y += 0.0f;
+			// 高さ調整
+			targetPos.y += kTargetHeight;
 
-		// 進む方向の決定
-		bullet.direction = VNorm(VSub(targetPos, bullet.pos));
+			// 進む方向の決定
+			bullet.direction = VNorm(VSub(targetPos, bullet.pos));
 
-		break;
+			break;
+		}
 	}
 	// タイムリセット
 	m_pBulletIntervalTime->Reset();
