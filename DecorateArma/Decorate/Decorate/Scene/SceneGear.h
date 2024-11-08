@@ -69,11 +69,25 @@ private:	// 関数
 	/// </summary>
 	void DrawCursor();
 
+	/// <summary>
+	/// ボックス描画
+	/// </summary>
+	void DrawBoxes();
+
 private:	// 変数
 	int m_mulMarkH;					// ×マーク画像ハンドル
 	int m_cursorH;					// カーソル画像ハンドル
+	int m_gearBoxH;					// 装備品ボックス画像ハンドル
+	int m_explainBoxH;				// 説明文ボックス画像ハンドル
+	int m_equipTextH;				// 装備をするテキスト画像ハンドル
+	int m_removeEquipTextH;			// 装備を外すテキスト画像ハンドル
+	int m_costTextH;				// コストテキスト画像ハンドル
+	int m_equippedBoxH;				// 装備中ボックス画像ハンドル
+	int m_statusBoxH;				// ステータスボックス画像ハンドル
 	std::vector<int> m_gearH;		// 装備品名画像ハンドル
 	std::vector<int> m_numH;		// 数字画像ハンドル
+	std::vector<int> m_explainH;	// 説明文画像ハンドル
+	int m_cursorCount;				// カーソルカウント
 	bool m_isCursorLeft;			// カーソルが左にあるかどうか
 	std::shared_ptr<Gear> m_pGear;	// 装備品
 };

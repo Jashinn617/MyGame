@@ -9,6 +9,8 @@
 namespace
 {
 	constexpr int kTextImgNum = 15;					// テキストの画像数
+
+	/*ファイルパス関係*/
 	// テキスト画像名
 	const char* kImgNamePath[kTextImgNum] = 
 	{
@@ -42,22 +44,67 @@ namespace
 		"Data/Image/Gear/Number/8.png",
 		"Data/Image/Gear/Number/9.png",
 	};
-	const char* kMulMarkPath = "Data/Image/Gear/MulMark.png";	// ×マーク画像ハンドル
-	const char* kCursorPath = "Data/Image/Gear/CursorBox.png";	// カーソル画像ハンドル
+	// 説明文画像名
+	const char* kExplainTextPath[kTextImgNum] =
+	{
+		"Data/Image/Gear/ExplainText/HPS.png",
+		"Data/Image/Gear/ExplainText/HPM.png",
+		"Data/Image/Gear/ExplainText/HPL.png",
+		"Data/Image/Gear/ExplainText/MATKS.png",
+		"Data/Image/Gear/ExplainText/MATKM.png",
+		"Data/Image/Gear/ExplainText/MATKL.png",
+		"Data/Image/Gear/ExplainText/SATKS.png",
+		"Data/Image/Gear/ExplainText/SATKM.png",
+		"Data/Image/Gear/ExplainText/SATKL.png",
+		"Data/Image/Gear/ExplainText/DEFS.png",
+		"Data/Image/Gear/ExplainText/DEFM.png",
+		"Data/Image/Gear/ExplainText/DEFL.png",
+		"Data/Image/Gear/ExplainText/AllS.png",
+		"Data/Image/Gear/ExplainText/AllM.png",
+		"Data/Image/Gear/ExplainText/AllL.png",
+	};
+	const char* kEquipTextPath = "Data/Image/Gear/Text/Equip.png";				// 装備をするテキスト画像ファイルパス
+	const char* kRemoveEquipPath = "Data/Image/Gear/Text/RemoveEquip.png";		// 装備を外すテキスト画像ファイルパス
+	const char* kCostTextPath = "Data/Image/Gear/Text/Cost.png";				// コストテキスト画像ファイルパス
+	const char* kMulMarkPath = "Data/Image/Gear/MulMark.png";					// ×マーク画像ファイルパス
+	const char* kCursorPath = "Data/Image/Gear/Box/CursorBox.png";				// カーソル画像ファイルパス
+	const char* kGearBoxPath = "Data/Image/Gear/Box/GearBox.png";				// 装備品ボックス画像ファイルパス
+	const char* kExplainBoxPath = "Data/Image/Gear/Box/GearExplainBox.png";		// 装備品説明文ボックス画像ファイルパス
+	const char* kEquippedBoxPath = "Data/Image/Gear/Box/EquippedBox.png";		// 装備中ボックス画像ファイルパス
+	const char* kStatusBoxPath = "Data/Image/Gear/Box/StatusBox.png";			// ステータスボックス画像ファイルパス
 
-	constexpr int kGearLeftPosX = 200;						// 装備品名左側座標
-	constexpr int kGearRightPosX = 800;						// 装備品名右側座標
+	/*座標関係*/
+	constexpr int kGearLeftPosX = 150;						// 装備品名左側座標
+	constexpr int kGearRightPosX = kGearLeftPosX + 600;		// 装備品名右側座標
+	constexpr int kGearStartPosY = 175;						// 装備品名Y座標の最初の位置
+	constexpr int kGearIntervalPosY = 80;					// 装備品名Y座標の間隔
+	constexpr int kEquipTextPosX = 380;						// 装備をするテキストX座標
+	constexpr int kREquipTextPosX = kEquipTextPosX + 400;	// 装備を外すテキストX座標
+	constexpr int kEquipTextPosY = 70;						// 装備をするテキストY座標
+	constexpr int kExplainTextPosX = 450;					// 説明文画像X座標
+	constexpr int kExplainTextPosY = 880;					// 説明文画像Y座標
+	constexpr int kExplainCostPosX = kExplainTextPosX + 60;	// 説明文コストX座標
+	constexpr int kExplainCostPosY = kExplainTextPosY + 50;	// 説明文コストY座標
+	constexpr int kCostTextPosX = 1500;						// コストテキストX座標
+	constexpr int kCostTextPosY = 70;						// コストテキストY座標
 	constexpr int kMulMarkPosX = 400;						// ×マーク座標
+	constexpr int kMulMarkPosY = 10;						// ×マークY座標調整
 	constexpr int kNumSecondPosX = kMulMarkPosX + 50;		// 十の位数字座標
 	constexpr int kNumFirstPosX = kNumSecondPosX + 30;		// 一の位数字座標
-	constexpr int kCursorPosX = -20;						// カーソルX座標
-	constexpr int kMulMarkPosY = 10;						// ×マークY座標調整
-	constexpr int kGearStartPosY = 100;						// 装備品名Y座標の最初の位置
-	constexpr int kGearIntervalPosY = 80;					// 装備品名Y座標の間隔
-	constexpr int kCursorPosY = -10;						// カーソルY座標
+	constexpr int kCursorPosX = -25;						// カーソルX座標
+	constexpr int kCursorPosY = -20;						// カーソルY座標
+	constexpr int kGearBoxPosX = 100;						// 装備品ボックスX座標
+	constexpr int kGearBoxPosY = 125;						// 装備品ボックスY座標
+	constexpr int kExplainBoxPosX = kGearBoxPosX + 35;		// 説明文ボックスX座標
+	constexpr int kExplainBoxPosY = 830;					// 説明文ボックスY座標
+	constexpr int kEquippedBoxPosX = 1400;					// 装備中ボックスX座標
+	constexpr int kEquippedBoxPosY = kGearBoxPosY;			// 装備中ボックスY座標
+	constexpr int kStatusBoxPosX = kEquippedBoxPosX - 80;	// ステータスボックスX座標
+	constexpr int kStatusBoxPosY = kEquippedBoxPosY + 580;	// ステータスボックスY座標
 }
 
 SceneGear::SceneGear():
+	m_cursorCount(0),
 	m_isCursorLeft(true),
 	m_pGear(std::make_shared<Gear>())
 {
@@ -73,26 +120,56 @@ SceneGear::SceneGear():
 		m_numH.push_back(LoadGraph(kNumPath[i]));
 		assert(m_numH[i] != -1);
 	}
+	for (int i = 0; i < kTextImgNum; i++)
+	{
+		m_explainH.push_back(LoadGraph(kExplainTextPath[i]));
+		assert(m_explainH[i]);
+	}
 
 	m_mulMarkH = LoadGraph(kMulMarkPath);
 	assert(m_mulMarkH != -1);
 	m_cursorH = LoadGraph(kCursorPath);
 	assert(m_cursorH != -1);
+	m_gearBoxH = LoadGraph(kGearBoxPath);
+	assert(m_gearBoxH != -1);
+	m_explainBoxH = LoadGraph(kExplainBoxPath);
+	assert(m_explainBoxH != -1);
+	m_equipTextH = LoadGraph(kEquipTextPath);
+	assert(m_equipTextH != -1);
+	m_removeEquipTextH = LoadGraph(kRemoveEquipPath);
+	assert(m_removeEquipTextH != -1);
+	m_costTextH = LoadGraph(kCostTextPath);
+	assert(m_costTextH != -1);
+	m_equippedBoxH = LoadGraph(kEquippedBoxPath);
+	assert(m_equippedBoxH != -1);
+	m_statusBoxH = LoadGraph(kStatusBoxPath);
+	assert(m_statusBoxH != -1);
 }
 
 SceneGear::~SceneGear()
 {
 	// 画像のデリート
-	for (auto& img : m_gearH)
+	for (auto& text : m_gearH)
 	{
-		DeleteGraph(img);
+		DeleteGraph(text);
 	}
 	for (auto& num : m_numH)
 	{
 		DeleteGraph(num);
 	}
+	for (auto& text : m_explainH)
+	{
+		DeleteGraph(text);
+	}
 	DeleteGraph(m_mulMarkH);
 	DeleteGraph(m_cursorH);
+	DeleteGraph(m_gearBoxH);
+	DeleteGraph(m_explainBoxH);
+	DeleteGraph(m_equipTextH);
+	DeleteGraph(m_removeEquipTextH);
+	DeleteGraph(m_costTextH);
+	DeleteGraph(m_equippedBoxH);
+	DeleteGraph(m_statusBoxH);
 }
 
 void SceneGear::Init()
@@ -115,11 +192,12 @@ void SceneGear::Draw()
 	DrawGearNum();
 	// カーソル描画
 	DrawCursor();
+	// ボックス描画
+	DrawBoxes();
 
 #ifdef _DEBUG
 	DrawFormatString(0, 0, 0xffffff, "装備画面");
 #endif // _DEBUG
-
 }
 
 void SceneGear::End()
@@ -128,12 +206,29 @@ void SceneGear::End()
 
 void SceneGear::UpdateCursor()
 {
-	// 左右ボタンを押したらカーソルが左右に動く
-	if (Pad::IsTrigger(PAD_INPUT_LEFT) || Pad::IsTrigger(PAD_INPUT_RIGHT))
+	// 右ボタンを押したらカーソルカウントが増える
+	if (Pad::IsTrigger(PAD_INPUT_RIGHT))
 	{
-		// 左右切り替え
-		m_isCursorLeft = !m_isCursorLeft;
+		m_cursorCount++;
+
 	}
+	// 左ボタンを押したらカーソルカウントが減る
+	if (Pad::IsTrigger(PAD_INPUT_LEFT))
+	{
+		m_cursorCount--;
+
+	}
+
+	// カーソルがループするようにする
+	if (m_cursorCount > kTextImgNum - 1)
+	{
+		m_cursorCount = 0;
+	}
+	if (m_cursorCount < 0)
+	{
+		m_cursorCount = kTextImgNum - 1;
+	}
+	
 }
 
 void SceneGear::DrawGearText()
@@ -167,6 +262,18 @@ void SceneGear::DrawGearText()
 			rightPosY += kGearIntervalPosY;
 		}
 	}
+
+	// 説明文描画
+	DrawGraph(kExplainTextPosX, kExplainTextPosY, m_explainH[m_cursorCount], true);
+	// 説明文コスト描画
+	DrawGraph(kExplainCostPosX, kExplainCostPosY, m_costTextH, true);
+
+	// 装備をする、外すテキスト描画
+	DrawGraph(kEquipTextPosX, kEquipTextPosY, m_equipTextH, true);
+	DrawGraph(kREquipTextPosX, kEquipTextPosY, m_removeEquipTextH, true);
+
+	// コストテキスト描画
+	DrawGraph(kCostTextPosX, kCostTextPosY, m_costTextH, true);
 }
 
 void SceneGear::DrawGearNum()
@@ -215,16 +322,40 @@ void SceneGear::DrawGearNum()
 
 void SceneGear::DrawCursor()
 {
-	// カーソルを左に描画
-	if (m_isCursorLeft)
+	// Y座標を決める
+	int posY = kGearStartPosY;
+	for (int i = 0; i < m_cursorCount; i++)
 	{
-		DrawGraph(kGearLeftPosX + kCursorPosX,
-			kGearStartPosY + kCursorPosY, m_cursorH, true);
+		// iが奇数の時のみY座標を追加する
+		if (i % 2 == 1)
+		{
+			posY += kGearIntervalPosY;
+		}
 	}
-	// カーソルを右に描画
+
+	// カーソルカウントが偶数だった場合
+	if (m_cursorCount % 2 == 0)
+	{
+		// 左側にカーソルを描画する
+		DrawGraph(kGearLeftPosX + kCursorPosX,
+			posY + kCursorPosY, m_cursorH, true);
+	}
 	else
 	{
+		// 右側にカーソルを描画する
 		DrawGraph(kGearRightPosX + kCursorPosX,
-			kGearStartPosY + kCursorPosY, m_cursorH, true);
+			posY + kCursorPosY, m_cursorH, true);
 	}
+}
+
+void SceneGear::DrawBoxes()
+{
+	// 装備品ボックス
+	DrawGraph(kGearBoxPosX, kGearBoxPosY, m_gearBoxH, true);
+	// 説明文ボックス
+	DrawGraph(kExplainBoxPosX, kExplainBoxPosY, m_explainBoxH, true);
+	// 装備中ボックス
+	DrawGraph(kEquippedBoxPosX, kEquippedBoxPosY, m_equippedBoxH, true);
+	// ステータスボックス
+	DrawGraph(kStatusBoxPosX, kStatusBoxPosY, m_statusBoxH, true);
 }
