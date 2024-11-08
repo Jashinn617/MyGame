@@ -184,7 +184,7 @@ void CsvLoad::AddStatusLoad(CharacterBase::StatusData& data, const char* charact
 	data.def += stoi(strVec[4]);
 }
 
-void CsvLoad::GearDataLoad(Gear::GearData& data)
+void CsvLoad::GearDataLoad(Gear::GearData& data, const char* gearName)
 {
 	// ファイル情報の読み込み
 	std::ifstream ifs("Data/CsvFile/Gear.csv");
@@ -204,6 +204,15 @@ void CsvLoad::GearDataLoad(Gear::GearData& data)
 		// strvec[4]	: DEF上昇値		int
 		// strvec[5]	: コスト		int
 		// strvec[6]	: 所持数		int
+
+		//参照したいキャラが見つかっていたら処理をやめる
+		const char* str = strVec[0].c_str();
+		if (strcmp(str, gearName) == 0) break;
+
+		else
+		{
+			strVec.erase(strVec.begin(), strVec.end());
+		}
 	}
 
 	// 情報を装備品データに入れる

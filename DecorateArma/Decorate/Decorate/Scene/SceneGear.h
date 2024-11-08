@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "SceneBase.h"
 
+#include <vector>
+
 class Gear;
 
 /// <summary>
@@ -46,8 +48,33 @@ public:	// 関数
 	/// <returns>シーンの種類</returns>
 	virtual SceneKind GetSceneKind() override final { return SceneKind::Gear; }
 
-private:	// 変数
+private:	// 関数
+	/// <summary>
+	/// カーソル更新
+	/// </summary>
+	void UpdateCursor();
 
+	/// <summary>
+	/// テキスト描画
+	/// </summary>
+	void DrawGearText();
+
+	/// <summary>
+	/// 装備品数描画
+	/// </summary>
+	void DrawGearNum();
+
+	/// <summary>
+	/// カーソル描画
+	/// </summary>
+	void DrawCursor();
+
+private:	// 変数
+	int m_mulMarkH;					// ×マーク画像ハンドル
+	int m_cursorH;					// カーソル画像ハンドル
+	std::vector<int> m_gearH;		// 装備品名画像ハンドル
+	std::vector<int> m_numH;		// 数字画像ハンドル
+	bool m_isCursorLeft;			// カーソルが左にあるかどうか
 	std::shared_ptr<Gear> m_pGear;	// 装備品
 };
 

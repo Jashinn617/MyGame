@@ -39,10 +39,16 @@ public:	// 関数
 	/// </summary>
 	/// <param name="gearName">装備品名</param>
 	/// <returns>指定の装備品</returns>
-	GearData GetGear(std::string gearName);
+	GearData GetGearNum(std::string gearName);
+
+	/// <summary>
+	/// 指定した装備品を取得する
+	/// </summary>
+	/// <param name="gearNum">装備品番号</param>
+	/// <returns>指定の装備品</returns>
+	GearData GetGearNum(int gearNum);
 
 private: // 変数
-
 	std::vector<GearData> m_data;	// 装備品情報
 	 
 };

@@ -50,7 +50,8 @@ public:	// 関数
 	/// 装備品のロード
 	/// </summary>
 	/// <param name="data">装備品データ</param>
-	void GearDataLoad(Gear::GearData& data);
+	/// <param name="gearName">装備品名</param>
+	void GearDataLoad(Gear::GearData& data, const char* gearName);
 
 private:	// 関数
 	/// <summary>
