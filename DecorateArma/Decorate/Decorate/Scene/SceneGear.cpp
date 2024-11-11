@@ -74,33 +74,37 @@ namespace
 	const char* kStatusBoxPath = "Data/Image/Gear/Box/StatusBox.png";			// ステータスボックス画像ファイルパス
 
 	/*座標関係*/
-	constexpr int kGearLeftPosX = 150;						// 装備品名左側座標
-	constexpr int kGearRightPosX = kGearLeftPosX + 600;		// 装備品名右側座標
-	constexpr int kGearStartPosY = 175;						// 装備品名Y座標の最初の位置
-	constexpr int kGearIntervalPosY = 80;					// 装備品名Y座標の間隔
-	constexpr int kEquipTextPosX = 380;						// 装備をするテキストX座標
-	constexpr int kREquipTextPosX = kEquipTextPosX + 400;	// 装備を外すテキストX座標
-	constexpr int kEquipTextPosY = 70;						// 装備をするテキストY座標
-	constexpr int kExplainTextPosX = 450;					// 説明文画像X座標
-	constexpr int kExplainTextPosY = 880;					// 説明文画像Y座標
-	constexpr int kExplainCostPosX = kExplainTextPosX + 60;	// 説明文コストX座標
-	constexpr int kExplainCostPosY = kExplainTextPosY + 50;	// 説明文コストY座標
-	constexpr int kCostTextPosX = 1500;						// コストテキストX座標
-	constexpr int kCostTextPosY = 70;						// コストテキストY座標
-	constexpr int kMulMarkPosX = 400;						// ×マーク座標
-	constexpr int kMulMarkPosY = 10;						// ×マークY座標調整
-	constexpr int kNumSecondPosX = kMulMarkPosX + 50;		// 十の位数字座標
-	constexpr int kNumFirstPosX = kNumSecondPosX + 30;		// 一の位数字座標
-	constexpr int kCursorPosX = -25;						// カーソルX座標
-	constexpr int kCursorPosY = -20;						// カーソルY座標
-	constexpr int kGearBoxPosX = 100;						// 装備品ボックスX座標
-	constexpr int kGearBoxPosY = 125;						// 装備品ボックスY座標
-	constexpr int kExplainBoxPosX = kGearBoxPosX + 35;		// 説明文ボックスX座標
-	constexpr int kExplainBoxPosY = 830;					// 説明文ボックスY座標
-	constexpr int kEquippedBoxPosX = 1400;					// 装備中ボックスX座標
-	constexpr int kEquippedBoxPosY = kGearBoxPosY;			// 装備中ボックスY座標
-	constexpr int kStatusBoxPosX = kEquippedBoxPosX - 80;	// ステータスボックスX座標
-	constexpr int kStatusBoxPosY = kEquippedBoxPosY + 580;	// ステータスボックスY座標
+	constexpr int kGearLeftPosX = 150;							// 装備品名左側座標
+	constexpr int kGearRightPosX = kGearLeftPosX + 600;			// 装備品名右側座標
+	constexpr int kGearStartPosY = 175;							// 装備品名Y座標の最初の位置
+	constexpr int kGearIntervalPosY = 80;						// 装備品名Y座標の間隔
+	constexpr int kEquipTextPosX = 380;							// 装備をするテキストX座標
+	constexpr int kREquipTextPosX = kEquipTextPosX + 400;		// 装備を外すテキストX座標
+	constexpr int kEquipTextPosY = 70;							// 装備をするテキストY座標
+	constexpr int kExplainTextPosX = 450;						// 説明文画像X座標
+	constexpr int kExplainTextPosY = 880;						// 説明文画像Y座標
+	constexpr int kExplainCostPosX = kExplainTextPosX + 60	;	// 説明文コストX座標
+	constexpr int kExplainCostPosY = kExplainTextPosY + 50;		// 説明文コストY座標
+	constexpr int kFirstCostNumPosX = kExplainCostPosX + 150;	// 説明文コスト数一の位X座標
+	constexpr int kFirstCostNumPosY = kExplainCostPosY;			// 説明文コスト数一の位Y座標
+	constexpr int kSecondCostNumPosX = kFirstCostNumPosX + 30;	// 説明文コスト数十の位X座標
+	constexpr int kSecondCostNumPosY = kExplainCostPosY;		// 説明文コスト数十の位Y座標
+	constexpr int kCostTextPosX = 1500;							// コストテキストX座標
+	constexpr int kCostTextPosY = 70;							// コストテキストY座標
+	constexpr int kMulMarkPosX = 400;							// ×マーク座標
+	constexpr int kMulMarkPosY = 10;							// ×マークY座標調整
+	constexpr int kNumSecondPosX = kMulMarkPosX + 50;			// 十の位数字座標
+	constexpr int kNumFirstPosX = kNumSecondPosX + 30;			// 一の位数字座標
+	constexpr int kCursorPosX = -25;							// カーソルX座標
+	constexpr int kCursorPosY = -20;							// カーソルY座標
+	constexpr int kGearBoxPosX = 100;							// 装備品ボックスX座標
+	constexpr int kGearBoxPosY = 125;							// 装備品ボックスY座標
+	constexpr int kExplainBoxPosX = kGearBoxPosX + 35;			// 説明文ボックスX座標
+	constexpr int kExplainBoxPosY = 830;						// 説明文ボックスY座標
+	constexpr int kEquippedBoxPosX = 1400;						// 装備中ボックスX座標
+	constexpr int kEquippedBoxPosY = kGearBoxPosY;				// 装備中ボックスY座標
+	constexpr int kStatusBoxPosX = kEquippedBoxPosX - 80;		// ステータスボックスX座標
+	constexpr int kStatusBoxPosY = kEquippedBoxPosY + 580;		// ステータスボックスY座標
 }
 
 SceneGear::SceneGear():
@@ -274,6 +278,15 @@ void SceneGear::DrawGearText()
 
 	// コストテキスト描画
 	DrawGraph(kCostTextPosX, kCostTextPosY, m_costTextH, true);
+	// コスト取得
+	int cost = m_pGear->GetGearNum(m_cursorCount).cost;
+	int numFirst = cost / 10;	// 一の位
+	int numSecond = cost % 10;	// 十の位
+
+	// コスト数一の位描画
+	DrawGraph(kFirstCostNumPosX, kFirstCostNumPosY, m_numH[numFirst], true);
+	// コスト数十の位描画
+	DrawGraph(kSecondCostNumPosX, kSecondCostNumPosY, m_numH[numSecond], true);
 }
 
 void SceneGear::DrawGearNum()
