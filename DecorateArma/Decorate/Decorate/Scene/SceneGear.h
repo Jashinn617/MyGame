@@ -55,6 +55,17 @@ private:	// 関数
 	void UpdateCursor();
 
 	/// <summary>
+	/// コスト更新
+	/// </summary>
+	/// <returns>コスト数</returns>
+	int UpdateCost();
+
+	/// <summary>
+	/// コスト描画
+	/// </summary>
+	void DrawCost();
+
+	/// <summary>
 	/// テキスト描画
 	/// </summary>
 	void DrawGearText();

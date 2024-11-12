@@ -9,6 +9,7 @@
 namespace
 {
 	constexpr int kGearNum = 15;					// 装備品の数
+	constexpr int kMaxCost = 30;					// 最大コスト数
 
 	/*ファイルパス関係*/
 	// テキスト画像名
@@ -71,6 +72,7 @@ namespace
 		"Data/Image/Gear/EquippedUI/HPL.png",
 		"Data/Image/Gear/EquippedUI/MATKS.png",
 		"Data/Image/Gear/EquippedUI/MATKM.png",
+		"Data/Image/Gear/EquippedUI/MATKL.png",
 		"Data/Image/Gear/EquippedUI/SATKS.png",
 		"Data/Image/Gear/EquippedUI/SATKM.png",
 		"Data/Image/Gear/EquippedUI/SATKL.png",
@@ -110,6 +112,7 @@ namespace
 	constexpr int kSecondCostNumPosY = kExplainCostPosY;		// 説明文コスト数十の位Y座標
 	constexpr int kCostTextPosX = 1500;							// コストテキストX座標
 	constexpr int kCostTextPosY = 70;							// コストテキストY座標
+	constexpr int kMaxCostFirstPosX = kCostTextPosX + 500;		// 最大コスト数一の位X座標
 	constexpr int kMulMarkPosX = 400;							// ×マーク座標
 	constexpr int kMulMarkPosY = 10;							// ×マークY座標調整
 	constexpr int kNumSecondPosX = kMulMarkPosX + 50;			// 十の位数字座標
@@ -270,16 +273,46 @@ void SceneGear::UpdateCursor()
 	// Aボタンが押された場合は選ばれている装備をセットする
 	if (Pad::IsTrigger(PAD_INPUT_1))
 	{
-		// 選ばれている装備品の数が1以上だった場合
-		if (m_pGear->GetGearNum(m_cursorCount).num > 0)
+		int addCost = m_pGear->GetGearNum(m_cursorCount).cost;
+
+		// 選ばれている装備品の数が1以上だった場合かつ
+		// 装備品を足した時の現コストが最大数を超えいなかった場合
+		if (m_pGear->GetGearNum(m_cursorCount).num > 0 &&
+			UpdateCost() + addCost <= kMaxCost)
 		{
 			// 装備数を減らす
 			m_pGear->DecreaseGear(m_cursorCount);
 			// 装備中の装備品にそのデータを追加する
 			m_pGear->AddEquippedGear(m_pGear->GetGearNum(m_cursorCount).name);
 		}
+		else
+		{
+			// 装備できないよSEを鳴らす
+
+		}
 	}
 	
+}
+
+int SceneGear::UpdateCost()
+{
+	int cost = 0;	// コスト
+	int equippedGearNum = m_pGear->GetEquippedGearSize();	// 装備中装備数
+	// 現在のコストを確認する
+	for (int i = 0; i < equippedGearNum; i++)
+	{
+		cost += m_pGear->GetEquippedNum(i).cost;
+	}
+	return cost;
+}
+
+void SceneGear::DrawCost()
+{
+	int cost = UpdateCost();		// 現在のコスト数取得
+	int costFirst = cost / 10;		// 一の位
+	int costSecond = cost % 10;		// 十の位
+	int maxFirst = kMaxCost / 10;	// 一の位
+	int maxSecond = kMaxCost % 10;	// 十の位
 }
 
 void SceneGear::DrawGearText()

@@ -67,9 +67,9 @@ public:	// 関数
 	void SaveGear();
 
 	/// <summary>
-	/// 装備中装備データの取得
+	/// 装備中装備データのサイズの取得
 	/// </summary>
-	/// <returns>装備中装備データ</returns>
+	/// <returns>装備中装備データのサイズ</returns>
 	int GetEquippedGearSize() { return m_equippedData.size(); }
 
 	/// <summary>
