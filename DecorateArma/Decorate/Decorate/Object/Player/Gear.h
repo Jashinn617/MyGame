@@ -70,7 +70,7 @@ public:	// 関数
 	/// 装備中装備データの取得
 	/// </summary>
 	/// <returns>装備中装備データ</returns>
-	std::vector<GearData> GetEquippedGear() { return m_equippedData; }
+	int GetEquippedGearSize() { return m_equippedData.size(); }
 
 	/// <summary>
 	/// 指定した装備中装備品を取得する

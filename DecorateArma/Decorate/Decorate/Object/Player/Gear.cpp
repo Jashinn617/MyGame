@@ -8,30 +8,6 @@
 
 namespace
 {
-	constexpr int kMaxCost = 30;		// 最大コスト数
-	constexpr int kGearKindNum = 15;	// 装備品の種類の数
-
-	// 装備品名
-	const char* kGearName[kGearKindNum] =
-	{
-		"HPUpS",
-		"HpUpM",
-		"HpUpL",
-		"MATKUpS",
-		"MATKUpM",
-		"MATKUpL",
-		"SATKUpS",
-		"SATKUpM",
-		"SATKUpL",
-		"DEFUpS",
-		"DEFUpM",
-		"DEFUpL",
-		"AllUpS",
-		"AllUpM",
-		"AllUpL",
-	};
-
-	
 	const char* kCsvFileName = "Data/CsvFile/Gear.csv";					// 保存するファイル名(装備前装備品)
 	const char* kEquippedCsvFileName = "Data/CsvFile/EquippedGear.csv";	// 保存するファイル名(装備後装備品)
 
@@ -39,19 +15,10 @@ namespace
 
 Gear::Gear()
 {
-	m_data.resize(kGearKindNum);
-
-	for (int i = 0; i < m_data.size(); i++)
-	{
-		// 装備品情報のロード
-		CsvLoad::GetInstance().GearDataLoad(m_data[i], kGearName[i]);
-	}
-
-	for (int i = 0; i < m_equippedData.size(); i++)
-	{
-		// 装備品情報のロード
-		CsvLoad::GetInstance().GearEquippedDataLoad(m_equippedData[i], kGearName[i]);
-	}
+	// 装備品情報のロード
+	CsvLoad::GetInstance().GearDataLoad(m_data);
+	// 装備品情報のロード
+	CsvLoad::GetInstance().GearEquippedDataLoad(m_equippedData);
 }
 
 Gear::~Gear()

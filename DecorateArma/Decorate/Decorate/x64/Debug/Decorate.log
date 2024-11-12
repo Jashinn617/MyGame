@@ -1,8 +1,4 @@
 ﻿  Gear.cpp
-  SceneGear.cpp
-  CsvLoad.cpp
-  Player.cpp
-  SceneDebug.cpp
-  コードを生成中...
-C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\Decorate\Object\Player\Gear.cpp(74): warning C4715: 'Gear::GetGearNum': 値を返さないコントロール パスがあります。
+C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\Decorate\Object\Player\Gear.h(73,28): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\Decorate\Object\Player\Gear.cpp(66): warning C4715: 'Gear::GetGearNum': 値を返さないコントロール パスがあります。
   Decorate.vcxproj -> C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\x64\Debug\Decorate.exe

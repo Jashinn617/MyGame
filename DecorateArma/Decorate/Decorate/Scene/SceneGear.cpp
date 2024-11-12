@@ -124,9 +124,9 @@ namespace
 	constexpr int kEquippedBoxPosY = kGearBoxPosY;				// 装備中ボックスY座標
 	constexpr int kStatusBoxPosX = kEquippedBoxPosX - 80;		// ステータスボックスX座標
 	constexpr int kStatusBoxPosY = kEquippedBoxPosY + 580;		// ステータスボックスY座標
-	constexpr int kEquippedUIPosX = 500;						// 装備品中装備品X座標
-	constexpr int kEquippedUIStartPosY = 100;					// 装備品中装備品初期Y座標
-	constexpr int kEquippedUIIntervalPosY = 10;					// 装備品中装備品Y座標間隔
+	constexpr int kEquippedUIPosX = 1410;						// 装備品中装備品X座標
+	constexpr int kEquippedUIStartPosY = 150;					// 装備品中装備品初期Y座標
+	constexpr int kEquippedUIIntervalPosY = 40;					// 装備品中装備品Y座標間隔
 }
 
 SceneGear::SceneGear():
@@ -275,11 +275,9 @@ void SceneGear::UpdateCursor()
 		{
 			// 装備数を減らす
 			m_pGear->DecreaseGear(m_cursorCount);
+			// 装備中の装備品にそのデータを追加する
+			m_pGear->AddEquippedGear(m_pGear->GetGearNum(m_cursorCount).name);
 		}
-
-		// 装備中の装備品にそのデータを追加する
-		m_pGear->AddEquippedGear(m_pGear->GetGearNum(m_cursorCount).name);
-
 	}
 	
 }
@@ -388,7 +386,7 @@ void SceneGear::DrawEquippedGear()
 	int posY = kEquippedUIStartPosY;
 
 	// 装備中のアイテムの数だけ繰り返す
-	for (int i = 0; i < m_pGear->GetEquippedGear().size(); i++)
+	for (int i = 0; i < m_pGear->GetEquippedGearSize(); i++)
 	{
 
 		DrawGraph(kEquippedUIPosX,posY,

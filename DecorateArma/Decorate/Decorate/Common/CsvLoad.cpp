@@ -184,18 +184,24 @@ void CsvLoad::AddStatusLoad(CharacterBase::StatusData& data, const char* charact
 	data.def += stoi(strVec[4]);
 }
 
-void CsvLoad::GearDataLoad(Gear::GearData& data, const char* gearName)
+void CsvLoad::GearDataLoad(std::vector<Gear::GearData>& data)
 {
 	// ファイル情報の読み込み
 	std::ifstream ifs("Data/CsvFile/Gear.csv");
 	std::string line;
 
-	std::vector<std::string> strVec;
+	
+	// 最初の行はヘッダなので飛ばす
+	getline(ifs, line);
+	
 
 	while (getline(ifs, line))
 	{
 		// csvデータの1行を','で複数の文字列の分割する
-		strVec = Split(line, ',');
+		std::vector<std::string> strVec = Split(line, ',');
+
+		// 行のデータが8個あるか調べる
+		if (strVec.size() < 8)continue;
 
 		// strvec[0]	: アイテム名	string
 		// strvec[1]	: HP上昇値		int
@@ -206,39 +212,40 @@ void CsvLoad::GearDataLoad(Gear::GearData& data, const char* gearName)
 		// strvec[6]	: 所持数		int
 		// strvec[7]	: 装備番号		int
 
-		//参照したいキャラが見つかっていたら処理をやめる
-		const char* str = strVec[0].c_str();
-		if (strcmp(str, gearName) == 0) break;
+		// データ作成
+		Gear::GearData gearData;
+		// 情報を装備品データに入れる
+		gearData.name = strVec[0];
+		gearData.upHp = stoi(strVec[1]);
+		gearData.upMAttack = stoi(strVec[2]);
+		gearData.upSAttack = stoi(strVec[3]);
+		gearData.upDef = stoi(strVec[4]);
+		gearData.cost = stoi(strVec[5]);
+		gearData.num = stoi(strVec[6]);
+		gearData.number = stoi(strVec[7]);
 
-		else
-		{
-			strVec.erase(strVec.begin(), strVec.end());
-		}
+		// 構造体をベクターに追加する
+		data.push_back(gearData);
 	}
-
-	// 情報を装備品データに入れる
-	data.name = strVec[0];
-	data.upHp = stoi(strVec[1]);
-	data.upMAttack = stoi(strVec[2]);
-	data.upSAttack = stoi(strVec[3]);
-	data.upDef = stoi(strVec[4]);
-	data.cost = stoi(strVec[5]);
-	data.num = stoi(strVec[6]);
-	data.number = stoi(strVec[7]);
 }
 
-void CsvLoad::GearEquippedDataLoad(Gear::GearData& data, const char* gearName)
+void CsvLoad::GearEquippedDataLoad(std::vector<Gear::GearData>& data)
 {
 	// ファイル情報の読み込み
 	std::ifstream ifs("Data/CsvFile/EquippedGear.csv");
 	std::string line;
 
-	std::vector<std::string> strVec;
+	// 最初の行はヘッダなので飛ばす
+	getline(ifs, line);
+	
 
 	while (getline(ifs, line))
 	{
 		// csvデータの1行を','で複数の文字列の分割する
-		strVec = Split(line, ',');
+		std::vector<std::string> strVec = Split(line, ',');
+
+		// 行のデータが8個あるか調べる
+		if (strVec.size() < 8)continue;
 
 		// strvec[0]	: アイテム名	string
 		// strvec[1]	: HP上昇値		int
@@ -249,23 +256,21 @@ void CsvLoad::GearEquippedDataLoad(Gear::GearData& data, const char* gearName)
 		// strvec[6]	: 所持数		int
 		// strvec[7]	: 装備番号		int
 
-		//参照したいキャラが見つかっていたら処理をやめる
-		const char* str = strVec[0].c_str();
-		if (strcmp(str, gearName) == 0) break;
-
-		else
-		{
-			strVec.erase(strVec.begin(), strVec.end());
-		}
+		// データ作成
+		Gear::GearData gearData;
+		// 情報を装備品データに入れる
+		gearData.name = strVec[0];
+		gearData.upHp = stoi(strVec[1]);
+		gearData.upMAttack = stoi(strVec[2]);
+		gearData.upSAttack = stoi(strVec[3]);
+		gearData.upDef = stoi(strVec[4]);
+		gearData.cost = stoi(strVec[5]);
+		gearData.num = stoi(strVec[6]);
+		gearData.number = stoi(strVec[7]);
+		
+		// 構造体をベクターに追加する
+		data.push_back(gearData);
 	}
 
-	// 情報を装備品データに入れる
-	data.name = strVec[0];
-	data.upHp = stoi(strVec[1]);
-	data.upMAttack = stoi(strVec[2]);
-	data.upSAttack = stoi(strVec[3]);
-	data.upDef = stoi(strVec[4]);
-	data.cost = stoi(strVec[5]);
-	data.num = stoi(strVec[6]);
-	data.number = stoi(strVec[7]);
+	
 }
