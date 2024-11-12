@@ -8,11 +8,11 @@
 
 namespace
 {
-	constexpr int kTextImgNum = 15;					// テキストの画像数
+	constexpr int kGearNum = 15;					// 装備品の数
 
 	/*ファイルパス関係*/
 	// テキスト画像名
-	const char* kImgNamePath[kTextImgNum] = 
+	const char* kImgNamePath[kGearNum] = 
 	{
 		"Data/Image/Gear/Text/HPUPS.png",
 		"Data/Image/Gear/Text/HPUPM.png",
@@ -45,7 +45,7 @@ namespace
 		"Data/Image/Gear/Number/9.png",
 	};
 	// 説明文画像名
-	const char* kExplainTextPath[kTextImgNum] =
+	const char* kExplainTextPath[kGearNum] =
 	{
 		"Data/Image/Gear/ExplainText/HPS.png",
 		"Data/Image/Gear/ExplainText/HPM.png",
@@ -63,6 +63,25 @@ namespace
 		"Data/Image/Gear/ExplainText/AllM.png",
 		"Data/Image/Gear/ExplainText/AllL.png",
 	};
+	// 装備中装備品UI画像パス
+	const char* kEquippedUIPath[kGearNum] =
+	{
+		"Data/Image/Gear/EquippedUI/HPS.png",
+		"Data/Image/Gear/EquippedUI/HPM.png",
+		"Data/Image/Gear/EquippedUI/HPL.png",
+		"Data/Image/Gear/EquippedUI/MATKS.png",
+		"Data/Image/Gear/EquippedUI/MATKM.png",
+		"Data/Image/Gear/EquippedUI/SATKS.png",
+		"Data/Image/Gear/EquippedUI/SATKM.png",
+		"Data/Image/Gear/EquippedUI/SATKL.png",
+		"Data/Image/Gear/EquippedUI/DEFS.png",
+		"Data/Image/Gear/EquippedUI/DEFM.png",
+		"Data/Image/Gear/EquippedUI/DEFL.png",
+		"Data/Image/Gear/EquippedUI/AllS.png",
+		"Data/Image/Gear/EquippedUI/AllM.png",
+		"Data/Image/Gear/EquippedUI/AllL.png",
+	};
+
 	const char* kEquipTextPath = "Data/Image/Gear/Text/Equip.png";				// 装備をするテキスト画像ファイルパス
 	const char* kRemoveEquipPath = "Data/Image/Gear/Text/RemoveEquip.png";		// 装備を外すテキスト画像ファイルパス
 	const char* kCostTextPath = "Data/Image/Gear/Text/Cost.png";				// コストテキスト画像ファイルパス
@@ -72,7 +91,6 @@ namespace
 	const char* kExplainBoxPath = "Data/Image/Gear/Box/GearExplainBox.png";		// 装備品説明文ボックス画像ファイルパス
 	const char* kEquippedBoxPath = "Data/Image/Gear/Box/EquippedBox.png";		// 装備中ボックス画像ファイルパス
 	const char* kStatusBoxPath = "Data/Image/Gear/Box/StatusBox.png";			// ステータスボックス画像ファイルパス
-	const char* kEquippedUIPath = "Data/Image/Gear/EquippedUI/";				// 装備中装備ファイルパス
 
 	/*座標関係*/
 	constexpr int kGearLeftPosX = 150;							// 装備品名左側座標
@@ -106,6 +124,9 @@ namespace
 	constexpr int kEquippedBoxPosY = kGearBoxPosY;				// 装備中ボックスY座標
 	constexpr int kStatusBoxPosX = kEquippedBoxPosX - 80;		// ステータスボックスX座標
 	constexpr int kStatusBoxPosY = kEquippedBoxPosY + 580;		// ステータスボックスY座標
+	constexpr int kEquippedUIPosX = 500;						// 装備品中装備品X座標
+	constexpr int kEquippedUIStartPosY = 100;					// 装備品中装備品初期Y座標
+	constexpr int kEquippedUIIntervalPosY = 10;					// 装備品中装備品Y座標間隔
 }
 
 SceneGear::SceneGear():
@@ -114,7 +135,7 @@ SceneGear::SceneGear():
 	m_pGear(std::make_shared<Gear>())
 {
 	// 画像のロード
-	for (int i = 0; i < kTextImgNum; i++)
+	for (int i = 0; i < kGearNum; i++)
 	{
 		m_gearH.push_back(LoadGraph(kImgNamePath[i]));
 		// 画像が無ければ止める
@@ -125,10 +146,15 @@ SceneGear::SceneGear():
 		m_numH.push_back(LoadGraph(kNumPath[i]));
 		assert(m_numH[i] != -1);
 	}
-	for (int i = 0; i < kTextImgNum; i++)
+	for (int i = 0; i < kGearNum; i++)
 	{
 		m_explainH.push_back(LoadGraph(kExplainTextPath[i]));
 		assert(m_explainH[i]);
+	}
+	for (int i = 0; i < kGearNum; i++)
+	{
+		m_equippedUIH.push_back(LoadGraph(kEquippedUIPath[i]));
+		assert(m_equippedUIH[i]);
 	}
 
 	m_mulMarkH = LoadGraph(kMulMarkPath);
@@ -166,6 +192,10 @@ SceneGear::~SceneGear()
 	{
 		DeleteGraph(text);
 	}
+	for (auto& UI : m_equippedUIH)
+	{
+		DeleteGraph(UI);
+	}
 	DeleteGraph(m_mulMarkH);
 	DeleteGraph(m_cursorH);
 	DeleteGraph(m_gearBoxH);
@@ -199,6 +229,8 @@ void SceneGear::Draw()
 	DrawCursor();
 	// ボックス描画
 	DrawBoxes();
+	// 装備中装備描画
+	DrawEquippedGear();
 
 #ifdef _DEBUG
 	DrawFormatString(0, 0, 0xffffff, "装備画面");
@@ -226,13 +258,13 @@ void SceneGear::UpdateCursor()
 	}
 
 	// カーソルがループするようにする
-	if (m_cursorCount > kTextImgNum - 1)
+	if (m_cursorCount > kGearNum - 1)
 	{
 		m_cursorCount = 0;
 	}
 	if (m_cursorCount < 0)
 	{
-		m_cursorCount = kTextImgNum - 1;
+		m_cursorCount = kGearNum - 1;
 	}
 
 	// Aボタンが押された場合は選ばれている装備をセットする
@@ -347,6 +379,23 @@ void SceneGear::DrawGearNum()
 			// Y座標を足す
 			rightPosY += kGearIntervalPosY;
 		}
+	}
+}
+
+void SceneGear::DrawEquippedGear()
+{
+	// Y座標を決める
+	int posY = kEquippedUIStartPosY;
+
+	// 装備中のアイテムの数だけ繰り返す
+	for (int i = 0; i < m_pGear->GetEquippedGear().size(); i++)
+	{
+
+		DrawGraph(kEquippedUIPosX,posY,
+			m_equippedUIH[m_pGear->GetEquippedNum(i).number],
+			true);
+
+		posY += kEquippedUIIntervalPosY;
 	}
 }
 

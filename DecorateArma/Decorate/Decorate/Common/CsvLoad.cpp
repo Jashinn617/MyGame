@@ -204,7 +204,7 @@ void CsvLoad::GearDataLoad(Gear::GearData& data, const char* gearName)
 		// strvec[4]	: DEF上昇値		int
 		// strvec[5]	: コスト		int
 		// strvec[6]	: 所持数		int
-		// strvec[7]	: UI画像パス	string
+		// strvec[7]	: 装備番号		int
 
 		//参照したいキャラが見つかっていたら処理をやめる
 		const char* str = strVec[0].c_str();
@@ -224,7 +224,7 @@ void CsvLoad::GearDataLoad(Gear::GearData& data, const char* gearName)
 	data.upDef = stoi(strVec[4]);
 	data.cost = stoi(strVec[5]);
 	data.num = stoi(strVec[6]);
-	data.path = strVec[7];
+	data.number = stoi(strVec[7]);
 }
 
 void CsvLoad::GearEquippedDataLoad(Gear::GearData& data, const char* gearName)
@@ -247,7 +247,7 @@ void CsvLoad::GearEquippedDataLoad(Gear::GearData& data, const char* gearName)
 		// strvec[4]	: DEF上昇値		int
 		// strvec[5]	: コスト		int
 		// strvec[6]	: 所持数		int
-		// strvec[7]	: UI画像パス	string
+		// strvec[7]	: 装備番号		int
 
 		//参照したいキャラが見つかっていたら処理をやめる
 		const char* str = strVec[0].c_str();
@@ -267,5 +267,5 @@ void CsvLoad::GearEquippedDataLoad(Gear::GearData& data, const char* gearName)
 	data.upDef = stoi(strVec[4]);
 	data.cost = stoi(strVec[5]);
 	data.num = stoi(strVec[6]);
-	data.path = strVec[7];
+	data.number = stoi(strVec[7]);
 }

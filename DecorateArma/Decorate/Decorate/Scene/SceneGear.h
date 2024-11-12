@@ -92,6 +92,7 @@ private:	// 変数
 	std::vector<int> m_gearH;		// 装備品名画像ハンドル
 	std::vector<int> m_numH;		// 数字画像ハンドル
 	std::vector<int> m_explainH;	// 説明文画像ハンドル
+	std::vector<int> m_equippedUIH;	// 装備中装備UI画像
 	int m_cursorCount;				// カーソルカウント
 	bool m_isCursorLeft;			// カーソルが左にあるかどうか
 	std::shared_ptr<Gear> m_pGear;	// 装備品

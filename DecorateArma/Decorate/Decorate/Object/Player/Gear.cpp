@@ -119,7 +119,7 @@ void Gear::SaveGear()
 		std::cerr << "ファイルを開けませんでした：" << kCsvFileName << std::endl;
 	}
 	// 一行目に数値の種類を書き込む
-	csvFile << "アイテム名,HP上昇値,MATK上昇値,SATK上昇値,DEF上昇値,コスト,所持数\n";
+	csvFile << "アイテム名,HP上昇値,MATK上昇値,SATK上昇値,DEF上昇値,コスト,所持数,装備番号\n";
 	// 二行目以降にデータを書き込む
 	for (const auto& data : m_data)
 	{
@@ -130,7 +130,7 @@ void Gear::SaveGear()
 			<< data.upDef << ","
 			<< data.cost << ","
 			<< data.num << ","
-			<< data.path << "\n";
+			<< data.number << "\n";
 	}
 	// ファイルを閉じる
 	csvFile.close();
@@ -144,7 +144,7 @@ void Gear::SaveGear()
 		std::cerr << "ファイルを開けませんでした：" << kEquippedCsvFileName << std::endl;
 	}
 	// 一行目に数値の種類を書き込む
-	csvEquippedFile << "アイテム名,HP上昇値,MATK上昇値,SATK上昇値,DEF上昇値,コスト,所持数\n";
+	csvEquippedFile << "アイテム名,HP上昇値,MATK上昇値,SATK上昇値,DEF上昇値,コスト,所持数,装備番号\n";
 	// 二行目以降にデータを書き込む
 	for (const auto& data : m_equippedData)
 	{
@@ -155,7 +155,7 @@ void Gear::SaveGear()
 			<< data.upDef << ","
 			<< data.cost << ","
 			<< data.num << ","
-			<< data.path << "\n";
+			<< data.number << "\n";
 	}
 	// ファイルを閉じる
 	csvEquippedFile.close();
