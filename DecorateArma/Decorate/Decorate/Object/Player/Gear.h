@@ -21,6 +21,7 @@ public:	// 構造体
 		int upDef;			// 防御力の上昇値
 		int cost;			// コスト
 		int num;			// 所持数
+		std::string path;	// UI画像パス
 	};
 
 public:	// 関数
@@ -48,8 +49,26 @@ public:	// 関数
 	/// <returns>指定の装備品</returns>
 	GearData GetGearNum(int gearNum);
 
+	/// <summary>
+	/// 指定した装備品の数を減らす
+	/// </summary>
+	/// <param name="gearNum">装備品番号</param>
+	void DecreaseGear(int gearNum);
+
+	/// <summary>
+	/// 装備品アイテムの追加
+	/// </summary>
+	/// <param name="gearName">アイテム名</param>
+	void AddEquippedGear(std::string gearName);
+
+	/// <summary>
+	/// CSVファイルに装備品のデータを書き込む
+	/// </summary>
+	void SaveGear();
+
 private: // 変数
-	std::vector<GearData> m_data;	// 装備品情報
+	std::vector<GearData> m_data;			// 装備品情報
+	std::vector<GearData> m_equippedData;	// 装備中装備品情報
 	 
 };
 

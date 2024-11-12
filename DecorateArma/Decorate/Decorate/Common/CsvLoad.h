@@ -53,6 +53,13 @@ public:	// 関数
 	/// <param name="gearName">装備品名</param>
 	void GearDataLoad(Gear::GearData& data, const char* gearName);
 
+	/// <summary>
+	/// 装備中装備品のロード
+	/// </summary>
+	/// <param name="data">装備品データ</param>
+	/// <param name="gearName">装備品名</param>
+	void GearEquippedDataLoad(Gear::GearData& data, const char* gearName);
+
 private:	// 関数
 	/// <summary>
 	/// コンストラクタ

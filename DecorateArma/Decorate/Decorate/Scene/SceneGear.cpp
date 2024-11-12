@@ -72,6 +72,7 @@ namespace
 	const char* kExplainBoxPath = "Data/Image/Gear/Box/GearExplainBox.png";		// 装備品説明文ボックス画像ファイルパス
 	const char* kEquippedBoxPath = "Data/Image/Gear/Box/EquippedBox.png";		// 装備中ボックス画像ファイルパス
 	const char* kStatusBoxPath = "Data/Image/Gear/Box/StatusBox.png";			// ステータスボックス画像ファイルパス
+	const char* kEquippedUIPath = "Data/Image/Gear/EquippedUI/";				// 装備中装備ファイルパス
 
 	/*座標関係*/
 	constexpr int kGearLeftPosX = 150;							// 装備品名左側座標
@@ -206,6 +207,7 @@ void SceneGear::Draw()
 
 void SceneGear::End()
 {
+	m_pGear->SaveGear();
 }
 
 void SceneGear::UpdateCursor()
@@ -231,6 +233,21 @@ void SceneGear::UpdateCursor()
 	if (m_cursorCount < 0)
 	{
 		m_cursorCount = kTextImgNum - 1;
+	}
+
+	// Aボタンが押された場合は選ばれている装備をセットする
+	if (Pad::IsTrigger(PAD_INPUT_1))
+	{
+		// 選ばれている装備品の数が1以上だった場合
+		if (m_pGear->GetGearNum(m_cursorCount).num > 0)
+		{
+			// 装備数を減らす
+			m_pGear->DecreaseGear(m_cursorCount);
+		}
+
+		// 装備中の装備品にそのデータを追加する
+		m_pGear->AddEquippedGear(m_pGear->GetGearNum(m_cursorCount).name);
+
 	}
 	
 }

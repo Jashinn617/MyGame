@@ -65,6 +65,11 @@ private:	// 関数
 	void DrawGearNum();
 
 	/// <summary>
+	/// 装備中装備描画
+	/// </summary>
+	void DrawEquippedGear();
+
+	/// <summary>
 	/// カーソル描画
 	/// </summary>
 	void DrawCursor();
