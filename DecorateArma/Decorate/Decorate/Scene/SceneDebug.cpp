@@ -9,8 +9,8 @@
 
 namespace
 {
-	constexpr float kCursorPosX = Game::kScreenWidth * 0.2f;								// 初期のカーソル座標X
-	constexpr float kCursorPosY = Game::kScreenHeight * 0.2f;								// 初期のカーソル座標Y
+	constexpr float kEquipCursorPosX = Game::kScreenWidth * 0.2f;								// 初期のカーソル座標X
+	constexpr float kEquipCursorPosY = Game::kScreenHeight * 0.2f;								// 初期のカーソル座標Y
 	constexpr float kSceneDescriptionPosX = Game::kScreenWidth * 0.1f;						// シーン説明用文字座標X
 	constexpr float kSceneDescriptionPosY = Game::kScreenHeight * 0.05f;					// シーン説明用文字座標Y
 
@@ -57,16 +57,16 @@ void SceneDebug::Draw()
 		if (m_cursorCount == i)	// その文字を選択中だった場合
 		{
 			// 選択中の文字色にする
-			DrawString(static_cast<int>(kCursorPosX),
-				static_cast<int>(kCursorPosY + (i * kCursorMove)),	// 座標
+			DrawString(static_cast<int>(kEquipCursorPosX),
+				static_cast<int>(kEquipCursorPosY + (i * kCursorMove)),	// 座標
 				m_sceneString[i].c_str(),							// 文字
 				kSelectStringColor);								// 色
 		}
 		else	// 選択中で無かった時
 		{
 			// 通常の文字色にする
-			DrawString(static_cast<int>(kCursorPosX),
-				static_cast<int>(kCursorPosY + (i * kCursorMove)),	// 座標
+			DrawString(static_cast<int>(kEquipCursorPosX),
+				static_cast<int>(kEquipCursorPosY + (i * kCursorMove)),	// 座標
 				m_sceneString[i].c_str(),							// 文字
 				kNormalStringColor);								// 色
 		}

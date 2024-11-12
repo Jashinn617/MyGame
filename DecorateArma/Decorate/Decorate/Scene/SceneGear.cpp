@@ -1,4 +1,5 @@
 ﻿#include "SceneGear.h"
+#include "SceneSelect.h"
 
 #include "../Object/Player/Gear.h"
 
@@ -88,6 +89,7 @@ namespace
 	const char* kRemoveEquipPath = "Data/Image/Gear/Text/RemoveEquip.png";		// 装備を外すテキスト画像ファイルパス
 	const char* kCostTextPath = "Data/Image/Gear/Text/Cost.png";				// コストテキスト画像ファイルパス
 	const char* kMulMarkPath = "Data/Image/Gear/MulMark.png";					// ×マーク画像ファイルパス
+	const char* kSlashPath = "Data/Image/Gear/Slash.png";						// スラッシュ画像ファイルパス
 	const char* kCursorPath = "Data/Image/Gear/Box/CursorBox.png";				// カーソル画像ファイルパス
 	const char* kGearBoxPath = "Data/Image/Gear/Box/GearBox.png";				// 装備品ボックス画像ファイルパス
 	const char* kExplainBoxPath = "Data/Image/Gear/Box/GearExplainBox.png";		// 装備品説明文ボックス画像ファイルパス
@@ -100,7 +102,7 @@ namespace
 	constexpr int kGearStartPosY = 175;							// 装備品名Y座標の最初の位置
 	constexpr int kGearIntervalPosY = 80;						// 装備品名Y座標の間隔
 	constexpr int kEquipTextPosX = 380;							// 装備をするテキストX座標
-	constexpr int kREquipTextPosX = kEquipTextPosX + 400;		// 装備を外すテキストX座標
+	constexpr int kRemoveTextPosX = kEquipTextPosX + 400;		// 装備を外すテキストX座標
 	constexpr int kEquipTextPosY = 70;							// 装備をするテキストY座標
 	constexpr int kExplainTextPosX = 450;						// 説明文画像X座標
 	constexpr int kExplainTextPosY = 880;						// 説明文画像Y座標
@@ -112,13 +114,22 @@ namespace
 	constexpr int kSecondCostNumPosY = kExplainCostPosY;		// 説明文コスト数十の位Y座標
 	constexpr int kCostTextPosX = 1500;							// コストテキストX座標
 	constexpr int kCostTextPosY = 70;							// コストテキストY座標
-	constexpr int kMaxCostFirstPosX = kCostTextPosX + 500;		// 最大コスト数一の位X座標
+	constexpr int kMaxCostFirstPosX = kCostTextPosX + 300;		// 最大コスト数一の位X座標
+	constexpr int kMaxCostSecondPosX = kMaxCostFirstPosX + 25;	// 最大コスト数十の位X座標
+	constexpr int kCostFirstPosX = kCostTextPosX + 200;			// 現在コスト数一の位X座標
+	constexpr int kCostSecondPosX = kCostFirstPosX + 25;		// 現在コスト数十の位X座標
+	constexpr int kCostPosY = kCostTextPosY;					// 最大コスト数Y座標
+	constexpr int kSlashPosX = kCostFirstPosX + 60;				// スラッシュX座標
+	constexpr int kSlashPosY = kCostPosY;						// スラッシュY座標
 	constexpr int kMulMarkPosX = 400;							// ×マーク座標
 	constexpr int kMulMarkPosY = 10;							// ×マークY座標調整
 	constexpr int kNumSecondPosX = kMulMarkPosX + 50;			// 十の位数字座標
 	constexpr int kNumFirstPosX = kNumSecondPosX + 30;			// 一の位数字座標
-	constexpr int kCursorPosX = -25;							// カーソルX座標
-	constexpr int kCursorPosY = -20;							// カーソルY座標
+	constexpr int kSelectCursorLeftPosX = kEquipTextPosX;		// 選択カーソルX座標左
+	constexpr int kSelectCursorRightPosX = kRemoveTextPosX;		// 選択カーソルX座標右
+	constexpr int kSelectCursorPosY = kEquipTextPosY;			// 選択カーソルY座標
+	constexpr int kEquipCursorPosX = -25;						// 装備を着けるカーソルY座標
+	constexpr int kEquipCursorPosY = -20;						// 装備を着けるカーソルY座標
 	constexpr int kGearBoxPosX = 100;							// 装備品ボックスX座標
 	constexpr int kGearBoxPosY = 125;							// 装備品ボックスY座標
 	constexpr int kExplainBoxPosX = kGearBoxPosX + 35;			// 説明文ボックスX座標
@@ -132,10 +143,12 @@ namespace
 	constexpr int kEquippedUIIntervalPosY = 40;					// 装備品中装備品Y座標間隔
 }
 
-SceneGear::SceneGear():
+SceneGear::SceneGear() :
 	m_cursorCount(0),
-	m_isCursorLeft(true),
-	m_pGear(std::make_shared<Gear>())
+	m_isSelectLeft(true),
+	m_pGear(std::make_shared<Gear>()),
+	m_cursorKind(CursorKind::Select),
+	m_nextScene(nullptr)
 {
 	// 画像のロード
 	for (int i = 0; i < kGearNum; i++)
@@ -162,6 +175,8 @@ SceneGear::SceneGear():
 
 	m_mulMarkH = LoadGraph(kMulMarkPath);
 	assert(m_mulMarkH != -1);
+	m_slashH = LoadGraph(kSlashPath);
+	assert(m_slashH != -1);
 	m_cursorH = LoadGraph(kCursorPath);
 	assert(m_cursorH != -1);
 	m_gearBoxH = LoadGraph(kGearBoxPath);
@@ -200,6 +215,7 @@ SceneGear::~SceneGear()
 		DeleteGraph(UI);
 	}
 	DeleteGraph(m_mulMarkH);
+	DeleteGraph(m_slashH);
 	DeleteGraph(m_cursorH);
 	DeleteGraph(m_gearBoxH);
 	DeleteGraph(m_explainBoxH);
@@ -216,10 +232,30 @@ void SceneGear::Init()
 
 std::shared_ptr<SceneBase> SceneGear::Update()
 {
-	// カーソル更新
-	UpdateCursor();
+	m_nextScene = shared_from_this();
 
-	return shared_from_this();
+	// カーソルの種類によって動きを変える
+	switch (m_cursorKind)
+	{
+	case SceneGear::CursorKind::Select:
+		// 選択
+		UpdateSelectCursor();
+		break;
+	case SceneGear::CursorKind::Equip:
+		// 装備を着ける
+		UpdateEquipCursor();
+		break;
+	case SceneGear::CursorKind::Remove:
+		// 装備を外す
+		UpdateRemoveCursor();
+		break;
+	default:
+		break;
+	}
+
+	
+
+	return m_nextScene;
 }
 
 void SceneGear::Draw()
@@ -234,6 +270,8 @@ void SceneGear::Draw()
 	DrawBoxes();
 	// 装備中装備描画
 	DrawEquippedGear();
+	// コスト描画
+	DrawCost();
 
 #ifdef _DEBUG
 	DrawFormatString(0, 0, 0xffffff, "装備画面");
@@ -242,10 +280,43 @@ void SceneGear::Draw()
 
 void SceneGear::End()
 {
+	// 装備情報の保存
 	m_pGear->SaveGear();
 }
 
-void SceneGear::UpdateCursor()
+void SceneGear::UpdateSelectCursor()
+{
+	// 左右ボタンを押されたらカーソルが移動する
+	if (Pad::IsTrigger(PAD_INPUT_LEFT) ||
+		Pad::IsTrigger(PAD_INPUT_RIGHT))
+	{
+		m_isSelectLeft = !m_isSelectLeft;
+	}
+
+	// Aボタンが押された場合はカーソルの種類を変える
+	if (Pad::IsTrigger(PAD_INPUT_1))
+	{
+		if (m_isSelectLeft)
+		{
+			// 装備を付ける
+			m_cursorKind = CursorKind::Equip;
+
+		}
+		else
+		{
+			// 装備を外す
+			m_cursorKind = CursorKind::Remove;
+		}
+	}
+
+	// Bボタンが押された場合はステージセレクトに戻る
+	if (Pad::IsTrigger(PAD_INPUT_2))
+	{
+		m_nextScene = std::make_shared<SceneSelect>();
+	}
+}
+
+void SceneGear::UpdateEquipCursor()
 {
 	// 右ボタンを押したらカーソルカウントが増える
 	if (Pad::IsTrigger(PAD_INPUT_RIGHT))
@@ -291,7 +362,22 @@ void SceneGear::UpdateCursor()
 
 		}
 	}
+
+	// Bボタンが押された場合は選択に戻る
+	if (Pad::IsTrigger(PAD_INPUT_2))
+	{
+		m_cursorKind = CursorKind::Select;
+	}
 	
+}
+
+void SceneGear::UpdateRemoveCursor()
+{
+	// Bボタンが押された場合は選択に戻る
+	if (Pad::IsTrigger(PAD_INPUT_2))
+	{
+		m_cursorKind = CursorKind::Select;
+	}
 }
 
 int SceneGear::UpdateCost()
@@ -308,11 +394,28 @@ int SceneGear::UpdateCost()
 
 void SceneGear::DrawCost()
 {
+	// 最大コスト数
+	int maxFirst = kMaxCost / 10;	// 一の位
+	int maxSecond = kMaxCost % 10;	// 十の位
+	// 現在のコスト数
 	int cost = UpdateCost();		// 現在のコスト数取得
 	int costFirst = cost / 10;		// 一の位
 	int costSecond = cost % 10;		// 十の位
-	int maxFirst = kMaxCost / 10;	// 一の位
-	int maxSecond = kMaxCost % 10;	// 十の位
+
+	// 最大コスト数描画
+	// 一の位
+	DrawGraph(kMaxCostFirstPosX, kCostPosY, m_numH[maxFirst], true);
+	// 十の位
+	DrawGraph(kMaxCostSecondPosX, kCostPosY, m_numH[maxSecond], true);
+
+	// スラッシュ表示
+	DrawGraph(kSlashPosX, kSlashPosY, m_slashH, true);
+
+	// 現在コスト数描画
+	// 一の位
+	DrawGraph(kCostFirstPosX, kCostPosY, m_numH[costFirst], true);
+	// 十の位
+	DrawGraph(kCostSecondPosX, kCostPosY, m_numH[costSecond], true);
 }
 
 void SceneGear::DrawGearText()
@@ -354,7 +457,7 @@ void SceneGear::DrawGearText()
 
 	// 装備をする、外すテキスト描画
 	DrawGraph(kEquipTextPosX, kEquipTextPosY, m_equipTextH, true);
-	DrawGraph(kREquipTextPosX, kEquipTextPosY, m_removeEquipTextH, true);
+	DrawGraph(kRemoveTextPosX, kEquipTextPosY, m_removeEquipTextH, true);
 
 	// コストテキスト描画
 	DrawGraph(kCostTextPosX, kCostTextPosY, m_costTextH, true);
@@ -432,6 +535,42 @@ void SceneGear::DrawEquippedGear()
 
 void SceneGear::DrawCursor()
 {
+
+	switch (m_cursorKind)
+	{
+	case SceneGear::CursorKind::Select:
+		// 選択
+		DrawSelectCursor();
+		break;
+	case SceneGear::CursorKind::Equip:
+		// 装備を着ける
+		DrawEquipCursor();
+		break;
+	case SceneGear::CursorKind::Remove:
+		// 装備を外す
+		DrawRemoveCursor();
+		break;
+	default:
+		break;
+	}
+}
+
+void SceneGear::DrawSelectCursor()
+{
+	if (m_isSelectLeft)
+	{
+		// カーソル左
+		DrawGraph(kSelectCursorLeftPosX, kSelectCursorPosY, m_cursorH , true);
+	}
+	else
+	{
+		// カーソル右
+		DrawGraph(kSelectCursorRightPosX, kSelectCursorPosY, m_cursorH, true);
+	}
+}
+
+void SceneGear::DrawEquipCursor()
+{
 	// Y座標を決める
 	int posY = kGearStartPosY;
 	for (int i = 0; i < m_cursorCount; i++)
@@ -447,15 +586,19 @@ void SceneGear::DrawCursor()
 	if (m_cursorCount % 2 == 0)
 	{
 		// 左側にカーソルを描画する
-		DrawGraph(kGearLeftPosX + kCursorPosX,
-			posY + kCursorPosY, m_cursorH, true);
+		DrawGraph(kGearLeftPosX + kEquipCursorPosX,
+			posY + kEquipCursorPosY, m_cursorH, true);
 	}
 	else
 	{
 		// 右側にカーソルを描画する
-		DrawGraph(kGearRightPosX + kCursorPosX,
-			posY + kCursorPosY, m_cursorH, true);
+		DrawGraph(kGearRightPosX + kEquipCursorPosX,
+			posY + kEquipCursorPosY, m_cursorH, true);
 	}
+}
+
+void SceneGear::DrawRemoveCursor()
+{
 }
 
 void SceneGear::DrawBoxes()

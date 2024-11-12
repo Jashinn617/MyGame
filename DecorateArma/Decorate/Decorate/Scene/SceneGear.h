@@ -48,11 +48,32 @@ public:	// 関数
 	/// <returns>シーンの種類</returns>
 	virtual SceneKind GetSceneKind() override final { return SceneKind::Gear; }
 
+private:	// 列挙型
+	/// <summary>
+	/// カーソルの種類
+	/// </summary>
+	enum class CursorKind
+	{
+		Select,	// 選択
+		Equip,	// 装備を着ける
+		Remove,	// 装備を外す
+	};
+
 private:	// 関数
 	/// <summary>
-	/// カーソル更新
+	/// 選択カーソル更新
 	/// </summary>
-	void UpdateCursor();
+	void UpdateSelectCursor();
+
+	/// <summary>
+	/// 装備を付けるカーソル更新
+	/// </summary>
+	void UpdateEquipCursor();
+
+	/// <summary>
+	/// 装備を外すカーソル更新
+	/// </summary>
+	void UpdateRemoveCursor();
 
 	/// <summary>
 	/// コスト更新
@@ -86,26 +107,44 @@ private:	// 関数
 	void DrawCursor();
 
 	/// <summary>
+	/// 選択カーソル描画
+	/// </summary>
+	void DrawSelectCursor();
+
+	/// <summary>
+	/// 装備を付けるカーソル描画
+	/// </summary>
+	void DrawEquipCursor();
+
+	/// <summary>
+	/// 装備を外すカーソル描画
+	/// </summary>
+	void DrawRemoveCursor();
+
+	/// <summary>
 	/// ボックス描画
 	/// </summary>
 	void DrawBoxes();
 
 private:	// 変数
-	int m_mulMarkH;					// ×マーク画像ハンドル
-	int m_cursorH;					// カーソル画像ハンドル
-	int m_gearBoxH;					// 装備品ボックス画像ハンドル
-	int m_explainBoxH;				// 説明文ボックス画像ハンドル
-	int m_equipTextH;				// 装備をするテキスト画像ハンドル
-	int m_removeEquipTextH;			// 装備を外すテキスト画像ハンドル
-	int m_costTextH;				// コストテキスト画像ハンドル
-	int m_equippedBoxH;				// 装備中ボックス画像ハンドル
-	int m_statusBoxH;				// ステータスボックス画像ハンドル
-	std::vector<int> m_gearH;		// 装備品名画像ハンドル
-	std::vector<int> m_numH;		// 数字画像ハンドル
-	std::vector<int> m_explainH;	// 説明文画像ハンドル
-	std::vector<int> m_equippedUIH;	// 装備中装備UI画像
-	int m_cursorCount;				// カーソルカウント
-	bool m_isCursorLeft;			// カーソルが左にあるかどうか
-	std::shared_ptr<Gear> m_pGear;	// 装備品
+	int m_mulMarkH;							// ×マーク画像ハンドル
+	int m_slashH;							// スラッシュ画像ハンドル
+	int m_cursorH;							// カーソル画像ハンドル
+	int m_gearBoxH;							// 装備品ボックス画像ハンドル
+	int m_explainBoxH;						// 説明文ボックス画像ハンドル
+	int m_equipTextH;						// 装備をするテキスト画像ハンドル
+	int m_removeEquipTextH;					// 装備を外すテキスト画像ハンドル
+	int m_costTextH;						// コストテキスト画像ハンドル
+	int m_equippedBoxH;						// 装備中ボックス画像ハンドル
+	int m_statusBoxH;						// ステータスボックス画像ハンドル
+	std::vector<int> m_gearH;				// 装備品名画像ハンドル
+	std::vector<int> m_numH;				// 数字画像ハンドル
+	std::vector<int> m_explainH;			// 説明文画像ハンドル
+	std::vector<int> m_equippedUIH;			// 装備中装備UI画像
+	int m_cursorCount;						// カーソルカウント
+	bool m_isSelectLeft;					// 選択カーソルが左にあるかどうか
+	std::shared_ptr<Gear> m_pGear;			// 装備品
+	CursorKind m_cursorKind;				// カーソルの種類
+	std::shared_ptr<SceneBase> m_nextScene;	// 次のシーン
 };
 
