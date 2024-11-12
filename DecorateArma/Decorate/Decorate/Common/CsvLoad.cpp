@@ -151,37 +151,35 @@ void CsvLoad::StatusLoad(CharacterBase::StatusData& data, const char* characterN
 void CsvLoad::AddStatusLoad(CharacterBase::StatusData& data, const char* characterName)
 {
 	// ファイル情報の読み込み
-	std::ifstream ifs("Data/CsvFile/AddStatus.csv");
+	std::ifstream ifs("Data/CsvFile/EquippedGear.csv");
 	std::string line;
 
-	std::vector<std::string> strVec;
+	// 最初の行はヘッダなので飛ばす
+	getline(ifs, line);
 
 	while (getline(ifs, line))
 	{
-		// csvデータ１行を、','で複数の文字列に分割
-		strVec = Split(line, ',');
+		// csvデータの1行を','で複数の文字列の分割する
+		std::vector<std::string> strVec = Split(line, ',');
 
-		// strvec[0]	: キャラ名	string
-		// strvec[1]	: HP		int
-		// strvec[2]	: MATK		int
-		// strvec[3]	: SATK		int
-		// strvec[4]	: DEF		int
+		// 行のデータが8個あるか調べる
+		if (strVec.size() < 8)continue;
 
-		//参照したいキャラが見つかっていたら処理をやめる
-		const char* str = strVec[0].c_str();
-		if (strcmp(str, characterName) == 0) break;
+		// strvec[0]	: アイテム名	string
+		// strvec[1]	: HP上昇値		int
+		// strvec[2]	: MATK上昇値	int
+		// strvec[3]	: SATK上昇値	int
+		// strvec[4]	: DEF上昇値		int
+		// strvec[5]	: コスト		int
+		// strvec[6]	: 所持数		int
+		// strvec[7]	: 装備番号		int
 
-		else
-		{
-			strVec.erase(strVec.begin(), strVec.end());
-		}
-	}
-
-	// ステータス情報をステータスデータに入れる
-	data.hp += stoi(strVec[1]);
-	data.meleeAtk += stoi(strVec[2]);
-	data.shotAtk += stoi(strVec[3]);
-	data.def += stoi(strVec[4]);
+		// ステータス情報をステータスデータに入れる
+		data.hp += stoi(strVec[1]);
+		data.meleeAtk += stoi(strVec[2]);
+		data.shotAtk += stoi(strVec[3]);
+		data.def += stoi(strVec[4]);
+	}	
 }
 
 void CsvLoad::GearDataLoad(std::vector<Gear::GearData>& data)
