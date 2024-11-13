@@ -11,6 +11,7 @@ namespace
 {
 	constexpr int kGearNum = 15;					// 装備品の数
 	constexpr int kMaxCost = 30;					// 最大コスト数
+	constexpr int kAlpha = 100;						// 装備を外すの時に使う画像の不透明度
 
 	/*ファイルパス関係*/
 	// テキスト画像名
@@ -90,7 +91,9 @@ namespace
 	const char* kCostTextPath = "Data/Image/Gear/Text/Cost.png";				// コストテキスト画像ファイルパス
 	const char* kMulMarkPath = "Data/Image/Gear/MulMark.png";					// ×マーク画像ファイルパス
 	const char* kSlashPath = "Data/Image/Gear/Slash.png";						// スラッシュ画像ファイルパス
+	const char* kSelectCursorPath = "Data/Image/Gear/Box/SelectCursorBox.png";	// 選択時のカーソル画像ファイルパス
 	const char* kCursorPath = "Data/Image/Gear/Box/CursorBox.png";				// カーソル画像ファイルパス
+	const char* kRemoveCursorPath = "Data/Image/Gear/Box/RemoveCursorBox.png";	// 装備を外す時のカーソル画像ファイルパス
 	const char* kGearBoxPath = "Data/Image/Gear/Box/GearBox.png";				// 装備品ボックス画像ファイルパス
 	const char* kExplainBoxPath = "Data/Image/Gear/Box/GearExplainBox.png";		// 装備品説明文ボックス画像ファイルパス
 	const char* kEquippedBoxPath = "Data/Image/Gear/Box/EquippedBox.png";		// 装備中ボックス画像ファイルパス
@@ -103,7 +106,7 @@ namespace
 	constexpr int kGearIntervalPosY = 80;						// 装備品名Y座標の間隔
 	constexpr int kEquipTextPosX = 380;							// 装備をするテキストX座標
 	constexpr int kRemoveTextPosX = kEquipTextPosX + 400;		// 装備を外すテキストX座標
-	constexpr int kEquipTextPosY = 70;							// 装備をするテキストY座標
+	constexpr int kEquipTextPosY = 50;							// 装備をするテキストY座標
 	constexpr int kExplainTextPosX = 450;						// 説明文画像X座標
 	constexpr int kExplainTextPosY = 880;						// 説明文画像Y座標
 	constexpr int kExplainCostPosX = kExplainTextPosX + 60	;	// 説明文コストX座標
@@ -125,9 +128,9 @@ namespace
 	constexpr int kMulMarkPosY = 10;							// ×マークY座標調整
 	constexpr int kNumSecondPosX = kMulMarkPosX + 50;			// 十の位数字座標
 	constexpr int kNumFirstPosX = kNumSecondPosX + 30;			// 一の位数字座標
-	constexpr int kSelectCursorLeftPosX = kEquipTextPosX;		// 選択カーソルX座標左
-	constexpr int kSelectCursorRightPosX = kRemoveTextPosX;		// 選択カーソルX座標右
-	constexpr int kSelectCursorPosY = kEquipTextPosY;			// 選択カーソルY座標
+	constexpr int kSelectCursorLeftPosX = kEquipTextPosX - 10;	// 選択カーソルX座標左
+	constexpr int kSelectCursorRightPosX = kRemoveTextPosX - 10;// 選択カーソルX座標右
+	constexpr int kSelectCursorPosY = kEquipTextPosY - 15;		// 選択カーソルY座標
 	constexpr int kEquipCursorPosX = -25;						// 装備を着けるカーソルY座標
 	constexpr int kEquipCursorPosY = -20;						// 装備を着けるカーソルY座標
 	constexpr int kGearBoxPosX = 100;							// 装備品ボックスX座標
@@ -179,6 +182,10 @@ SceneGear::SceneGear() :
 	assert(m_slashH != -1);
 	m_cursorH = LoadGraph(kCursorPath);
 	assert(m_cursorH != -1);
+	m_selectCursorH = LoadGraph(kSelectCursorPath);
+	assert(m_selectCursorH != -1);
+	m_removeCursorH = LoadGraph(kRemoveCursorPath);
+	assert(m_removeCursorH != -1);
 	m_gearBoxH = LoadGraph(kGearBoxPath);
 	assert(m_gearBoxH != -1);
 	m_explainBoxH = LoadGraph(kExplainBoxPath);
@@ -217,6 +224,8 @@ SceneGear::~SceneGear()
 	DeleteGraph(m_mulMarkH);
 	DeleteGraph(m_slashH);
 	DeleteGraph(m_cursorH);
+	DeleteGraph(m_selectCursorH);
+	DeleteGraph(m_removeCursorH);
 	DeleteGraph(m_gearBoxH);
 	DeleteGraph(m_explainBoxH);
 	DeleteGraph(m_equipTextH);
@@ -264,14 +273,14 @@ void SceneGear::Draw()
 	DrawGearText();
 	// 装備品数描画
 	DrawGearNum();
-	// カーソル描画
-	DrawCursor();
 	// ボックス描画
 	DrawBoxes();
 	// 装備中装備描画
 	DrawEquippedGear();
 	// コスト描画
 	DrawCost();
+	// カーソル描画
+	DrawCursor();
 
 #ifdef _DEBUG
 	DrawFormatString(0, 0, 0xffffff, "装備画面");
@@ -300,12 +309,19 @@ void SceneGear::UpdateSelectCursor()
 		{
 			// 装備を付ける
 			m_cursorKind = CursorKind::Equip;
+			// カーソルカウントを0にする
+			m_cursorCount = 0;
 
 		}
 		else
 		{
-			// 装備を外す
-			m_cursorKind = CursorKind::Remove;
+			
+				// 装備を外す
+				m_cursorKind = CursorKind::Remove;
+				// カーソルカウントを0にする
+				m_cursorCount = 0;
+		
+		
 		}
 	}
 
@@ -373,6 +389,43 @@ void SceneGear::UpdateEquipCursor()
 
 void SceneGear::UpdateRemoveCursor()
 {
+	// 上ボタンを押したらカーソルカウントが減る
+	if (Pad::IsTrigger(PAD_INPUT_UP))
+	{
+		m_cursorCount--;
+	}
+	// 下ボタンを押したらカーソルカウントが増える
+	if (Pad::IsTrigger(PAD_INPUT_DOWN))
+	{
+		m_cursorCount++;
+	}
+
+	// カーソルがループしないようにする
+	if (m_cursorCount < 0)
+	{
+		m_cursorCount = m_pGear->GetEquippedGearSize() - 1;
+	}
+	if (m_cursorCount > m_pGear->GetEquippedGearSize() - 1)
+	{
+		m_cursorCount = 0;
+	}
+
+	// Aボタンが押された場合は装備を外す
+	if (Pad::IsTrigger(PAD_INPUT_1))
+	{
+		// 装備中装備数が0以下でなかった場合
+		if (m_pGear->GetEquippedGearSize() > 0)
+		{
+			// 装備を外す
+			m_pGear->RemoveGear(m_cursorCount);
+		}
+		else
+		{
+			// 選べないよSEを鳴らす
+		}
+
+	}
+
 	// Bボタンが押された場合は選択に戻る
 	if (Pad::IsTrigger(PAD_INPUT_2))
 	{
@@ -535,7 +588,6 @@ void SceneGear::DrawEquippedGear()
 
 void SceneGear::DrawCursor()
 {
-
 	switch (m_cursorKind)
 	{
 	case SceneGear::CursorKind::Select:
@@ -560,12 +612,12 @@ void SceneGear::DrawSelectCursor()
 	if (m_isSelectLeft)
 	{
 		// カーソル左
-		DrawGraph(kSelectCursorLeftPosX, kSelectCursorPosY, m_cursorH , true);
+		DrawGraph(kSelectCursorLeftPosX, kSelectCursorPosY, m_selectCursorH, true);
 	}
 	else
 	{
 		// カーソル右
-		DrawGraph(kSelectCursorRightPosX, kSelectCursorPosY, m_cursorH, true);
+		DrawGraph(kSelectCursorRightPosX, kSelectCursorPosY, m_selectCursorH, true);
 	}
 }
 
@@ -599,6 +651,13 @@ void SceneGear::DrawEquipCursor()
 
 void SceneGear::DrawRemoveCursor()
 {
+	// 半透明の箱を選択中のUIに重ねる
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, kAlpha);
+	DrawGraph(kEquippedUIPosX,
+		kEquippedUIStartPosY + (kEquippedUIIntervalPosY * m_cursorCount), 
+		m_removeCursorH, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
 }
 
 void SceneGear::DrawBoxes()

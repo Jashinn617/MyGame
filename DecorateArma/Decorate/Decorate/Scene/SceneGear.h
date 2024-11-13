@@ -130,6 +130,8 @@ private:	// 変数
 	int m_mulMarkH;							// ×マーク画像ハンドル
 	int m_slashH;							// スラッシュ画像ハンドル
 	int m_cursorH;							// カーソル画像ハンドル
+	int m_selectCursorH;					// セレクト時カーソル画像ハンドル
+	int m_removeCursorH;					// 装備を外す時カーソル画像ハンドル
 	int m_gearBoxH;							// 装備品ボックス画像ハンドル
 	int m_explainBoxH;						// 説明文ボックス画像ハンドル
 	int m_equipTextH;						// 装備をするテキスト画像ハンドル

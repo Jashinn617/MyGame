@@ -71,6 +71,26 @@ void Gear::AddEquippedGear(std::string gearName)
 		if (m_data[i].name == gearName)
 		{
 			m_equippedData.push_back(m_data[i]);
+			return;
+		}
+	}
+}
+
+void Gear::RemoveGear(int gearNum)
+{
+	// 装備前装備品のデータを一つ増やす
+	// 外す装備品と同じ装備品を探す
+	for (int i = 0; i < m_data.size(); i++)
+	{
+		// 指定の装備品を見つけたら装備品数を増やして
+		// 装備中の装備品を消す
+		if (m_data[i].name == m_equippedData[gearNum].name)
+		{
+			m_data[i].num++;
+			m_equippedData.erase(m_equippedData.begin() + gearNum);
+
+			// 見つけたら終わる
+			return;
 		}
 	}
 }

@@ -62,6 +62,12 @@ public:	// 関数
 	void AddEquippedGear(std::string gearName);
 
 	/// <summary>
+	/// 装備を外す
+	/// </summary>
+	/// <param name="gearNum">装備品番号</param>
+	void RemoveGear(int gearNum);
+
+	/// <summary>
 	/// CSVファイルに装備品のデータを書き込む
 	/// </summary>
 	void SaveGear();
