@@ -8,6 +8,7 @@
 #include "../../Utility/CollisionShape.h"
 #include "../../Utility/Time.h"
 
+#include "../../UI/HpBar/HpBarBase.h"
 #include "../../UI/HpBar/HpBarEnemy.h"
 
 #include <cassert>

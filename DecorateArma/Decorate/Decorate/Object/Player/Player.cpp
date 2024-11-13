@@ -491,6 +491,8 @@ void Player::OnRecovery(int recoveryNum)
 		{
 			m_statusData.hp = m_maxHp;
 		}
+		// HPバー回復
+		m_pHpBar->OnRecoveryHp(recoveryNum);
 }
 
 void Player::UpdateState()

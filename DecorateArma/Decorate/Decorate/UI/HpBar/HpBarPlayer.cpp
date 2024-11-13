@@ -97,8 +97,3 @@ void HpBarPlayer::Draw()
 	true,													// 透過するかどうか
 	false);													// 反転するかどうか
 }
-
-void HpBarPlayer::OnCureHp()
-{
-	m_decreaseHp = m_maxHp;
-}

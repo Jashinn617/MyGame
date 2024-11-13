@@ -15,21 +15,16 @@ public:	// 関数
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~HpBarPlayer();
+	virtual ~HpBarPlayer();
 
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update() override;
+	void Update() override final;
 
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw() override;
-
-	/// <summary>
-	/// 体力回復時の処理
-	/// </summary>
-	void OnCureHp();
+	void Draw() override final;
 };
 

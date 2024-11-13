@@ -26,6 +26,12 @@ public:	// 関数
 	/// </summary>
 	virtual void Draw() = 0;
 
+	/// <summary>
+	/// 体力回復時の処理
+	/// </summary>
+	/// <param name="recoveryNum">回復値</param>
+	virtual void OnRecoveryHp(int recoveryNum);
+
 protected:	// 変数
 	const int* m_hp = 0;					// 体力
 	int m_maxHp = 0;						// 最大体力

@@ -9,6 +9,7 @@
 #include "../../Utility/Time.h"
 
 #include "../../UI/HpBar/HpBarBase.h"
+#include "../../UI/HpBar/HpBarEnemy.h"
 
 using namespace CharacterData;
 
