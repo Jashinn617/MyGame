@@ -83,7 +83,7 @@ public:	// 関数
 	/// 索敵範囲に入っているかどうかを調べる
 	/// </summary>
 	/// <param name="pPlayer">プレイヤーポインタ</param>
-	void OnSearch(CharacterBase* pPlayer);
+	void OnSearch(ObjectBase* pPlayer);
 
 	/// <summary>
 	/// 近距離攻撃

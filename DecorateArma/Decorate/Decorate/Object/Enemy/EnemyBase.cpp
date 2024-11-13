@@ -184,7 +184,7 @@ void EnemyBase::OnDead()
 {
 }
 
-void EnemyBase::OnSearch(CharacterBase* pPlayer)
+void EnemyBase::OnSearch(ObjectBase* pPlayer)
 {
 	// 衝突判定
 	if (m_pSearchRange->IsCollide(pPlayer->GetCollShape()))

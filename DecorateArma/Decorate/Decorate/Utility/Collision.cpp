@@ -68,7 +68,7 @@ void Collision::UpdateCollision(ObjectBase* my, ObjectBase* target)
 			// キャラクター同士衝突判定
 			dynamic_cast<CharacterBase*>(my)->MoveCollCharacter(dynamic_cast<CharacterBase*>(target));
 			// 索敵範囲衝突判定
-			dynamic_cast<EnemyBase*>(my)->OnSearch(dynamic_cast<CharacterBase*>(target));
+			dynamic_cast<EnemyBase*>(my)->OnSearch(target);
 			// 近距離攻撃衝突判定
 			dynamic_cast<EnemyBase*>(my)->OnMeleeAttack(dynamic_cast<CharacterBase*>(target));
 
@@ -90,9 +90,9 @@ void Collision::UpdateCollision(ObjectBase* my, ObjectBase* target)
 		if (target->GetColType() == ObjectBase::ColType::Player)
 		{
 			// プレイヤーに近付くか判定
-			dynamic_cast<RecoveryItem*>(my)->OnApproach(dynamic_cast<CharacterBase*>(target));
+			dynamic_cast<RecoveryItem*>(my)->OnApproach(target);
 			// 衝突判定
-			dynamic_cast<RecoveryItem*>(my)->OnGet(dynamic_cast<CharacterBase*>(target));
+			dynamic_cast<RecoveryItem*>(my)->OnGet(dynamic_cast<Player*>(target));
 		}
 	}
 }

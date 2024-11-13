@@ -7,6 +7,8 @@
 class Model;
 class SetVertexShader;
 class ObjectManager;
+class CollisionShape;
+
 
 class ToonShader;
 class ShadowMapShader;
@@ -85,6 +87,12 @@ public:	// 継承用関数
 	virtual void StageClear() {/*処理無し*/ };
 
 	/// <summary>
+	/// 当たり判定用図形ポインタの取得
+	/// </summary>
+	/// <returns>当たり判定用図形ポインタ</returns>
+	const std::shared_ptr<CollisionShape> GetCollShape()const { return m_pCollShape; }
+
+	/// <summary>
 	/// 自身の当たり判定の情報の取得
 	/// </summary>
 	/// <returns>当たり判定情報</returns>
@@ -147,6 +155,7 @@ protected:	// 変数
 	ObjectManager* m_pObjectManager;					// オブジェクトマネージャーポインタ
 	CharacterData::CharacterInfo m_characterInfo;		// キャラクター情報
 	std::shared_ptr<Model> m_pModel;					// モデルクラスポインタ
+	std::shared_ptr<CollisionShape> m_pCollShape;	// 当たり判定用図形のポインタ
 	std::shared_ptr<SetVertexShader> m_pVertexShader;	// 頂点シェーダポインタ
 
 private:	 // 関数

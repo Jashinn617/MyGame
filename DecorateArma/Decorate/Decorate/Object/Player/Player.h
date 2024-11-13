@@ -9,6 +9,7 @@ class PlayerState;
 class Shot;
 class Camera;
 class Time;
+class RecoveryItem;
 
 /// <summary>
 /// プレイヤー
@@ -99,6 +100,12 @@ public:		// 関数
 	/// <param name="pEnemy">敵ポインタ</param>
 	void OnHardAttack(CharacterBase* pEnemy);
 
+	/// <summary>
+	/// 回復処理
+	/// </summary>
+	/// <param name="recoveryNum">回復量</param>
+	void OnRecovery(int recoveryNum);
+
 private:	// 列挙型
 	/// <summary>
 	/// アニメーション速度
@@ -161,6 +168,7 @@ private:	// 関数
 	void AttackPosUpdate(float angle);
 
 private:	// 変数
+	int m_maxHp;									// 最大HP
 	int m_attackCount;								// 連続で攻撃した回数
 
 	bool m_isColl;									// 攻撃が当たったか

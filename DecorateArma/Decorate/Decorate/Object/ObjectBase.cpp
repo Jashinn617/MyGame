@@ -27,6 +27,7 @@ ObjectBase::ObjectBase():
 	m_moveSpeed(0.0f),
 	m_isDamage(false),
 	m_pModel(nullptr),
+	m_pCollShape(nullptr),
 	m_pVertexShader(std::make_shared<SetVertexShader>()),
 	m_pObjectManager(nullptr),
 	m_wallNum(0),

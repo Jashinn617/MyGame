@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include "ObjectBase.h"
 
-class CollisionShape;
 class HpBarBase;
 
 /// <summary>
@@ -108,12 +107,6 @@ public:
 	void UpdateGravity();
 
 	/// <summary>
-	/// 当たり判定用図形ポインタの取得
-	/// </summary>
-	/// <returns>当たり判定用図形ポインタ</returns>
-	const std::shared_ptr<CollisionShape> GetCollShape()const { return m_pCollShape; }
-
-	/// <summary>
 	/// 角度の更新
 	/// </summary>
 	/// <returns>角度</returns>
@@ -166,7 +159,6 @@ protected:	// 変数
 	bool m_isJump;									// ジャンプ中かどうか
 	bool m_isDead;									// 死んだかどうか
 	bool m_isResetAttack;							// 攻撃判定の初期化(一度攻撃の当たった敵のもう一度当てる為)
-	std::shared_ptr<CollisionShape> m_pCollShape;	// 当たり判定用図形のポインタ
 	std::shared_ptr<HpBarBase> m_pHpBar;			// HPバーポインタ
 
 	StatusData m_statusData{};			// ステータス情報

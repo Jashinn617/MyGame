@@ -2,14 +2,14 @@
 #include "ObjectBase.h"
 
 class CollisionShape;
-class CharacterBase;
+class Player;
 
 /// <summary>
 /// 回復アイテム
 /// </summary>
 class RecoveryItem : public ObjectBase
 {
-public:
+public:		// 関数
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
@@ -47,17 +47,16 @@ public:
 	/// ゲットされたとき
 	/// </summary>
 	/// <param name="pPlayer">プレイヤーポインタ</param>
-	void OnGet(CharacterBase* pPlayer);
+	void OnGet(Player* pPlayer);
 
 	/// <summary>
 	/// プレイヤーに近付く
 	/// </summary>
 	/// <param name="pPlayer">プレイヤーポインタ</param>
-	void OnApproach(CharacterBase* pPlayer);
+	void OnApproach(ObjectBase* pPlayer);
 
-private:
+private:	// 変数
 
-	std::shared_ptr<CollisionShape> m_pColl;			// 当たり判定ポインタ
 	std::shared_ptr<CollisionShape> m_pApproachColl;	// プレイヤーに近付くようになる当たり判定
 };
 

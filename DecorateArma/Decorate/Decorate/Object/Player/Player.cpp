@@ -138,6 +138,9 @@ Player::Player() :
 	// 強攻撃
 	m_hardAtkColl = std::make_shared<CollisionShape>(m_characterInfo.topPos, kHardRadius, kHardHeight);
 
+	// 最大HP設定
+	m_maxHp = m_statusData.hp;
+
 	// HPバー作成
 	m_pHpBar = std::make_shared<HpBarPlayer>(m_statusData.hp);
 
@@ -476,6 +479,17 @@ void Player::OnHardAttack(CharacterBase* pEnemy)
 			// 当たっていたらダメージを与える
 			pEnemy->OnDamage(m_characterInfo.pos, m_statusData.meleeAtk * kHardAttackRate);
 			m_isHardAttack = true;
+		}
+}
+
+void Player::OnRecovery(int recoveryNum)
+{
+		// HP回復
+		m_statusData.hp += recoveryNum;
+		// 最大HP以上にはならないようにする
+		if (m_statusData.hp >= m_maxHp)
+		{
+			m_statusData.hp = m_maxHp;
 		}
 }
 
