@@ -56,7 +56,9 @@ public:		// 関数
 	void OnApproach(ObjectBase* pPlayer);
 
 private:	// 変数
-
+	float m_sinCount;									// 上下移動カウント
+	float m_sinPosY;									// 上下移動の計算に使うY座標
+	bool m_isApproaching;								// プレイヤーを追いかけているかどうか
 	std::shared_ptr<CollisionShape> m_pApproachColl;	// プレイヤーに近付くようになる当たり判定
 };
 

@@ -14,10 +14,16 @@ namespace
 	constexpr float kApproachHeight = -5.0f;			// 近付く範囲の高さ
 	constexpr float kFlyHeight = 90.0f;					// プレイヤーの方向に飛んでいく高さ
 	constexpr float kSpeed = 10.0f;						// 近付く速度
+	constexpr float kSinSpeed = 0.04f;					// 昇降速度
+	constexpr float kSinSwing = 0.5f;					// 昇降幅
+	constexpr float kYRot = DX_PI_F * 180;				// モデルY角度
 	constexpr VECTOR kScale = { 0.3f,0.3f,0.3f };		// モデルスケール
 }
 
-RecoveryItem::RecoveryItem(VECTOR pos)
+RecoveryItem::RecoveryItem(VECTOR pos):
+	m_sinCount(0),
+	m_sinPosY(0),
+	m_isApproaching(0)
 {
 	// 座標設定
 	m_characterInfo.pos = pos;
@@ -44,6 +50,16 @@ void RecoveryItem::Init()
 
 void RecoveryItem::Update()
 {
+	// プレイヤーを追いかけていないときは上下にふわふわ動く
+	if (!m_isApproaching)
+	{
+		// 昇降
+		m_sinCount += kSinSpeed;
+		m_sinPosY = sinf(m_sinCount) * kSinSwing;
+		m_characterInfo.pos.y += m_sinPosY;
+	}
+
+
 	// モデル座標更新
 	m_pModel->SetPos(m_characterInfo.pos);
 }

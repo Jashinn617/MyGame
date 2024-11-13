@@ -21,18 +21,18 @@ namespace
 	constexpr float kPlayerDistance = 40.0f;					// プレイヤーとの距離
 	constexpr float kPlayerToHeight = 55.0f;					// プレイヤーからの高さ
 	constexpr float kPlayerLeftBack = DX_PI_F * 5.0f / 4.0f;	// プレイヤーの左後ろ
-	constexpr float kSinSpeed = 0.03f;							// 昇降スピード
+	constexpr float kSinSpeed = 0.03f;							// 昇降速度
 	constexpr float kSinSwing = 4.0f;							// 昇降幅
 	constexpr VECTOR kScaleVec = { 0.01f,0.05f,0.01f };			// スケール
 
-	constexpr int kNum = 50;							// 弾数
-	constexpr int kVanishTime = 50;					// 弾が消えるまでの時間
-	constexpr int kIntervalTime = 5;					// 次の球が発射されるまでの時間
+	constexpr int kNum = 50;								// 弾数
+	constexpr int kVanishTime = 50;							// 弾が消えるまでの時間
+	constexpr int kIntervalTime = 5;						// 次の球が発射されるまでの時間
 	constexpr float kEnemyHeight = 50.0f;					// ロックオンした敵に当てる弾の高さ調整
-	constexpr float kRadius = 10;						// 弾の半径
-	constexpr float kSpeed = 15.0f;					// 弾の速度
-	constexpr float kStartPosHeight = 5.0f;			// 弾を発射する高さ
-	constexpr VECTOR kScale = { 0.4f,0.4f,0.4f };		// 弾のスケール
+	constexpr float kRadius = 10;							// 弾の半径
+	constexpr float kSpeed = 15.0f;							// 弾の速度
+	constexpr float kStartPosHeight = 5.0f;					// 弾を発射する高さ
+	constexpr VECTOR kScale = { 0.4f,0.4f,0.4f };			// 弾のスケール
 }
 
 Shot::Shot(Player* pPlayer, int atkPoint):
