@@ -85,6 +85,30 @@ public:	// 関数
 	/// <returns>指定の装備品</returns>
 	GearData GetEquippedNum(int gearNum) { return m_equippedData[gearNum]; }
 
+	/// <summary>
+	/// 現在の追加HP数を取得する
+	/// </summary>
+	/// <returns>追加HP数</returns>
+	int GetAddHp();
+
+	/// <summary>
+	/// 現在の追加近接攻撃力数を取得する
+	/// </summary>
+	/// <returns>追加近接攻撃力数</returns>
+	int GetAddMAtk();
+
+	/// <summary>
+	/// 現在の追加遠距離攻撃力数を取得する
+	/// </summary>
+	/// <returns>追加遠距離攻撃力数</returns>
+	int GetAddSAtk();
+
+	/// <summary>
+	/// 現在の追加防御力数を取得する
+	/// </summary>
+	/// <returns>追加防御力数</returns>
+	int GetAddDef();
+
 private: // 変数
 	std::vector<GearData> m_data;			// 装備品情報
 	std::vector<GearData> m_equippedData;	// 装備中装備品情報

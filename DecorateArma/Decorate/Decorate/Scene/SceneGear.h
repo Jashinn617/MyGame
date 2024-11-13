@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "SceneBase.h"
 
+#include "../Object/CharacterBase.h"
+
 #include <vector>
 
 class Gear;
@@ -126,6 +128,26 @@ private:	// 関数
 	/// </summary>
 	void DrawBoxes();
 
+	/// <summary>
+	/// HP描画
+	/// </summary>
+	void DrawHp();
+
+	/// <summary>
+	/// 近接攻撃力描画
+	/// </summary>
+	void DrawMAtk();
+
+	/// <summary>
+	/// 遠距離攻撃力描画
+	/// </summary>
+	void DrawSAtk();
+
+	/// <summary>
+	/// 防御力描画
+	/// </summary>
+	void DrawDef();
+
 private:	// 変数
 	int m_mulMarkH;							// ×マーク画像ハンドル
 	int m_slashH;							// スラッシュ画像ハンドル
@@ -139,6 +161,11 @@ private:	// 変数
 	int m_costTextH;						// コストテキスト画像ハンドル
 	int m_equippedBoxH;						// 装備中ボックス画像ハンドル
 	int m_statusBoxH;						// ステータスボックス画像ハンドル
+	int m_hpTextH;							// HPのテキスト画像ハンドル
+	int m_mAtkTextH;						// 近接攻撃力のテキスト画像ハンドル
+	int m_sAtkTextH;						// 遠距離攻撃のテキスト画像ハンドル
+	int m_defTextH;							// 防御力のテキスト画像ハンドル
+	int m_addH;								// プラス記号画像ハンドル
 	std::vector<int> m_gearH;				// 装備品名画像ハンドル
 	std::vector<int> m_numH;				// 数字画像ハンドル
 	std::vector<int> m_explainH;			// 説明文画像ハンドル
@@ -148,5 +175,6 @@ private:	// 変数
 	std::shared_ptr<Gear> m_pGear;			// 装備品
 	CursorKind m_cursorKind;				// カーソルの種類
 	std::shared_ptr<SceneBase> m_nextScene;	// 次のシーン
+	CharacterBase::StatusData m_statusData;	// プレイヤーのステータスデータ
 };
 

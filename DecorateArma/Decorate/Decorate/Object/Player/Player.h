@@ -175,11 +175,11 @@ private:	// 変数
 	std::shared_ptr<PlayerState> m_pState;			// ステイトポインタ
 	std::shared_ptr<Camera> m_pCamera;				// カメラポインタ
 	std::shared_ptr<Shot> m_pShot;					// ショット
-	std::shared_ptr<CollisionShape> m_attackColl;		// 剣の当たり判定
+	std::shared_ptr<CollisionShape> m_attackColl;	// 剣の当たり判定
 	std::shared_ptr<CollisionShape> m_hardAtkColl;	// 強攻撃当たり判定
 
 	std::shared_ptr<Time> m_attackStanTime;			// 攻撃硬直時間
-	std::shared_ptr<Time> m_attackInvokeTime;	// 強攻撃発動時間
+	std::shared_ptr<Time> m_attackInvokeTime;		// 強攻撃発動時間
 
 	AnimSpeed m_animSpeed;							// アニメーション速度
 };

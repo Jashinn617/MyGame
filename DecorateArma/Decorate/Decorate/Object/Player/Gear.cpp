@@ -147,3 +147,55 @@ void Gear::SaveGear()
 	// ファイルを閉じる
 	csvEquippedFile.close();
 }
+
+int Gear::GetAddHp()
+{
+	int ans = 0;
+
+	for (auto& data : m_equippedData)
+	{
+		// 全てのHPを足す
+		ans += data.upHp;
+	}
+
+	return ans;
+}
+
+int Gear::GetAddMAtk()
+{
+	int ans = 0;
+
+	for (auto& data : m_equippedData)
+	{
+		// 全ての近接攻撃力を足す
+		ans += data.upMAttack;
+	}
+
+	return ans;
+}
+
+int Gear::GetAddSAtk()
+{
+	int ans = 0;
+
+	for (auto& data : m_equippedData)
+	{
+		// 全ての遠距離攻撃力を足す
+		ans += data.upSAttack;
+	}
+
+	return ans;
+}
+
+int Gear::GetAddDef()
+{
+	int ans = 0;
+
+	for (auto& data : m_equippedData)
+	{
+		// 全ての防御力を足す
+		ans += data.upDef;
+	}
+
+	return ans;
+}

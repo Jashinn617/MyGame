@@ -1,4 +1,14 @@
-﻿  Gear.cpp
+﻿  CsvLoad.cpp
 C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\Decorate\Object\Player\Gear.h(79,30): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+  EnemyRobot.cpp
+C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\Decorate\Object\Player\Gear.h(79,30): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+  Gear.cpp
+C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\Decorate\Object\Player\Gear.h(79,30): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+  Player.cpp
+C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\Decorate\Object\Player\Gear.h(79,30): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+  SceneDebug.cpp
+  SceneGear.cpp
+C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\Decorate\Object\Player\Gear.h(79,30): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+  コードを生成中...
 C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\Decorate\Object\Player\Gear.cpp(41): warning C4715: 'Gear::GetGearNum': 値を返さないコントロール パスがあります。
   Decorate.vcxproj -> C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\x64\Debug\Decorate.exe

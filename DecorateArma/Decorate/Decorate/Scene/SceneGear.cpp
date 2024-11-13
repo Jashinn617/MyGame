@@ -5,6 +5,8 @@
 
 #include "../Utility/Pad.h"
 
+#include "../Common/CsvLoad.h"
+
 #include <cassert>
 
 namespace
@@ -98,6 +100,11 @@ namespace
 	const char* kExplainBoxPath = "Data/Image/Gear/Box/GearExplainBox.png";		// 装備品説明文ボックス画像ファイルパス
 	const char* kEquippedBoxPath = "Data/Image/Gear/Box/EquippedBox.png";		// 装備中ボックス画像ファイルパス
 	const char* kStatusBoxPath = "Data/Image/Gear/Box/StatusBox.png";			// ステータスボックス画像ファイルパス
+	const char* kStatusHpTextPath = "Data/Image/Gear/Text/HP.png";				// ステータスボックス内HPテキスト画像ファイルパス
+	const char* kStatusMAtkTextPath = "Data/Image/Gear/Text/MATK.png";			// ステータスボックス内近接攻撃テキスト画像ファイルパス
+	const char* kStatusSAtkTextPath = "Data/Image/Gear/Text/SATK.png";			// ステータスボックス内遠距離攻撃テキスト画像ファイルパス
+	const char* kStatusDefTextPath = "Data/Image/Gear/Text/Def.png";			// ステータスボックス内防御力テキスト画像ファイルパス
+	const char* kAddPath = "Data/Image/Gear/Add.png";							// プラス記号画像ファイルパス
 
 	/*座標関係*/
 	constexpr int kGearLeftPosX = 150;							// 装備品名左側座標
@@ -111,18 +118,17 @@ namespace
 	constexpr int kExplainTextPosY = 880;						// 説明文画像Y座標
 	constexpr int kExplainCostPosX = kExplainTextPosX + 60	;	// 説明文コストX座標
 	constexpr int kExplainCostPosY = kExplainTextPosY + 50;		// 説明文コストY座標
-	constexpr int kFirstCostNumPosX = kExplainCostPosX + 150;	// 説明文コスト数一の位X座標
-	constexpr int kFirstCostNumPosY = kExplainCostPosY;			// 説明文コスト数一の位Y座標
-	constexpr int kSecondCostNumPosX = kFirstCostNumPosX + 30;	// 説明文コスト数十の位X座標
-	constexpr int kSecondCostNumPosY = kExplainCostPosY;		// 説明文コスト数十の位Y座標
+	constexpr int kSecondCostNumPosX = kExplainCostPosX + 150;	// 説明文コスト数十の位X座標
+	constexpr int kFirstCostNumPosX = kSecondCostNumPosX + 30;	// 説明文コスト数一の位X座標
+	constexpr int kCostNumPosY = kExplainCostPosY;				// 説明文コスト数のY座標
 	constexpr int kCostTextPosX = 1500;							// コストテキストX座標
 	constexpr int kCostTextPosY = 70;							// コストテキストY座標
-	constexpr int kMaxCostFirstPosX = kCostTextPosX + 300;		// 最大コスト数一の位X座標
-	constexpr int kMaxCostSecondPosX = kMaxCostFirstPosX + 25;	// 最大コスト数十の位X座標
-	constexpr int kCostFirstPosX = kCostTextPosX + 200;			// 現在コスト数一の位X座標
-	constexpr int kCostSecondPosX = kCostFirstPosX + 25;		// 現在コスト数十の位X座標
+	constexpr int kMaxCostSecondPosX = kCostTextPosX + 300;		// 最大コスト数十の位X座標
+	constexpr int kMaxCostFirstPosX = kMaxCostSecondPosX + 25;	// 最大コスト数一の位X座標
+	constexpr int kCostSecondPosX = kCostTextPosX + 200;		// 現在コスト数十の位X座標
+	constexpr int kCostFirstPosX = kCostSecondPosX + 25;		// 現在コスト数一の位X座標
 	constexpr int kCostPosY = kCostTextPosY;					// 最大コスト数Y座標
-	constexpr int kSlashPosX = kCostFirstPosX + 60;				// スラッシュX座標
+	constexpr int kSlashPosX = kCostFirstPosX + 30;				// スラッシュX座標
 	constexpr int kSlashPosY = kCostPosY;						// スラッシュY座標
 	constexpr int kMulMarkPosX = 400;							// ×マーク座標
 	constexpr int kMulMarkPosY = 10;							// ×マークY座標調整
@@ -144,6 +150,21 @@ namespace
 	constexpr int kEquippedUIPosX = 1410;						// 装備品中装備品X座標
 	constexpr int kEquippedUIStartPosY = 150;					// 装備品中装備品初期Y座標
 	constexpr int kEquippedUIIntervalPosY = 40;					// 装備品中装備品Y座標間隔
+	constexpr int kStatusTextPosX = kStatusBoxPosX + 20;		// ステータスボックス内テキストX座標
+	constexpr int kHpTextPosY = 725;							// HPテキストY座標
+	constexpr int kMAtkTextPosY = kHpTextPosY + 70;				// 近接攻撃テキストY座標
+	constexpr int kSAtkTextPosY = kMAtkTextPosY + 70;			// 遠距離攻撃テキストY座標
+	constexpr int kDefTextPosY = kSAtkTextPosY + 70;			// 防御テキストY座標
+	constexpr int kStatusFourthPosX = kStatusTextPosX + 225;	// ステータス千の位X座標
+	constexpr int kStatusThirdPosX = kStatusFourthPosX + 25;	// ステータス百の位X座標
+	constexpr int kStatusSecondPosX = kStatusThirdPosX + 25;	// ステータス十の位X座標
+	constexpr int kStatusFirstPosX = kStatusSecondPosX + 25;	// ステータス一の位X座標
+	constexpr int kAddPosX = kStatusFirstPosX + 30;				// プラスマークX座標
+	constexpr int kAddStatusFourthPosX = kAddPosX + 90;			// 追加ステータス千の位X座標
+	constexpr int kAddStatusThirdPosX = kAddStatusFourthPosX + 25;	// 追加ステータス百の位X座標
+	constexpr int kAddStatusSecondPosX = kAddStatusThirdPosX + 25;	// 追加ステータス十の位X座標
+	constexpr int kAddStatusFirstPosX = kAddStatusSecondPosX + 25;	// 追加ステータス一の位X座標
+	constexpr int kStatusNumPosY = 5;							// ステータスY座標調整用
 }
 
 SceneGear::SceneGear() :
@@ -200,6 +221,19 @@ SceneGear::SceneGear() :
 	assert(m_equippedBoxH != -1);
 	m_statusBoxH = LoadGraph(kStatusBoxPath);
 	assert(m_statusBoxH != -1);
+	m_hpTextH = LoadGraph(kStatusHpTextPath);
+	assert(m_hpTextH != -1);
+	m_mAtkTextH = LoadGraph(kStatusMAtkTextPath);
+	assert(m_mAtkTextH != -1);
+	m_sAtkTextH = LoadGraph(kStatusSAtkTextPath);
+	assert(m_sAtkTextH != -1);
+	m_defTextH = LoadGraph(kStatusDefTextPath);
+	assert(m_defTextH != -1);
+	m_addH = LoadGraph(kAddPath);
+	assert(m_addH != -1);
+
+	// プレイヤーのステータス取得
+	CsvLoad::GetInstance().StatusLoad(m_statusData, "Player");
 }
 
 SceneGear::~SceneGear()
@@ -233,6 +267,11 @@ SceneGear::~SceneGear()
 	DeleteGraph(m_costTextH);
 	DeleteGraph(m_equippedBoxH);
 	DeleteGraph(m_statusBoxH);
+	DeleteGraph(m_hpTextH);
+	DeleteGraph(m_mAtkTextH);
+	DeleteGraph(m_sAtkTextH);
+	DeleteGraph(m_defTextH);
+	DeleteGraph(m_addH);
 }
 
 void SceneGear::Init()
@@ -279,6 +318,14 @@ void SceneGear::Draw()
 	DrawEquippedGear();
 	// コスト描画
 	DrawCost();
+	// HP描画
+	DrawHp();
+	// 近接攻撃力描画
+	DrawMAtk();
+	// 遠距離攻撃力描画
+	DrawSAtk();
+	// 防御力描画
+	DrawDef();
 	// カーソル描画
 	DrawCursor();
 
@@ -448,12 +495,12 @@ int SceneGear::UpdateCost()
 void SceneGear::DrawCost()
 {
 	// 最大コスト数
-	int maxFirst = kMaxCost / 10;	// 一の位
-	int maxSecond = kMaxCost % 10;	// 十の位
+	int maxFirst = kMaxCost % 10;	// 一の位
+	int maxSecond = kMaxCost / 10;	// 十の位
 	// 現在のコスト数
 	int cost = UpdateCost();		// 現在のコスト数取得
-	int costFirst = cost / 10;		// 一の位
-	int costSecond = cost % 10;		// 十の位
+	int costFirst = cost % 10;		// 一の位
+	int costSecond = cost / 10;		// 十の位
 
 	// 最大コスト数描画
 	// 一の位
@@ -503,26 +550,70 @@ void SceneGear::DrawGearText()
 		}
 	}
 
-	// 説明文描画
-	DrawGraph(kExplainTextPosX, kExplainTextPosY, m_explainH[m_cursorCount], true);
-	// 説明文コスト描画
-	DrawGraph(kExplainCostPosX, kExplainCostPosY, m_costTextH, true);
-
-	// 装備をする、外すテキスト描画
-	DrawGraph(kEquipTextPosX, kEquipTextPosY, m_equipTextH, true);
-	DrawGraph(kRemoveTextPosX, kEquipTextPosY, m_removeEquipTextH, true);
+	int cost = 0;		// コスト
+	int numFirst = 0;	// 一の位
+	int numSecond = 0;	// 十の位
+	int number = 0;
+	/*説明文描画*/
+	switch (m_cursorKind)
+	{
+	case SceneGear::CursorKind::Select:
+		// 何も描画しない
+		break;
+	case SceneGear::CursorKind::Equip:
+		// 説明文描画
+		DrawGraph(kExplainTextPosX, kExplainTextPosY, m_explainH[m_cursorCount], true);
+		// 説明文コスト描画
+		DrawGraph(kExplainCostPosX, kExplainCostPosY, m_costTextH, true);
+		// コスト取得
+		cost = m_pGear->GetGearNum(m_cursorCount).cost;
+		numFirst = cost % 10;	// 一の位
+		numSecond = cost / 10;	// 十の位
+		// コスト数一の位描画
+		DrawGraph(kFirstCostNumPosX, kCostNumPosY, m_numH[numFirst], true);
+		// コスト数十の位描画
+		DrawGraph(kSecondCostNumPosX, kCostNumPosY, m_numH[numSecond], true);
+		break;
+	case SceneGear::CursorKind::Remove:
+		// 装備中装備数が0以下でなかった場合
+		if (m_pGear->GetEquippedGearSize() > 0)
+		{
+			// 装備品番号の取得
+			number = m_pGear->GetGearNum(m_pGear->GetEquippedNum(m_cursorCount).name).number;
+			// 説明文描画
+			DrawGraph(kExplainTextPosX, kExplainTextPosY, m_explainH[number], true);
+			// 説明文コスト描画
+			DrawGraph(kExplainCostPosX, kExplainCostPosY, m_costTextH, true);
+			// コスト取得
+			cost = m_pGear->GetGearNum(number).cost;
+			numFirst = cost % 10;	// 一の位
+			numSecond = cost / 10;	// 十の位
+			// コスト数一の位描画
+			DrawGraph(kFirstCostNumPosX, kCostNumPosY, m_numH[numFirst], true);
+			// コスト数十の位描画
+			DrawGraph(kSecondCostNumPosX, kCostNumPosY, m_numH[numSecond], true);
+		}
+		break;
+	default:
+		break;
+	}
 
 	// コストテキスト描画
 	DrawGraph(kCostTextPosX, kCostTextPosY, m_costTextH, true);
-	// コスト取得
-	int cost = m_pGear->GetGearNum(m_cursorCount).cost;
-	int numFirst = cost / 10;	// 一の位
-	int numSecond = cost % 10;	// 十の位
 
-	// コスト数一の位描画
-	DrawGraph(kFirstCostNumPosX, kFirstCostNumPosY, m_numH[numFirst], true);
-	// コスト数十の位描画
-	DrawGraph(kSecondCostNumPosX, kSecondCostNumPosY, m_numH[numSecond], true);
+	// 装備をする、外すテキスト描画
+	DrawGraph(kEquipTextPosX, kEquipTextPosY, m_equipTextH, true);
+	DrawGraph(kRemoveTextPosX, kEquipTextPosY, m_removeEquipTextH, true);	
+
+	// ステータスボックス内テキスト描画
+	// HP
+	DrawGraph(kStatusTextPosX, kHpTextPosY, m_hpTextH, true);
+	// 近接攻撃
+	DrawGraph(kStatusTextPosX, kMAtkTextPosY, m_mAtkTextH, true);
+	// 遠距離攻撃
+	DrawGraph(kStatusTextPosX, kSAtkTextPosY, m_sAtkTextH, true);
+	// 防御
+	DrawGraph(kStatusTextPosX, kDefTextPosY, m_defTextH, true);
 }
 
 void SceneGear::DrawGearNum()
@@ -670,4 +761,140 @@ void SceneGear::DrawBoxes()
 	DrawGraph(kEquippedBoxPosX, kEquippedBoxPosY, m_equippedBoxH, true);
 	// ステータスボックス
 	DrawGraph(kStatusBoxPosX, kStatusBoxPosY, m_statusBoxH, true);
+}
+
+void SceneGear::DrawHp()
+{
+	int posY = kHpTextPosY + kStatusNumPosY;	// Y座標
+	int hp = m_statusData.hp;					// HP
+	int first = hp % 10;						// 一の位
+	int second = (hp / 10) % 10;				// 十の位
+	int third = ((hp / 10) / 10) % 10;			// 百の位
+	int fourth = (((hp / 10) / 10) / 10) % 10;	// 千の位
+	// 千の位
+	DrawGraph(kStatusFourthPosX, posY, m_numH[fourth], true);
+	// 百の位
+	DrawGraph(kStatusThirdPosX, posY, m_numH[third], true);
+	// 十の位
+	DrawGraph(kStatusSecondPosX, posY, m_numH[second], true);
+	// 一の位
+	DrawGraph(kStatusFirstPosX, posY, m_numH[first], true);
+	// プラス記号
+	DrawGraph(kAddPosX, posY + kStatusNumPosY, m_addH, true);
+
+	int addHp = m_pGear->GetAddHp();			// 追加HP
+	first = addHp % 10;							// 一の位
+	second = (addHp / 10) % 10;					// 十の位
+	third = ((addHp / 10) / 10) % 10;			// 百の位
+	fourth = (((addHp / 10) / 10) / 10) % 10;	// 千の位
+	// 追加千の位
+	DrawGraph(kAddStatusFourthPosX, posY, m_numH[fourth], true);
+	// 追加百の位
+	DrawGraph(kAddStatusThirdPosX, posY, m_numH[third], true);
+	// 追加十の位
+	DrawGraph(kAddStatusSecondPosX, posY, m_numH[second], true);
+	// 追加一の位
+	DrawGraph(kAddStatusFirstPosX, posY, m_numH[first], true);
+}
+
+void SceneGear::DrawMAtk()
+{
+	int posY = kMAtkTextPosY + kStatusNumPosY;	// Y座標
+	int atk = m_statusData.meleeAtk;			// 近接攻撃力
+	int first = atk % 10;						// 一の位
+	int second = (atk / 10) % 10;				// 十の位
+	int third = ((atk / 10) / 10) % 10;			// 百の位
+	int fourth = (((atk / 10) / 10) / 10) % 10;	// 千の位
+	// 千の位
+	DrawGraph(kStatusFourthPosX, posY, m_numH[fourth], true);
+	// 百の位
+	DrawGraph(kStatusThirdPosX, posY, m_numH[third], true);
+	// 十の位
+	DrawGraph(kStatusSecondPosX, posY, m_numH[second], true);
+	// 一の位
+	DrawGraph(kStatusFirstPosX, posY, m_numH[first], true);
+	// プラス記号
+	DrawGraph(kAddPosX, posY + kStatusNumPosY, m_addH, true);
+
+	int addAtk = m_pGear->GetAddMAtk();			// 追加近接攻撃力
+	first = addAtk % 10;						// 一の位
+	second = (addAtk / 10) % 10;				// 十の位
+	third = ((addAtk / 10) / 10) % 10;			// 百の位
+	fourth = (((addAtk / 10) / 10) / 10) % 10;	// 千の位
+	// 追加千の位
+	DrawGraph(kAddStatusFourthPosX, posY, m_numH[fourth], true);
+	// 追加百の位
+	DrawGraph(kAddStatusThirdPosX, posY, m_numH[third], true);
+	// 追加十の位
+	DrawGraph(kAddStatusSecondPosX, posY, m_numH[second], true);
+	// 追加一の位
+	DrawGraph(kAddStatusFirstPosX, posY, m_numH[first], true);
+}
+
+void SceneGear::DrawSAtk()
+{
+	int posY = kSAtkTextPosY + kStatusNumPosY;	// Y座標
+	int atk = m_statusData.shotAtk;				// 遠距離攻撃力
+	int first = atk % 10;						// 一の位
+	int second = (atk / 10) % 10;				// 十の位
+	int third = ((atk / 10) / 10) % 10;			// 百の位
+	int fourth = (((atk / 10) / 10) / 10) % 10;	// 千の位
+	// 千の位
+	DrawGraph(kStatusFourthPosX, posY, m_numH[fourth], true);
+	// 百の位
+	DrawGraph(kStatusThirdPosX, posY, m_numH[third], true);
+	// 十の位
+	DrawGraph(kStatusSecondPosX, posY, m_numH[second], true);
+	// 一の位
+	DrawGraph(kStatusFirstPosX, posY, m_numH[first], true);
+	// プラス記号
+	DrawGraph(kAddPosX, posY + kStatusNumPosY, m_addH, true);
+
+	int addAtk = m_pGear->GetAddSAtk();			// 追加遠距離攻撃力
+	first = addAtk % 10;						// 一の位
+	second = (addAtk / 10) % 10;				// 十の位
+	third = ((addAtk / 10) / 10) % 10;			// 百の位
+	fourth = (((addAtk / 10) / 10) / 10) % 10;	// 千の位
+	// 追加千の位
+	DrawGraph(kAddStatusFourthPosX, posY, m_numH[fourth], true);
+	// 追加百の位
+	DrawGraph(kAddStatusThirdPosX, posY, m_numH[third], true);
+	// 追加十の位
+	DrawGraph(kAddStatusSecondPosX, posY, m_numH[second], true);
+	// 追加一の位
+	DrawGraph(kAddStatusFirstPosX, posY, m_numH[first], true);
+}
+
+void SceneGear::DrawDef()
+{
+	int posY = kDefTextPosY + kStatusNumPosY;	// Y座標
+	int atk = m_statusData.def;					// 防御力
+	int first = atk % 10;						// 一の位
+	int second = (atk / 10) % 10;				// 十の位
+	int third = ((atk / 10) / 10) % 10;			// 百の位
+	int fourth = (((atk / 10) / 10) / 10) % 10;	// 千の位
+	// 千の位
+	DrawGraph(kStatusFourthPosX, posY, m_numH[fourth], true);
+	// 百の位
+	DrawGraph(kStatusThirdPosX, posY, m_numH[third], true);
+	// 十の位
+	DrawGraph(kStatusSecondPosX, posY, m_numH[second], true);
+	// 一の位
+	DrawGraph(kStatusFirstPosX, posY, m_numH[first], true);
+	// プラス記号
+	DrawGraph(kAddPosX, posY + kStatusNumPosY, m_addH, true);
+
+	int addAtk = m_pGear->GetAddDef();			// 追加防御力
+	first = addAtk % 10;						// 一の位
+	second = (addAtk / 10) % 10;				// 十の位
+	third = ((addAtk / 10) / 10) % 10;			// 百の位
+	fourth = (((addAtk / 10) / 10) / 10) % 10;	// 千の位
+	// 追加千の位
+	DrawGraph(kAddStatusFourthPosX, posY, m_numH[fourth], true);
+	// 追加百の位
+	DrawGraph(kAddStatusThirdPosX, posY, m_numH[third], true);
+	// 追加十の位
+	DrawGraph(kAddStatusSecondPosX, posY, m_numH[second], true);
+	// 追加一の位
+	DrawGraph(kAddStatusFirstPosX, posY, m_numH[first], true);
 }
