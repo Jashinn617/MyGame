@@ -160,6 +160,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Object\Player\Gear.cpp" />
+    <ClCompile Include="Object\RecoveryItem.cpp" />
     <ClCompile Include="Scene\SceneSelect.cpp" />
     <ClCompile Include="Scene\SceneGear.cpp" />
     <ClCompile Include="UI\HpBar\HpBarPlayer.cpp" />
@@ -196,6 +197,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object\Player\Gear.h" />
+    <ClInclude Include="Object\RecoveryItem.h" />
     <ClInclude Include="Scene\SceneSelect.h" />
     <ClInclude Include="Scene\SceneGear.h" />
     <ClInclude Include="UI\HpBar\HpBarPlayer.h" />

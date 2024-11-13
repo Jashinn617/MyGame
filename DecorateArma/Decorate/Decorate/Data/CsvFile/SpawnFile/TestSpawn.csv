@@ -2,3 +2,4 @@
 1,Enemy,Robot,Robot/robot,200,0,1532
 2,Enemy,Robot,Robot/robot,-200,0,1532
 3,Enemy,Robot,Robot/robot,400,0,1532
+4,Item,Recovery,RecoveryItem/CupCake,0,0,1300

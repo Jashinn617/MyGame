@@ -5,6 +5,7 @@
 #include "../Object/Player/Shot.h"
 #include "../Object/Enemy/EnemyBase.h"
 #include "../Object/Camera.h"
+#include "../Object/RecoveryItem.h"
 
 Collision::Collision()
 {
@@ -85,6 +86,13 @@ void Collision::UpdateCollision(ObjectBase* my, ObjectBase* target)
 	// オブジェクトタイプがアイテムの場合
 	if (my->GetColType() == ObjectBase::ColType::Item)
 	{
-
+		// ターゲットのオブジェクトがプレイヤーの場合
+		if (target->GetColType() == ObjectBase::ColType::Player)
+		{
+			// プレイヤーに近付くか判定
+			dynamic_cast<RecoveryItem*>(my)->OnApproach(dynamic_cast<CharacterBase*>(target));
+			// 衝突判定
+			dynamic_cast<RecoveryItem*>(my)->OnGet(dynamic_cast<CharacterBase*>(target));
+		}
 	}
 }

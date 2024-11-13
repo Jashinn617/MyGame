@@ -5,6 +5,7 @@
 
 #include "../Object/ObjectBase.h"
 #include "../Object/ObjectManager.h"
+#include "../Object/RecoveryItem.h"
 
 #include <fstream>
 #include <sstream>
@@ -12,7 +13,7 @@
 
 namespace
 {
-	// 
+	// ステージ毎にスポーンするものを変える
 	const char* const kCsvDataFile[static_cast<int>(Game::StageKind::StageNum)] =
 	{
 		"Data/CsvFile/SpawnFile/TestSpawn.csv",
@@ -90,7 +91,6 @@ void Spawn::CsvLoad()
 
 void Spawn::Add(int createNum, std::string kind, std::string name, std::string path, VECTOR pos)
 {
-
 	std::string objModelFile;
 
 	if (kind == "Item")
@@ -113,9 +113,10 @@ void Spawn::Add(int createNum, std::string kind, std::string name, std::string p
 	if (kind == "Item")
 	{
 		// nameと同じ種類のアイテムの追加
-		if (name == "")
+		if (name == "Recovery")
 		{
-
+			m_pData.push_back(new Data);
+			m_pData.back()->pObj = new RecoveryItem(pos);
 		}
 		else if (name == "")
 		{
