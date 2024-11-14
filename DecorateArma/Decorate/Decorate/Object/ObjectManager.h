@@ -12,6 +12,7 @@ class EnemyBase;
 class ToonShader;
 class ShadowMapShader;
 class Spawn;
+class Gear;
 
 class ObjectManager
 {

@@ -89,14 +89,7 @@ void CsvLoad::AnimLoad(CharacterBase::AnimData& data, const char* characterName)
 		}
 	}
 
-	//外部ファイルから持ってきたステータス情報をステータスデータに入れる
-	/*data.idle = animData[1];
-	data.walk = animData[2];
-	data.run = animData[3];
-	data.jumpStart = animData[4];
-	data.jumpIdle = animData[5];
-	data.damage = animData[6];*/
-
+	// 情報をアニメデータに入れる
 	data.idle = animData[1];
 	data.walk = animData[2];
 	data.run = animData[3];
@@ -270,5 +263,53 @@ void CsvLoad::GearEquippedDataLoad(std::vector<Gear::GearData>& data)
 		data.push_back(gearData);
 	}
 
+	
+}
+
+void CsvLoad::ItemDropProbabilityDataLoad(std::vector<int>& data, const char* stageName)
+{
+	// ファイル情報の読み込み
+	std::ifstream ifs("Data/CsvFile/DropProbability.csv");
+	std::string line;
+
+	std::vector<std::string>strVec;
+
+	while (getline(ifs, line))
+	{
+		// csvデータ１行を、','で複数の文字列に分割
+		strVec = Split(line, ',');
+
+		// strvec[0]	: ステージ名	string
+		// strvec[1]	: HPS			int
+		// strvec[2]	: HPM			int
+		// strvec[3]	: HPL			int
+		// strvec[4]	: MATKS			int
+		// strvec[5]	: MATKM			int
+		// strvec[6]	: MATKL			int
+		// strvec[7]	: SATKS			int
+		// strvec[8]	: SATKM			int
+		// strvec[9]	: SATKL			int
+		// strvec[10]	: DEFS			int
+		// strvec[11]	: DEFM			int
+		// strvec[12]	: DEFL			int
+		// strvec[13]	: AllS			int
+		// strvec[14]	: AllM			int
+		// strvec[15]	: AllL			int
+
+		//参照したいステージが見つかっていたら処理をやめる
+		const char* str = strVec[0].c_str();
+		if (strcmp(str, stageName) == 0) break;
+
+		else
+		{
+			strVec.erase(strVec.begin(), strVec.end());
+		}
+	}
+
+	// データを入れる
+	for (int i = 1; i <= 15; i++)
+	{
+		data.push_back(stoi(strVec[i]));
+	}
 	
 }

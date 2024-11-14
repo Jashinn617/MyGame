@@ -10,7 +10,7 @@ namespace
 	constexpr int kRecoveryNum = 30;					// HP回復量
 	constexpr float kRadius = 35.0f;					// 半径
 	constexpr float kHeight = -5.0f;					// 高さ
-	constexpr float kApproachRadius = 300.0f;			// 近付く範囲の半径
+	constexpr float kApproachRadius = 200.0f;			// 近付く範囲の半径
 	constexpr float kApproachHeight = -5.0f;			// 近付く範囲の高さ
 	constexpr float kFlyHeight = 90.0f;					// プレイヤーの方向に飛んでいく高さ
 	constexpr float kSpeed = 25.0f;						// 近付く速度

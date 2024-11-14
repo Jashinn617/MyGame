@@ -6,22 +6,35 @@
 #include <fstream>
 #include <cassert>
 
+#include <random>
+#include <Windows.h>
+
 namespace
 {
 	const char* kCsvFileName = "Data/CsvFile/Gear.csv";					// 保存するファイル名(装備前装備品)
 	const char* kEquippedCsvFileName = "Data/CsvFile/EquippedGear.csv";	// 保存するファイル名(装備後装備品)
 
+	constexpr int kItemDropProbability = 50;	// アイテムを手に入れる確率
+	constexpr int kMaxProbability = 100;		// 確率最大値
 }
 
-Gear::Gear()
+Gear::Gear():
+	m_nowDropProbability(0),
+	m_prevDropProbability(0)
 {
 	// 装備品情報のロード
 	CsvLoad::GetInstance().GearDataLoad(m_data);
 	// 装備品情報のロード
 	CsvLoad::GetInstance().GearEquippedDataLoad(m_equippedData);
+	// ドロップ確率のロード
+	CsvLoad::GetInstance().ItemDropProbabilityDataLoad(m_probability, "Test");
 }
 
 Gear::~Gear()
+{
+}
+
+void Gear::Draw()
 {
 }
 
@@ -42,15 +55,6 @@ Gear::GearData Gear::GetGearNum(std::string gearName)
 
 Gear::GearData Gear::GetGearNum(int gearNum)
 {
-	//for (int i = 0; i < m_data.size(); i++)
-	//{
-	//	// 指定の装備品を見つけたらそれを返す
-	//	if (i == gearNum)
-	//	{
-	//		return m_data[i];
-	//	}
-	//}
-
 	return m_data[gearNum];
 
 	// 指定した装備品がなければ止める
@@ -198,4 +202,39 @@ int Gear::GetAddDef()
 	}
 
 	return ans;
+}
+
+void Gear::ObtainItemOnStage()
+{
+	// アイテムを落としたかどうかを調べる
+	std::random_device rd;
+	std::mt19937 mt(rd());
+	// 範囲
+	std::uniform_real_distribution<int> urd(0, kMaxProbability);
+	int probability = urd(mt);
+	// 出た数が確率より大きかったら何もせずに返る
+	if (probability > kItemDropProbability) return;
+
+	// 確率を出す
+	int rand = urd(mt);
+	// 確率初期化
+	m_prevDropProbability = -1;
+	m_nowDropProbability = m_probability[0];
+
+	for (int i = 0; i <= m_probability.size(); i++)
+	{
+		/*その確率の範囲内にいるかどうかを調べる*/
+		if (m_prevDropProbability < rand >= m_nowDropProbability)
+		{
+			// 範囲内に入っていたら所持アイテムに加えて処理を返す
+			m_dorpData.push_back(m_data[i]);
+
+			// 画面右上に何を手に入れたかを描画するようにする
+
+			return;
+		}
+		// 違う場合は次の範囲を設定する
+		m_prevDropProbability = m_nowDropProbability;
+		m_nowDropProbability += m_probability[static_cast<std::vector<int, std::allocator<int>>::size_type>(i) + 1];
+	}
 }

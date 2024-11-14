@@ -60,6 +60,13 @@ public:	// 関数
 	/// <param name="gearName">装備品名</param>
 	void GearEquippedDataLoad(std::vector<Gear::GearData>& data);
 
+	/// <summary>
+	/// 装備品
+	/// </summary>
+	/// <param name="data">装備品データ</param>
+	/// <param name="stageName">ステージ名</param>
+	void ItemDropProbabilityDataLoad(std::vector<int>& data, const char* stageName);
+
 private:	// 関数
 	/// <summary>
 	/// コンストラクタ

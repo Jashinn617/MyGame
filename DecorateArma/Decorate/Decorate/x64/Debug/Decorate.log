@@ -1,10 +1,10 @@
-﻿  Spawn.cpp
-  EnemyBase.cpp
-  EnemyRobot.cpp
+﻿  Gear.cpp
 C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\Decorate\Object\Player\Gear.h(79,30): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-  ObjectManager.cpp
+C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\Decorate\Object\Player\Gear.cpp(213,29): warning C4804: '>=': 演算中の 'bool' 型の使用方法が安全ではありません
+  SceneGear.cpp
+C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\Decorate\Object\Player\Gear.h(79,30): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
   Player.cpp
 C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\Decorate\Object\Player\Gear.h(79,30): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-  Collision.cpp
   コードを生成中...
+C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\Decorate\Object\Player\Gear.cpp(44): warning C4715: 'Gear::GetGearNum': 値を返さないコントロール パスがあります。
   Decorate.vcxproj -> C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\x64\Debug\Decorate.exe

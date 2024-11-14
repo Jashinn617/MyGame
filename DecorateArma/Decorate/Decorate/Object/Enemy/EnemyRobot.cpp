@@ -68,6 +68,7 @@ EnemyRobot::~EnemyRobot()
 
 void EnemyRobot::Init()
 {
+	// モデル取得
 	m_pModel = std::make_shared<Model>(m_modelH);
 	// モデル頂点取得
 	m_topFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(),

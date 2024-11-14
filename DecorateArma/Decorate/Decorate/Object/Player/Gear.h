@@ -36,6 +36,11 @@ public:	// 関数
 	~Gear();
 
 	/// <summary>
+	/// 描画
+	/// </summary>
+	void Draw();
+
+	/// <summary>
 	/// 指定した装備品を取得する
 	/// </summary>
 	/// <param name="gearName">装備品名</param>
@@ -109,9 +114,18 @@ public:	// 関数
 	/// <returns>追加防御力数</returns>
 	int GetAddDef();
 
+	/// <summary>
+	/// ステージでアイテムを手に入れた時の処理
+	/// </summary>
+	void ObtainItemOnStage();
+
 private: // 変数
+	int m_nowDropProbability;				// 現在確率
+	int m_prevDropProbability;				// 前回確率
+	std::vector<int> m_probability;			// アイテムドロップ確率
 	std::vector<GearData> m_data;			// 装備品情報
 	std::vector<GearData> m_equippedData;	// 装備中装備品情報
+	std::vector<GearData> m_dorpData;		// ステージ上で拾ったアイテム
 	 
 };
 
