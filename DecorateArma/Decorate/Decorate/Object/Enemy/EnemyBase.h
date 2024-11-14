@@ -86,10 +86,10 @@ public:	// 関数
 	void OnSearch(ObjectBase* pPlayer);
 
 	/// <summary>
-	/// 近距離攻撃
+	/// 攻撃判定
 	/// </summary>
 	/// <param name="pPlayer">プレイヤーポインタ</param>
-	void OnMeleeAttack(CharacterBase* pPlayer);
+	void OnAttack(CharacterBase* pPlayer);
 
 	/// <summary>
 	/// 存在するかどうか
@@ -161,6 +161,12 @@ protected:	// 状態遷移関数
 	/// </summary>
 	/// <returns>条件があっているかどうか</returns>
 	virtual bool StateTransitionShotAttack();
+
+	/// <summary>
+	/// 近接遠距離攻撃状態に変更する条件があっているかどうかを返す
+	/// </summary>
+	/// <returns>条件があっているかどうか</returns>
+	virtual bool StateTransitionMulchAttack();
 
 protected:	// メンバ関数
 	/// <summary>

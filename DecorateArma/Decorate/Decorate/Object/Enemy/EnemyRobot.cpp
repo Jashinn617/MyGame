@@ -47,7 +47,7 @@ EnemyRobot::EnemyRobot(VECTOR pos)
 	m_shotAttackRange = kShotAttackRange;
 
 	// 攻撃タイプ設定
-	m_attackType = AttackType::Shot;
+	m_attackType = AttackType::Mulch;
 
 	// 索敵範囲設定
 	m_pSearchRange = std::make_shared<CollisionShape>(m_characterInfo.pos, kSearchRadius, kSearchHeight);

@@ -145,11 +145,13 @@ void EnemyBase::Update()
 
 void EnemyBase::Draw(std::shared_ptr<ToonShader> pToonShader)
 {
+	// モデル描画
 	m_pModel->Draw();
 
 	// 攻撃タイプが近距離以外だった場合
 	if (m_attackType != AttackType::Melee)
 	{
+		// ショット描画
 		m_pShot->Draw();
 	}	
 
@@ -202,7 +204,7 @@ void EnemyBase::OnSearch(ObjectBase* pPlayer)
 	}
 }
 
-void EnemyBase::OnMeleeAttack(CharacterBase* pPlayer)
+void EnemyBase::OnAttack(CharacterBase* pPlayer)
 {
 	// 攻撃中でないときは判定しない
 	if (!m_isAttack) return;
@@ -281,6 +283,7 @@ void EnemyBase::UpdateStateTransition()
 	// 攻撃状態になったら処理を終了する
 	if (StateTransitionMeleeAttack()) return;
 	if (StateTransitionShotAttack()) return;
+	if (StateTransitionMulchAttack()) return;
 
 	// どれでもなかった場合は移動状態になる
 	m_updateFunc = &EnemyBase::UpdateMoveState;
@@ -341,6 +344,46 @@ bool EnemyBase::StateTransitionShotAttack()
 		// 攻撃状態に遷移する
 		m_updateFunc = &EnemyBase::UpdateShotAttackState;
 		
+		return true;
+	}
+
+	// どの条件にも当てはまらなければfalseを返す
+	return false;
+}
+
+bool EnemyBase::StateTransitionMulchAttack()
+{
+	// 攻撃タイプが複合タイプ以外だった場合は何もしない
+	if (m_attackType != AttackType::Mulch) return false;
+	// 攻撃中だったらtrueを返す
+	if (m_updateFunc == &EnemyBase::UpdateMeleeAttackState) return true;
+	if(m_updateFunc == &EnemyBase::UpdateShotAttackState) return true;
+	
+	// プレイヤーから敵までの方向ベクトルを求める
+	m_enemyToPlayer = VSub(m_pObjectManager->GetPlayer()->GetInfo().pos, m_characterInfo.pos);
+
+	// プレイヤーが近距離攻撃範囲内に入ったら近距離攻撃状態に移行する
+	if (VSize(m_enemyToPlayer) < m_meleeAttackRange)
+	{
+		// 攻撃間隔のリセット
+		m_pAttackInterval->Reset();
+		// 攻撃フラグを立てる
+		m_isAttack = true;
+		// 攻撃状態に遷移する
+		m_updateFunc = &EnemyBase::UpdateMeleeAttackState;
+
+		return true;
+	}
+	// プレイヤーが遠距離攻撃範囲内に入ったら遠距離攻撃状態に移行する
+	else if (VSize(m_enemyToPlayer) < m_shotAttackRange)
+	{
+		// 攻撃間隔のリセット
+		m_pAttackInterval->Reset();
+		// 攻撃フラグを立てる
+		m_isAttack = true;
+		// 攻撃状態に遷移する
+		m_updateFunc = &EnemyBase::UpdateShotAttackState;
+
 		return true;
 	}
 

@@ -226,7 +226,6 @@ void Shot::MakeBullet()
 				}
 			}
 			m_pBulletIntervalTime->Reset();
-		}
-		
+		}		
 	}
 }

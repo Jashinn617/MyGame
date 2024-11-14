@@ -70,7 +70,7 @@ void Collision::UpdateCollision(ObjectBase* my, ObjectBase* target)
 			// 索敵範囲衝突判定
 			dynamic_cast<EnemyBase*>(my)->OnSearch(target);
 			// 近距離攻撃衝突判定
-			dynamic_cast<EnemyBase*>(my)->OnMeleeAttack(dynamic_cast<CharacterBase*>(target));
+			dynamic_cast<EnemyBase*>(my)->OnAttack(dynamic_cast<CharacterBase*>(target));
 
 			return;
 		}

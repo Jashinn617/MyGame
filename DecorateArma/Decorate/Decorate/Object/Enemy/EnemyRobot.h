@@ -18,6 +18,9 @@ public:		// 関数
 	/// </summary>
 	~EnemyRobot();
 
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Init() override final;
 
 private:	// 関数
