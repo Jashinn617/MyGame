@@ -210,8 +210,8 @@ void Gear::ObtainItemOnStage()
 	std::random_device rd;
 	std::mt19937 mt(rd());
 	// 範囲
-	std::uniform_real_distribution<int> urd(0, kMaxProbability);
-	int probability = urd(mt);
+	std::uniform_real_distribution<float> urd(0, kMaxProbability);
+	float probability = urd(mt);
 	// 出た数が確率より大きかったら何もせずに返る
 	if (probability > kItemDropProbability) return;
 
