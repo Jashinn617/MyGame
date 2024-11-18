@@ -16,9 +16,26 @@ namespace
 
 	constexpr int kItemDropProbability = 50;	// アイテムを手に入れる確率
 	constexpr int kMaxProbability = 100;		// 確率最大値
+	constexpr int kMaxHandNum = 99;				// 最大手持ち数
+
+	const char* kStageName[2] =
+	{
+		"Test",
+		"Stage1",
+	};
 }
 
-Gear::Gear():
+Gear::Gear() :
+	m_nowDropProbability(0),
+	m_prevDropProbability(0)
+{
+	// 装備品情報のロード
+	CsvLoad::GetInstance().GearDataLoad(m_data);
+	// 装備品情報のロード
+	CsvLoad::GetInstance().GearEquippedDataLoad(m_equippedData);
+}
+
+Gear::Gear(Game::StageKind stageKind):
 	m_nowDropProbability(0),
 	m_prevDropProbability(0)
 {
@@ -27,7 +44,7 @@ Gear::Gear():
 	// 装備品情報のロード
 	CsvLoad::GetInstance().GearEquippedDataLoad(m_equippedData);
 	// ドロップ確率のロード
-	CsvLoad::GetInstance().ItemDropProbabilityDataLoad(m_probability, "Test");
+	CsvLoad::GetInstance().ItemDropProbabilityDataLoad(m_probability, kStageName[static_cast<int>(stageKind)]);
 }
 
 Gear::~Gear()
@@ -221,10 +238,10 @@ void Gear::ObtainItemOnStage()
 	m_prevDropProbability = -1;
 	m_nowDropProbability = m_probability[0];
 
-	for (int i = 0; i <= m_probability.size(); i++)
+	for (int i = 0; i < m_probability.size(); i++)
 	{
 		/*その確率の範囲内にいるかどうかを調べる*/
-		if (m_prevDropProbability < rand >= m_nowDropProbability)
+		if (m_prevDropProbability < rand && rand <= m_nowDropProbability)
 		{
 			// 範囲内に入っていたら所持アイテムに加えて処理を返す
 			m_dorpData.push_back(m_data[i]);
@@ -235,6 +252,39 @@ void Gear::ObtainItemOnStage()
 		}
 		// 違う場合は次の範囲を設定する
 		m_prevDropProbability = m_nowDropProbability;
-		m_nowDropProbability += m_probability[static_cast<std::vector<int, std::allocator<int>>::size_type>(i) + 1];
+		m_nowDropProbability += m_probability[i];
+	}
+}
+
+void Gear::StageClear()
+{
+	/*手に入れた装備品を持ち物に入れる*/
+	// 手に入れた装備品の数だけ回す
+	for (int i = 0; i < m_dorpData.size(); i++)
+	{
+		// 装備品の種類数だけ回す
+		for (int j = 0; j < m_data.size(); j++)
+		{
+			// 同じ装備品を見つけた場合
+			if (m_dorpData[i].name == m_data[j].name)
+			{
+				// 装備中のモノを含めた装備品の数を確かめる
+				int equippedNum = 0;
+				for (int l = 0; l < m_equippedData.size(); l++)
+				{
+					if (m_equippedData[l].name == m_dorpData[i].name)
+					{
+						equippedNum++;
+					}
+				}
+				// 装備品の数が99個以下だった場合は手持ちの装備品を一つ増やす
+				if (kMaxHandNum >= m_data[j].num + equippedNum)
+				{
+					m_data[j].num++;
+				}
+				// 次の装備品に行く
+				break;
+			}
+		}
 	}
 }

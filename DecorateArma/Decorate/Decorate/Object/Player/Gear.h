@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "../../Utility/Game.h"
+
 #include <string>
 #include <vector>
 
@@ -29,6 +31,12 @@ public:	// 関数
 	/// コンストラクタ
 	/// </summary>
 	Gear();
+
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="stageKind">ステージの種類</param>
+	Gear(Game::StageKind stageKind);
 
 	/// <summary>
 	/// デストラクタ
@@ -118,6 +126,11 @@ public:	// 関数
 	/// ステージでアイテムを手に入れた時の処理
 	/// </summary>
 	void ObtainItemOnStage();
+
+	/// <summary>
+	/// ステージクリア時の処理
+	/// </summary>
+	void StageClear();
 
 private: // 変数
 	int m_nowDropProbability;				// 現在確率

@@ -3,6 +3,7 @@
 
 #include "../ObjectManager.h"
 #include "../Player/Player.h"
+#include "../Player/Gear.h"
 #include "../Model.h"
 
 #include "../../Utility/CollisionShape.h"
@@ -177,6 +178,8 @@ void EnemyBase::OnDamage(VECTOR targetPos, int damagePoint)
 	{
 		// 死亡する
 		m_isDead = true;
+		// アイテムドロップ
+		m_pObjectManager->GetGear()->ObtainItemOnStage();
 	}
 
 	// ダメージを受けた状態にする

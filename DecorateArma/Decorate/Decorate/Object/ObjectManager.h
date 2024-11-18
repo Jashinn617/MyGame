@@ -58,6 +58,12 @@ public:		// 関数
 	Player* const GetPlayer();
 
 	/// <summary>
+	/// 装備品ポインタ取得
+	/// </summary>
+	/// <returns>装備品ポインタ</returns>
+	std::shared_ptr<Gear> const GetGear() { return m_pGear; }
+
+	/// <summary>
 	/// ロックオンされている敵の設定
 	/// </summary>
 	void InitLockOnEnemy();
@@ -76,6 +82,7 @@ private:	// 変数
 	std::shared_ptr<Collision> m_pCollision;			// 当たり判定
 	std::shared_ptr<Spawn> m_pSpawn;					// オブジェクト出現
 	std::shared_ptr<ToonShader> m_pToon;				// トゥーンシェーダ
+	std::shared_ptr<Gear> m_pGear;						// 装備品
 	//std::shared_ptr<ShadowMapShader> m_pShadowMap;	// シャドウマップシェーダ
 
 	std::list<ObjectBase*> m_pObject;				// オブジェクト

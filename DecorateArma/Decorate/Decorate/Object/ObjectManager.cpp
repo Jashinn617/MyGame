@@ -4,11 +4,13 @@
 #include "../Object/Field.h"
 #include "../Object/Camera.h"
 #include "../Object/Player/Player.h"
+#include "../Object/Player/Gear.h"
 #include "../Object/Enemy/EnemyBase.h"
 
 #include "../Utility/Collision.h"
 
 #include "../Common/Spawn.h"
+
 
 #include "../Shader/ToonShader.h"
 
@@ -26,7 +28,8 @@ ObjectManager::ObjectManager(Game::StageKind stageKind) :
 	m_pLockOnEnemy(nullptr),
 	m_pCollision(std::make_shared<Collision>()),
 	m_pSpawn(std::make_shared<Spawn>(stageKind,this)),
-	m_pToon(std::make_shared<ToonShader>())
+	m_pToon(std::make_shared<ToonShader>()),
+	m_pGear(std::make_shared<Gear>(stageKind))
 	//m_pShadowMap(std::make_shared<ShadowMapShader>())
 {
 	// プレイヤーの追加
@@ -39,6 +42,11 @@ ObjectManager::ObjectManager(Game::StageKind stageKind) :
 
 ObjectManager::~ObjectManager()
 {
+	// 仮ーーーーーーーーーーーーーーーーー
+	m_pGear->StageClear();
+	m_pGear->SaveGear();
+	// -------------------------------------------
+
 	// オブジェクトポインタ解放
 	std::list<ObjectBase*>::iterator it = m_pObject.begin();
 	while (it != m_pObject.end())

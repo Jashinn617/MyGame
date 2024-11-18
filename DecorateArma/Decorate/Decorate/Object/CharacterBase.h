@@ -2,6 +2,7 @@
 #include "ObjectBase.h"
 
 class HpBarBase;
+class Gear;
 
 /// <summary>
 /// オブジェクトの中でもキャラクターの基底クラス
@@ -160,6 +161,7 @@ protected:	// 変数
 	bool m_isDead;									// 死んだかどうか
 	bool m_isResetAttack;							// 攻撃判定の初期化(一度攻撃の当たった敵のもう一度当てる為)
 	std::shared_ptr<HpBarBase> m_pHpBar;			// HPバーポインタ
+	std::shared_ptr<Gear> m_pGear;						// 装備品
 
 	StatusData m_statusData{};			// ステータス情報
 	MoveStatusData m_moveData{};		// 移動情報
