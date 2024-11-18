@@ -17,11 +17,33 @@ namespace
 	constexpr int kItemDropProbability = 50;	// アイテムを手に入れる確率
 	constexpr int kMaxProbability = 100;		// 確率最大値
 	constexpr int kMaxHandNum = 99;				// 最大手持ち数
+	constexpr int kGearNum = 15;				// 装備品の種類数
 
+	// ステージ名
 	const char* kStageName[2] =
 	{
 		"Test",
 		"Stage1",
+	};
+
+	// 取得装備UI画像パス
+	const char* kGetUIPath[kGearNum] =
+	{
+		"Data/Image/Gear/EquippedUI/HPS.png",
+		"Data/Image/Gear/EquippedUI/HPM.png",
+		"Data/Image/Gear/EquippedUI/HPL.png",
+		"Data/Image/Gear/EquippedUI/MATKS.png",
+		"Data/Image/Gear/EquippedUI/MATKM.png",
+		"Data/Image/Gear/EquippedUI/MATKL.png",
+		"Data/Image/Gear/EquippedUI/SATKS.png",
+		"Data/Image/Gear/EquippedUI/SATKM.png",
+		"Data/Image/Gear/EquippedUI/SATKL.png",
+		"Data/Image/Gear/EquippedUI/DEFS.png",
+		"Data/Image/Gear/EquippedUI/DEFM.png",
+		"Data/Image/Gear/EquippedUI/DEFL.png",
+		"Data/Image/Gear/EquippedUI/AllS.png",
+		"Data/Image/Gear/EquippedUI/AllM.png",
+		"Data/Image/Gear/EquippedUI/AllL.png",
 	};
 }
 
@@ -45,14 +67,34 @@ Gear::Gear(Game::StageKind stageKind):
 	CsvLoad::GetInstance().GearEquippedDataLoad(m_equippedData);
 	// ドロップ確率のロード
 	CsvLoad::GetInstance().ItemDropProbabilityDataLoad(m_probability, kStageName[static_cast<int>(stageKind)]);
+	// 画像ロード
+	for (int i = 0; i < kGearNum; i++)
+	{
+		m_getUIH.push_back(LoadGraph(kGetUIPath[i]));
+		assert(m_getUIH[i]);
+	}
 }
 
 Gear::~Gear()
 {
+	// 画像デリート
+	for (auto& UI : m_getUIH)
+	{
+		DeleteGraph(UI);
+	}
 }
 
 void Gear::Draw()
 {
+	// getGearが1以上だった場合
+	if (m_getGear.size() > 0)
+	{
+		for (int i = 0; i < m_getGear.size(); i++)
+		{
+			// UI描画
+			DrawGraph(0, 0, m_getUIH[m_getGear[i]], true);
+		}
+	}
 }
 
 Gear::GearData Gear::GetGearNum(std::string gearName)
@@ -247,6 +289,7 @@ void Gear::ObtainItemOnStage()
 			m_dorpData.push_back(m_data[i]);
 
 			// 画面右上に何を手に入れたかを描画するようにする
+			m_getGear.push_back(m_data[i].number);
 
 			return;
 		}

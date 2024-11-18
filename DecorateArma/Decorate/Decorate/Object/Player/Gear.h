@@ -136,6 +136,8 @@ private: // 変数
 	int m_nowDropProbability;				// 現在確率
 	int m_prevDropProbability;				// 前回確率
 	std::vector<int> m_probability;			// アイテムドロップ確率
+	std::vector<int> m_getUIH;				// 取得装備UI画像
+	std::vector<int> m_getGear;				// 取得した装備
 	std::vector<GearData> m_data;			// 装備品情報
 	std::vector<GearData> m_equippedData;	// 装備中装備品情報
 	std::vector<GearData> m_dorpData;		// ステージ上で拾ったアイテム
