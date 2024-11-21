@@ -129,6 +129,7 @@ void ObjectManager::Draw()
 	{
 		obj->Draw2D();
 	}
+	m_pGear->Draw();
 
 	// カメラ位置リセット
 	GetPlayer()->GetCamera()->ResetCamera();

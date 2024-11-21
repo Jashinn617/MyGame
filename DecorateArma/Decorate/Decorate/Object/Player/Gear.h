@@ -4,6 +4,9 @@
 
 #include <string>
 #include <vector>
+#include <memory>
+
+class Time;
 
 /// <summary>
 /// 装備品
@@ -141,6 +144,8 @@ private: // 変数
 	std::vector<GearData> m_data;			// 装備品情報
 	std::vector<GearData> m_equippedData;	// 装備中装備品情報
 	std::vector<GearData> m_dorpData;		// ステージ上で拾ったアイテム
+
+	std::shared_ptr<Time> m_UIDeleteTime;	// UIを消していく時間
 	 
 };
 

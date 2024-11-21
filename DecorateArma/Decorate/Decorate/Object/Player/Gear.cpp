@@ -2,6 +2,8 @@
 
 #include "../../Common/CsvLoad.h"
 
+#include "../../Utility/Time.h"
+
 #include <iostream>
 #include <fstream>
 #include <cassert>
@@ -14,10 +16,14 @@ namespace
 	const char* kCsvFileName = "Data/CsvFile/Gear.csv";					// 保存するファイル名(装備前装備品)
 	const char* kEquippedCsvFileName = "Data/CsvFile/EquippedGear.csv";	// 保存するファイル名(装備後装備品)
 
-	constexpr int kItemDropProbability = 50;	// アイテムを手に入れる確率
+	constexpr int kItemDropProbability = 100;	// アイテムを手に入れる確率
 	constexpr int kMaxProbability = 100;		// 確率最大値
 	constexpr int kMaxHandNum = 99;				// 最大手持ち数
 	constexpr int kGearNum = 15;				// 装備品の種類数
+	constexpr int kUIPosX = 1400;				// 取得時表示UIX座標
+	constexpr int kUIStartPosY = 50;			// 取得時表示UI初期Y座標
+	constexpr int kUIIntervalPosY = 40;			// 取得時表示UIY座標間隔
+	constexpr int kUIDeleteTime = 60;			// UIを消すまでの時間
 
 	// ステージ名
 	const char* kStageName[2] =
@@ -59,7 +65,8 @@ Gear::Gear() :
 
 Gear::Gear(Game::StageKind stageKind):
 	m_nowDropProbability(0),
-	m_prevDropProbability(0)
+	m_prevDropProbability(0),
+	m_UIDeleteTime(std::make_shared<Time>(kUIDeleteTime))
 {
 	// 装備品情報のロード
 	CsvLoad::GetInstance().GearDataLoad(m_data);
@@ -89,10 +96,22 @@ void Gear::Draw()
 	// getGearが1以上だった場合
 	if (m_getGear.size() > 0)
 	{
+		// 一定時間経過したら先頭の要素から消していく
+		if (m_UIDeleteTime->Update())
+		{
+			// 先頭要素を消す
+			m_getGear.erase(m_getGear.begin());
+
+			// リセット
+			m_UIDeleteTime->Reset();
+		}
+
+		// 描画
 		for (int i = 0; i < m_getGear.size(); i++)
 		{
 			// UI描画
-			DrawGraph(0, 0, m_getUIH[m_getGear[i]], true);
+			DrawGraph(kUIPosX, kUIStartPosY + (kUIIntervalPosY * i),
+				m_getUIH[m_getGear[i]], true);
 		}
 	}
 }
@@ -311,6 +330,9 @@ void Gear::StageClear()
 			// 同じ装備品を見つけた場合
 			if (m_dorpData[i].name == m_data[j].name)
 			{
+				// 画像表示
+				m_getGear.push_back(m_dorpData[i].number);
+
 				// 装備中のモノを含めた装備品の数を確かめる
 				int equippedNum = 0;
 				for (int l = 0; l < m_equippedData.size(); l++)
