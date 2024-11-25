@@ -10,7 +10,7 @@ namespace
 {
 	constexpr int kMaxInputNum = 1000;													// アナログ入力状態最大値
 	constexpr int kMaxColHitTryNum = 50;												// カメラの押し出し試行回数
-	constexpr float kNear = 10.0f;														// カメラの一番近い描画距離
+	constexpr float kNear = 5.0f;														// カメラの一番近い描画距離
 	constexpr float kFar = 7000.0f;														// カメラの一番遠い描画距離
 	constexpr float kCameraAngleSpeedX = 0.1f;											// カメラの旋回速度X
 	constexpr float kCameraAngleSpeedY = 0.05f;											// カメラの旋回速度Y

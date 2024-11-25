@@ -19,7 +19,7 @@ namespace Game
 	constexpr int kClorDepth = 32;						// カラービット数
 
 	constexpr float kStandardTimePer1Frame = 16666.6f;				// 1フレームあたりの標準時間(現在60fps)
-	constexpr float kFov = 60.0f * DX_PI_F / 180.0f;				// カメラの視野角
+	constexpr float kFov = 45.0f * DX_PI_F / 180.0f;				// カメラの視野角
 	constexpr float kAspect = static_cast<float>(kScreenWidth) / static_cast<float>(kScreenHeight);	// アスペクト比
 	
 	constexpr VECTOR kLightPos = { -1000.0f,2000.0f,-1000.0f };		// ライト座標

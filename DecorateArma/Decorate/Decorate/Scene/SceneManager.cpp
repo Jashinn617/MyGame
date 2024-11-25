@@ -71,14 +71,14 @@ bool SceneManager::Update()
 		return false;
 	}
 
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	// LBが押された場合
 	if (CheckHitKey(KEY_INPUT_SPACE))
 	{
 		// デバッグシーンに飛ぶ
 		pNext = std::make_shared<SceneDebug>();
 	}
-#endif
+//#endif
 
 	// 次のシーンが現在のシーンでは無かった場合
 	if (pNext != m_pScene)

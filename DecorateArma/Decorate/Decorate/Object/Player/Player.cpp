@@ -49,7 +49,7 @@ namespace
 	constexpr float kAttackHeight = 50.0f;					// 攻撃判定高さ
 	constexpr float kHardRadius = 70.0f;					// 強攻撃当たり判定半径
 	constexpr float kHardHeight = -10.0f;					// 強攻撃当たり判定高さ
-	constexpr VECTOR kScaleVec = { 0.5f,0.6f,0.5f };		// スケール
+	constexpr VECTOR kScaleVec = { 0.5f,0.7f,0.5f };		// スケール
 	
 	/// <summary>
 	/// アニメーション切り替え速度
