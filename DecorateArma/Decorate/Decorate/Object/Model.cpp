@@ -6,7 +6,7 @@ Model::Model(const char* fileName):
 	m_modelH(-1),
 	m_animFrame(0),
 	m_animChangeFrame(0),
-	m_animChangeFrameTotal(0),
+	m_animChangeTotalFrame(0),
 	m_animChangeSpeed(0),
 	m_colFrameIndex(0),
 	m_isUseCol(false),
@@ -14,13 +14,13 @@ Model::Model(const char* fileName):
 	m_pos{0.0f,0.0f,0.0f}
 {
 	// 非同期読み込み設定に変更する
-	SetUseASyncLoadFlag(true);
+	//SetUseASyncLoadFlag(true);
 	// モデルのロード
 	m_modelH = MV1LoadModel(fileName);
 	// モデルのロードに失敗したら止まる
 	assert(m_modelH != -1);
 	// 非同期読み込み設定を解除する
-	SetUseASyncLoadFlag(false);	
+	//SetUseASyncLoadFlag(false);	
 
 	// アニメーション情報のクリア
 	ClearAnimData(m_prevAnim);
@@ -31,7 +31,7 @@ Model::Model(int modelH):
 	m_modelH(-1),	// モデルのコピー
 	m_animFrame(0),
 	m_animChangeFrame(0),
-	m_animChangeFrameTotal(0),
+	m_animChangeTotalFrame(0),
 	m_animChangeSpeed(0),
 	m_colFrameIndex(0),
 	m_isUseCol(false),
@@ -39,13 +39,13 @@ Model::Model(int modelH):
 	m_pos{ 0.0f,0.0f,0.0f }
 {
 	// 非同期読み込み設定に変更する
-	SetUseASyncLoadFlag(true);
+	//SetUseASyncLoadFlag(true);
 	// モデルのロード
 	m_modelH = MV1DuplicateModel(modelH);
 	// モデルのロードに失敗したら止まる
 	assert(m_modelH != -1);
 	// 非同期読み込み設定を解除する
-	SetUseASyncLoadFlag(false);
+	//SetUseASyncLoadFlag(false);
 
 	// アニメーション情報のクリア
 	ClearAnimData(m_prevAnim);
@@ -66,17 +66,17 @@ Model::~Model()
 	MV1DeleteModel(m_modelH);
 }
 
-void Model::Update(float animSpeed)
+void Model::Update()
 {
 	// アニメーションを進める
-	m_animFrame += animSpeed;
+	m_animFrame++;
 
 	// アニメーションが一周した場合
-	if (m_animFrame >= m_animChangeFrameTotal)
+	if (m_animFrame >= m_animChangeTotalFrame)
 	{
 		// アニメーションの更新をする
-		UpdateAnim(m_prevAnim, animSpeed);
-		UpdateAnim(m_nextAnim, animSpeed);
+		UpdateAnim(m_prevAnim);
+		UpdateAnim(m_nextAnim);
 		// フレームをリセットする
 		m_animFrame = 0;
 	}
@@ -85,10 +85,10 @@ void Model::Update(float animSpeed)
 	// アニメーションの切り替えを進める
 	m_animChangeFrame++;
 	// 切り替えフレームが総フレーム数に達した場合
-	if (m_animChangeFrame > m_animChangeFrameTotal)
+	if (m_animChangeFrame > m_animChangeTotalFrame)
 	{
 		// 切り替えフレーム数が総フレーム数を越さないようにする
-		m_animChangeFrame = m_animChangeFrameTotal;
+		m_animChangeFrame = m_animChangeTotalFrame;
 	}
 	// アニメーションのブレンド率の設定
 	UpdateAnimBlendRate();
@@ -155,7 +155,7 @@ void Model::SetAnim(int animNo, bool isLoop, bool isForceChange)
 	m_nextAnim.isLoop = isLoop;
 
 	// 変更にかけるフレーム数を設定する
-	m_animChangeFrameTotal = 1;
+	m_animChangeTotalFrame = 1;
 	m_animChangeFrame = 1;	
 }
 
@@ -182,7 +182,7 @@ void Model::ChangeAnim(int animNo, bool isLoop, bool isForceChange, int changeFr
 	m_nextAnim.isLoop = isLoop;
 
 	// 変更にかけるフレーム数を設定する
-	m_animChangeFrameTotal = changeFrameNum;
+	m_animChangeTotalFrame = changeFrameNum;
 	m_animChangeFrame = 0;
 
 	// アニメーションのブレンド率の設定
@@ -196,7 +196,6 @@ bool Model::IsAnimEnd()
 
 	// 現在のアニメーションの再生
 	float time = MV1GetAttachAnimTime(m_modelH, m_nextAnim.attachNo);
-
 	/*現在のアニメーションの再生時間がアニメーションの総再生時間よりも
 	大きかったらtrue返す*/
 	if (time >= m_nextAnim.totalTime)return true;
@@ -214,7 +213,7 @@ void Model::ClearAnimData(AnimData& anim)
 	anim.isLoop = false;
 }
 
-void Model::UpdateAnim(AnimData anim, float animSpeed)
+void Model::UpdateAnim(AnimData anim, const float animSpeed)
 {
 	// アニメーションが何も設定されていなければ何もしない
 	if (anim.animNo == -1)return;
@@ -223,17 +222,23 @@ void Model::UpdateAnim(AnimData anim, float animSpeed)
 	float nowFrame = MV1GetAttachAnimTime(m_modelH, anim.attachNo);
 	nowFrame += animSpeed;
 
-	// ループするアニメーションだった場合
-	if (anim.isLoop)
+	if (nowFrame > anim.totalTime)
 	{
-		// 現在のフレーム数が総再生時間よりも大きかった場合
-		if (nowFrame > anim.totalTime)
+		// ループするアニメーションだった場合
+		if (anim.isLoop)
 		{
-			// アニメーションをループさせる
-			nowFrame -= anim.totalTime;
+			// 現在のフレーム数が総再生時間よりも大きかった場合
+			if (nowFrame > anim.totalTime)
+			{
+				// アニメーションをループさせる
+				nowFrame -= anim.totalTime;
+			}
+			else
+			{
+				nowFrame = anim.totalTime;
+			}
 		}
 	}
-	
 	// アニメーションの再生時間の設定
 	MV1SetAttachAnimTime(m_modelH, anim.attachNo, nowFrame);
 }
@@ -241,7 +246,7 @@ void Model::UpdateAnim(AnimData anim, float animSpeed)
 void Model::UpdateAnimBlendRate()
 {
 	// アニメーション変化のフレーム数に応じたブレンド率を計算する
-	float rate = static_cast<float>(m_animChangeFrame) / static_cast<float>(m_animChangeFrameTotal);
+	float rate = static_cast<float>(m_animChangeFrame) / static_cast<float>(m_animChangeTotalFrame);
 	// ブレンド率が1以上にならないようにする
 	if (rate > 1.0f)rate = 1.0f;
 

@@ -106,24 +106,6 @@ public:		// 関数
 	/// <param name="recoveryNum">回復量</param>
 	void OnRecovery(int recoveryNum);
 
-private:	// 列挙型
-	/// <summary>
-	/// アニメーション速度
-	/// </summary>
-	enum AnimSpeed
-	{
-		Idle = 1,
-		Walk = 1,
-		Dash = 1,
-		Attack1 = 1,
-		Attack2 = 1,
-		Attack3 = 2,
-		HardAttack = 2,
-		JumpStart = 1,
-		JumpIdle = 1,
-		Damage = 1,
-	};
-
 private:	// 関数
 	/// <summary>
 	/// 角度更新
@@ -171,6 +153,8 @@ private:	// 変数
 	int m_maxHp;									// 最大HP
 	int m_attackCount;								// 連続で攻撃した回数
 
+	float m_animSpeed;								// アニメーション速度
+
 	bool m_isColl;									// 攻撃が当たったか
 	bool m_isAttack;								// 攻撃中か
 	bool m_isHardAttack;							// 強攻撃中か
@@ -189,5 +173,5 @@ private:	// 変数
 	std::shared_ptr<Time> m_attackStanTime;			// 攻撃硬直時間
 	std::shared_ptr<Time> m_attackInvokeTime;		// 強攻撃発動時間
 
-	AnimSpeed m_animSpeed;							// アニメーション速度
+	//AnimSpeed m_animSpeed;							// アニメーション速度
 };

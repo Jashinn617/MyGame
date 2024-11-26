@@ -32,8 +32,7 @@ public:		// 関数
 	/// <summary>
 	/// 更新
 	/// </summary>
-	/// <param name="animSpeed">アニメーション速度(基本は1)</param>
-	void Update(float animSpeed = 1.0f);
+	void Update();
 
 	/// <summary>
 	/// 描画
@@ -124,7 +123,7 @@ private:	// 関数
 	/// </summary>
 	/// <param name="anim">アニメーション情報</param>
 	/// <param name="animSpeed">アニメーション速度</param>
-	void UpdateAnim(AnimData anim, float animSpeed = 1.0f);
+	void UpdateAnim(AnimData anim, const float animSpeed = 1.0f);
 
 	/// <summary>
 	/// アニメーションのブレンド率を設定する
@@ -134,7 +133,7 @@ private:	// 関数
 private:	// 変数
 	int m_modelH;					// モデルハンドル
 	int m_animChangeFrame;			// 現在の切り替えフレーム数
-	int m_animChangeFrameTotal;		// 切り替えにかける総フレーム数
+	int m_animChangeTotalFrame;		// 切り替えにかける総フレーム数
 	int m_animChangeSpeed;			// アニメーションの変更速度
 	int m_colFrameIndex;			// 当たり判定として使用するフレームのインデックス
 	float m_animFrame;				// アニメーションフレーム

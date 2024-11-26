@@ -30,7 +30,7 @@ namespace
 	constexpr int kAttackStanTime = 20;						// 攻撃硬直時間
 	constexpr int kattackInvokeTime = 30;					// 強攻撃発動時間
 	constexpr int kHardAttackRate = 3;						// 強攻撃時の攻撃力倍率
-	constexpr float kMoveSpeedDashRate = 1.2f;				// ダッシュ時速度
+	constexpr float kMoveSpeedDashRate = 1.5f;				// ダッシュ時速度
 	constexpr float kAccelerationRate = 0.5f;				// 加速度
 	constexpr float kJumpMaxSpeed = 8.0f;					// ジャンプ時の最大速度
 	constexpr float kGravity = 0.8f;						// 重力
@@ -49,7 +49,7 @@ namespace
 	constexpr float kAttackHeight = 50.0f;					// 攻撃判定高さ
 	constexpr float kHardRadius = 70.0f;					// 強攻撃当たり判定半径
 	constexpr float kHardHeight = -10.0f;					// 強攻撃当たり判定高さ
-	constexpr VECTOR kScaleVec = { 0.5f,0.7f,0.5f };		// スケール
+	constexpr VECTOR kScaleVec = { 0.5f,1.0f,0.5f };		// スケール
 	
 	/// <summary>
 	/// アニメーション切り替え速度
@@ -58,14 +58,14 @@ namespace
 	{
 		Idle = 2,
 		Walk = 2,
-		Dash = 1,
+		Dash = 2,
 		Attack1 = 1,
 		Attack2 = 1,
 		Attack3 = 1,
 		HardAttack = 1,
-		JumpStart = 1,
-		JumpIdle = 1,
-		Damage = 1,
+		JumpStart = 2,
+		JumpIdle = 2,
+		Damage = 2,
 	};
 }
 
@@ -81,8 +81,7 @@ Player::Player() :
 	m_pState(std::make_shared<PlayerState>(this)),
 	m_pCamera(std::make_shared<Camera>()),
 	m_attackStanTime(std::make_shared<Time>(kAttackStanTime)),
-	m_attackInvokeTime(std::make_shared<Time>(kattackInvokeTime)),
-	m_animSpeed(AnimSpeed::Idle)
+	m_attackInvokeTime(std::make_shared<Time>(kattackInvokeTime))
 {
 	// アニメーションロード
 	CsvLoad::GetInstance().AnimLoad(m_animData, "Player");
@@ -112,7 +111,7 @@ Player::Player() :
 	assert(m_topFrameIndex != -1);
 	assert(m_topFrameIndex != -2);
 	// モデル底辺の取得
-	m_bottomFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(), "mixamorig:Ribbon3");
+	m_bottomFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(), "MaleBruteA_Eyes");
 	assert(m_bottomFrameIndex != -1);
 	assert(m_bottomFrameIndex != -2);
 	// 初期ステイトの設定(待機状態から)
@@ -174,7 +173,7 @@ void Player::Update()
 	UpdateGravity();
 
 	// アニメーション更新
-	m_pModel->Update(static_cast<float>(m_animSpeed));
+	m_pModel->Update();
 	// モデル座標の設定
 	m_pModel->SetPos(m_characterInfo.pos);
 	// モデル回転の設定
@@ -505,7 +504,6 @@ void Player::UpdateState()
 		m_moveSpeed = max(m_moveSpeed - m_moveData.acc, 0.0f);
 		// アニメーションを待機状態に変更する
 		m_pModel->ChangeAnim(m_animData.idle, true, false, kAnimChangeFrameNum::Idle);
-		m_animSpeed = AnimSpeed::Idle;
 		break;
 
 	case PlayerState::StateKind::Walk:	// 歩き
@@ -513,7 +511,6 @@ void Player::UpdateState()
 		m_moveSpeed = min(m_moveSpeed + m_moveData.acc, m_moveData.walkSpeed);
 		// アニメーションを歩きアニメーションに変更する
 		m_pModel->ChangeAnim(m_animData.walk, true, false, kAnimChangeFrameNum::Walk);
-		m_animSpeed = AnimSpeed::Walk;
 		break;
 
 	case PlayerState::StateKind::Dash:	// ダッシュ
@@ -521,7 +518,6 @@ void Player::UpdateState()
 		m_moveSpeed = min(m_moveSpeed + m_moveData.acc, m_moveData.dashSpeed);
 		// アニメーションをダッシュアニメーションに変更する
 		m_pModel->ChangeAnim(m_animData.run, true, false, kAnimChangeFrameNum::Dash);
-		m_animSpeed = AnimSpeed::Dash;
 		break;
 
 	case PlayerState::StateKind::Attack:	// 攻撃
@@ -549,7 +545,6 @@ void Player::UpdateState()
 		//{
 			// アニメーションをジャンプ待機アニメーションに切り替える
 		m_pModel->ChangeAnim(m_animData.jumpIdle, true, false, kAnimChangeFrameNum::JumpIdle);
-		m_animSpeed = AnimSpeed::JumpIdle;
 		//}
 		break;
 
@@ -573,17 +568,14 @@ void Player::UpdateAttack()
 	{
 	case 0:
 		m_pModel->ChangeAnim(m_animData.attack1, false, false, kAnimChangeFrameNum::Attack1);
-		m_animSpeed = AnimSpeed::Attack1;
 		break;
 
 	case 1:
 		m_pModel->ChangeAnim(m_animData.attack2, false, false, kAnimChangeFrameNum::Attack2);
-		m_animSpeed = AnimSpeed::Attack2;
 		break;
 
 	case 2:
 		m_pModel->ChangeAnim(m_animData.attack3, false, false, kAnimChangeFrameNum::Attack3);
-		m_animSpeed = AnimSpeed::Attack3;
 		break;
 
 	default:
@@ -643,7 +635,6 @@ void Player::UpdateHardAttack()
 
 	// アニメーションを再生する
 	m_pModel->ChangeAnim(m_animData.hardAttack, false, false, kAnimChangeFrameNum::HardAttack);
-	m_animSpeed = AnimSpeed::HardAttack;
 
 	// アニメーションが終わった場合
 	if (m_pModel->IsAnimEnd())

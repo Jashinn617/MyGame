@@ -16,9 +16,9 @@ namespace
 	constexpr float kCameraAngleSpeedY = 0.05f;											// カメラの旋回速度Y
 	constexpr float kCameraAngleVMax = DX_PI_F / 2.0f - 0.8f;							// カメラの最大垂直角度
 	constexpr float kCameraAngleVMin = -DX_PI_F / 2.0f + 0.6f;							// カメラの最小垂直角度
-	constexpr float kCameraViewpointHeight = 75.0f;										// ターゲットから注視点までの高さ
+	constexpr float kCameraViewpointHeight = 150.0f;									// ターゲットから注視点までの高さ
 	constexpr float kCameraToTargetLenghtMax = 400.0f;									// カメラからターゲットまでの最大距離
-	constexpr float kCameraToTargetLenghtMin = 0.0f;									// カメラからターゲットまでの最小距離
+	constexpr float kCameraToTargetLenghtMin = 10.0f;									// カメラからターゲットまでの最小距離
 	constexpr float kCameraToTargetLenghtSpeed = 5.0f;									// カメラからターゲットまでの距離を変える速度
 	constexpr float kSize = 50.0f;														// 当たり判定用のカメラのサイズ
 	
