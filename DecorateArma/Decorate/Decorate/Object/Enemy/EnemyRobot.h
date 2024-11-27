@@ -16,7 +16,7 @@ public:		// 関数
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~EnemyRobot();
+	virtual ~EnemyRobot();
 
 	/// <summary>
 	/// 初期化

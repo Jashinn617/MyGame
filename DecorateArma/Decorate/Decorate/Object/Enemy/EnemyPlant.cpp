@@ -1,0 +1,104 @@
+﻿#include "EnemyPlant.h"
+
+#include "../Model.h"
+
+#include "../../Common/CsvLoad.h"
+
+#include "../../Utility/CollisionShape.h"
+#include "../../Utility/Time.h"
+
+#include "../../UI/HpBar/HpBarBase.h"
+#include "../../UI/HpBar/HpBarEnemy.h"
+
+#include <cassert>
+
+namespace
+{
+	constexpr int kAttackInterval = 80;						// 攻撃感覚
+	constexpr float kRadius = 120.0f;						// 当たり判定半径
+	constexpr float kHeight = 50.0f;						// 高さ
+	constexpr float kRotSpeed = 9.0f;						// 回転速度
+	constexpr VECTOR kModelScale = { 1.5f,1.5f,1.5f };	// モデルスケール
+	constexpr float kSearchRadius = 500.0f;					// 索敵範囲の半径
+	constexpr float kSearchHeight = 70.0f;					// 索敵範囲の高さ
+	constexpr float kAttackRadius = 35.0f;					// 攻撃当たり判定の半径
+	constexpr float kAttackHeight = 10.0f;					// 攻撃当たり判定の高さ
+	constexpr float kMeleeAttackRange = 200.0f;				// 近距離攻撃射程
+	const char* const kName = "Plant";						// 名前
+}
+
+EnemyPlant::EnemyPlant(VECTOR pos)
+{
+	// 座標初期化
+	m_characterInfo.pos = pos;
+
+	// ステータス初期化
+	CsvLoad::GetInstance().StatusLoad(m_statusData, kName);
+	// アニメーション設定
+	CsvLoad::GetInstance().AnimLoad(m_animData, kName);
+
+	// 移動速度設定
+	InitMoveSpeed(m_statusData.spd);
+
+	// 回転速度設定
+	m_moveData.rotSpeed = kRotSpeed;
+
+	// 攻撃範囲設定
+	m_meleeAttackRange = kMeleeAttackRange;
+
+	// 攻撃タイプ設定
+	m_attackType = AttackType::Melee;
+
+	// 索敵範囲設定
+	m_pSearchRange = std::make_shared<CollisionShape>(m_characterInfo.pos, kSearchRadius, kSearchHeight);
+
+	// 攻撃間隔
+	m_pAttackInterval = std::make_shared<Time>(kAttackInterval);
+
+	// HPバーポインタ作成
+	m_pHpBar = std::make_shared<HpBarEnemy>(m_statusData.hp, m_characterInfo.pos);
+
+}
+
+EnemyPlant::~EnemyPlant()
+{
+	/*処理無し*/
+}
+
+void EnemyPlant::Init()
+{
+	// モデル取得
+	m_pModel = std::make_shared<Model>(m_modelH);
+	// 当たり判定ポインタ作成
+	m_pCollShape = std::make_shared<CollisionShape>(m_characterInfo.pos, kRadius, kHeight);
+
+	// 攻撃当たり判定作成
+	m_melleAttack.Coll1TopFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(),
+		"plant_tongue_05");
+	assert(m_melleAttack.Coll1TopFrameIndex != -1);
+	assert(m_melleAttack.Coll1TopFrameIndex != -2);
+	m_melleAttack.Coll1Top = MV1GetFramePosition(m_pModel->GetModelHandle(),
+		m_melleAttack.Coll1TopFrameIndex);
+	m_melleAttack.Coll2TopFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(),
+		"plant_tongue_05");
+	m_melleAttack.Coll2Top = MV1GetFramePosition(m_pModel->GetModelHandle(),
+		m_melleAttack.Coll2TopFrameIndex);
+	// 球で当たり判定を取るため、底辺はいらない
+	m_melleAttack.Coll1BottomFrameIndex = -1;
+	m_melleAttack.Coll2BottomFrameIndex = -1;
+
+	// 攻撃当たり判定ポインタ作成
+	m_pMelleAttackCol1 = std::make_shared<CollisionShape>(m_melleAttack.Coll1Top,
+		kAttackRadius, kAttackHeight);
+	m_pMelleAttackCol2 = std::make_shared<CollisionShape>(m_melleAttack.Coll2Top,
+		kAttackRadius, kAttackHeight);
+
+	// アニメーション設定
+	m_pModel->SetAnim(m_animData.idle, true, true);
+	// スケール設定
+	m_pModel->SetScale(kModelScale);
+	// 回転量初期化
+	m_pModel->SetRot(m_characterInfo.rot);
+	// 座標初期化
+	m_pModel->SetPos(m_characterInfo.pos);
+}

@@ -18,8 +18,8 @@ namespace
 	const char* const kFileName = "Data/Model/ShotWeapon/UFO.mv1";					// モデルファイルパス
 	const char* const kBulletFileName = "Data/Model/ShotWeapon/Bullet/Shot.mv1";	// 弾ファイルパス
 	
-	constexpr float kPlayerDistance = 40.0f;					// プレイヤーとの距離
-	constexpr float kPlayerToHeight = 55.0f;					// プレイヤーからの高さ
+	constexpr float kPlayerDistance = 60.0f;					// プレイヤーとの距離
+	constexpr float kPlayerToHeight = 150.0f;					// プレイヤーからの高さ
 	constexpr float kPlayerLeftBack = DX_PI_F * 5.0f / 4.0f;	// プレイヤーの左後ろ
 	constexpr float kSinSpeed = 0.03f;							// 昇降速度
 	constexpr float kSinSwing = 4.0f;							// 昇降幅

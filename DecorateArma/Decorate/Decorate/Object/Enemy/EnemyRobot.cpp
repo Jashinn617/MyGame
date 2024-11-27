@@ -24,6 +24,7 @@ namespace
 	constexpr float kHandRadius = 10.0f;					// 腕の当たり判定の半径
 	constexpr float kMeleeAttackRange = 100.0f;				// 近距離攻撃射程
 	constexpr float kShotAttackRange = 500.0f;				// 遠距離攻撃射程
+	const char* const kName = "Robot";						// 名前
 }
 
 EnemyRobot::EnemyRobot(VECTOR pos)
@@ -32,9 +33,9 @@ EnemyRobot::EnemyRobot(VECTOR pos)
 	m_characterInfo.pos = pos;
 
 	// ステータス初期化
-	CsvLoad::GetInstance().StatusLoad(m_statusData, "Robot");
+	CsvLoad::GetInstance().StatusLoad(m_statusData, kName);
 	// アニメーション設定
-	CsvLoad::GetInstance().AnimLoad(m_animData, "Robot");
+	CsvLoad::GetInstance().AnimLoad(m_animData, kName);
 
 	// 移動速度設定
 	InitMoveSpeed(m_statusData.spd);
@@ -64,6 +65,7 @@ EnemyRobot::EnemyRobot(VECTOR pos)
 
 EnemyRobot::~EnemyRobot()
 {
+	/*処理無し*/
 }
 
 void EnemyRobot::Init()
@@ -85,42 +87,42 @@ void EnemyRobot::Init()
 	m_characterInfo.bottomPos = MV1GetFramePosition(m_pModel->GetModelHandle(),
 		m_bottomFrameIndex);
 	// 右手当たり判定頂点座標取得
-	m_melleAttack.rightTopFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(),
+	m_melleAttack.Coll1TopFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(),
 		"armr.001");
-	assert(m_melleAttack.rightTopFrameIndex != -1);
-	assert(m_melleAttack.rightTopFrameIndex != -2);
-	m_melleAttack.rightTop = MV1GetFramePosition(m_pModel->GetModelHandle(),
-		m_melleAttack.rightTopFrameIndex);
+	assert(m_melleAttack.Coll1TopFrameIndex != -1);
+	assert(m_melleAttack.Coll1TopFrameIndex != -2);
+	m_melleAttack.Coll1Top = MV1GetFramePosition(m_pModel->GetModelHandle(),
+		m_melleAttack.Coll1TopFrameIndex);
 	// 左手当たり判定頂点座標取得
-	m_melleAttack.leftTopFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(),
+	m_melleAttack.Coll2TopFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(),
 		"arml.001");
-	assert(m_melleAttack.leftTopFrameIndex != -1);
-	assert(m_melleAttack.leftTopFrameIndex != -2);
-	m_melleAttack.leftTop = MV1GetFramePosition(m_pModel->GetModelHandle(),
-		m_melleAttack.leftTopFrameIndex);
+	assert(m_melleAttack.Coll2TopFrameIndex != -1);
+	assert(m_melleAttack.Coll2TopFrameIndex != -2);
+	m_melleAttack.Coll2Top = MV1GetFramePosition(m_pModel->GetModelHandle(),
+		m_melleAttack.Coll2TopFrameIndex);
 	// 右手当たり判定底辺座標取得
-	m_melleAttack.rightBottomFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(),
+	m_melleAttack.Coll1BottomFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(),
 		"iktargetleft_end");
-	assert(m_melleAttack.rightBottomFrameIndex != -1);
-	assert(m_melleAttack.rightBottomFrameIndex != -2);
-	m_melleAttack.rightBottom = MV1GetFramePosition(m_pModel->GetModelHandle(),
-		m_melleAttack.rightBottomFrameIndex);
+	assert(m_melleAttack.Coll1BottomFrameIndex != -1);
+	assert(m_melleAttack.Coll1BottomFrameIndex != -2);
+	m_melleAttack.Coll1Bottom = MV1GetFramePosition(m_pModel->GetModelHandle(),
+		m_melleAttack.Coll1BottomFrameIndex);
 	// 左手当たり判定底辺座標取得
-	m_melleAttack.leftBottomFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(),
+	m_melleAttack.Coll2BottomFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(),
 		"iktargetright_end");
-	assert(m_melleAttack.leftBottomFrameIndex != -1);
-	assert(m_melleAttack.leftBottomFrameIndex != -2);
-	m_melleAttack.leftBottom = MV1GetFramePosition(m_pModel->GetModelHandle(),
-		m_melleAttack.leftBottomFrameIndex);
+	assert(m_melleAttack.Coll2BottomFrameIndex != -1);
+	assert(m_melleAttack.Coll2BottomFrameIndex != -2);
+	m_melleAttack.Coll2Bottom = MV1GetFramePosition(m_pModel->GetModelHandle(),
+		m_melleAttack.Coll2BottomFrameIndex);
 
 	// 当たり判定カプセルポインタ作成
 	m_pCollShape = std::make_shared<CollisionShape>(m_characterInfo.topPos,
 		m_characterInfo.bottomPos, kCapsuleRadius);
 	// 右手当たり判定作成
-	m_pRightHandColl = std::make_shared<CollisionShape>(m_melleAttack.rightTop, m_melleAttack.rightBottom,
+	m_pMelleAttackCol1 = std::make_shared<CollisionShape>(m_melleAttack.Coll1Top, m_melleAttack.Coll1Bottom,
 		kHandRadius);
 	// 左手当たり判定作成
-	m_pLeftHandColl = std::make_shared<CollisionShape>(m_melleAttack.leftTop, m_melleAttack.leftBottom,
+	m_pMelleAttackCol2 = std::make_shared<CollisionShape>(m_melleAttack.Coll2Top, m_melleAttack.Coll2Bottom,
 		kHandRadius);
 
 	// アニメーション設定

@@ -1,4 +1,4 @@
 CharacterName,HP,MATK,SATK,DEF,SPD
 Player,100,10,1,10,5
 Robot,30,5,1,5,2
-Skeleton,40,6,0,5,5.5
+Plant,50,5,0,10,5

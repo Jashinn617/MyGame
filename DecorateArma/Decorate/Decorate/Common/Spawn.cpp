@@ -2,6 +2,7 @@
 
 #include "../Object/Enemy/EnemyBase.h"
 #include "../Object/Enemy/EnemyRobot.h"
+#include "../Object/Enemy/EnemyPlant.h"
 
 #include "../Object/ObjectBase.h"
 #include "../Object/ObjectManager.h"
@@ -136,9 +137,10 @@ void Spawn::Add(int createNum, std::string kind, std::string name, std::string p
 			m_pData.push_back(new Data);
 			m_pData.back()->pObj = new EnemyRobot(pos);
 		}
-		else if (name == "")
+		else if (name == "Plant")
 		{
-
+			m_pData.push_back(new Data);
+			m_pData.back()->pObj = new EnemyPlant(pos);
 		}
 		else
 		{
