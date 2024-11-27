@@ -30,7 +30,8 @@ namespace
 	constexpr int kAttackStanTime = 20;						// 攻撃硬直時間
 	constexpr int kattackInvokeTime = 30;					// 強攻撃発動時間
 	constexpr int kHardAttackRate = 3;						// 強攻撃時の攻撃力倍率
-	constexpr float kMoveSpeedDashRate = 1.5f;				// ダッシュ時速度
+	constexpr int kKnockBackDamage = 10.0f;					// ノックバックするダメージ量
+	constexpr float kMoveSpeedDashRate = 1.7f;				// ダッシュ時速度
 	constexpr float kAccelerationRate = 0.5f;				// 加速度
 	constexpr float kJumpMaxSpeed = 8.0f;					// ジャンプ時の最大速度
 	constexpr float kGravity = 0.8f;						// 重力
@@ -45,10 +46,12 @@ namespace
 	constexpr float kTopPos = 60.0f;						// 頭高さ
 	constexpr float kBottomPos = 0.0f;						// 足元座標
 	constexpr float kCapsuleRadius = 15.0f;					// カプセル半径
-	constexpr float kAttackRadius = 35.0f;					// 攻撃判定半径
-	constexpr float kAttackHeight = 50.0f;					// 攻撃判定高さ
-	constexpr float kHardRadius = 70.0f;					// 強攻撃当たり判定半径
-	constexpr float kHardHeight = -10.0f;					// 強攻撃当たり判定高さ
+	constexpr float kAttackRadius = 60.0f;					// 攻撃判定半径
+	constexpr float kAttackHeight = 100.0f;					// 攻撃判定高さ
+	constexpr float kHardRadius = 90.0f;					// 強攻撃当たり判定半径
+	constexpr float kHardHeight = -50.0f;					// 強攻撃当たり判定高さ
+	constexpr float kKnockBackSpeed = 5.0f;					// ノックバック速度
+	constexpr float kKnockBackDecreaseSpeed = 0.2f;			// ノックバック速度減少量
 	constexpr VECTOR kScaleVec = { 0.5f,1.0f,0.5f };		// スケール
 	
 	/// <summary>
@@ -472,13 +475,19 @@ void Player::OnHardAttack(CharacterBase* pEnemy)
 	// 強攻撃中以外は処理をしない
 	if (!m_isHardAttack) return;
 
+	// 当たり判定は少し時間が経過してから取る
+	if (m_attackInvokeTime->Update())
+	{
 		// 衝突判定
 		if (m_hardAtkColl->IsCollide(pEnemy->GetCollShape()))
 		{
 			// 当たっていたらダメージを与える
 			pEnemy->OnDamage(m_characterInfo.pos, m_statusData.meleeAtk * kHardAttackRate);
 			m_isHardAttack = true;
+			// 硬直時間のリセット
+			m_attackInvokeTime->Reset();
 		}
+	}
 }
 
 void Player::OnRecovery(int recoveryNum)
