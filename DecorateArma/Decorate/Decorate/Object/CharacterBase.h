@@ -159,6 +159,7 @@ protected:	// 変数
 	float m_jumpPower;								// ジャンプ力
 	bool m_isJump;									// ジャンプ中かどうか
 	bool m_isDead;									// 死んだかどうか
+	bool m_isGravity;								// 重力を適応するかどうか
 	bool m_isResetAttack;							// 攻撃判定の初期化(一度攻撃の当たった敵のもう一度当てる為)
 	std::shared_ptr<HpBarBase> m_pHpBar;			// HPバーポインタ
 	std::shared_ptr<Gear> m_pGear;						// 装備品

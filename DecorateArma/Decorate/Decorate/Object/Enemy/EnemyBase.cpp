@@ -142,11 +142,15 @@ void EnemyBase::Draw(std::shared_ptr<ToonShader> pToonShader)
 	{
 		// ショット描画
 		m_pShot->Draw();
-	}	
+	}
+	else
+	{
+		m_pMelleAttackCol->DebugDraw(0xff00ff);
+	}
 
 	m_pCollShape->DebugDraw(0x00ff00);
 	m_pSearchRange->DebugDraw(0x000000);
-	m_pMelleAttackCol->DebugDraw(0xff00ff);
+	
 }
 
 void EnemyBase::Draw2D()
@@ -199,11 +203,16 @@ void EnemyBase::OnAttack(CharacterBase* pPlayer)
 	// 攻撃中でないときは判定しない
 	if (!m_isAttack) return;
 
-	// 衝突判定
-	if (m_pMelleAttackCol->IsCollide(pPlayer->GetCollShape()))
+	// 近距離攻撃判定
+	// 攻撃タイプが遠距離以外だった場合
+	if (m_attackType != AttackType::Shot)
 	{
-		// 右手か左手どちらか当たってたらダメージを与える
-		pPlayer->OnDamage(m_characterInfo.pos, m_statusData.meleeAtk);
+		// 衝突判定
+		if (m_pMelleAttackCol->IsCollide(pPlayer->GetCollShape()))
+		{
+			// 右手か左手どちらか当たってたらダメージを与える
+			pPlayer->OnDamage(m_characterInfo.pos, m_statusData.meleeAtk);
+		}
 	}
 
 	// 遠距離攻撃判定

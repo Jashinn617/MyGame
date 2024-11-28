@@ -1,12 +1,18 @@
 ﻿#include "Spawn.h"
 
+#include "../Object/ObjectBase.h"
+#include "../Object/ObjectManager.h"
+
+#include "../Object/RecoveryItem.h"
+
 #include "../Object/Enemy/EnemyBase.h"
 #include "../Object/Enemy/EnemyRobot.h"
 #include "../Object/Enemy/EnemyPlant.h"
-
-#include "../Object/ObjectBase.h"
-#include "../Object/ObjectManager.h"
-#include "../Object/RecoveryItem.h"
+#include "../Object/Enemy/EnemySloth.h"
+#include "../Object/Enemy/EnemyWyvern.h"
+#include "../Object/Enemy/EnemyBug.h"
+#include "../Object/Enemy/EnemyDiatryma.h"
+#include "../Object/Enemy/EnemySerpent.h"
 
 #include <fstream>
 #include <sstream>
@@ -119,10 +125,6 @@ void Spawn::Add(int createNum, std::string kind, std::string name, std::string p
 			m_pData.push_back(new Data);
 			m_pData.back()->pObj = new RecoveryItem(pos);
 		}
-		else if (name == "")
-		{
-
-		}
 		else
 		{
 			// 合うアイテムがいなかった場合は何もしない
@@ -131,7 +133,7 @@ void Spawn::Add(int createNum, std::string kind, std::string name, std::string p
 	}
 	else if (kind == "Enemy")
 	{
-		// nameと同じ種類のアイテムの追加
+		// nameと同じ種類の敵の追加
 		if (name == "Robot")
 		{
 			m_pData.push_back(new Data);
@@ -142,9 +144,34 @@ void Spawn::Add(int createNum, std::string kind, std::string name, std::string p
 			m_pData.push_back(new Data);
 			m_pData.back()->pObj = new EnemyPlant(pos);
 		}
+		else if (name == "Sloth")
+		{
+			m_pData.push_back(new Data);
+			m_pData.back()->pObj = new EnemySloth(pos);
+		}
+		else if (name == "Wyvern")
+		{
+			m_pData.push_back(new Data);
+			m_pData.back()->pObj = new EnemyWyvern(pos);
+		}
+		else if (name == "Bug")
+		{
+			m_pData.push_back(new Data);
+			m_pData.back()->pObj = new EnemyBug(pos);
+		}
+		else if (name == "Diatryma")
+		{
+			m_pData.push_back(new Data);
+			m_pData.back()->pObj = new EnemyDiatryma(pos);
+		}
+		else if (name == "Serpent")
+		{
+			m_pData.push_back(new Data);
+			m_pData.back()->pObj = new EnemySerpent(pos);
+		}
 		else
 		{
-			// 合うアイテムがいなかった場合は何もしない
+			// 合う敵がいなかった場合は何もしない
 			return;
 		}
 	}

@@ -20,6 +20,7 @@ CharacterBase::CharacterBase():
 	m_jumpPower(0.0f),
 	m_isJump(false),
 	m_isDead(false),
+	m_isGravity(true),
 	m_isResetAttack(false)
 {
 	/*処理無し*/
@@ -96,6 +97,9 @@ void CharacterBase::HitGround()
 
 void CharacterBase::UpdateGravity()
 {
+	// 重力が適応されなかったら何もしない
+	if (!m_isGravity) return;
+
 	// 落ちる速度が最大落下速度を超えないようにする
 	m_jumpPower = max(m_jumpPower - (kGravity * kFixGravity), kFallMaxSpeed);
 

@@ -18,7 +18,7 @@ namespace
 	constexpr float kRadius = 180.0f;						// 当たり判定半径
 	constexpr float kHeight = 50.0f;						// 高さ
 	constexpr float kRotSpeed = 9.0f;						// 回転速度
-	constexpr VECTOR kModelScale = { 1.5f,1.5f,1.5f };	// モデルスケール
+	constexpr VECTOR kModelScale = { 1.5f,1.5f,1.5f };		// モデルスケール
 	constexpr float kSearchRadius = 500.0f;					// 索敵範囲の半径
 	constexpr float kSearchHeight = 70.0f;					// 索敵範囲の高さ
 	constexpr float kAttackRadius = 35.0f;					// 攻撃当たり判定の半径

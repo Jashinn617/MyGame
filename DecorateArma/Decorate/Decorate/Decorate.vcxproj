@@ -159,6 +159,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Object\Enemy\EnemySerpent.cpp" />
+    <ClCompile Include="Object\Enemy\EnemyDiatryma.cpp" />
+    <ClCompile Include="Object\Enemy\EnemyBug.cpp" />
+    <ClCompile Include="Object\Enemy\EnemyWyvern.cpp" />
+    <ClCompile Include="Object\Enemy\EnemySloth.cpp" />
     <ClCompile Include="Object\Enemy\EnemyPlant.cpp" />
     <ClCompile Include="Object\Player\Gear.cpp" />
     <ClCompile Include="Object\RecoveryItem.cpp" />
@@ -197,6 +202,11 @@
     <ClCompile Include="Shader\SetVertexShader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Object\Enemy\EnemySerpent.h" />
+    <ClInclude Include="Object\Enemy\EnemyDiatryma.h" />
+    <ClInclude Include="Object\Enemy\EnemyBug.h" />
+    <ClInclude Include="Object\Enemy\EnemyWyvern.h" />
+    <ClInclude Include="Object\Enemy\EnemySloth.h" />
     <ClInclude Include="Object\Enemy\EnemyPlant.h" />
     <ClInclude Include="Object\Player\Gear.h" />
     <ClInclude Include="Object\RecoveryItem.h" />
