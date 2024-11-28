@@ -29,19 +29,14 @@ EnemyBase::EnemyBase():
 	m_enemyToPlayer{0.0f,0.0f,0.0f},
 	m_attackType(AttackType::Melee),
 	m_pSearchRange(nullptr),
-	m_pMelleAttackCol1(nullptr),
-	m_pMelleAttackCol2(nullptr),
+	m_pMelleAttackCol(nullptr),
 	m_pAttackInterval(nullptr)
 {
 	// 近距離攻撃当たり判定座標初期化
-	m_melleAttack.Coll1TopFrameIndex = -1;
-	m_melleAttack.Coll1BottomFrameIndex = -1;
-	m_melleAttack.Coll2TopFrameIndex = -1;
-	m_melleAttack.Coll2BottomFrameIndex = -1;
-	m_melleAttack.Coll1Top = VGet(0.0f, 0.0f, 0.0f);
-	m_melleAttack.Coll1Bottom = VGet(0.0f, 0.0f, 0.0f);
-	m_melleAttack.Coll2Top = VGet(0.0f, 0.0f, 0.0f);
-	m_melleAttack.Coll2Bottom = VGet(0.0f, 0.0f, 0.0f);
+	m_melleAttack.CollTopFrameIndex = -1;
+	m_melleAttack.CollBottomFrameIndex = -1;
+	m_melleAttack.CollTop = VGet(0.0f, 0.0f, 0.0f);
+	m_melleAttack.CollBottom = VGet(0.0f, 0.0f, 0.0f);
 	// キャラクター情報初期化
 	m_characterInfo.vec = VGet(0.0f, 0.0f, 0.0f);
 	m_characterInfo.topPos = VGet(0.0f, 0.0f, 0.0f);
@@ -71,18 +66,13 @@ EnemyBase::EnemyBase(VECTOR pos):
 	m_enemyToPlayer{ 0.0f,0.0f,0.0f },
 	m_attackType(AttackType::Melee),
 	m_pSearchRange(nullptr),
-	m_pMelleAttackCol1(nullptr),
-	m_pMelleAttackCol2(nullptr)
+	m_pMelleAttackCol(nullptr)
 {
 	// 近距離攻撃当たり判定座標初期化
-	m_melleAttack.Coll1TopFrameIndex = -1;
-	m_melleAttack.Coll1BottomFrameIndex = -1;
-	m_melleAttack.Coll2TopFrameIndex = -1;
-	m_melleAttack.Coll2BottomFrameIndex = -1;
-	m_melleAttack.Coll1Top = VGet(0.0f, 0.0f, 0.0f);
-	m_melleAttack.Coll1Bottom = VGet(0.0f, 0.0f, 0.0f);
-	m_melleAttack.Coll2Top = VGet(0.0f, 0.0f, 0.0f);
-	m_melleAttack.Coll2Bottom = VGet(0.0f, 0.0f, 0.0f);
+	m_melleAttack.CollTopFrameIndex = -1;
+	m_melleAttack.CollBottomFrameIndex = -1;
+	m_melleAttack.CollTop = VGet(0.0f, 0.0f, 0.0f);
+	m_melleAttack.CollBottom = VGet(0.0f, 0.0f, 0.0f);
 	// キャラクター情報初期化
 	m_characterInfo.pos = pos;
 	m_characterInfo.vec = VGet(0.0f, 0.0f, 0.0f);
@@ -128,10 +118,8 @@ void EnemyBase::Update()
 	// 座標更新
 	m_characterInfo.topPos = MV1GetFramePosition(m_pModel->GetModelHandle(), m_topFrameIndex);
 	m_characterInfo.bottomPos = MV1GetFramePosition(m_pModel->GetModelHandle(), m_bottomFrameIndex);
-	m_melleAttack.Coll1Top = MV1GetFramePosition(m_pModel->GetModelHandle(), m_melleAttack.Coll1TopFrameIndex);
-	m_melleAttack.Coll1Bottom= MV1GetFramePosition(m_pModel->GetModelHandle(), m_melleAttack.Coll1BottomFrameIndex);
-	m_melleAttack.Coll2Top= MV1GetFramePosition(m_pModel->GetModelHandle(), m_melleAttack.Coll2TopFrameIndex);
-	m_melleAttack.Coll2Bottom= MV1GetFramePosition(m_pModel->GetModelHandle(), m_melleAttack.Coll2BottomFrameIndex);
+	m_melleAttack.CollTop = MV1GetFramePosition(m_pModel->GetModelHandle(), m_melleAttack.CollTopFrameIndex);
+	m_melleAttack.CollBottom= MV1GetFramePosition(m_pModel->GetModelHandle(), m_melleAttack.CollBottomFrameIndex);
 
 	// HPバー更新
 	m_pHpBar->Update();
@@ -158,8 +146,7 @@ void EnemyBase::Draw(std::shared_ptr<ToonShader> pToonShader)
 
 	m_pCollShape->DebugDraw(0x00ff00);
 	m_pSearchRange->DebugDraw(0x000000);
-	m_pMelleAttackCol1->DebugDraw(0xff00ff);
-	m_pMelleAttackCol2->DebugDraw(0xff00ff);
+	m_pMelleAttackCol->DebugDraw(0xff00ff);
 }
 
 void EnemyBase::Draw2D()
@@ -213,7 +200,7 @@ void EnemyBase::OnAttack(CharacterBase* pPlayer)
 	if (!m_isAttack) return;
 
 	// 衝突判定
-	if (m_pMelleAttackCol1->IsCollide(pPlayer->GetCollShape()) || m_pMelleAttackCol2->IsCollide(pPlayer->GetCollShape()))
+	if (m_pMelleAttackCol->IsCollide(pPlayer->GetCollShape()))
 	{
 		// 右手か左手どちらか当たってたらダメージを与える
 		pPlayer->OnDamage(m_characterInfo.pos, m_statusData.meleeAtk);

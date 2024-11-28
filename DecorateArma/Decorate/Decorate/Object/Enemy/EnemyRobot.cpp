@@ -87,42 +87,25 @@ void EnemyRobot::Init()
 	m_characterInfo.bottomPos = MV1GetFramePosition(m_pModel->GetModelHandle(),
 		m_bottomFrameIndex);
 	// 右手当たり判定頂点座標取得
-	m_melleAttack.Coll1TopFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(),
+	m_melleAttack.CollTopFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(),
 		"armr.001");
-	assert(m_melleAttack.Coll1TopFrameIndex != -1);
-	assert(m_melleAttack.Coll1TopFrameIndex != -2);
-	m_melleAttack.Coll1Top = MV1GetFramePosition(m_pModel->GetModelHandle(),
-		m_melleAttack.Coll1TopFrameIndex);
-	// 左手当たり判定頂点座標取得
-	m_melleAttack.Coll2TopFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(),
-		"arml.001");
-	assert(m_melleAttack.Coll2TopFrameIndex != -1);
-	assert(m_melleAttack.Coll2TopFrameIndex != -2);
-	m_melleAttack.Coll2Top = MV1GetFramePosition(m_pModel->GetModelHandle(),
-		m_melleAttack.Coll2TopFrameIndex);
+	assert(m_melleAttack.CollTopFrameIndex != -1);
+	assert(m_melleAttack.CollTopFrameIndex != -2);
+	m_melleAttack.CollTop = MV1GetFramePosition(m_pModel->GetModelHandle(),
+		m_melleAttack.CollTopFrameIndex);
 	// 右手当たり判定底辺座標取得
-	m_melleAttack.Coll1BottomFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(),
+	m_melleAttack.CollBottomFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(),
 		"iktargetleft_end");
-	assert(m_melleAttack.Coll1BottomFrameIndex != -1);
-	assert(m_melleAttack.Coll1BottomFrameIndex != -2);
-	m_melleAttack.Coll1Bottom = MV1GetFramePosition(m_pModel->GetModelHandle(),
-		m_melleAttack.Coll1BottomFrameIndex);
-	// 左手当たり判定底辺座標取得
-	m_melleAttack.Coll2BottomFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(),
-		"iktargetright_end");
-	assert(m_melleAttack.Coll2BottomFrameIndex != -1);
-	assert(m_melleAttack.Coll2BottomFrameIndex != -2);
-	m_melleAttack.Coll2Bottom = MV1GetFramePosition(m_pModel->GetModelHandle(),
-		m_melleAttack.Coll2BottomFrameIndex);
+	assert(m_melleAttack.CollBottomFrameIndex != -1);
+	assert(m_melleAttack.CollBottomFrameIndex != -2);
+	m_melleAttack.CollBottom = MV1GetFramePosition(m_pModel->GetModelHandle(),
+		m_melleAttack.CollBottomFrameIndex);
 
 	// 当たり判定カプセルポインタ作成
 	m_pCollShape = std::make_shared<CollisionShape>(m_characterInfo.topPos,
 		m_characterInfo.bottomPos, kCapsuleRadius);
 	// 右手当たり判定作成
-	m_pMelleAttackCol1 = std::make_shared<CollisionShape>(m_melleAttack.Coll1Top, m_melleAttack.Coll1Bottom,
-		kHandRadius);
-	// 左手当たり判定作成
-	m_pMelleAttackCol2 = std::make_shared<CollisionShape>(m_melleAttack.Coll2Top, m_melleAttack.Coll2Bottom,
+	m_pMelleAttackCol = std::make_shared<CollisionShape>(m_melleAttack.CollTop, m_melleAttack.CollBottom,
 		kHandRadius);
 
 	// アニメーション設定

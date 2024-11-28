@@ -23,7 +23,7 @@ namespace
 	constexpr float kPlayerLeftBack = DX_PI_F * 5.0f / 4.0f;	// プレイヤーの左後ろ
 	constexpr float kSinSpeed = 0.03f;							// 昇降速度
 	constexpr float kSinSwing = 4.0f;							// 昇降幅
-	constexpr VECTOR kScaleVec = { 0.01f,0.05f,0.01f };			// スケール
+	constexpr VECTOR kScaleVec = { 0.05f,0.1f,0.05f };			// スケール
 
 	constexpr int kNum = 50;								// 弾数
 	constexpr int kVanishTime = 50;							// 弾が消えるまでの時間

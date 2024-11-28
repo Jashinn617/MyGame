@@ -15,7 +15,7 @@
 namespace
 {
 	constexpr int kAttackInterval = 80;						// 攻撃感覚
-	constexpr float kRadius = 120.0f;						// 当たり判定半径
+	constexpr float kRadius = 180.0f;						// 当たり判定半径
 	constexpr float kHeight = 50.0f;						// 高さ
 	constexpr float kRotSpeed = 9.0f;						// 回転速度
 	constexpr VECTOR kModelScale = { 1.5f,1.5f,1.5f };	// モデルスケール
@@ -23,7 +23,7 @@ namespace
 	constexpr float kSearchHeight = 70.0f;					// 索敵範囲の高さ
 	constexpr float kAttackRadius = 35.0f;					// 攻撃当たり判定の半径
 	constexpr float kAttackHeight = 10.0f;					// 攻撃当たり判定の高さ
-	constexpr float kMeleeAttackRange = 200.0f;				// 近距離攻撃射程
+	constexpr float kMeleeAttackRange = 250.0f;				// 近距離攻撃射程
 	const char* const kName = "Plant";						// 名前
 }
 
@@ -73,24 +73,15 @@ void EnemyPlant::Init()
 	m_pCollShape = std::make_shared<CollisionShape>(m_characterInfo.pos, kRadius, kHeight);
 
 	// 攻撃当たり判定作成
-	m_melleAttack.Coll1TopFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(),
+	m_melleAttack.CollTopFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(),
 		"plant_tongue_05");
-	assert(m_melleAttack.Coll1TopFrameIndex != -1);
-	assert(m_melleAttack.Coll1TopFrameIndex != -2);
-	m_melleAttack.Coll1Top = MV1GetFramePosition(m_pModel->GetModelHandle(),
-		m_melleAttack.Coll1TopFrameIndex);
-	m_melleAttack.Coll2TopFrameIndex = MV1SearchFrame(m_pModel->GetModelHandle(),
-		"plant_tongue_05");
-	m_melleAttack.Coll2Top = MV1GetFramePosition(m_pModel->GetModelHandle(),
-		m_melleAttack.Coll2TopFrameIndex);
-	// 球で当たり判定を取るため、底辺はいらない
-	m_melleAttack.Coll1BottomFrameIndex = -1;
-	m_melleAttack.Coll2BottomFrameIndex = -1;
+	assert(m_melleAttack.CollTopFrameIndex != -1);
+	assert(m_melleAttack.CollTopFrameIndex != -2);
+	m_melleAttack.CollTop = MV1GetFramePosition(m_pModel->GetModelHandle(),
+		m_melleAttack.CollTopFrameIndex);
 
 	// 攻撃当たり判定ポインタ作成
-	m_pMelleAttackCol1 = std::make_shared<CollisionShape>(m_melleAttack.Coll1Top,
-		kAttackRadius, kAttackHeight);
-	m_pMelleAttackCol2 = std::make_shared<CollisionShape>(m_melleAttack.Coll2Top,
+	m_pMelleAttackCol = std::make_shared<CollisionShape>(m_melleAttack.CollTop,
 		kAttackRadius, kAttackHeight);
 
 	// アニメーション設定

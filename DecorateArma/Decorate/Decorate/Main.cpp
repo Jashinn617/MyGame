@@ -55,8 +55,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// ライト方向の設定
 	SetLightDirection(Game::kLightDirection);
 
-	// カメラのアスペクト比の設定
-	SetCameraDotAspect(Game::kAspect);
 	// カメラの視野角の設定
 	SetupCamera_Perspective(Game::kFov);
 

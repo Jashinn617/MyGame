@@ -196,14 +196,10 @@ protected:	// 構造体
 	/// </summary>
 	struct MeleeAttackPos
 	{
-		int Coll1TopFrameIndex;			// 頂点フレーム番号1
-		int Coll1BottomFrameIndex;		// 底辺フレーム番号1
-		int Coll2TopFrameIndex;			// 頂点フレーム番号2
-		int Coll2BottomFrameIndex;		// 底辺フレーム番号2
-		VECTOR Coll1Top;				// 頂点座標1
-		VECTOR Coll1Bottom;				// 底辺座標1
-		VECTOR Coll2Top;				// 頂点座標2
-		VECTOR Coll2Bottom;				// 底辺座標2
+		int CollTopFrameIndex;			// 頂点フレーム番号
+		int CollBottomFrameIndex;		// 底辺フレーム番号
+		VECTOR CollTop;				// 頂点座標
+		VECTOR CollBottom;				// 底辺座標
 	};
 
 protected:	// 変数
@@ -216,8 +212,7 @@ protected:	// 変数
 	AttackType m_attackType;							// 攻撃タイプ
 	MeleeAttackPos m_melleAttack;						// 近距離攻撃当たり判定座標
 	std::shared_ptr<CollisionShape> m_pSearchRange;		// 索敵範囲
-	std::shared_ptr<CollisionShape> m_pMelleAttackCol1;	// 近接攻撃当たり判定1
-	std::shared_ptr<CollisionShape> m_pMelleAttackCol2;	// 近接攻撃当たり判定2
+	std::shared_ptr<CollisionShape> m_pMelleAttackCol;	// 近接攻撃当たり判定
 	std::shared_ptr<Time> m_pAttackInterval;			// 攻撃間隔
 	std::shared_ptr<EShot> m_pShot;						// 遠距離攻撃
 	void(EnemyBase::* m_updateFunc)();					// メンバ関数ポインタ

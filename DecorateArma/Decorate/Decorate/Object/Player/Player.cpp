@@ -26,6 +26,7 @@
 namespace
 {
 	const char* const kFileName = "Data/Model/Player/Player.mv1";	// プレイヤーモデルファイルパス
+	const char* const kName = "Player";
 
 	constexpr int kAttackStanTime = 20;						// 攻撃硬直時間
 	constexpr int kattackInvokeTime = 30;					// 強攻撃発動時間
@@ -45,14 +46,14 @@ namespace
 	constexpr float kSize = 50.0f;							// サイズ
 	constexpr float kTopPos = 60.0f;						// 頭高さ
 	constexpr float kBottomPos = 0.0f;						// 足元座標
-	constexpr float kCapsuleRadius = 15.0f;					// カプセル半径
+	constexpr float kCapsuleRadius = 30.0f;					// カプセル半径
 	constexpr float kAttackRadius = 60.0f;					// 攻撃判定半径
 	constexpr float kAttackHeight = 100.0f;					// 攻撃判定高さ
 	constexpr float kHardRadius = 90.0f;					// 強攻撃当たり判定半径
 	constexpr float kHardHeight = -50.0f;					// 強攻撃当たり判定高さ
 	constexpr float kKnockBackSpeed = 5.0f;					// ノックバック速度
 	constexpr float kKnockBackDecreaseSpeed = 0.2f;			// ノックバック速度減少量
-	constexpr VECTOR kScaleVec = { 0.5f,1.0f,0.5f };		// スケール
+	constexpr VECTOR kScaleVec = { 0.8f,0.8f,0.8f };		// スケール
 	
 	/// <summary>
 	/// アニメーション切り替え速度
@@ -87,11 +88,11 @@ Player::Player() :
 	m_attackInvokeTime(std::make_shared<Time>(kattackInvokeTime))
 {
 	// アニメーションロード
-	CsvLoad::GetInstance().AnimLoad(m_animData, "Player");
+	CsvLoad::GetInstance().AnimLoad(m_animData, kName);
 	// ステータス情報初期化
-	CsvLoad::GetInstance().StatusLoad(m_statusData, "Player");
+	CsvLoad::GetInstance().StatusLoad(m_statusData, kName);
 	// ステータス追加
-	CsvLoad::GetInstance().AddStatusLoad(m_statusData, "Player");
+	CsvLoad::GetInstance().AddStatusLoad(m_statusData, kName);
 
 	// ショット作成
 	m_pShot = std::make_shared<Shot>(this, m_statusData.shotAtk);
@@ -265,7 +266,7 @@ void Player::OnDamage(VECTOR targetPos, int damagePoint)
 	if (m_statusData.hp <= 0 && !m_isDead)
 	{
 		// 死亡する
-		m_isDead = true;
+		//m_isDead = true;
 	}
 
 	// ダメージを受けた状態にする
