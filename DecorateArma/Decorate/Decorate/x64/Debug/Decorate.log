@@ -1,6 +1,3 @@
 ﻿  EnemySerpent.cpp
 C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\Decorate\Object\Player\Gear.h(95,30): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-  EnemyWyvern.cpp
-C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\Decorate\Object\Player\Gear.h(95,30): warning C4267: 'return': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
-  コードを生成中...
   Decorate.vcxproj -> C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\x64\Debug\Decorate.exe

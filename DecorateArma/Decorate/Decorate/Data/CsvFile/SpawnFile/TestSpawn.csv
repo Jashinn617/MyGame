@@ -1,1 +1,7 @@
 0,Enemy,Serpent,Serpent/Serpent,0,30,1532
+1,Enemy,Plant,Plant/Plant,0,0,1332
+2,Enemy,Sloth,Sloth/Sloth,200,0,1532
+3,Enemy,Wyvern,Wyvern/Wyvern,-200,30,1532
+4,Enemy,Bug,Bug/Bug,200,0,1332
+5,Enemy,Diatryma,Diatryma/Diatryma,-200,0,1332
+6,Item,Recovery,RecoveryItem/CupCake,400,-80,1222
