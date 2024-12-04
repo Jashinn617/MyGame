@@ -46,5 +46,6 @@ public:	// 関数
 
 private:	// 変数
 	int m_titleLogoH;	// タイトルロゴ
+	int m_pressTextH;	// プレスボタンテキスト
 };
 

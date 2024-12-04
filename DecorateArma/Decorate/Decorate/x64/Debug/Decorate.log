@@ -1,4 +1,2 @@
-﻿  SceneTitle.cpp
-C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\Decorate\Scene\SceneTitle.cpp(16,29): warning C4244: '初期化中': 'float' から 'const int' への変換です。データが失われる可能性があります。
-C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\Decorate\Scene\SceneTitle.cpp(17,29): warning C4244: '初期化中': 'float' から 'const int' への変換です。データが失われる可能性があります。
+﻿  SceneSelect.cpp
   Decorate.vcxproj -> C:\Users\fko2347024\Desktop\GitHub\MyGame\DecorateArma\Decorate\x64\Debug\Decorate.exe

@@ -1,5 +1,11 @@
 ﻿#pragma once
 #include "SceneBase.h"
+
+#include <vector>
+
+/// <summary>
+/// セレクト画面
+/// </summary>
 class SceneSelect : public SceneBase
 {
 public:	// 関数
@@ -40,6 +46,13 @@ public:	// 関数
 	/// <returns>シーンの種類</returns>
 	virtual SceneKind GetSceneKind() override final { return SceneKind::Select; }
 
-private:
+private:	// 関数
+	/// <summary>
+	/// 背景描画
+	/// </summary>
+	void BackDraw();
+
+private:	// 変数
+	std::vector<int> m_backH;		// 背景画像ハンドル
 };
 
