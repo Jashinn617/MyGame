@@ -54,5 +54,13 @@ private:	// 関数
 
 private:	// 変数
 	std::vector<int> m_backH;		// 背景画像ハンドル
+
+	int m_backWidth;		// 背景画像横幅
+	int m_backHeight;		// 背景画像縦幅
+
+	int m_scrollXBack;		// 奥スクロール値
+	int m_scrollXMiddle;	// 中スクロール値
+	int m_scrollXFront;		// 手前スクロール値
+	
 };
 
