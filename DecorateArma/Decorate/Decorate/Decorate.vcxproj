@@ -159,6 +159,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Object\Enemy\EnemyBossParasite.cpp" />
+    <ClCompile Include="Object\Enemy\EnemyBossBase.cpp" />
     <ClCompile Include="Object\Enemy\EnemySerpent.cpp" />
     <ClCompile Include="Object\Enemy\EnemyDiatryma.cpp" />
     <ClCompile Include="Object\Enemy\EnemyBug.cpp" />
@@ -167,6 +169,9 @@
     <ClCompile Include="Object\Enemy\EnemyPlant.cpp" />
     <ClCompile Include="Object\Player\Gear.cpp" />
     <ClCompile Include="Object\RecoveryItem.cpp" />
+    <ClCompile Include="Scene\SceneClear.cpp" />
+    <ClCompile Include="Scene\SceneGameOver.cpp" />
+    <ClCompile Include="Scene\SceneTitle.cpp" />
     <ClCompile Include="Scene\SceneSelect.cpp" />
     <ClCompile Include="Scene\SceneGear.cpp" />
     <ClCompile Include="UI\HpBar\HpBarPlayer.cpp" />
@@ -202,6 +207,8 @@
     <ClCompile Include="Shader\SetVertexShader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Object\Enemy\EnemyBossParasite.h" />
+    <ClInclude Include="Object\Enemy\EnemyBossBase.h" />
     <ClInclude Include="Object\Enemy\EnemySerpent.h" />
     <ClInclude Include="Object\Enemy\EnemyDiatryma.h" />
     <ClInclude Include="Object\Enemy\EnemyBug.h" />
@@ -210,6 +217,9 @@
     <ClInclude Include="Object\Enemy\EnemyPlant.h" />
     <ClInclude Include="Object\Player\Gear.h" />
     <ClInclude Include="Object\RecoveryItem.h" />
+    <ClInclude Include="Scene\SceneClear.h" />
+    <ClInclude Include="Scene\SceneGameOver.h" />
+    <ClInclude Include="Scene\SceneTitle.h" />
     <ClInclude Include="Scene\SceneSelect.h" />
     <ClInclude Include="Scene\SceneGear.h" />
     <ClInclude Include="UI\HpBar\HpBarPlayer.h" />

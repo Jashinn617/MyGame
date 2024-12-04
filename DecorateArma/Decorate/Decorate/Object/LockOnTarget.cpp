@@ -5,7 +5,7 @@
 
 namespace 
 {
-	const char* const kFileName = "Data/Image/TargetLogo.png";	// 画像ファイルパス
+	const char* const kFileName = "Data/Image/GameScene/TargetLogo.png";	// 画像ファイルパス
 	constexpr float kScale = 0.3f;								// 画像スケール
 	constexpr float kHeight = 100.0f;							// 高さ調整
 

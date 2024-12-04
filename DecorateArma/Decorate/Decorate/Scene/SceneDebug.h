@@ -37,7 +37,7 @@ public:		// 関数
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~SceneDebug() {/*処理無し*/ }
+	virtual ~SceneDebug() {/*処理無し*/ }
 
 	/// <summary>
 	/// 初期化

@@ -16,95 +16,96 @@ namespace
 	constexpr int kAlpha = 100;						// 装備を外すの時に使う画像の不透明度
 
 	/*ファイルパス関係*/
-	// テキスト画像名
-	const char* kImgNamePath[kGearNum] = 
+	const std::string kGearPath = "Data/Image/Gear/";	// 画像ファイルパス
+	// テキスト画像パス
+	const std::string kImgNamePath[kGearNum] =
 	{
-		"Data/Image/Gear/Text/HPUPS.png",
-		"Data/Image/Gear/Text/HPUPM.png",
-		"Data/Image/Gear/Text/HPUPL.png",
-		"Data/Image/Gear/Text/MATKUPS.png",
-		"Data/Image/Gear/Text/MATKUPM.png",
-		"Data/Image/Gear/Text/MATKUPL.png",
-		"Data/Image/Gear/Text/SATKUPS.png",
-		"Data/Image/Gear/Text/SATKUPM.png",
-		"Data/Image/Gear/Text/SATKUPL.png",
-		"Data/Image/Gear/Text/DEFUPS.png",
-		"Data/Image/Gear/Text/DEFUPM.png",
-		"Data/Image/Gear/Text/DEFUPL.png",
-		"Data/Image/Gear/Text/AllUPS.png",
-		"Data/Image/Gear/Text/AllUPM.png",
-		"Data/Image/Gear/Text/AllUPL.png",
+		 kGearPath + "Text/HPUPS.png",
+		 kGearPath + "Text/HPUPM.png",
+		 kGearPath + "Text/HPUPL.png",
+		 kGearPath + "Text/MATKUPS.png",
+		 kGearPath + "Text/MATKUPM.png",
+		 kGearPath + "Text/MATKUPL.png",
+		 kGearPath + "Text/SATKUPS.png",
+		 kGearPath + "Text/SATKUPM.png",
+		 kGearPath + "/Text/SATKUPL.png",
+		 kGearPath + "Text/DEFUPS.png",
+		 kGearPath + "Text/DEFUPM.png",
+		 kGearPath + "Text/DEFUPL.png",
+		 kGearPath + "Text/AllUPS.png",
+		 kGearPath + "Text/AllUPM.png",
+		 kGearPath + "Text/AllUPL.png",
 	};
-	// 数字画像名
-	const char* kNumPath[10] =
+	// 数字画像パス
+	const std::string kNumPath[10] =
 	{
-		"Data/Image/Gear/Number/0.png",
-		"Data/Image/Gear/Number/1.png",
-		"Data/Image/Gear/Number/2.png",
-		"Data/Image/Gear/Number/3.png",
-		"Data/Image/Gear/Number/4.png",
-		"Data/Image/Gear/Number/5.png",
-		"Data/Image/Gear/Number/6.png",
-		"Data/Image/Gear/Number/7.png",
-		"Data/Image/Gear/Number/8.png",
-		"Data/Image/Gear/Number/9.png",
+		 kGearPath + "Number/0.png",
+		 kGearPath + "Number/1.png",
+		 kGearPath + "Number/2.png",
+		 kGearPath + "Number/3.png",
+		 kGearPath + "Number/4.png",
+		 kGearPath + "Number/5.png",
+		 kGearPath + "Number/6.png",
+		 kGearPath + "Number/7.png",
+		 kGearPath + "Number/8.png",
+		 kGearPath + "Number/9.png",
 	};
 	// 説明文画像名
-	const char* kExplainTextPath[kGearNum] =
+	const std::string kExplainTextPath[kGearNum] =
 	{
-		"Data/Image/Gear/ExplainText/HPS.png",
-		"Data/Image/Gear/ExplainText/HPM.png",
-		"Data/Image/Gear/ExplainText/HPL.png",
-		"Data/Image/Gear/ExplainText/MATKS.png",
-		"Data/Image/Gear/ExplainText/MATKM.png",
-		"Data/Image/Gear/ExplainText/MATKL.png",
-		"Data/Image/Gear/ExplainText/SATKS.png",
-		"Data/Image/Gear/ExplainText/SATKM.png",
-		"Data/Image/Gear/ExplainText/SATKL.png",
-		"Data/Image/Gear/ExplainText/DEFS.png",
-		"Data/Image/Gear/ExplainText/DEFM.png",
-		"Data/Image/Gear/ExplainText/DEFL.png",
-		"Data/Image/Gear/ExplainText/AllS.png",
-		"Data/Image/Gear/ExplainText/AllM.png",
-		"Data/Image/Gear/ExplainText/AllL.png",
+		 kGearPath + "ExplainText/HPS.png",
+		 kGearPath + "ExplainText/HPM.png",
+		 kGearPath + "ExplainText/HPL.png",
+		 kGearPath + "ExplainText/MATKS.png",
+		 kGearPath + "ExplainText/MATKM.png",
+		 kGearPath + "ExplainText/MATKL.png",
+		 kGearPath + "ExplainText/SATKS.png",
+		 kGearPath + "ExplainText/SATKM.png",
+		 kGearPath + "ExplainText/SATKL.png",
+		 kGearPath + "ExplainText/DEFS.png",
+		 kGearPath + "ExplainText/DEFM.png",
+		 kGearPath + "ExplainText/DEFL.png",
+		 kGearPath + "ExplainText/AllS.png",
+		 kGearPath + "ExplainText/AllM.png",
+		 kGearPath + "ExplainText/AllL.png",
 	};
 	// 装備中装備品UI画像パス
-	const char* kEquippedUIPath[kGearNum] =
+	const std::string kEquippedUIPath[kGearNum] =
 	{
-		"Data/Image/Gear/EquippedUI/HPS.png",
-		"Data/Image/Gear/EquippedUI/HPM.png",
-		"Data/Image/Gear/EquippedUI/HPL.png",
-		"Data/Image/Gear/EquippedUI/MATKS.png",
-		"Data/Image/Gear/EquippedUI/MATKM.png",
-		"Data/Image/Gear/EquippedUI/MATKL.png",
-		"Data/Image/Gear/EquippedUI/SATKS.png",
-		"Data/Image/Gear/EquippedUI/SATKM.png",
-		"Data/Image/Gear/EquippedUI/SATKL.png",
-		"Data/Image/Gear/EquippedUI/DEFS.png",
-		"Data/Image/Gear/EquippedUI/DEFM.png",
-		"Data/Image/Gear/EquippedUI/DEFL.png",
-		"Data/Image/Gear/EquippedUI/AllS.png",
-		"Data/Image/Gear/EquippedUI/AllM.png",
-		"Data/Image/Gear/EquippedUI/AllL.png",
+		 kGearPath + "EquippedUI/HPS.png",
+		 kGearPath + "EquippedUI/HPM.png",
+		 kGearPath + "EquippedUI/HPL.png",
+		 kGearPath + "EquippedUI/MATKS.png",
+		 kGearPath + "EquippedUI/MATKM.png",
+		 kGearPath + "EquippedUI/MATKL.png",
+		 kGearPath + "EquippedUI/SATKS.png",
+		 kGearPath + "EquippedUI/SATKM.png",
+		 kGearPath + "EquippedUI/SATKL.png",
+		 kGearPath + "EquippedUI/DEFS.png",
+		 kGearPath + "EquippedUI/DEFM.png",
+		 kGearPath + "EquippedUI/DEFL.png",
+		 kGearPath + "EquippedUI/AllS.png",
+		 kGearPath + "EquippedUI/AllM.png",
+		 kGearPath + "EquippedUI/AllL.png",
 	};
 
-	const char* kEquipTextPath = "Data/Image/Gear/Text/Equip.png";				// 装備をするテキスト画像ファイルパス
-	const char* kRemoveEquipPath = "Data/Image/Gear/Text/RemoveEquip.png";		// 装備を外すテキスト画像ファイルパス
-	const char* kCostTextPath = "Data/Image/Gear/Text/Cost.png";				// コストテキスト画像ファイルパス
-	const char* kMulMarkPath = "Data/Image/Gear/MulMark.png";					// ×マーク画像ファイルパス
-	const char* kSlashPath = "Data/Image/Gear/Slash.png";						// スラッシュ画像ファイルパス
-	const char* kSelectCursorPath = "Data/Image/Gear/Box/SelectCursorBox.png";	// 選択時のカーソル画像ファイルパス
-	const char* kCursorPath = "Data/Image/Gear/Box/CursorBox.png";				// カーソル画像ファイルパス
-	const char* kRemoveCursorPath = "Data/Image/Gear/Box/RemoveCursorBox.png";	// 装備を外す時のカーソル画像ファイルパス
-	const char* kGearBoxPath = "Data/Image/Gear/Box/GearBox.png";				// 装備品ボックス画像ファイルパス
-	const char* kExplainBoxPath = "Data/Image/Gear/Box/GearExplainBox.png";		// 装備品説明文ボックス画像ファイルパス
-	const char* kEquippedBoxPath = "Data/Image/Gear/Box/EquippedBox.png";		// 装備中ボックス画像ファイルパス
-	const char* kStatusBoxPath = "Data/Image/Gear/Box/StatusBox.png";			// ステータスボックス画像ファイルパス
-	const char* kStatusHpTextPath = "Data/Image/Gear/Text/HP.png";				// ステータスボックス内HPテキスト画像ファイルパス
-	const char* kStatusMAtkTextPath = "Data/Image/Gear/Text/MATK.png";			// ステータスボックス内近接攻撃テキスト画像ファイルパス
-	const char* kStatusSAtkTextPath = "Data/Image/Gear/Text/SATK.png";			// ステータスボックス内遠距離攻撃テキスト画像ファイルパス
-	const char* kStatusDefTextPath = "Data/Image/Gear/Text/Def.png";			// ステータスボックス内防御力テキスト画像ファイルパス
-	const char* kAddPath = "Data/Image/Gear/Add.png";							// プラス記号画像ファイルパス
+	const std::string kEquipTextPath = kGearPath + "Text/Equip.png";				// 装備をするテキスト画像ファイルパス
+	const std::string kRemoveEquipPath = kGearPath + "Text/RemoveEquip.png";		// 装備を外すテキスト画像ファイルパス
+	const std::string kCostTextPath = kGearPath + "Text/Cost.png";					// コストテキスト画像ファイルパス
+	const std::string kMulMarkPath = kGearPath + "MulMark.png";						// ×マーク画像ファイルパス
+	const std::string kSlashPath = kGearPath + "Slash.png";							// スラッシュ画像ファイルパス
+	const std::string kSelectCursorPath = kGearPath + "Box/SelectCursorBox.png";	// 選択時のカーソル画像ファイルパス
+	const std::string kCursorPath = kGearPath + "Box/CursorBox.png";				// カーソル画像ファイルパス
+	const std::string kRemoveCursorPath = kGearPath + "Box/RemoveCursorBox.png";	// 装備を外す時のカーソル画像ファイルパス
+	const std::string kGearBoxPath = kGearPath + "Box/GearBox.png";					// 装備品ボックス画像ファイルパス
+	const std::string kExplainBoxPath = kGearPath + "Box/GearExplainBox.png";		// 装備品説明文ボックス画像ファイルパス
+	const std::string kEquippedBoxPath = kGearPath + "Box/EquippedBox.png";			// 装備中ボックス画像ファイルパス
+	const std::string kStatusBoxPath = kGearPath + "Box/StatusBox.png";				// ステータスボックス画像ファイルパス
+	const std::string kStatusHpTextPath = kGearPath + "Text/HP.png";				// ステータスボックス内HPテキスト画像ファイルパス
+	const std::string kStatusMAtkTextPath = kGearPath + "Text/MATK.png";			// ステータスボックス内近接攻撃テキスト画像ファイルパス
+	const std::string kStatusSAtkTextPath = kGearPath + "Text/SATK.png";			// ステータスボックス内遠距離攻撃テキスト画像ファイルパス
+	const std::string kStatusDefTextPath = kGearPath + "Text/Def.png";				// ステータスボックス内防御力テキスト画像ファイルパス
+	const std::string kAddPath = kGearPath + "Add.png";								// プラス記号画像ファイルパス
 
 	/*座標関係*/
 	constexpr int kGearLeftPosX = 150;							// 装備品名左側座標
@@ -177,59 +178,59 @@ SceneGear::SceneGear() :
 	// 画像のロード
 	for (int i = 0; i < kGearNum; i++)
 	{
-		m_gearH.push_back(LoadGraph(kImgNamePath[i]));
+		m_gearH.push_back(LoadGraph(kImgNamePath[i].c_str()));
 		// 画像が無ければ止める
 		assert(m_gearH[i] != -1);
 	}
 	for (int i = 0; i < 10; i++)
 	{
-		m_numH.push_back(LoadGraph(kNumPath[i]));
+		m_numH.push_back(LoadGraph(kNumPath[i].c_str()));
 		assert(m_numH[i] != -1);
 	}
 	for (int i = 0; i < kGearNum; i++)
 	{
-		m_explainH.push_back(LoadGraph(kExplainTextPath[i]));
+		m_explainH.push_back(LoadGraph(kExplainTextPath[i].c_str()));
 		assert(m_explainH[i]);
 	}
 	for (int i = 0; i < kGearNum; i++)
 	{
-		m_equippedUIH.push_back(LoadGraph(kEquippedUIPath[i]));
+		m_equippedUIH.push_back(LoadGraph(kEquippedUIPath[i].c_str()));
 		assert(m_equippedUIH[i]);
 	}
 
-	m_mulMarkH = LoadGraph(kMulMarkPath);
+	m_mulMarkH = LoadGraph(kMulMarkPath.c_str());
 	assert(m_mulMarkH != -1);
-	m_slashH = LoadGraph(kSlashPath);
+	m_slashH = LoadGraph(kSlashPath.c_str());
 	assert(m_slashH != -1);
-	m_cursorH = LoadGraph(kCursorPath);
+	m_cursorH = LoadGraph(kCursorPath.c_str());
 	assert(m_cursorH != -1);
-	m_selectCursorH = LoadGraph(kSelectCursorPath);
+	m_selectCursorH = LoadGraph(kSelectCursorPath.c_str());
 	assert(m_selectCursorH != -1);
-	m_removeCursorH = LoadGraph(kRemoveCursorPath);
+	m_removeCursorH = LoadGraph(kRemoveCursorPath.c_str());
 	assert(m_removeCursorH != -1);
-	m_gearBoxH = LoadGraph(kGearBoxPath);
+	m_gearBoxH = LoadGraph(kGearBoxPath.c_str());
 	assert(m_gearBoxH != -1);
-	m_explainBoxH = LoadGraph(kExplainBoxPath);
+	m_explainBoxH = LoadGraph(kExplainBoxPath.c_str());
 	assert(m_explainBoxH != -1);
-	m_equipTextH = LoadGraph(kEquipTextPath);
+	m_equipTextH = LoadGraph(kEquipTextPath.c_str());
 	assert(m_equipTextH != -1);
-	m_removeEquipTextH = LoadGraph(kRemoveEquipPath);
+	m_removeEquipTextH = LoadGraph(kRemoveEquipPath.c_str());
 	assert(m_removeEquipTextH != -1);
-	m_costTextH = LoadGraph(kCostTextPath);
+	m_costTextH = LoadGraph(kCostTextPath.c_str());
 	assert(m_costTextH != -1);
-	m_equippedBoxH = LoadGraph(kEquippedBoxPath);
+	m_equippedBoxH = LoadGraph(kEquippedBoxPath.c_str());
 	assert(m_equippedBoxH != -1);
-	m_statusBoxH = LoadGraph(kStatusBoxPath);
+	m_statusBoxH = LoadGraph(kStatusBoxPath.c_str());
 	assert(m_statusBoxH != -1);
-	m_hpTextH = LoadGraph(kStatusHpTextPath);
+	m_hpTextH = LoadGraph(kStatusHpTextPath.c_str());
 	assert(m_hpTextH != -1);
-	m_mAtkTextH = LoadGraph(kStatusMAtkTextPath);
+	m_mAtkTextH = LoadGraph(kStatusMAtkTextPath.c_str());
 	assert(m_mAtkTextH != -1);
-	m_sAtkTextH = LoadGraph(kStatusSAtkTextPath);
+	m_sAtkTextH = LoadGraph(kStatusSAtkTextPath.c_str());
 	assert(m_sAtkTextH != -1);
-	m_defTextH = LoadGraph(kStatusDefTextPath);
+	m_defTextH = LoadGraph(kStatusDefTextPath.c_str());
 	assert(m_defTextH != -1);
-	m_addH = LoadGraph(kAddPath);
+	m_addH = LoadGraph(kAddPath.c_str());
 	assert(m_addH != -1);
 
 	// プレイヤーのステータス取得

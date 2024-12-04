@@ -20,7 +20,7 @@ std::shared_ptr<SceneBase> SceneSelect::Update()
 void SceneSelect::Draw()
 {
 #ifdef _DEBUG
-	DrawFormatString(0, 0, 0xffffff, "セレクト画面");
+	DrawFormatString(0, 0, 0xffffff, "Select");
 #endif // _DEBUG
 }
 

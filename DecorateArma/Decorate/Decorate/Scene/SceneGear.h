@@ -21,7 +21,7 @@ public:	// 関数
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~SceneGear();
+	virtual ~SceneGear();
 
 	/// <summary>
 	/// 初期化
