@@ -1,5 +1,10 @@
 ﻿#include "SceneSelect.h"
 
+#include "SceneGear.h"
+
+#include "../Utility/Game.h"
+#include "../Utility/Pad.h"
+
 #include <string>
 #include <cassert>
 
@@ -11,11 +16,25 @@ namespace
 	constexpr int kMiddleBackNum = 2;	// 真ん中の背景の数
 	constexpr int kFrontBackNum = 2;	// 手前の背景の数
 
-	constexpr int kIndexBackNum = 2;			// スクロールに必要な背景数
+	constexpr int kIndexBackNum = 2;		// スクロールに必要な背景数
 	constexpr int kScrollSpeedBack = 1;		// スクロール速度奥
 	constexpr int kScrollSpeedMiddle = 2;	// スクロール速度真ん中
-	constexpr int kScrollSpeedFront = 3;		// スクロール速度手前
+	constexpr int kScrollSpeedFront = 3;	// スクロール速度手前
 
+
+	constexpr int kStageSelectpBoxPosX = Game::kScreenWidth * 0.03f;		// ステージ選択ボックス座標X
+	constexpr int kStageSelectpBoxPosY = Game::kScreenHeight * 0.05f;		// ステージ選択ボックス座標Y
+	constexpr int kGearBoxPosX = Game::kScreenWidth * 0.555f;				// 装備ボックス座標X
+	constexpr int kGearBoxPosY = Game::kScreenHeight * 0.05f;				// 装備ボックス座標Y
+	constexpr int kOptionBoxPosX = Game::kScreenWidth * 0.55f;			// オプションボックス座標X
+	constexpr int kOptionBoxPosY = Game::kScreenHeight * 0.4f;			// オプションボックス座標Y
+	constexpr int kGameEndBoxPosX = Game::kScreenWidth * 0.77f;			// ゲーム終了ボックス座標X
+	constexpr int kGameEndBoxPosY = Game::kScreenHeight * 0.4f;			// ゲーム終了ボックス座標Y
+	constexpr int kDescriptionBoxPosX = Game::kScreenWidth * 0.02f;		// 説明文ボックス座標X
+	constexpr int kDescriptionBoxPosY = Game::kScreenHeight * 0.65f;		// 説明文ボックス座標Y
+	constexpr int kButtonPosX = Game::kScreenWidth * 0.8f;				// ボタン座標X
+	constexpr int kSelectButtonPosY = Game::kScreenHeight * 0.65f;		// 選択ボタン座標Y
+	constexpr int kDecisionButtonPosY = Game::kScreenHeight * 0.8f;		// 決定ボタン座標Y
 
 	/*ファイルパス関係*/
 	const std::string kSelectPath = "Data/Image/Select/";		// 画像ファイルパス
@@ -32,12 +51,23 @@ namespace
 		kSelectPath + "Background/back8.png",
 		kSelectPath + "Background/back9.png",
 	};
+	const std::string kStageSelectBoxPath = kSelectPath + "Box/StageSelect.png";	// ステージ選択ボックスパス
+	const std::string kGearBoxPath = kSelectPath + "Box/Gear.png";					// 装備ボックスパス
+	const std::string kOptionBoxPath = kSelectPath + "Box/Option.png";				// オプションボックスパス
+	const std::string kGameEndBoxPath = kSelectPath + "Box/GameEnd.png";			// ゲーム終了ボックスパス
+	const std::string kDescriptionBoxPath = kSelectPath + "Box/Description.png";	// 説明文ボックスパス
+	const std::string kSelectButtonPath = kSelectPath + "Box/Select.png";			// 選択ボタンパス
+	const std::string kDecisionButtonPath = kSelectPath + "Box/Decision.png";		// 決定ボタンパス
+
 }
 
 SceneSelect::SceneSelect():
 	m_scrollXBack(0),
 	m_scrollXMiddle(0),
-	m_scrollXFront(0)
+	m_scrollXFront(0),
+	m_isCursorUp(true),
+	m_isCursorLeft(true),
+	m_isCursorGameEnd(false)
 {
 	/*画像のロード*/
 	for (int i = 0; i < kBackImgNum; i++)
@@ -46,6 +76,20 @@ SceneSelect::SceneSelect():
 		// ロードに失敗したら止める
 		assert(m_backH[i] != -1);
 	}
+	m_stageSelectBoxH = LoadGraph(kStageSelectBoxPath.c_str());
+	assert(m_stageSelectBoxH != -1);
+	m_gearBoxH = LoadGraph(kGearBoxPath.c_str());
+	assert(m_gearBoxH != -1);
+	m_optionBoxH = LoadGraph(kOptionBoxPath.c_str());
+	assert(m_optionBoxH != -1);
+	m_gameEndBoxH = LoadGraph(kGameEndBoxPath.c_str());
+	assert(m_gameEndBoxH != -1);
+	m_descriptionBoxH = LoadGraph(kDescriptionBoxPath.c_str());
+	assert(m_decisionButtonH != -1);
+	m_selectButtonH = LoadGraph(kSelectButtonPath.c_str());
+	assert(m_selectButtonH != -1);
+	m_decisionButtonH = LoadGraph(kDecisionButtonPath.c_str());
+	assert(m_decisionButtonH != -1);
 
 	// 背景画像サイズ取得
 	GetGraphSize(m_backH[0], &m_backWidth, &m_backHeight);
@@ -58,6 +102,13 @@ SceneSelect::~SceneSelect()
 	{
 		DeleteGraph(img);
 	}
+	DeleteGraph(m_stageSelectBoxH);
+	DeleteGraph(m_gearBoxH);
+	DeleteGraph(m_optionBoxH);
+	DeleteGraph(m_gameEndBoxH);
+	DeleteGraph(m_descriptionBoxH);
+	DeleteGraph(m_selectButtonH);
+	DeleteGraph(m_decisionButtonH);
 }
 
 void SceneSelect::Init()
@@ -78,7 +129,10 @@ std::shared_ptr<SceneBase> SceneSelect::Update()
 void SceneSelect::Draw()
 {
 	// 背景描画
-	BackDraw();
+	DrawBack();
+
+	// ボックス描画
+	DrawBox();
 
 #ifdef _DEBUG
 	DrawFormatString(0, 0, 0xffffff, "Select");
@@ -89,7 +143,12 @@ void SceneSelect::End()
 {
 }
 
-void SceneSelect::BackDraw()
+void SceneSelect::UpdateCursor()
+{
+	// 左右ボタンが押されたらカーソルの左右を切り替える
+}
+
+void SceneSelect::DrawBack()
 {
 	// 動かない背景
 	for (int i = 0; i < kStopBackNum; i++)
@@ -134,4 +193,29 @@ void SceneSelect::BackDraw()
 				0, m_backH[drawBack + i], true);
 		}
 	}
+}
+
+void SceneSelect::DrawBox()
+{
+	// ステージ選択
+	DrawGraph(kStageSelectpBoxPosX, kStageSelectpBoxPosY,
+		m_stageSelectBoxH, true);
+	// 装備
+	DrawGraph(kGearBoxPosX, kGearBoxPosY,
+		m_gearBoxH, true);
+	// オプション
+	DrawGraph(kOptionBoxPosX, kOptionBoxPosY,
+		m_optionBoxH, true);
+	// ゲーム終了
+	DrawGraph(kGameEndBoxPosX, kGameEndBoxPosY,
+		m_gameEndBoxH, true);
+	// 説明文
+	DrawGraph(kDescriptionBoxPosX, kDescriptionBoxPosY,
+		m_descriptionBoxH, true);
+	// 選択ボタン
+	DrawGraph(kButtonPosX, kSelectButtonPosY,
+		m_selectButtonH, true);
+	// 決定ボタン
+	DrawGraph(kButtonPosX, kDecisionButtonPosY,
+		m_decisionButtonH, true);
 }

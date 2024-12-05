@@ -48,12 +48,29 @@ public:	// 関数
 
 private:	// 関数
 	/// <summary>
+	/// カーソル更新
+	/// </summary>
+	void UpdateCursor();
+
+	/// <summary>
 	/// 背景描画
 	/// </summary>
-	void BackDraw();
+	void DrawBack();
+
+	/// <summary>
+	/// ボックス描画
+	/// </summary>
+	void DrawBox();
 
 private:	// 変数
 	std::vector<int> m_backH;		// 背景画像ハンドル
+	int m_stageSelectBoxH;			// ステージ選択ボックスハンドル
+	int m_gearBoxH;					// 装備ボックスハンドル
+	int m_optionBoxH;				// オプションボックスハンドル
+	int m_gameEndBoxH;				// ゲーム終了ボックスハンドル
+	int m_descriptionBoxH;			// 説明文ボックスハンドル
+	int m_selectButtonH;			// セレクトボタンハンドル
+	int m_decisionButtonH;			// 決定ボタンハンドル
 
 	int m_backWidth;		// 背景画像横幅
 	int m_backHeight;		// 背景画像縦幅
@@ -61,6 +78,8 @@ private:	// 変数
 	int m_scrollXBack;		// 奥スクロール値
 	int m_scrollXMiddle;	// 中スクロール値
 	int m_scrollXFront;		// 手前スクロール値
-	
-};
 
+	bool m_isCursorUp;			// カーソルが上にいるか
+	bool m_isCursorLeft;		// カーソルが左にいるか
+	bool m_isCursorGameEnd;		// カーソルがゲーム終了にいるか
+};
