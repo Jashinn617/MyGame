@@ -23,23 +23,24 @@ namespace
 
 	constexpr int kMaxCursorCount = 2;		// カーソルカウント最大値
 
-
 	constexpr int kStageSelectpBoxPosX = Game::kScreenWidth * 0.28f;		// ステージ選択ボックス座標X
 	constexpr int kStageSelectpBoxPosY = Game::kScreenHeight * 0.32f;		// ステージ選択ボックス座標Y
 	constexpr int kGearBoxPosX = Game::kScreenWidth * 0.76f;				// 装備ボックス座標X
 	constexpr int kGearBoxPosY = Game::kScreenHeight * 0.18f;				// 装備ボックス座標Y
-	constexpr int kOptionBoxPosX = Game::kScreenWidth * 0.65f;			// オプションボックス座標X
-	constexpr int kOptionBoxPosY = Game::kScreenHeight * 0.47f;			// オプションボックス座標Y
-	constexpr int kGameEndBoxPosX = Game::kScreenWidth * 0.87f;			// ゲーム終了ボックス座標X
+	constexpr int kOptionBoxPosX = Game::kScreenWidth * 0.65f;				// オプションボックス座標X
+	constexpr int kOptionBoxPosY = Game::kScreenHeight * 0.47f;				// オプションボックス座標Y
+	constexpr int kGameEndBoxPosX = Game::kScreenWidth * 0.87f;				// ゲーム終了ボックス座標X
 	constexpr int kGameEndBoxPosY = Game::kScreenHeight * 0.47f;			// ゲーム終了ボックス座標Y
-	constexpr int kDescriptionBoxPosX = Game::kScreenWidth * 0.02f;		// 説明文ボックス座標X
+	constexpr int kDescriptionBoxPosX = Game::kScreenWidth * 0.02f;			// 説明文ボックス座標X
 	constexpr int kDescriptionBoxPosY = Game::kScreenHeight * 0.65f;		// 説明文ボックス座標Y
-	constexpr int kButtonPosX = Game::kScreenWidth * 0.8f;				// ボタン座標X
-	constexpr int kSelectButtonPosY = Game::kScreenHeight * 0.65f;		// 選択ボタン座標Y
-	constexpr int kDecisionButtonPosY = Game::kScreenHeight * 0.8f;		// 決定ボタン座標Y
+	constexpr int kButtonPosX = Game::kScreenWidth * 0.8f;					// ボタン座標X
+	constexpr int kSelectButtonPosY = Game::kScreenHeight * 0.65f;			// 選択ボタン座標Y
+	constexpr int kDecisionButtonPosY = Game::kScreenHeight * 0.8f;			// 決定ボタン座標Y
 
-	constexpr double kNormalBoxExtRate = 1.0;							// 通常時ボックス拡大率
-	constexpr double kSelectBoxExtRate = 1.06;							// 選択時ボックス拡大率
+	constexpr double kNormalBoxExtRate = 1.0;								// 通常時ボックス拡大率
+
+	constexpr double kBoxSinSpeed = 0.07;									// ボックス拡縮速度
+	constexpr double kBoxAnimSwing = 0.03;									// ボックス拡縮幅
 
 	/*ファイルパス関係*/
 	const std::string kSelectPath = "Data/Image/Select/";		// 画像ファイルパス
@@ -71,6 +72,8 @@ SceneSelect::SceneSelect() :
 	m_scrollXMiddle(0),
 	m_scrollXFront(0),
 	m_cursorCount(0),
+	m_boxSinCount(0.0),
+	m_expansionBoxExtRate(0.0),
 	m_stageSelectBoxExtRate(0.0),
 	m_gearBoxExtRate(0.0),
 	m_optionBoxExtRate(0.0),
@@ -189,10 +192,14 @@ void SceneSelect::UpdateCursor()
 
 void SceneSelect::UpdateBox()
 {
+	// 選択中ボックス拡縮処理
+	m_boxSinCount += kBoxSinSpeed;
+	m_expansionBoxExtRate = sinf(m_boxSinCount) * kBoxAnimSwing;
+
 	// カーソルカウントが0の場合はステージ選択ボックスを選択している
 	if (m_cursorCount == 0)
 	{
-		m_stageSelectBoxExtRate = kSelectBoxExtRate;
+		m_stageSelectBoxExtRate = kNormalBoxExtRate + m_expansionBoxExtRate;
 		m_gearBoxExtRate = kNormalBoxExtRate;
 		m_optionBoxExtRate = kNormalBoxExtRate;
 		m_gameEndBoxExtRate = kNormalBoxExtRate;
@@ -205,7 +212,7 @@ void SceneSelect::UpdateBox()
 		if (m_isCursorUp)
 		{
 			m_stageSelectBoxExtRate = kNormalBoxExtRate;
-			m_gearBoxExtRate = kSelectBoxExtRate;
+			m_gearBoxExtRate = kNormalBoxExtRate + m_expansionBoxExtRate;
 			m_optionBoxExtRate = kNormalBoxExtRate;
 			m_gameEndBoxExtRate = kNormalBoxExtRate;
 		}
@@ -214,7 +221,7 @@ void SceneSelect::UpdateBox()
 		{
 			m_stageSelectBoxExtRate = kNormalBoxExtRate;
 			m_gearBoxExtRate = kNormalBoxExtRate;
-			m_optionBoxExtRate = kSelectBoxExtRate;
+			m_optionBoxExtRate = kNormalBoxExtRate + m_expansionBoxExtRate;
 			m_gameEndBoxExtRate = kNormalBoxExtRate;
 		}
 	}
@@ -223,7 +230,7 @@ void SceneSelect::UpdateBox()
 		m_stageSelectBoxExtRate = kNormalBoxExtRate;
 		m_gearBoxExtRate = kNormalBoxExtRate;
 		m_optionBoxExtRate = kNormalBoxExtRate;
-		m_gameEndBoxExtRate = kSelectBoxExtRate;
+		m_gameEndBoxExtRate = kNormalBoxExtRate + m_expansionBoxExtRate;
 
 		// Aボタンが押されたらゲーム終了
 		if (Pad::IsTrigger(PAD_INPUT_1))

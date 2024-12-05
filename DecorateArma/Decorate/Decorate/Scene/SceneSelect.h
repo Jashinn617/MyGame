@@ -86,10 +86,17 @@ private:	// 変数
 
 	int m_cursorCount;				// カーソルカウント
 
+	double m_boxSinCount;			// ボックス拡縮カウント
+
+	double m_expansionBoxExtRate;	// ボックスの拡縮サイズ
+
 	double m_stageSelectBoxExtRate;	// ステージ選択ボックス拡大率
 	double m_gearBoxExtRate;		// 装備ボックス拡大率
 	double m_optionBoxExtRate;		// オプションボックス拡大率
 	double m_gameEndBoxExtRate;		// ゲーム終了ボックス拡大率
+
+	
+	
 
 	bool m_isCursorUp;				// カーソルが上にいるか
 
