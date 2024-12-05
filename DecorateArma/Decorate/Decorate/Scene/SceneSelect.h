@@ -53,6 +53,11 @@ private:	// 関数
 	void UpdateCursor();
 
 	/// <summary>
+	/// ボックス更新
+	/// </summary>
+	void UpdateBox();
+
+	/// <summary>
 	/// 背景描画
 	/// </summary>
 	void DrawBack();
@@ -72,14 +77,22 @@ private:	// 変数
 	int m_selectButtonH;			// セレクトボタンハンドル
 	int m_decisionButtonH;			// 決定ボタンハンドル
 
-	int m_backWidth;		// 背景画像横幅
-	int m_backHeight;		// 背景画像縦幅
+	int m_backWidth;				// 背景画像横幅
+	int m_backHeight;				// 背景画像縦幅
 
-	int m_scrollXBack;		// 奥スクロール値
-	int m_scrollXMiddle;	// 中スクロール値
-	int m_scrollXFront;		// 手前スクロール値
+	int m_scrollXBack;				// 奥スクロール値
+	int m_scrollXMiddle;			// 中スクロール値
+	int m_scrollXFront;				// 手前スクロール値
 
-	bool m_isCursorUp;			// カーソルが上にいるか
-	bool m_isCursorLeft;		// カーソルが左にいるか
-	bool m_isCursorGameEnd;		// カーソルがゲーム終了にいるか
+	int m_cursorCount;				// カーソルカウント
+
+	double m_stageSelectBoxExtRate;	// ステージ選択ボックス拡大率
+	double m_gearBoxExtRate;		// 装備ボックス拡大率
+	double m_optionBoxExtRate;		// オプションボックス拡大率
+	double m_gameEndBoxExtRate;		// ゲーム終了ボックス拡大率
+
+	bool m_isCursorUp;				// カーソルが上にいるか
+
+	std::shared_ptr<SceneBase> m_nextScene;		// 次のシーン
+
 };

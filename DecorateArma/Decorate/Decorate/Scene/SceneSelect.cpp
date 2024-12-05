@@ -21,20 +21,25 @@ namespace
 	constexpr int kScrollSpeedMiddle = 2;	// スクロール速度真ん中
 	constexpr int kScrollSpeedFront = 3;	// スクロール速度手前
 
+	constexpr int kMaxCursorCount = 2;		// カーソルカウント最大値
 
-	constexpr int kStageSelectpBoxPosX = Game::kScreenWidth * 0.03f;		// ステージ選択ボックス座標X
-	constexpr int kStageSelectpBoxPosY = Game::kScreenHeight * 0.05f;		// ステージ選択ボックス座標Y
-	constexpr int kGearBoxPosX = Game::kScreenWidth * 0.555f;				// 装備ボックス座標X
-	constexpr int kGearBoxPosY = Game::kScreenHeight * 0.05f;				// 装備ボックス座標Y
-	constexpr int kOptionBoxPosX = Game::kScreenWidth * 0.55f;			// オプションボックス座標X
-	constexpr int kOptionBoxPosY = Game::kScreenHeight * 0.4f;			// オプションボックス座標Y
-	constexpr int kGameEndBoxPosX = Game::kScreenWidth * 0.77f;			// ゲーム終了ボックス座標X
-	constexpr int kGameEndBoxPosY = Game::kScreenHeight * 0.4f;			// ゲーム終了ボックス座標Y
+
+	constexpr int kStageSelectpBoxPosX = Game::kScreenWidth * 0.28f;		// ステージ選択ボックス座標X
+	constexpr int kStageSelectpBoxPosY = Game::kScreenHeight * 0.32f;		// ステージ選択ボックス座標Y
+	constexpr int kGearBoxPosX = Game::kScreenWidth * 0.76f;				// 装備ボックス座標X
+	constexpr int kGearBoxPosY = Game::kScreenHeight * 0.18f;				// 装備ボックス座標Y
+	constexpr int kOptionBoxPosX = Game::kScreenWidth * 0.65f;			// オプションボックス座標X
+	constexpr int kOptionBoxPosY = Game::kScreenHeight * 0.47f;			// オプションボックス座標Y
+	constexpr int kGameEndBoxPosX = Game::kScreenWidth * 0.87f;			// ゲーム終了ボックス座標X
+	constexpr int kGameEndBoxPosY = Game::kScreenHeight * 0.47f;			// ゲーム終了ボックス座標Y
 	constexpr int kDescriptionBoxPosX = Game::kScreenWidth * 0.02f;		// 説明文ボックス座標X
 	constexpr int kDescriptionBoxPosY = Game::kScreenHeight * 0.65f;		// 説明文ボックス座標Y
 	constexpr int kButtonPosX = Game::kScreenWidth * 0.8f;				// ボタン座標X
 	constexpr int kSelectButtonPosY = Game::kScreenHeight * 0.65f;		// 選択ボタン座標Y
 	constexpr int kDecisionButtonPosY = Game::kScreenHeight * 0.8f;		// 決定ボタン座標Y
+
+	constexpr double kNormalBoxExtRate = 1.0;							// 通常時ボックス拡大率
+	constexpr double kSelectBoxExtRate = 1.06;							// 選択時ボックス拡大率
 
 	/*ファイルパス関係*/
 	const std::string kSelectPath = "Data/Image/Select/";		// 画像ファイルパス
@@ -61,13 +66,17 @@ namespace
 
 }
 
-SceneSelect::SceneSelect():
+SceneSelect::SceneSelect() :
 	m_scrollXBack(0),
 	m_scrollXMiddle(0),
 	m_scrollXFront(0),
+	m_cursorCount(0),
+	m_stageSelectBoxExtRate(0.0),
+	m_gearBoxExtRate(0.0),
+	m_optionBoxExtRate(0.0),
+	m_gameEndBoxExtRate(0.0),
 	m_isCursorUp(true),
-	m_isCursorLeft(true),
-	m_isCursorGameEnd(false)
+	m_nextScene(nullptr)
 {
 	/*画像のロード*/
 	for (int i = 0; i < kBackImgNum; i++)
@@ -117,13 +126,20 @@ void SceneSelect::Init()
 
 std::shared_ptr<SceneBase> SceneSelect::Update()
 {
+	m_nextScene = shared_from_this();
+
+	// カーソル更新
+	UpdateCursor();
+
+	// ボックス更新
+	UpdateBox();
 
 	// スクロール値の更新
 	m_scrollXBack += kScrollSpeedBack;
 	m_scrollXMiddle += kScrollSpeedMiddle;
 	m_scrollXFront += kScrollSpeedFront;
 
-	return shared_from_this();
+	return m_nextScene;
 }
 
 void SceneSelect::Draw()
@@ -145,7 +161,76 @@ void SceneSelect::End()
 
 void SceneSelect::UpdateCursor()
 {
-	// 左右ボタンが押されたらカーソルの左右を切り替える
+	// 左ボタンが押されたらカウントを減らす
+	if (Pad::IsTrigger(PAD_INPUT_LEFT)) m_cursorCount--;
+	// 右ボタンが押されたらカウントを増やす
+	else if (Pad::IsTrigger(PAD_INPUT_RIGHT)) m_cursorCount++;
+	
+	// カーソルをループさせる
+	// カーソルが上下どちらにいるかでループさせる値が変わる
+	if (m_isCursorUp)
+	{
+		if (m_cursorCount > kMaxCursorCount - 1) m_cursorCount = 0;
+		if (m_cursorCount < 0) m_cursorCount = kMaxCursorCount - 1;
+	}
+	else
+	{
+		if (m_cursorCount > kMaxCursorCount) m_cursorCount = 0;
+		if (m_cursorCount < 0) m_cursorCount = kMaxCursorCount;
+	}
+	
+
+	// 上下ボタンが押されたら上下を入れ替える
+	if (Pad::IsTrigger(PAD_INPUT_UP) || Pad::IsTrigger(PAD_INPUT_DOWN))
+	{
+		m_isCursorUp = !m_isCursorUp;
+	}
+}
+
+void SceneSelect::UpdateBox()
+{
+	// カーソルカウントが0の場合はステージ選択ボックスを選択している
+	if (m_cursorCount == 0)
+	{
+		m_stageSelectBoxExtRate = kSelectBoxExtRate;
+		m_gearBoxExtRate = kNormalBoxExtRate;
+		m_optionBoxExtRate = kNormalBoxExtRate;
+		m_gameEndBoxExtRate = kNormalBoxExtRate;
+
+		m_isCursorUp = true;
+	}
+	else if (m_cursorCount == 1)
+	{
+		// カーソルが上だった場合は装備ボックスを選択している
+		if (m_isCursorUp)
+		{
+			m_stageSelectBoxExtRate = kNormalBoxExtRate;
+			m_gearBoxExtRate = kSelectBoxExtRate;
+			m_optionBoxExtRate = kNormalBoxExtRate;
+			m_gameEndBoxExtRate = kNormalBoxExtRate;
+		}
+		// 下だった場合はオプションボックスを選択している
+		else
+		{
+			m_stageSelectBoxExtRate = kNormalBoxExtRate;
+			m_gearBoxExtRate = kNormalBoxExtRate;
+			m_optionBoxExtRate = kSelectBoxExtRate;
+			m_gameEndBoxExtRate = kNormalBoxExtRate;
+		}
+	}
+	else
+	{
+		m_stageSelectBoxExtRate = kNormalBoxExtRate;
+		m_gearBoxExtRate = kNormalBoxExtRate;
+		m_optionBoxExtRate = kNormalBoxExtRate;
+		m_gameEndBoxExtRate = kSelectBoxExtRate;
+
+		// Aボタンが押されたらゲーム終了
+		if (Pad::IsTrigger(PAD_INPUT_1))
+		{
+			m_nextScene = nullptr;
+		}
+	}
 }
 
 void SceneSelect::DrawBack()
@@ -198,16 +283,20 @@ void SceneSelect::DrawBack()
 void SceneSelect::DrawBox()
 {
 	// ステージ選択
-	DrawGraph(kStageSelectpBoxPosX, kStageSelectpBoxPosY,
+	DrawRotaGraph(kStageSelectpBoxPosX, kStageSelectpBoxPosY,
+		m_stageSelectBoxExtRate, 0.0,
 		m_stageSelectBoxH, true);
 	// 装備
-	DrawGraph(kGearBoxPosX, kGearBoxPosY,
+	DrawRotaGraph(kGearBoxPosX, kGearBoxPosY,
+		m_gearBoxExtRate, 0.0,
 		m_gearBoxH, true);
 	// オプション
-	DrawGraph(kOptionBoxPosX, kOptionBoxPosY,
+	DrawRotaGraph(kOptionBoxPosX, kOptionBoxPosY,
+		m_optionBoxExtRate, 0.0,
 		m_optionBoxH, true);
 	// ゲーム終了
-	DrawGraph(kGameEndBoxPosX, kGameEndBoxPosY,
+	DrawRotaGraph(kGameEndBoxPosX, kGameEndBoxPosY,
+		m_gameEndBoxExtRate, 0.0,
 		m_gameEndBoxH, true);
 	// 説明文
 	DrawGraph(kDescriptionBoxPosX, kDescriptionBoxPosY,
