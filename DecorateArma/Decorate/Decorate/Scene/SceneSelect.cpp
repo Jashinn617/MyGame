@@ -125,6 +125,7 @@ SceneSelect::~SceneSelect()
 
 void SceneSelect::Init()
 {
+	/*処理無し*/
 }
 
 std::shared_ptr<SceneBase> SceneSelect::Update()
