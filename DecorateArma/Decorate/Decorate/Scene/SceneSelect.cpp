@@ -216,6 +216,12 @@ void SceneSelect::UpdateBox()
 			m_gearBoxExtRate = kNormalBoxExtRate + m_expansionBoxExtRate;
 			m_optionBoxExtRate = kNormalBoxExtRate;
 			m_gameEndBoxExtRate = kNormalBoxExtRate;
+
+			// Aボタンが押されたら装備シーンに飛ぶ
+			if (Pad::IsTrigger(PAD_INPUT_1))
+			{
+				m_nextScene = std::make_shared<SceneGear>();
+			}
 		}
 		// 下だった場合はオプションボックスを選択している
 		else
@@ -226,6 +232,7 @@ void SceneSelect::UpdateBox()
 			m_gameEndBoxExtRate = kNormalBoxExtRate;
 		}
 	}
+	// カーソルカウントが2の場合はゲーム終了ボックスを選択している
 	else
 	{
 		m_stageSelectBoxExtRate = kNormalBoxExtRate;

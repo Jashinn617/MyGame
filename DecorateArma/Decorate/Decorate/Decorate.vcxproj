@@ -180,7 +180,6 @@
     <ClCompile Include="Object\Enemy\EShot.cpp" />
     <ClCompile Include="Utility\CollisionShape.cpp" />
     <ClCompile Include="Object\LockOnTarget.cpp" />
-    <ClCompile Include="Object\Enemy\EnemyRobot.cpp" />
     <ClCompile Include="Object\Enemy\EnemyBase.cpp" />
     <ClCompile Include="Object\Field.cpp" />
     <ClCompile Include="Object\Player\Shot.cpp" />
@@ -228,7 +227,6 @@
     <ClInclude Include="Object\Enemy\EShot.h" />
     <ClInclude Include="Utility\CollisionShape.h" />
     <ClInclude Include="Object\LockOnTarget.h" />
-    <ClInclude Include="Object\Enemy\EnemyRobot.h" />
     <ClInclude Include="Object\Enemy\EnemyBase.h" />
     <ClInclude Include="Object\Field.h" />
     <ClInclude Include="Object\Player\Shot.h" />

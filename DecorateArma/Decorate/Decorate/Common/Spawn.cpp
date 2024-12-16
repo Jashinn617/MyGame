@@ -6,7 +6,6 @@
 #include "../Object/RecoveryItem.h"
 
 #include "../Object/Enemy/EnemyBase.h"
-#include "../Object/Enemy/EnemyRobot.h"
 #include "../Object/Enemy/EnemyPlant.h"
 #include "../Object/Enemy/EnemySloth.h"
 #include "../Object/Enemy/EnemyWyvern.h"
@@ -134,12 +133,7 @@ void Spawn::Add(int createNum, std::string kind, std::string name, std::string p
 	else if (kind == "Enemy")
 	{
 		// nameと同じ種類の敵の追加
-		if (name == "Robot")
-		{
-			m_pData.push_back(new Data);
-			m_pData.back()->pObj = new EnemyRobot(pos);
-		}
-		else if (name == "Plant")
+		if (name == "Plant")
 		{
 			m_pData.push_back(new Data);
 			m_pData.back()->pObj = new EnemyPlant(pos);

@@ -210,6 +210,7 @@ protected:	// 変数
 	VECTOR m_moveDirection;								// 移動方向ベクトル
 	VECTOR m_enemyToPlayer;								// 敵からプレイヤーまでのベクトル
 	AttackType m_attackType;							// 攻撃タイプ
+	EnemyType m_enemyType;								// 敵タイプ
 	MeleeAttackPos m_melleAttack;						// 近距離攻撃当たり判定座標
 	std::shared_ptr<CollisionShape> m_pSearchRange;		// 索敵範囲
 	std::shared_ptr<CollisionShape> m_pMelleAttackCol;	// 近接攻撃当たり判定

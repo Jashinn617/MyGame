@@ -144,9 +144,6 @@
     <ClCompile Include="Object\Enemy\EnemyBase.cpp">
       <Filter>ソース ファイル\Object\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Object\Enemy\EnemyRobot.cpp">
-      <Filter>ソース ファイル\Object\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="Utility\CollisionShape.cpp">
       <Filter>ソース ファイル\Utility</Filter>
     </ClCompile>
@@ -292,9 +289,6 @@
     </ClInclude>
     <ClInclude Include="Object\LockOnTarget.h">
       <Filter>ヘッダー ファイル\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\Enemy\EnemyRobot.h">
-      <Filter>ヘッダー ファイル\Object\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Common\Spawn.h">
       <Filter>ヘッダー ファイル\Common</Filter>

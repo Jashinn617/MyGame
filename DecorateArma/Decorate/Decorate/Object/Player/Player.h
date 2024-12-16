@@ -172,6 +172,7 @@ private:	// 変数
 
 	std::shared_ptr<Time> m_attackStanTime;			// 攻撃硬直時間
 	std::shared_ptr<Time> m_attackInvokeTime;		// 強攻撃発動時間
+	std::shared_ptr<Time> m_invincibleTime;			// 無敵時間
 
 	//AnimSpeed m_animSpeed;							// アニメーション速度
 };

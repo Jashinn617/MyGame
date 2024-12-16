@@ -28,6 +28,7 @@ EnemyBase::EnemyBase():
 	m_moveDirection{0.0f,0.0f,0.0f},
 	m_enemyToPlayer{0.0f,0.0f,0.0f},
 	m_attackType(AttackType::Melee),
+	m_enemyType(EnemyType::Normal),
 	m_pSearchRange(nullptr),
 	m_pMelleAttackCol(nullptr),
 	m_pAttackInterval(nullptr)
@@ -65,6 +66,7 @@ EnemyBase::EnemyBase(VECTOR pos):
 	m_moveDirection{ 0.0f,0.0f,0.0f },
 	m_enemyToPlayer{ 0.0f,0.0f,0.0f },
 	m_attackType(AttackType::Melee),
+	m_enemyType(EnemyType::Normal),
 	m_pSearchRange(nullptr),
 	m_pMelleAttackCol(nullptr)
 {

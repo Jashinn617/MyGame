@@ -29,7 +29,8 @@ namespace
 	const char* const kName = "Player";
 
 	constexpr int kAttackStanTime = 20;						// 攻撃硬直時間
-	constexpr int kattackInvokeTime = 30;					// 強攻撃発動時間
+	constexpr int kAttackInvokeTime = 30;					// 強攻撃発動時間
+	constexpr int kInvincibleTime = 10;						// 無敵時間
 	constexpr int kHardAttackRate = 3;						// 強攻撃時の攻撃力倍率
 	constexpr int kKnockBackDamage = 10.0f;					// ノックバックするダメージ量
 	constexpr float kMoveSpeedDashRate = 1.7f;				// ダッシュ時速度
@@ -85,7 +86,8 @@ Player::Player() :
 	m_pState(std::make_shared<PlayerState>(this)),
 	m_pCamera(std::make_shared<Camera>()),
 	m_attackStanTime(std::make_shared<Time>(kAttackStanTime)),
-	m_attackInvokeTime(std::make_shared<Time>(kattackInvokeTime))
+	m_attackInvokeTime(std::make_shared<Time>(kAttackInvokeTime)),
+	m_invincibleTime(std::make_shared<Time>(kInvincibleTime))
 {
 	// アニメーションロード
 	CsvLoad::GetInstance().AnimLoad(m_animData, kName);
@@ -200,6 +202,20 @@ void Player::Update()
 	m_characterInfo.topPos = MV1GetFramePosition(m_pModel->GetModelHandle(), m_topFrameIndex);
 	m_characterInfo.bottomPos = MV1GetFramePosition(m_pModel->GetModelHandle(), m_bottomFrameIndex);
 	AttackPosUpdate(m_angle);
+
+	// ダメージ中の場合は攻撃を受けない
+	if (m_isDamage)
+	{
+		// 一定時間経過した場合
+		if (m_invincibleTime->Update())
+		{
+			// タイマーリセット
+			m_invincibleTime->Reset();
+			// ダメージ中フラグをfalseにする
+			m_isDamage = false;
+		}
+	}
+	
 }
 
 void Player::Draw(std::shared_ptr<ToonShader> pToonShader)
@@ -259,6 +275,9 @@ void Player::Draw2D()
 
 void Player::OnDamage(VECTOR targetPos, int damagePoint)
 {
+	// ダメージ中は処理をしない
+	if (m_isDamage) return;
+
 	// HPを減らす
 	m_statusData.hp -= damagePoint;
 
